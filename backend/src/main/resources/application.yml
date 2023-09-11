@@ -76,6 +76,20 @@ spring:
 #        show_sql: true
         format_sql: true
 
+  # 이메일 인증
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: masoori308
+    password: b308masoori
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+
 # log 레벨 설정
 logging:
   level:
