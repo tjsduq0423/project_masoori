@@ -8,24 +8,20 @@ spring:
             client-id: 796025688077-hqc2e6abkjbg7bj08nhrbqbvu3k21mmb.apps.googleusercontent.com
             client-secret: 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
             redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
-            scope: profile, email
+            scope: email
           naver:
             client-id: yJzsI9ggxgPZoCCR9S0l
             client-secret: DNZZ4x_23p
             redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
             authorization-grant-type: authorization_code
             scope:
-              - name
               - email
-              - profile_image
             client-name: Naver
           kakao:
             client-id: 3b07a5202438033c59f75ee9f58f8674
             client-secret: FvbJSCpBsGqEH47mxzcxCGjKkkBmnRis
             scope:
-              - profile_nickname
               - account_email
-              - profile_image
             client-name: Kakao
             authorization-grant-type: authorization_code
             redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
@@ -46,13 +42,13 @@ spring:
   # key-value store인  redis 설정 (임시)
   data:
     redis:
-      host: ec2-13-209-49-213.ap-northeast-2.compute.amazonaws.com
+      host: j9b308.p.ssafy.io
       port: 1234
 
 # main DB 인 MariaDB 설정 (임시)
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://ec2-13-209-49-213.ap-northeast-2.compute.amazonaws.com:5555/ssafy_b308?useUnicode=yes&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    url: jdbc:mariadb://j9b308.p.ssafy.io:5555/masoori?useUnicode=yes&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: ssafy_b308
     password: ssafy_b308_1
 
@@ -95,11 +91,10 @@ logging:
   level:
     org:
       hibernate: debug
-
 # OAuth2 redirect url 설정
 app:
   oauth2:
-    authorizedRedirectUris: http://localhost:3000/oauth/redirect
+    authorizedRedirectUris: https://j9b308.p.ssafy.io/oauth/redirect
 
 # jwt secret key 설정
 jwt:
@@ -109,6 +104,6 @@ jwt:
 #server:
 #  ssl:
 #    key-store: classpath:keystore.p12
-#    key-store-password:
+#    key-store-password:1q2w3e4r
 #    key-store-type: PKCS12
 
