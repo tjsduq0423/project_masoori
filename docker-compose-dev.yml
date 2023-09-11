@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      args:
+        SERVER_MODE: prod
+    ports:
+      - 8080:8080
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    ports:
+      - 3000:3000
+    stdin_open: true
+    depends_on:
+      - backend
