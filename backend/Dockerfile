@@ -5,7 +5,6 @@ COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
 COPY src src
-COPY /var/jenkins_home/keystore.p12 src/main/resources/keystore.p12
 
 RUN chmod +x ./gradlew
 RUN ./gradlew bootJar
