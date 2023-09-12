@@ -56,7 +56,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	@Builder.Default
-	private List<Card> card = new ArrayList<>();
+	private List<Card> cards = new ArrayList<>();
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
