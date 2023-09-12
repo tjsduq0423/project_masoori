@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import "tailwindcss/tailwind.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RecoilRoot } from "recoil";
+import "@/styles/font.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
