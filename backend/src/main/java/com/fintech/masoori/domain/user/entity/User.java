@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fintech.masoori.domain.card.entity.Card;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,16 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fintech.masoori.global.oauth.ProviderType;
 import com.fintech.masoori.global.util.BaseTimeEntity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,6 +30,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
 	private Long id;
 
 	@Column(name = "email", length = 80, nullable = false)
@@ -60,6 +53,10 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "provider_type", length = 20, nullable = false)
 	private ProviderType providerType;
+
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@Builder.Default
+	private List<Card> card = new ArrayList<>();
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
