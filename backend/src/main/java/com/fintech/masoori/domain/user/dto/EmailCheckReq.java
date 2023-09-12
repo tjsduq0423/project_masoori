@@ -4,8 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class SendEmailReq {
+public class EmailCheckReq {
 
     @NotBlank
     private String email;
+
+    @NotBlank
+    private String code;
 }

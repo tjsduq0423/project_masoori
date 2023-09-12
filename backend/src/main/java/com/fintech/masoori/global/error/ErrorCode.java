@@ -12,7 +12,9 @@ public enum ErrorCode {
 	// LOGIN_INPUT_INVALID(400, "M002", "Login input is invalid");
 
 	// User
-	EMAIL_DUPLICATION(400, "U001", "Email is Duplication"),
+	EMAIL_DUPLICATION(409, "U001", "Email is Duplication"),
+	USER_NOT_FOUND(400, "U002", "User Not Found"),
+	INVALID_AUTH_CODE(400, "U003", "Invalid Auth Code"),
 
 	// Common
 	INVALID_INPUT_VALUE(400, "C001", " Invalid Input Value"),
