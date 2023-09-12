@@ -37,12 +37,14 @@ import lombok.NoArgsConstructor;
 public class User extends BaseTimeEntity implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
 	private Long id;
 
 	@Column(name = "email", length = 80, nullable = false)
 	private String email;
 
-	@Column(name = "nickname", length = 20, nullable = false)
+	@Column(name = "nickname")
+//	@Column(name = "nickname", length = 20, nullable = false)
 	private String nickname;
 
 	@Column(name = "password")
@@ -59,6 +61,11 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "provider_type", length = 20, nullable = false)
 	private ProviderType providerType;
+
+	public User(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
