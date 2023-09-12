@@ -22,6 +22,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
+    "react-native-toggle-element": "^2.0.1",
     "react-pageflip": "^2.0.3",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.15.0",
@@ -62,6 +63,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/plugin-syntax-jsx": "^7.22.5",
     "@types/jest": "^29.5.4",
     "@types/styled-components": "^5.1.27",
     "babel-plugin-module-resolver": "^5.0.0",
