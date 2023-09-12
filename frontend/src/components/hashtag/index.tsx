@@ -5,7 +5,7 @@ interface StyledButtonProps {
 }
 
 // StyledButton을 props로 width와 height를 받도록 변경
-const StyledButton = styled.button<StyledButtonProps>`
+const StyledButton = styled.div<StyledButtonProps>`
   border-radius: 34.5px;
   background: rgba(47, 6, 6, 0.6);
   width: auto;
