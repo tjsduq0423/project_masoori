@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fintech.masoori.domain.credit.entity.CreditCardUser;
 import com.fintech.masoori.global.oauth.ProviderType;
 import com.fintech.masoori.global.util.BaseTimeEntity;
 
@@ -21,6 +22,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -44,7 +46,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 	private String email;
 
 	@Column(name = "nickname")
-//	@Column(name = "nickname", length = 20, nullable = false)
+	//	@Column(name = "nickname", length = 20, nullable = false)
 	private String nickname;
 
 	@Column(name = "password")
@@ -54,13 +56,16 @@ public class User extends BaseTimeEntity implements UserDetails {
 	private String profile;
 
 	@Column(name = "roles")
-	@ElementCollection(fetch = FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.LAZY)
 	@Builder.Default
 	private List<String> roles = new ArrayList<>();
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "provider_type", length = 20, nullable = false)
 	private ProviderType providerType;
+
+	@OneToMany(mappedBy = "user")
+	private List<CreditCardUser> creditCardUsers = new ArrayList<>();
 
 	public User(String email, String password) {
 		this.email = email;
