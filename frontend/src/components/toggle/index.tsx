@@ -47,10 +47,6 @@ const ToggleLabel = styled.label<{ bgImage: string; bgColor: string }>`
   border: 5px solid #72cce3;
   display: flex;
   align-items: center;
-  color: #a37c9b;
-  font-family: Pretendard;
-  font-size: 22px;
-  font-weight: bold;
   position: relative;
   transition: all 150ms ease-in;
 
@@ -157,6 +153,10 @@ const ToggleCheckbox = styled.input.attrs({ type: "checkbox" })`
 
 const Text = styled.div<TextProps>`
   transition: all 0.3s ease-in-out;
+  color: #a37c9b;
+  font-family: Pretendard;
+  font-size: 22px;
+  font-weight: bold;
   margin-left: ${(props) => (props.isChecked ? "15%" : "40%")};
 `;
 
