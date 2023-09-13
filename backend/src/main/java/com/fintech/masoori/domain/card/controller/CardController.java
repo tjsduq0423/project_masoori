@@ -1,9 +1,12 @@
 package com.fintech.masoori.domain.card.controller;
 
+import java.sql.Timestamp;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,13 +40,13 @@ public class CardController {
 
 	//챌린지 조회
 	@GetMapping("/challenge")
-	public ResponseEntity<?> selectChallenge() {
+	public ResponseEntity<?> selectChallenge(@RequestBody Timestamp time) {
 		return ResponseEntity.ok(200);
 	}
 
 	//챌린지 카드 조회
-	@GetMapping("/challengecard")
-	public ResponseEntity<?> selectChallengeCard() {
+	@GetMapping("/challengecard/{id}")
+	public ResponseEntity<?> selectChallengeCard(@PathVariable Long id) {
 		return ResponseEntity.ok(200);
 	}
 
