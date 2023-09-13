@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class WebSecurityConfig {
-	private static final String[] WHITE_LIST = {"/api/logout", "/**"};
+	private static final String[] WHITE_LIST = {"/api/logout","/swagger-ui/**","/v3/**", "/**"};
 	private final JwtTokenProvider jwtTokenProvider;
 	private final RedisTemplate<String, String> redisTemplate;
 	private final CustomOAuth2UserService customOAuth2UserService;
