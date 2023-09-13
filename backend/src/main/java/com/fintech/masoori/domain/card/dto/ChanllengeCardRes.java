@@ -1,25 +1,21 @@
 package com.fintech.masoori.domain.card.dto;
 
 import com.fintech.masoori.domain.card.entity.Card;
-import com.fintech.masoori.domain.user.entity.User;
+import com.fintech.masoori.domain.card.entity.Challenge;
 
 import lombok.Data;
 
 @Data
 public class ChanllengeCardRes {
 	private Long id;
-	private User user;
 	private String name;
 	private String photoPath;
 	private String description;
-	private CardType cardType;
 
-	public ChanllengeCardRes(Card card) {
+	public ChanllengeCardRes(Card card, Challenge challenge) {
 		this.id = card.getId();
-		this.user = card.getUser();
 		this.name = card.getName();
 		this.photoPath = card.getPhotoPath();
 		this.description = card.getDescription();
-		this.cardType = card.getCardType();
 	}
 }
