@@ -1,0 +1,96 @@
+.container {
+  background-color: rgba(64, 10, 10, 0.7);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  height: 20vh;
+  width: 75vw;
+}
+
+.menuButton {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+.img {
+  height: 80vh;
+  width: 70vw;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  background-image: url("@/assets/img/Login.png");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.id {
+  position: relative;
+  z-index: 1;
+  top: 20%;
+}
+
+.idFont,
+.pwFont {
+  font-size: x-small;
+  display: flex;
+  margin-bottom: 2px;
+}
+
+.inputId {
+  width: 17vw;
+  border-radius: 5px;
+  border-width: 2px;
+  border-color: black;
+  height: 30px;
+}
+
+.pw {
+  position: relative;
+  top: 22%;
+  z-index: 1;
+}
+
+.inputPW {
+  width: 17vw;
+  border-radius: 5px;
+  border-width: 2px;
+  border-color: black;
+  height: 30px;
+}
+
+.signUp {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  display: flex;
+  justify-content: end;
+  font-size: x-small;
+}
+
+.loginButton {
+  width: 17vw;
+  border-radius: 5px;
+  border-color: black;
+  border-width: 2px;
+  margin-bottom: 25px;
+  height: 30px;
+  background-color: #5e3a66;
+  color: white;
+  font-weight: bold;
+  font-size: smaller;
+}
+
+.Kakao,
+.Naver,
+.Google {
+  width: 17vw;
+  margin-top: 5px;
+}

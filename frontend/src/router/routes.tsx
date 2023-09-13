@@ -34,6 +34,10 @@ const routes: RouteType[] = [
     element: React.lazy(() => import("@/pages/bookpage")),
   },
   {
+    path: "/login",
+    element: React.lazy(() => import("@/components/modal/login")),
+  },
+  {
     path: "/crystal",
     element: React.lazy(() => import("@/components/CrystalBall")),
   },
