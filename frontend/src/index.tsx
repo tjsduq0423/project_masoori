@@ -7,7 +7,7 @@ import "tailwindcss/tailwind.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RecoilRoot } from "recoil";
 import { ThemeProvider } from "styled-components";
-import GlobalStyle from "@/styles/GlobbalStyle";
+import GlobalStyle from "@/styles/GlobalStyle";
 import "@/styles/font.css";
 import theme from "@/styles/theme";
 
