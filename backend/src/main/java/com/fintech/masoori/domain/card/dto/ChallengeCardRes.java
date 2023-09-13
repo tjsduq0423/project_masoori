@@ -1,23 +1,32 @@
 package com.fintech.masoori.domain.card.dto;
 
-import com.fintech.masoori.domain.card.entity.Card;
-import com.fintech.masoori.domain.card.entity.Challenge;
+import java.util.ArrayList;
+import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class ChallengeCardRes {
-	private Long id;
-	private String name;
-	@Schema(description = "사진 경로", example = "/etc/img")
-	private String imagePath;
-	@Schema(description = "카드 설명", example = "이 카드는...")
-	private String description;
+	@Builder.Default
+	private List<ChallengeCard> challengeCardList = new ArrayList<>();
 
-	public ChallengeCardRes(Card card, Challenge challenge) {
-		this.id = card.getId();
-		this.name = card.getName();
-		this.photoPath = card.getPhotoPath();
-		this.description = card.getDescription();
+	@Data
+	@AllArgsConstructor
+	public static class ChallengeCard {
+		@Schema(description = "id(PK)", example = "1")
+		private Long id;
+		@Schema(description = "카드 이름", example = "카드 이름")
+		private String name;
+		@Schema(description = "사진 경로", example = "/etc/img")
+		private String imagePath;
+		@Schema(description = "카드 설명", example = "이 카드는...")
+		private String description;
+		@Schema(description = "카드에 속한 챌린지들")
+		@Builder.Default
+		private List<Challenge> challenges = new ArrayList<>();
 	}
 }
