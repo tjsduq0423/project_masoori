@@ -5,7 +5,7 @@ const GlobalStyle = createGlobalStyle`
         padding: 0;
         margin: 0;
         box-sizing: border-box;
-        color: ${({ theme }) => theme.color.white};
+        /* color: ${({ theme }) => theme.color.white}; */
     }
 
     ul, ol, li {
