@@ -7,6 +7,7 @@ import "tailwindcss/tailwind.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RecoilRoot } from "recoil";
 import { ThemeProvider } from "styled-components";
+import GlobalStyle from "@/styles/GlobbalStyle";
 import "@/styles/font.css";
 import theme from "@/styles/theme";
 
@@ -21,6 +22,7 @@ root.render(
     <RecoilRoot>
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
+          <GlobalStyle />
           <App />
         </QueryClientProvider>
       </ThemeProvider>
