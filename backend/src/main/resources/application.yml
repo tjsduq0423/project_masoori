@@ -76,7 +76,7 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: masoori308
+    username: masoori30
     password: ycpizzmpopiflpca
     properties:
       mail:
@@ -85,6 +85,11 @@ spring:
           timeout: 5000
           starttls:
             enable: true
+
+  # 휴대폰 인증
+  sms:
+    api: NCSICXQZGOSRQDAU
+    api-secret: RDSPTVRMQWG48BT1TFHO14QWGTIHBMKS
 
 # log 레벨 설정
 logging:

@@ -1,4 +1,4 @@
-package com.fintech.masoori.global.util;
+package com.fintech.masoori.domain.user.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
