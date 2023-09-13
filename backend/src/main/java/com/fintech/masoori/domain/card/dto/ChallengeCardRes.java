@@ -9,7 +9,9 @@ import lombok.Data;
 public class ChallengeCardRes {
 	private Long id;
 	private String name;
-	private String photoPath;
+	@Schema(description = "사진 경로", example = "/etc/img")
+	private String imagePath;
+	@Schema(description = "카드 설명", example = "이 카드는...")
 	private String description;
 
 	public ChallengeCardRes(Card card, Challenge challenge) {
