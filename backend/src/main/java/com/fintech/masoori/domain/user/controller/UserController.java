@@ -2,28 +2,32 @@ package com.fintech.masoori.domain.user.controller;
 
 import java.util.Optional;
 
-import com.fintech.masoori.domain.user.dto.EmailCheckReq;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
+import com.fintech.masoori.domain.user.dto.SmsCheckReq;
+import com.fintech.masoori.domain.user.exception.*;
+import jakarta.mail.MessagingException;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fintech.masoori.domain.user.dto.EmailCheckReq;
 import com.fintech.masoori.domain.user.dto.SendEmailReq;
+import com.fintech.masoori.domain.user.dto.SendSmsReq;
+import com.fintech.masoori.domain.user.service.EmailService;
+import com.fintech.masoori.domain.user.service.SmsService;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.service.UserService;
-import com.fintech.masoori.global.error.ErrorCode;
-import com.fintech.masoori.global.error.ErrorResponse;
+import com.fintech.masoori.global.error.exception.InvalidValueException;
 import com.fintech.masoori.global.redis.RedisService;
-import com.fintech.masoori.global.util.EmailService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,49 +40,25 @@ public class UserController {
     private final UserService userService;
     private final EmailService emailService;
     private final RedisService redisService;
+    private final SmsService smsService;
 
-    @Operation(summary = "회원가입 시 이메일 인증 API")
+    @Operation(summary = "회원가입 시 이메일 인증코드 발송 API")
     @PostMapping("/email/signup")
     public ResponseEntity<?> sendSignupEmailCode(
             @Parameter(description = "회원 이메일", required = true)
-            @RequestBody SendEmailReq sendEmailReq) {
-        String email = sendEmailReq.getEmail();
-        Optional<User> findUser = userService.findByEmail(email);
-        // 사용자 존재 => 중복 => 가입 안됨
-        if (findUser.isPresent()) {
-            ErrorResponse response = ErrorResponse.of(ErrorCode.EMAIL_DUPLICATION);
-            return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
-        }
-        return sendEmail(email);
+            @RequestBody @Validated SendEmailReq sendEmailReq, BindingResult bindingResult) {
+        validateRequest(bindingResult);
+        userService.sendSignupEmailCode(sendEmailReq.getEmail());
+        return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "비밀번호 재설정 시 이메일 인증 API")
+    @Operation(summary = "비밀번호 재설정 시 이메일 인증코드 발송 API")
     @PostMapping("/email/password")
     public ResponseEntity<?> sendPasswordEmailCode(
             @Parameter(description = "회원 이메일", required = true)
-            @RequestBody SendEmailReq sendEmailReq) {
-        String email = sendEmailReq.getEmail();
-        Optional<User> findUser = userService.findByEmail(email);
-        // 사용자 존재x => 없는 사용자
-        if (!findUser.isPresent()) {
-            ErrorResponse response = ErrorResponse.of(ErrorCode.USER_NOT_FOUND);
-            return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
-        }
-        return sendEmail(email);
-    }
-
-    public ResponseEntity<?> sendEmail(String email) {
-        // 인증코드 redis 서버에 저장
-        String code = emailService.createCode(8);
-        redisService.setEmailCode(email, code);
-        try {
-            emailService.sendEmail(email, code);
-        } catch (MessagingException e) {
-            log.debug("이메일 전송 실패", e);
-            redisService.deleteEmailCode(email);
-            ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
-            return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
-        }
+            @RequestBody @Validated SendEmailReq sendEmailReq, BindingResult bindingResult) {
+        validateRequest(bindingResult);
+        userService.sendPasswordEmailCode(sendEmailReq.getEmail());
         return ResponseEntity.ok().build();
     }
 
@@ -86,15 +66,53 @@ public class UserController {
     @PostMapping("/email/check")
     public ResponseEntity<?> verifyEmailCode(
             @Parameter(description = "회원 이메일, 인증 코드", required = true)
-            @RequestBody EmailCheckReq emailCheckReq) {
-        String inputCode = emailCheckReq.getCode();
-        String savedCode = redisService.getEmailCode(emailCheckReq.getEmail());
-        if (!inputCode.equals(savedCode)) {
-            ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_AUTH_CODE);
-            return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
-        }
+            @RequestBody @Validated EmailCheckReq emailCheckReq, BindingResult bindingResult) {
+        validateRequest(bindingResult);
+        userService.verifyEmailCode(emailCheckReq);
         return ResponseEntity.ok().build();
     }
 
+//    @Operation(summary = "휴대폰 인증코드 발송 API")
+//    @PostMapping("/sms")
+//    public ResponseEntity<?> sendSms(
+//            @Parameter(description = "회원")
+//            @RequestBody @Validated SendSmsReq sendSmsReq, BindingResult bindingResult, Authentication authentication) {
+//        validateRequest(bindingResult);
+//        User loginUser = loginUser(authentication);
+//        userService.updateInfoAndSendSms(sendSmsReq, loginUser);
+//        return ResponseEntity.ok().build();
+//    }
+
+    @Operation(summary = "휴대폰 인증코드 발송 API")
+    @PostMapping("/sms")
+    public ResponseEntity<?> sendSms(
+            @Parameter(description = "회원")
+            @RequestBody @Validated SendSmsReq sendSmsReq, BindingResult bindingResult) {
+        validateRequest(bindingResult);
+        User loginUser = userService.findByEmail(sendSmsReq.getEmail()).get();
+        userService.updateInfoAndSendSms(sendSmsReq, loginUser);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "휴대폰 인증코드 검증 API")
+    @PostMapping("/sms/check")
+    public ResponseEntity<?> verifySmsCode(
+            @Parameter(description = "회원 전화번호, 인증 코드", required = true)
+            @RequestBody @Validated SmsCheckReq smsCheckReq, BindingResult bindingResult) {
+        validateRequest(bindingResult);
+        userService.verifySmsCode(smsCheckReq);
+        return ResponseEntity.ok().build();
+    }
+
+
+    private void validateRequest(BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            throw new InvalidValueException("Invalid Input Value");
+    }
+
+    // 현재 로그인한 유저 정보를 찾아온다.
+    public User loginUser(Authentication authentication) {
+        return userService.findByEmail(authentication.getPrincipal().toString()).get();
+    }
 
 }
