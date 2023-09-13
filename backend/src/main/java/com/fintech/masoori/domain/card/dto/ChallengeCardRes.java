@@ -6,13 +6,13 @@ import com.fintech.masoori.domain.card.entity.Challenge;
 import lombok.Data;
 
 @Data
-public class ChanllengeCardRes {
+public class ChallengeCardRes {
 	private Long id;
 	private String name;
 	private String photoPath;
 	private String description;
 
-	public ChanllengeCardRes(Card card, Challenge challenge) {
+	public ChallengeCardRes(Card card, Challenge challenge) {
 		this.id = card.getId();
 		this.name = card.getName();
 		this.photoPath = card.getPhotoPath();
