@@ -35,6 +35,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
 public class User extends BaseTimeEntity implements UserDetails {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
@@ -62,10 +63,9 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Column(name = "provider_type", length = 20, nullable = false)
 	private ProviderType providerType;
 
-	public User(String email, String password) {
-		this.email = email;
-		this.password = password;
-	}
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@Builder.Default
+	private List<Card> cards = new ArrayList<>();
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
