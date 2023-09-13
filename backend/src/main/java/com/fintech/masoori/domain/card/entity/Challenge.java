@@ -38,6 +38,7 @@ public class Challenge {
 	@Column(name = "is_success")
 	private Boolean isSuccess;
 
+	@Column(name = "challenge_name")
 	private String name;
 
 	@Column(name = "achievement_condition", length = 25)
