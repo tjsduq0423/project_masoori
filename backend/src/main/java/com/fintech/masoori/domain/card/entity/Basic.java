@@ -1,7 +1,20 @@
 package com.fintech.masoori.domain.card.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -12,21 +25,21 @@ import lombok.*;
 @ToString(of = {"id", "keyword", "totalAmount", "frequency"})
 public class Basic {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "basic_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "basic_id")
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id")
-    private Card card;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "card_id")
+	private Card card;
 
-    @Column(name = "keyword")
-    private String keyword;
+	@Column(name = "keyword")
+	private String keyword;
 
-    @Column(name = "total_amount")
-    private int totalAmount;
+	@Column(name = "total_amount")
+	private int totalAmount;
 
-    @Column(name = "frequency")
-    private int frequency;
+	@Column(name = "frequency")
+	private int frequency;
 }
