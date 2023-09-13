@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fintech.masoori.domain.card.entity.Card;
 import com.fintech.masoori.global.oauth.ProviderType;
 import com.fintech.masoori.global.util.BaseTimeEntity;
 
@@ -21,6 +22,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -45,7 +47,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 	private String email;
 
 	@Column(name = "nickname")
-//	@Column(name = "nickname", length = 20, nullable = false)
+	//	@Column(name = "nickname", length = 20, nullable = false)
 	private String nickname;
 
 	@Column(name = "password")
