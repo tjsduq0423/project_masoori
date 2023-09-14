@@ -9,8 +9,8 @@ import lombok.Data;
 @Data
 @Builder
 public class SelectChallengeCardReq {
-	@Schema(description = "조회 시작일", example = "202307")
+	@Schema(description = "조회 시작일(Date)", example = "2023-07-14T15:30:45")
 	private LocalDateTime startTime;
-	@Schema(description = "조회 종료일", example = "202309")
+	@Schema(description = "조회 종료일(Date)", example = "2023-09-14T15:30:45")
 	private LocalDateTime endTime;
 }
