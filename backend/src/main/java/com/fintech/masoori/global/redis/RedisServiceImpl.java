@@ -3,10 +3,8 @@ package com.fintech.masoori.global.redis;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -28,6 +26,21 @@ public class RedisServiceImpl implements RedisService {
 	@Override
 	public void deleteEmailCode(String email) {
 		redisTemplate.delete(email);
+	}
+
+	@Override
+	public void setSmsCode(String phoneNumber, String code) {
+		redisTemplate.opsForValue().set(phoneNumber, code, 5, TimeUnit.MINUTES);
+	}
+
+	@Override
+	public String getSmsCode(String phoneNumber) {
+		return redisTemplate.opsForValue().get(phoneNumber);
+	}
+
+	@Override
+	public void deleteSmsCode(String phoneNumber) {
+		redisTemplate.delete(phoneNumber);
 	}
 
 }

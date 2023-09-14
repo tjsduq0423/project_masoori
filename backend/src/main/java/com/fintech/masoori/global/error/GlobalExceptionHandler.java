@@ -7,16 +7,16 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.fintech.masoori.global.error.exception.BusinessException;
 
 import lombok.extern.slf4j.Slf4j;
 
-@RestController
 @Slf4j
+@RestControllerAdvice
 public class GlobalExceptionHandler {
-
 	/**
 	 * javax.validation.Valid or @Validated 으로 binding error 발생시 발생한다.
 	 * HttpMessageConverter 에서 등록한 HttpMessageConverter binding 못할경우 발생

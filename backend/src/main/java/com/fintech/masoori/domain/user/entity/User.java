@@ -56,6 +56,12 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Column(name = "profile")
 	private String profile;
 
+	@Column(name = "name", length = 11)
+	private String name;
+
+	@Column(name = "phone_number", length = 11)
+	private String phoneNumber;
+
 	@Column(name = "roles")
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Builder.Default
