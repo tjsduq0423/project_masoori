@@ -86,6 +86,12 @@ spring:
           starttls:
             enable: true
 
+  # 휴대폰 인증
+  sms:
+    api: NCSICXQZGOSRQDAU
+    api-secret: RDSPTVRMQWG48BT1TFHO14QWGTIHBMKS
+    from: 01051548989
+
 # log 레벨 설정
 logging:
   level:
