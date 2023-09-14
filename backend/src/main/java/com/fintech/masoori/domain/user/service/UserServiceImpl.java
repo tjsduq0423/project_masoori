@@ -19,6 +19,7 @@ import com.fintech.masoori.domain.user.exception.InvalidAuthCodeException;
 import com.fintech.masoori.domain.user.exception.SmsMessagingException;
 import com.fintech.masoori.domain.user.exception.UserNotFoundException;
 import com.fintech.masoori.domain.user.repository.UserRepository;
+import com.fintech.masoori.global.config.jwt.TokenInfo;
 import com.fintech.masoori.global.redis.RedisService;
 
 import jakarta.mail.MessagingException;
@@ -54,8 +55,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void login(LoginReq loginReq) {
-
+	public TokenInfo login(LoginReq loginReq) {
+		TokenInfo tokenInfo = null;
+		return tokenInfo;
 	}
 
 	@Override
