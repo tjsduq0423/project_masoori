@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 public class SelectBasicCardReq {
-	@Schema(description = "조회 시작일", example = "20230901")
+	@Schema(description = "조회 시작일(Date 객체)", example = "2023-09-14T15:30:45")
 	private LocalDateTime time;
 	@Schema(description = "조회 개수", example = "3")
 	private int count;
