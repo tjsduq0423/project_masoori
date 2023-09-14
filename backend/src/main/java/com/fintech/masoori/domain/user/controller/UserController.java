@@ -4,25 +4,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fintech.masoori.domain.user.dto.EmailCheckReq;
+import com.fintech.masoori.domain.user.dto.InfoRes;
+import com.fintech.masoori.domain.user.dto.LoginReq;
 import com.fintech.masoori.domain.user.dto.SendEmailReq;
 import com.fintech.masoori.domain.user.dto.SendSmsReq;
+import com.fintech.masoori.domain.user.dto.SignUpReq;
 import com.fintech.masoori.domain.user.dto.SmsCheckReq;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.service.EmailService;
 import com.fintech.masoori.domain.user.service.SmsService;
 import com.fintech.masoori.domain.user.service.UserService;
+import com.fintech.masoori.global.config.jwt.TokenInfo;
 import com.fintech.masoori.global.error.exception.InvalidValueException;
 import com.fintech.masoori.global.redis.RedisService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -67,6 +74,33 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
+	@Operation(summary = "회원가입 API")
+	@PostMapping("/signup")
+	public ResponseEntity<?> signup(
+		@Parameter(description = "이메일, 패스워드", required = true)
+		@RequestBody @Validated SignUpReq signUpReq, BindingResult bindingResult) {
+		validateRequest(bindingResult);
+		userService.signUp(signUpReq);
+		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "로그인 API")
+	@PostMapping("/login")
+	public ResponseEntity<?> login(
+		@Parameter(description = "이메일, 패스워드", required = true)
+		@RequestBody @Validated LoginReq loginReq, BindingResult bindingResult) {
+		validateRequest(bindingResult);
+		TokenInfo tokenInfo = userService.login(loginReq);
+		return ResponseEntity.ok().body(tokenInfo);
+	}
+
+	@Operation(summary = "로그아웃 API")
+	@PostMapping("/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+		userService.logout(request, response);
+		return "redirect:https://masoori.site/";
+	}
+
 	//    @Operation(summary = "휴대폰 인증코드 발송 API")
 	//    @PostMapping("/sms")
 	//    public ResponseEntity<?> sendSms(
@@ -97,6 +131,13 @@ public class UserController {
 		validateRequest(bindingResult);
 		userService.verifySmsCode(smsCheckReq);
 		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "마이페이지 유저 정보 조회 API")
+	@GetMapping("/info")
+	public ResponseEntity<?> userInfo(Authentication authentication) {
+		InfoRes infoRes = null;
+		return ResponseEntity.ok().body(infoRes);
 	}
 
 	private void validateRequest(BindingResult bindingResult) {
