@@ -35,7 +35,7 @@ const routes: RouteType[] = [
   },
   {
     path: "/login",
-    element: React.lazy(() => import("@/components/modal/login")),
+    element: React.lazy(() => import("@/pages/login")),
   },
   {
     path: "/crystal",
