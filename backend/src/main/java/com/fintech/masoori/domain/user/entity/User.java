@@ -9,6 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fintech.masoori.domain.card.entity.Card;
+import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.global.oauth.ProviderType;
 import com.fintech.masoori.global.util.BaseTimeEntity;
 
@@ -21,6 +23,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -35,14 +38,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
 public class User extends BaseTimeEntity implements UserDetails {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
 	private Long id;
 
 	@Column(name = "email", length = 80, nullable = false)
 	private String email;
 
-	@Column(name = "nickname", length = 20, nullable = false)
+	@Column(name = "nickname")
+	//	@Column(name = "nickname", length = 20, nullable = false)
 	private String nickname;
 
 	@Column(name = "password")
@@ -50,6 +56,12 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 	@Column(name = "profile")
 	private String profile;
+
+	@Column(name = "name", length = 11)
+	private String name;
+
+	@Column(name = "phone_number", length = 11)
+	private String phoneNumber;
 
 	@Column(name = "roles")
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -59,6 +71,14 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "provider_type", length = 20, nullable = false)
 	private ProviderType providerType;
+
+	@OneToMany(mappedBy = "user")
+	@Builder.Default
+	private List<Card> cardList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user")
+	@Builder.Default
+	private List<FortuneUser> fortuneUserList = new ArrayList<>();
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
