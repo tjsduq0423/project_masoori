@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fintech.masoori.domain.card.entity.Card;
+import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.global.oauth.ProviderType;
 import com.fintech.masoori.global.util.BaseTimeEntity;
 
@@ -65,9 +66,13 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Column(name = "provider_type", length = 20, nullable = false)
 	private ProviderType providerType;
 
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "user")
 	@Builder.Default
-	private List<Card> cards = new ArrayList<>();
+	private List<Card> cardList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user")
+	@Builder.Default
+	private List<FortuneUser> fortuneUserList = new ArrayList<>();
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
