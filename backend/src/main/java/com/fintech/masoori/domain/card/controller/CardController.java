@@ -58,7 +58,7 @@ public class CardController {
 	@Operation(summary = "챌린지 조회 API", description = "유저에게 할당되어 있는 챌린지카드와 챌린지를 연,월일을 통해 조회한다.")
 	@GetMapping("/challenge")
 	public ResponseEntity<ChallengeCardRes.ChallengeCard> selectChallenge(
-		@Parameter(description = "조회할 연,월", required = true, example = "202308")
+		@Parameter(description = "조회할 연,월(Date 객체)", required = true, example = "2023-09-14T15:30:45")
 		@RequestBody LocalDateTime time, Principal principal) {
 		return ResponseEntity.ok().build();
 	}
