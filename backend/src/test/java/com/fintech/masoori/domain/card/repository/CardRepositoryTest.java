@@ -29,7 +29,7 @@ class CardRepositoryTest {
 	void findCardById() {
 		Card card1 = Card.builder()
 						 .name("카드 테스트1")
-						 .photoPath("D://img/test.img")
+						 .imagePath("D://img/test.img")
 						 .description("이 카드는 테스트1용 카드")
 						 .cardType(CardType.BASIC)
 						 .build();
@@ -41,15 +41,15 @@ class CardRepositoryTest {
 						.profile("C://test/1.jpg")
 						.providerType(ProviderType.LOCAL)
 						.build();
-		user.getCards().add(card1);
+		user.getCardList().add(card1);
 		//        logger.info("UserCardClass : {}", user.getCards().get(0).getClass());
 		userRepository.save(user);
 		User findUser = userRepository.findById(user.getId()).orElse(null);
-		logger.info("CardClass : {}", findUser.getCards().get(0).getClass());
-		logger.info("CardSize : {}", findUser.getCards().size());
-		for (Card card : findUser.getCards()) {
+		logger.info("CardClass : {}", findUser.getCardList().get(0).getClass());
+		logger.info("CardSize : {}", findUser.getCardList().size());
+		for (Card card : findUser.getCardList()) {
 			logger.info("Card : {}", card);
 		}
-		assertThat(findUser.getCards().get(0).getId()).isEqualTo(card1.getId());
+		assertThat(findUser.getCardList().get(0).getId()).isEqualTo(card1.getId());
 	}
 }
