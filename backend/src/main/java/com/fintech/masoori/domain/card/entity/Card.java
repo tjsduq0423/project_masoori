@@ -32,7 +32,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "card")
-@ToString(of = {"id", "name", "photoPath", "description", "cardType"})
+@ToString(of = {"id", "name", "imagePath", "description", "cardType"})
 public class Card extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,8 +46,8 @@ public class Card extends BaseTimeEntity {
 	@Column(name = "card_name")
 	private String name;
 
-	@Column(name = "photo_path")
-	private String photoPath;
+	@Column(name = "image_path")
+	private String imagePath;
 
 	@Column(name = "description")
 	private String description;
