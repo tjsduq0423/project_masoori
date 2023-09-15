@@ -11,7 +11,7 @@ const routes: RouteType[] = [
     path: "/",
     // guard: LoginGuard,
     // layout: DashboardLayout,
-    element: React.lazy(() => import("@/components/Pokemon")),
+    element: React.lazy(() => import("@/components/CardFlip")),
   },
   {
     path: "/deck",
