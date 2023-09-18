@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fintech.masoori.domain.analytics.entity.MonthlySpendingAnalytics;
+import com.fintech.masoori.domain.credit.entity.CreditCardUser;
 import com.fintech.masoori.domain.card.entity.Card;
 import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.global.oauth.ProviderType;
@@ -65,7 +66,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 	private String phoneNumber;
 
 	@Column(name = "roles")
-	@ElementCollection(fetch = FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.LAZY)
 	@Builder.Default
 	private List<String> roles = new ArrayList<>();
 
@@ -74,6 +75,12 @@ public class User extends BaseTimeEntity implements UserDetails {
 	private ProviderType providerType;
 
 	@OneToMany(mappedBy = "user")
+	private List<CreditCardUser> creditCardUsers = new ArrayList<>();
+
+	public User(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
 	@Builder.Default
 	private List<Card> cardList = new ArrayList<>();
 
