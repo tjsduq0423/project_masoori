@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fintech.masoori.domain.analytics.entity.MonthlySpendingAnalytics;
 import com.fintech.masoori.domain.card.entity.Card;
 import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.global.oauth.ProviderType;
@@ -80,6 +81,22 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Builder.Default
 	private List<FortuneUser> fortuneUserList = new ArrayList<>();
 
+	@OneToMany(mappedBy = "user")
+	@Builder.Default
+	private List<MonthlySpendingAnalytics> monthlySpendingAnalyticsList = new ArrayList<>();
+
+	public void updatePassword(String password) {
+		this.password = password;
+	}
+
+	public void updateProfile(String profile) {
+		this.profile = profile;
+	}
+
+	public void updateNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
@@ -110,15 +127,4 @@ public class User extends BaseTimeEntity implements UserDetails {
 		return true;
 	}
 
-	public void updatePassword(String password) {
-		this.password = password;
-	}
-
-	public void updateProfile(String profile) {
-		this.profile = profile;
-	}
-
-	public void updateNickname(String nickname) {
-		this.nickname = nickname;
-	}
 }
