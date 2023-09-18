@@ -21,18 +21,18 @@ const switchAnimation = keyframes`
     width: 112px;
   }
   100% {
-    left: 304px;
-    width: 82px;
+    left: 235px;
+    width: 52px;
   }
 `;
 
 const reverseAnimation = keyframes`
   0% {
-    left: 304px;
-    width: 82px;
+    left: 235px;
+    width: 52px;
   }
   60% {
-    left: 264px;
+    left: 150px;
     width: 112px;
   }
   100% {
@@ -41,10 +41,10 @@ const reverseAnimation = keyframes`
 `;
 
 const ToggleLabel = styled.label<{ bgImage: string; bgColor: string }>`
-  width: 400px;
-  height: 100px;
+  height: 62.048px;
+  width: 100%;
   border-radius: 100px;
-  border: 5px solid #72cce3;
+  background: white;
   display: flex;
   align-items: center;
   position: relative;
@@ -56,9 +56,9 @@ const ToggleLabel = styled.label<{ bgImage: string; bgColor: string }>`
     animation-fill-mode: forwards;
     transition: all 150ms ease-in;
     content: "";
-    width: 82px;
-    height: 82px;
-    top: 4px;
+    width: 52px;
+    height: 52px;
+    top: 6px;
     left: 4px;
     position: absolute;
     border-radius: 82px;
@@ -70,10 +70,10 @@ const ToggleLabel = styled.label<{ bgImage: string; bgColor: string }>`
     transition: all 150ms ease-in;
     position: absolute;
     content: "";
-    top: 4px;
+    top: 5px;
     right: 4px;
-    width: 82px;
-    height: 82px;
+    width: 52px;
+    height: 52px;
     background: url(${(props) => props.bgImage}) ${(props) => props.bgColor};
     background-size: 63.6363636364% 54.5454545455%;
     background-position: center;
@@ -90,7 +90,7 @@ const ToggleLabelBackground = styled.div`
   height: 5px;
   border-radius: 5px;
   position: relative;
-  background: "#fff";
+  background: "#ff0e0e";
   left: 135px;
   top: 45px;
   transition: all 150ms ease-in;
@@ -155,9 +155,9 @@ const Text = styled.div<TextProps>`
   transition: all 0.3s ease-in-out;
   color: #a37c9b;
   font-family: Pretendard;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: bold;
-  margin-left: ${(props) => (props.isChecked ? "15%" : "40%")};
+  margin-left: ${(props) => (props.isChecked ? "15%" : "25%")};
 `;
 
 const ToggleSwitch = ({
@@ -172,18 +172,24 @@ const ToggleSwitch = ({
     setIsChecked(!isChecked);
   };
 
+  const toggleId = Math.random().toString(36).substring(7); // 고유한 id 생성
+
   return (
-    <div className="container">
-      <ToggleCheckbox id="toggle" checked={isChecked} onChange={toggleSwitch} />
+    <>
+      <ToggleCheckbox
+        id={`toggle-${toggleId}`}
+        checked={isChecked}
+        onChange={toggleSwitch}
+      />
       <ToggleLabel
-        htmlFor="toggle"
+        htmlFor={`toggle-${toggleId}`}
         bgImage={backgroundImage}
         bgColor={backgroundColor}
       >
         <ToggleLabelBackground />
         <Text isChecked={isChecked}>{isChecked ? textOn : textOff}</Text>
       </ToggleLabel>
-    </div>
+    </>
   );
 };
 
