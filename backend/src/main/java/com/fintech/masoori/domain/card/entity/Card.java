@@ -58,10 +58,10 @@ public class Card extends BaseTimeEntity {
 
 	@OneToMany(mappedBy = "card", fetch = FetchType.LAZY)
 	@Builder.Default
-	private List<Challenge> challenges = new ArrayList<>();
+	private List<Challenge> challengeList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "card", fetch = FetchType.LAZY)
 	@Builder.Default
-	private List<Basic> basics = new ArrayList<>();
+	private List<Basic> basicList = new ArrayList<>();
 
 }
