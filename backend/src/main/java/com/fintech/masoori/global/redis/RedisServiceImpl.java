@@ -43,4 +43,14 @@ public class RedisServiceImpl implements RedisService {
 		redisTemplate.delete(phoneNumber);
 	}
 
+	@Override
+	public void setUserColor(String email, String color, int limitTime) {
+		redisTemplate.opsForValue().set("RC_" + email, color, limitTime, TimeUnit.MINUTES);
+	}
+
+	@Override
+	public String getUserColor(String email) {
+		return redisTemplate.opsForValue().get("RC_" + email);
+	}
+
 }

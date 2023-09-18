@@ -21,4 +21,10 @@ public interface RedisService {
 
 	// 휴대폰 인증코드 삭제
 	void deleteSmsCode(String phoneNumber);
+
+	//행운의 색 저장
+	void setUserColor(String email, String color, int limitTime);
+
+	//행운의 색 조회
+	String getUserColor(String email);
 }
