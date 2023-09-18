@@ -135,6 +135,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public void updateIntegration(User loginUser) {
+		userRepository.updateIntegration(loginUser.getEmail());
+	}
+
+	@Override
 	public void updateSmsAlarm(User loginUser) {
 		userRepository.updateSmsAlarm(loginUser.getEmail());
 	}
@@ -144,12 +149,6 @@ public class UserServiceImpl implements UserService {
 		userRepository.updateCardGeneration(loginUser.getEmail());
 	}
 
-	@Override
-	public void updateIntegration(User loginUser) {
-		String email = loginUser.getEmail();
-		// userRepository.updateSmsAlarm(email);
-		// userRepository.updateCardGeneration(email);
-		userRepository.updateIntegration(email);
-	}
+
 
 }

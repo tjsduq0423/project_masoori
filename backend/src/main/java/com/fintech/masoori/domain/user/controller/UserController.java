@@ -134,7 +134,15 @@ public class UserController {
 		return ResponseEntity.ok().body(infoRes);
 	}
 
-	@Operation(summary = "sms 알림 연동 설정 변경 API")
+	@Operation(summary = "유령을 통한 SMS, 소비카드 생성 연동 API")
+	@PostMapping("/ghost")
+	public ResponseEntity<?> updateIntegration(Authentication authentication) {
+		User loginUser = loginUser(authentication);
+		userService.updateIntegration(loginUser);
+		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "마이페이지 sms 알림 연동 변경 API")
 	@PostMapping("/alram")
 	public ResponseEntity<?> updateSmsAlarm(Authentication authentication) {
 		User loginUser = loginUser(authentication);
@@ -142,19 +150,11 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "소비카드 생성 연동 설정 변경 API")
+	@Operation(summary = "마이페이지 소비카드 생성 연동 변경 API")
 	@PostMapping("/generation")
 	public ResponseEntity<?> updateCardGeneration(Authentication authentication) {
 		User loginUser = loginUser(authentication);
 		userService.updateCardGeneration(loginUser);
-		return ResponseEntity.ok().build();
-	}
-
-	@Operation(summary = "유령을 통한 SMS, 소비카드 생성 연동 API")
-	@PostMapping("/ghost")
-	public ResponseEntity<?> updateIntegration(Authentication authentication) {
-		User loginUser = loginUser(authentication);
-		userService.updateIntegration(loginUser);
 		return ResponseEntity.ok().build();
 	}
 

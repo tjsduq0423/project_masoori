@@ -34,9 +34,11 @@ public interface UserService {
 
 	void verifySmsCode(SmsCheckReq smsCheckReq);
 
+	void updateIntegration(User loginUser);
+
 	void updateSmsAlarm(User loginUser);
 
 	void updateCardGeneration(User loginUser);
 
-	void updateIntegration(User loginUser);
+
 }
