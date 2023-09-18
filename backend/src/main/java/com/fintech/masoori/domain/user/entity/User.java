@@ -10,6 +10,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fintech.masoori.domain.credit.entity.CreditCardUser;
+import com.fintech.masoori.domain.card.entity.Card;
+import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.global.oauth.ProviderType;
 import com.fintech.masoori.global.util.BaseTimeEntity;
 
@@ -37,6 +39,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
 public class User extends BaseTimeEntity implements UserDetails {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
@@ -55,6 +58,12 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Column(name = "profile")
 	private String profile;
 
+	@Column(name = "name", length = 11)
+	private String name;
+
+	@Column(name = "phone_number", length = 11)
+	private String phoneNumber;
+
 	@Column(name = "roles")
 	@ElementCollection(fetch = FetchType.LAZY)
 	@Builder.Default
@@ -71,6 +80,12 @@ public class User extends BaseTimeEntity implements UserDetails {
 		this.email = email;
 		this.password = password;
 	}
+	@Builder.Default
+	private List<Card> cardList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user")
+	@Builder.Default
+	private List<FortuneUser> fortuneUserList = new ArrayList<>();
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

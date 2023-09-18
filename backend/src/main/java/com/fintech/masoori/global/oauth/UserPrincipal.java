@@ -26,7 +26,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
 	private final String email;
-	private final String nickname;
+	private final String name;
 	private final String password;
 	private final ProviderType providerType;
 	private final UserRole userRole;
@@ -34,7 +34,7 @@ public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
 	private Map<String, Object> attributes;
 
 	public static UserPrincipal create(User user) {
-		return new UserPrincipal(user.getEmail(), user.getNickname(), user.getPassword(), user.getProviderType(),
+		return new UserPrincipal(user.getEmail(), user.getName(), user.getPassword(), user.getProviderType(),
 			UserRole.ROLE_USER, Collections.singletonList(new SimpleGrantedAuthority(UserRole.ROLE_USER.name())));
 	}
 
@@ -51,7 +51,7 @@ public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
 
 	@Override
 	public String getUsername() {
-		return nickname;
+		return name;
 	}
 
 	@Override
