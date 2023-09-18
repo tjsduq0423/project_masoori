@@ -59,9 +59,11 @@ public class CreditCard {
 	private String registerPath;
 
 	@OneToMany(mappedBy = "creditCard")
+	@Builder.Default
 	private List<CreditCardUser> creditCardUsers = new ArrayList<>();
 
 	@ElementCollection
 	@CollectionTable(name = "benefits", joinColumns = @JoinColumn(name = "credit_card_id"))
+	@Builder.Default
 	private List<Benefit> benefits = new ArrayList<>();
 }
