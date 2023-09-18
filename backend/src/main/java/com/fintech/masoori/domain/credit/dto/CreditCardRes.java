@@ -23,6 +23,7 @@ public class CreditCardRes {
 		private List<String> brandList;
 		private String imagePath;
 		private String registerPath;
+		private String reason;
 		private List<CreditCardRes.Benefit> benefitList;
 
 		public CreditCard(com.fintech.masoori.domain.credit.entity.CreditCard creditCard) {
