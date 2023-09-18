@@ -95,27 +95,27 @@ public class UserController {
 		return "redirect:https://masoori.site/";
 	}
 
-	//    @Operation(summary = "휴대폰 인증코드 발송 API")
-	//    @PostMapping("/sms")
-	//    public ResponseEntity<?> sendSms(
-	//            @Parameter(description = "회원")
-	//            @RequestBody @Validated SendSmsReq sendSmsReq, BindingResult bindingResult, Authentication authentication) {
-	//        validateRequest(bindingResult);
-	//        User loginUser = loginUser(authentication);
-	//        userService.updateInfoAndSendSms(sendSmsReq, loginUser);
-	//        return ResponseEntity.ok().build();
-	//    }
-
 	@Operation(summary = "휴대폰 인증코드 발송 API")
 	@PostMapping("/sms")
 	public ResponseEntity<?> sendSms(
 		@Parameter(description = "회원")
-		@RequestBody @Validated SendSmsReq sendSmsReq, BindingResult bindingResult) {
+		@RequestBody @Validated SendSmsReq sendSmsReq, BindingResult bindingResult, Authentication authentication) {
 		validateRequest(bindingResult);
-		User loginUser = userService.findByEmail(sendSmsReq.getEmail()).get();
+		User loginUser = loginUser(authentication);
 		userService.updateInfoAndSendSms(sendSmsReq, loginUser);
 		return ResponseEntity.ok().build();
 	}
+
+	// @Operation(summary = "휴대폰 인증코드 발송 API")
+	// @PostMapping("/sms")
+	// public ResponseEntity<?> sendSms(
+	// 	@Parameter(description = "회원")
+	// 	@RequestBody @Validated SendSmsReq sendSmsReq, BindingResult bindingResult) {
+	// 	validateRequest(bindingResult);
+	// 	User loginUser = userService.findByEmail(sendSmsReq.getEmail()).get();
+	// 	userService.updateInfoAndSendSms(sendSmsReq, loginUser);
+	// 	return ResponseEntity.ok().build();
+	// }
 
 	@Operation(summary = "휴대폰 인증코드 검증 API")
 	@PostMapping("/sms/check")

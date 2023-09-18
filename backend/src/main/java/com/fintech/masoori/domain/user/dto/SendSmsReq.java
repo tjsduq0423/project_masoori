@@ -12,7 +12,4 @@ public class SendSmsReq {
 	@NotBlank
 	private String phoneNumber;
 
-	// 로그인 기능 구현되면 지울 것
-	@NotBlank
-	private String email;
 }
