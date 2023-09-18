@@ -134,4 +134,22 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public void updateSmsAlarm(User loginUser) {
+		userRepository.updateSmsAlarm(loginUser.getEmail());
+	}
+
+	@Override
+	public void updateCardGeneration(User loginUser) {
+		userRepository.updateCardGeneration(loginUser.getEmail());
+	}
+
+	@Override
+	public void updateIntegration(User loginUser) {
+		String email = loginUser.getEmail();
+		// userRepository.updateSmsAlarm(email);
+		// userRepository.updateCardGeneration(email);
+		userRepository.updateIntegration(email);
+	}
+
 }
