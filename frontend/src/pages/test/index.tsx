@@ -1,9 +1,9 @@
-import EnterBtn from "@/components/enterbtn";
+import Book from "@/components/book";
 
 const TestPage = () => {
   return (
     <div>
-      <EnterBtn />
+      <Book />
     </div>
   );
 };

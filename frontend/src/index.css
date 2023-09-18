@@ -2,28 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i');
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i");
 
-html {
-  box-sizing: border-box;
-  font-size: 14px;
-  font-family: 'Montserrat', sans-serif;
-  line-height: 1.2;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-
-}
-
-html, body {
+body {
   margin: 0;
-  padding: 0;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-*, :after, :before {
-  box-sizing: inherit;
-  cursor: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/836/hearthstone-cursor.png) 10 2, auto;
+*,
+:after,
+:before {
+  cursor:
+    url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/836/hearthstone-cursor.png)
+      10 2,
+    auto;
   &:hover {
-    cursor: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/836/hearthstone-click.png) 10 2, auto;
+    cursor:
+      url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/836/hearthstone-click.png)
+        10 2,
+      auto;
   }
 }
