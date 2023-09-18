@@ -26,15 +26,14 @@ const DonutTrack = styled.circle<{ strokewidth: number }>`
 
 const DonutIndicator = styled.circle<{ strokewidth: number; dashval: string }>`
   fill: transparent;
-  stroke: #009688;
+  stroke: #7c5874;
   stroke-width: ${(props) => props.strokewidth};
   stroke-dasharray: ${(props) => props.dashval};
   transition: stroke-dasharray 0.3s ease;
 `;
 
 const DonutText = styled.text`
-  font-family: "Roboto";
-  fill: #607580;
+  fill: #fff;
 `;
 
 const DonutTextVal = styled.tspan`
@@ -42,12 +41,12 @@ const DonutTextVal = styled.tspan`
 `;
 
 const DonutTextPercent = styled.tspan`
-  font-size: 14px;
+  font-size: 16px;
 `;
 
 const DonutTextLabel = styled.tspan`
   margin-top: 10px;
-  font-size: 9px;
+  font-size: 12px;
 `;
 
 function DonutChart({ value, valuelabel, size, strokewidth }: DonutChartProps) {
@@ -90,7 +89,7 @@ function DonutChart({ value, valuelabel, size, strokewidth }: DonutChartProps) {
       <DonutText x={halfsize} y={halfsize} style={{ textAnchor: "middle" }}>
         <DonutTextVal>{value}</DonutTextVal>
         <DonutTextPercent>만원</DonutTextPercent>
-        <DonutTextLabel x={halfsize} y={halfsize + 10}>
+        <DonutTextLabel x={halfsize} y={halfsize + 17} fill="#DACBD7">
           {valuelabel}
         </DonutTextLabel>
       </DonutText>
