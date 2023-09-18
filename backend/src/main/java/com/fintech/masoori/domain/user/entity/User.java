@@ -86,6 +86,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 	private ProviderType providerType;
 
 	@OneToMany(mappedBy = "user")
+	@Builder.Default
 	private List<CreditCardUser> creditCardUsers = new ArrayList<>();
 
 	public User(String email, String password) {
