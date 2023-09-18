@@ -72,25 +72,30 @@ main {
   color: #ffffff;
 }
 .intro-text h1 {
+  font-family: "Pyeongchangpeace";
   font-size: 42px;
   margin: 0;
 }
 .intro-text h2 {
   font-size: 16px;
+  font-family: "Pyeongchangpeace";
   text-transform: uppercase;
   margin: 0;
 }
 .intro-text p {
+  font-family: "Pyeongchangpeace";
   font-size: 18px;
   line-height: 1.5;
 }
 .intro-text a {
   display: inline-block;
-  padding: 15px 30px;
-  background: #feca0a;
+  padding: 7px 20px;
+  background: #CAB2D3;
   border-radius: 99px;
   text-transform: uppercase;
   font-weight: bold;
+  font-size: 24px;
+  color: #813E83;
   margin-top: 20px;
 }
 .intro-text .feature {
