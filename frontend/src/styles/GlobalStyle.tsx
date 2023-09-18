@@ -14,7 +14,7 @@ const GlobalStyle = createGlobalStyle`
 
     body {
         font-family: "Pretendard";
-        overflow: hidden;
+        overflow: auto;
     }
 
     .scrollable {

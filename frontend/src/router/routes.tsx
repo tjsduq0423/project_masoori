@@ -33,6 +33,18 @@ const routes: RouteType[] = [
     path: "/login",
     element: React.lazy(() => import("@/pages/login")),
   },
+  {
+    path: "/profile",
+    element: React.lazy(() => import("@/pages/profile")),
+  },
+  {
+    path: "/menu",
+    element: React.lazy(() => import("@/pages/menu")),
+  },
+  {
+    path: "/faq",
+    element: React.lazy(() => import("@/pages/faq")),
+  },
   //   {
   //     path: "/",
   //     element: () => <Navigate replace to="/menu" />,
