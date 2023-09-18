@@ -93,6 +93,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 		this.email = email;
 		this.password = password;
 	}
+	@OneToMany(mappedBy = "user")
 	@Builder.Default
 	private List<Card> cardList = new ArrayList<>();
 
