@@ -1,17 +1,9 @@
 import styled from "styled-components";
-
-export interface StyledTextBubbleProps {
-  text: string;
-  width: string;
-  background: string;
-  opacity: string;
-  paddingLeftRight: string;
-  paddingTopBottom: string;
-}
+import { StyledTextBubbleProps } from "@/types/luckType";
 
 const StyledTextBubble = styled.div<StyledTextBubbleProps>`
   width: ${(props) => props.width};
-  border-radius: 44px;
+  border-radius: ${(props) => props.borderRadius};
   background: ${(props) => props.background};
   opacity: ${(props) => props.opacity};
   box-shadow:
@@ -26,6 +18,29 @@ const StyledTextBubble = styled.div<StyledTextBubbleProps>`
   word-wrap: break-word;
   text-align: left;
   color: white;
+  position: relative;
+
+  /* hoverable 프로퍼티가 true일 때만 hover 효과 적용 */
+  ${(props) =>
+    props.hoverable &&
+    `
+    &:hover::before {
+      opacity: 1;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  `}
+
+  &::before {
+    content: "▶";
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 20px; /* 이 부분을 적절히 조정하세요 */
+    transform: translateY(-50%);
+    transition: opacity 0.3s ease-in-out;
+  }
 `;
 
 const TextBubble = ({
@@ -35,15 +50,19 @@ const TextBubble = ({
   opacity,
   paddingLeftRight,
   paddingTopBottom,
+  borderRadius,
+  hoverable,
 }: StyledTextBubbleProps) => {
   return (
     <StyledTextBubble
       width={width}
-      text={text}
       paddingLeftRight={paddingLeftRight}
       paddingTopBottom={paddingTopBottom}
       background={background}
       opacity={opacity}
+      borderRadius={borderRadius}
+      text={text}
+      hoverable={hoverable}
     >
       {text}
     </StyledTextBubble>
