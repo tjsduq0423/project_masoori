@@ -53,4 +53,9 @@ public class RedisServiceImpl implements RedisService {
 		return redisTemplate.opsForValue().get("RC_" + email);
 	}
 
+	@Override
+	public void deleteUserColor(String email) {
+		redisTemplate.delete("RC_" + email);
+	}
+
 }

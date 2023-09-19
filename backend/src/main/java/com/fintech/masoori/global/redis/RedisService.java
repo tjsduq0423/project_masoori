@@ -27,4 +27,7 @@ public interface RedisService {
 
 	//행운의 색 조회
 	String getUserColor(String email);
+
+	//행운의 색 삭제
+	void deleteUserColor(String email);
 }
