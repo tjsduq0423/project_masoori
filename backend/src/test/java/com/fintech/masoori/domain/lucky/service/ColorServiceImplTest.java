@@ -52,6 +52,9 @@ class ColorServiceImplTest {
 			//레디스에서 유저 제거
 			redisService.deleteUserColor(user.getEmail());
 			assertThat(redisService.getUserColor(user.getEmail()) == null);
+		} else {
+			redisService.deleteUserColor(user.getEmail());
+			fail("이미 Redis에 유저가 존재합니다.");
 		}
 	}
 
@@ -77,11 +80,15 @@ class ColorServiceImplTest {
 		ColorRes response = colorService.selectOneColor(user.getEmail());
 		if (redisService.getUserColor(user.getEmail()).equals(response.getColor())) {
 			//redis에 있는 컬러가 저장된 컬러가 맞는지
-			String Color = redisService.getUserColor(user.getEmail());
-			log.info("Color : {}", colorRepository.findDescriptionByColor(Color));
-			assertThat(Color.equals(response.getColor()));
+			String color = redisService.getUserColor(user.getEmail());
+			Color findColor = colorRepository.findDescriptionByColor(color);
+			log.info("Color : {}", findColor);
+			assertThat(color.equals(response.getColor()));
+			assertThat(color.equals(findColor.getColor()));
+			redisService.deleteUserColor(user.getEmail());
+			assertThat(redisService.getUserColor(user.getEmail()) == null);
+		} else {
+			fail("redis에 저장되어 있는 color와 유저가 뽑았던 color가 일치하지 않습니다.");
 		}
-		redisService.deleteUserColor(user.getEmail());
-		assertThat(redisService.getUserColor(user.getEmail()) == null);
 	}
 }
