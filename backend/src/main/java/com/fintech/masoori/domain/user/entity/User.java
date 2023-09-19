@@ -10,8 +10,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fintech.masoori.domain.analytics.entity.MonthlySpendingAnalytics;
-import com.fintech.masoori.domain.credit.entity.CreditCardUser;
 import com.fintech.masoori.domain.card.entity.Card;
+import com.fintech.masoori.domain.credit.entity.CreditCardUser;
+import com.fintech.masoori.domain.deal.entity.Deal;
 import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.global.oauth.ProviderType;
 import com.fintech.masoori.global.util.BaseTimeEntity;
@@ -49,18 +50,14 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Column(name = "email", length = 80, nullable = false)
 	private String email;
 
-	@Column(name = "nickname")
-	//	@Column(name = "nickname", length = 20, nullable = false)
-	private String nickname;
+	@Column(name = "name", length = 25)
+	private String name;
 
 	@Column(name = "password")
 	private String password;
 
-	@Column(name = "profile")
-	private String profile;
-
-	@Column(name = "name", length = 11)
-	private String name;
+	@Column(name = "card_image")
+	private String cardImage;
 
 	@Column(name = "phone_number", length = 11)
 	private String phoneNumber;
@@ -87,11 +84,6 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Builder.Default
 	private List<CreditCardUser> creditCardUsers = new ArrayList<>();
 
-	public User(String email, String password) {
-		this.email = email;
-		this.password = password;
-	}
-
 	@OneToMany(mappedBy = "user")
 	@Builder.Default
 	private List<Card> cardList = new ArrayList<>();
@@ -104,16 +96,16 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Builder.Default
 	private List<MonthlySpendingAnalytics> monthlySpendingAnalyticsList = new ArrayList<>();
 
+	@OneToMany(mappedBy = "user")
+	@Builder.Default
+	private List<Deal> dealList = new ArrayList<>();
+
 	public void updatePassword(String password) {
 		this.password = password;
 	}
 
-	public void updateProfile(String profile) {
-		this.profile = profile;
-	}
-
-	public void updateNickname(String nickname) {
-		this.nickname = nickname;
+	public void updateCardImage(String cardImage) {
+		this.cardImage = cardImage;
 	}
 
 	@Override

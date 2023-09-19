@@ -1,14 +1,26 @@
 package com.fintech.masoori.domain.user.service;
 
-import java.util.Optional;
+import static com.fintech.masoori.global.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.*;
 
+import java.util.Collections;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
+import com.fintech.masoori.domain.user.UserRole;
 import com.fintech.masoori.domain.user.dto.EmailCheckReq;
+import com.fintech.masoori.domain.user.dto.InfoRes;
 import com.fintech.masoori.domain.user.dto.LoginReq;
+import com.fintech.masoori.domain.user.dto.LoginRes;
 import com.fintech.masoori.domain.user.dto.SendSmsReq;
 import com.fintech.masoori.domain.user.dto.SignUpReq;
 import com.fintech.masoori.domain.user.dto.SmsCheckReq;
@@ -16,13 +28,18 @@ import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.exception.EmailDuplicationException;
 import com.fintech.masoori.domain.user.exception.EmailMessagingException;
 import com.fintech.masoori.domain.user.exception.InvalidAuthCodeException;
+import com.fintech.masoori.domain.user.exception.ProviderIsNotMatchedException;
 import com.fintech.masoori.domain.user.exception.SmsMessagingException;
 import com.fintech.masoori.domain.user.exception.UserNotFoundException;
 import com.fintech.masoori.domain.user.repository.UserRepository;
+import com.fintech.masoori.global.config.jwt.JwtTokenProvider;
 import com.fintech.masoori.global.config.jwt.TokenInfo;
+import com.fintech.masoori.global.oauth.ProviderType;
 import com.fintech.masoori.global.redis.RedisService;
+import com.fintech.masoori.global.util.CookieUtil;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,36 +50,102 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
-
+	private final RedisTemplate redisTemplate;
+	private final JwtTokenProvider jwtTokenProvider;
+	private final PasswordEncoder passwordEncoder;
 	private final UserRepository userRepository;
 	private final RedisService redisService;
 	private final EmailService emailService;
 	private final SmsService smsService;
+	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 	@Override
-	public boolean checkEmail(String email) throws Exception {
-		return false;
+	public boolean checkEmail(String email) {
+		return userRepository.findByEmail(email).isPresent();
 	}
 
 	@Override
 	public boolean checkOAuthAccount(String email) {
-		return false;
+		User user = userRepository.findUserByEmail(email);
+		return user.getProviderType() != ProviderType.LOCAL;
 	}
 
 	@Override
+	@Transactional
 	public void signUp(SignUpReq signUpReq) {
-
+		if (checkEmail(signUpReq.getEmail())) {
+			throw new EmailDuplicationException("Email is Duplicated");
+		}
+		User newUser = User.builder()
+		                   .email(signUpReq.getEmail())
+		                   .password(passwordEncoder.encode(signUpReq.getPassword()))
+		                   .roles(Collections.singletonList(UserRole.ROLE_USER.name()))
+		                   .providerType(ProviderType.LOCAL)
+		                   .build();
+		userRepository.save(newUser);
 	}
 
 	@Override
-	public TokenInfo login(LoginReq loginReq) {
-		TokenInfo tokenInfo = null;
-		return tokenInfo;
+	public LoginRes login(LoginReq loginReq) {
+		Optional<User> byEmail = userRepository.findByEmail(loginReq.getEmail());
+		if (byEmail.isEmpty())
+			throw new UserNotFoundException("User is Not Found");
+		User user = byEmail.get();
+		if (user.getProviderType() != ProviderType.LOCAL)
+			throw new ProviderIsNotMatchedException("Provider is Not Matched");
+
+		UsernamePasswordAuthenticationToken authenticationToken = loginReq.toAuthentication();
+
+		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+		TokenInfo tokenInfo = jwtTokenProvider.createToken(authentication);
+
+		redisTemplate.opsForValue()
+		             .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getExpireTime(),
+			             TimeUnit.MILLISECONDS);
+		LoginRes loginRes = new LoginRes(tokenInfo.getAccessToken());
+		return loginRes;
+	}
+
+	@Override
+	public InfoRes getUserInfo(String email) {
+		User user = userRepository.findUserByEmail(email);
+		InfoRes infoRes = InfoRes.builder()
+		                         .imagePath(user.getCardImage())
+		                         .isPaymentInfoLinked(user.getIsAuthenticated())
+		                         .kakaoAlarm(user.getSmsAlarm())
+		                         .dailySpending(getDailySpending())
+		                         .monthlySpending(getMonthlySpending())
+		                         .weeklySpending(getWeeklySpending())
+		                         .build();
+		return infoRes;
+	}
+
+	private Integer getWeeklySpending() {
+		return null;
+	}
+
+	private Integer getMonthlySpending() {
+		return null;
+	}
+
+	private Integer getDailySpending() {
+		return null;
 	}
 
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response) {
-
+		Optional<String> cookie = CookieUtil.getCookie(request, REFRESH_TOKEN).map(Cookie::getValue);
+		// 쿠키 없으면 걍 로그아웃.
+		if (cookie.isEmpty()) {
+			return;
+		}
+		String refreshTokenFromCookie = cookie.get();
+		String userEmail = jwtTokenProvider.parseClaims(refreshTokenFromCookie).getSubject();
+		// 쿠키 삭제
+		CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+		// redis 토큰 삭제
+		redisTemplate.delete("RT" + userEmail);
 	}
 
 	@Override
@@ -148,7 +231,4 @@ public class UserServiceImpl implements UserService {
 	public void updateCardGeneration(User loginUser) {
 		userRepository.updateCardGeneration(loginUser.getEmail());
 	}
-
-
-
 }

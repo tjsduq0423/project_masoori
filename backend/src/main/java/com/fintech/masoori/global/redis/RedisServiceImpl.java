@@ -42,5 +42,4 @@ public class RedisServiceImpl implements RedisService {
 	public void deleteSmsCode(String phoneNumber) {
 		redisTemplate.delete(phoneNumber);
 	}
-
 }
