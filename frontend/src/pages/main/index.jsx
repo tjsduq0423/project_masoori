@@ -144,7 +144,9 @@ const MainPage = () => {
     };
 
     const setParticles = () => {
-      for (let i = 0; i < graphicPixels.length; i++) {
+      const maxParticles = 3000; // Change this to the desired number of particles
+
+      for (let i = 0; i < graphicPixels.length && i < maxParticles; i++) {
         if (particles[i]) {
           const pos = getGraphicPos(graphicPixels[i]);
           particles[i].particle.targetPosition.x = pos.x;
