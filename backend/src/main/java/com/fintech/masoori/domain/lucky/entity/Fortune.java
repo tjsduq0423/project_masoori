@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,8 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "fortune")
+@Table(name = "fortune", uniqueConstraints = {
+	@UniqueConstraint(name = "uc_fortune_fortune_name", columnNames = {"fortune_name"})})
 @ToString(of = {"id", "name", "imagePath", "description"})
 public class Fortune {
 	@Id
