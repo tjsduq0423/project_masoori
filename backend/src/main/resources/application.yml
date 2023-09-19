@@ -96,7 +96,8 @@ spring:
 logging:
   level:
     com.fintech.masoori: debug
-
+    org:
+      hibernate: debug
 # OAuth2 redirect url 설정
 app:
   oauth2:
