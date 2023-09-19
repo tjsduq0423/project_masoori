@@ -62,7 +62,7 @@ spring:
   # JPA 설정
   jpa:
     hibernate:
-      ddl-auto:
+      ddl-auto: create
     properties:
       hibernate:
         default_batch_fetch_size: 100
@@ -95,7 +95,7 @@ spring:
 # log 레벨 설정
 logging:
   level:
-    com.fintech.masoori: DEBUG
+    com.fintech.masoori: debug
     org:
       hibernate: debug
 # OAuth2 redirect url 설정
