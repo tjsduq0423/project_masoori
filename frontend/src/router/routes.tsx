@@ -19,7 +19,7 @@ const routes: RouteType[] = [
   },
   {
     path: "/flip",
-    element: React.lazy(() => import("@/components/CardFlip")),
+    element: React.lazy(() => import("@/components/cardFlip")),
   },
   {
     path: "/main",
