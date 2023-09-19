@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Builder
 @AllArgsConstructor
@@ -24,6 +25,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "monthly_spending_analytics")
+@ToString(of = {"category", "cost", "analytics"})
 public class MonthlySpendingAnalytics extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
