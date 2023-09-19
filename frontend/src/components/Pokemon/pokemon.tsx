@@ -290,14 +290,14 @@ const Card = styled.div`
 
   &.animated {
     transition: none;
-    animation: holoCard 12s ease 0s 1;
+    animation: ${holoCard} 12s ease 0s 1;
     &:before {
       transition: none;
-      animation: holoGradient 12s ease 0s 1;
+      animation: ${holoGradient} 12s ease 0s 1;
     }
     &:after {
       transition: none;
-      animation: holoSparkle 12s ease 0s 1;
+      animation: ${holoSparkle} 12s ease 0s 1;
     }
   }
 
@@ -414,13 +414,17 @@ const Cards = styled.div`
 
 const CharizardCard = styled(Card)`
   /* Charizard card specific styles */
+  --color1: rgb(0, 231, 255);
+  --color2: rgb(255, 0, 231);
+  --back: url(https://cdn2.bulbagarden.net/upload/1/17/Cardback.jpg);
+
   --charizard1: #fac;
   --charizard2: #ddccaa;
   --charizardfront: url(https://cdn2.bulbagarden.net/upload/1/17/Cardback.jpg);
   background-image: var(--charizardfront);
   &.animated {
     transition: none;
-    animation: holoCard, holoSparkle, holoGradient;
+    animation: ${holoCard}, ${holoSparkle}, ${holoGradient};
   }
 `;
 
@@ -499,7 +503,7 @@ const PokemonCard: React.FC = () => {
     const transform = { transform: `rotateX(${ty}deg) rotateY(${tx}deg)` };
 
     style.innerHTML = `
-      .${Card}:hover::before { ${gradPos} }
+      .${card}:hover::before { ${gradPos} }
       .${Card}:hover::after { ${sprkPos} ${opc} }
     `;
 
@@ -524,7 +528,7 @@ const PokemonCard: React.FC = () => {
           onMouseMove={handleCardHover}
           onMouseLeave={handleCardLeave}
           className={`charizard ${clickedCard === 0 ? "clicked" : ""}`}
-          style={hoverStyle}
+          style={disableHover ? {} : hoverStyle}
         ></CharizardCard>
       </section>
     </div>
