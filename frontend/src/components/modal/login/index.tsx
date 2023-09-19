@@ -4,7 +4,6 @@ import Google from "@/assets/img/Google.png";
 import Naver from "@/assets/img/Naver.png";
 import BackCards from "@/assets/img/Login.png";
 import styled from "styled-components";
-import styles from "./styles.module.css";
 
 const Container = styled.div`
   height: 100%;
@@ -146,7 +145,7 @@ const Login: React.FC = () => {
                 회원가입
               </button>
             </SignUp>
-            <LoginButton className={styles.loginButton}>Login</LoginButton>
+            <LoginButton>Login</LoginButton>
             <SocialLogin
               src={Kakao}
               onClick={() => {
