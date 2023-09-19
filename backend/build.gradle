@@ -71,6 +71,10 @@ dependencies {
 
     // sms
     implementation group: 'net.nurigo', name: 'javaSDK', version: '2.2'
+
+    //Test 코드
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {

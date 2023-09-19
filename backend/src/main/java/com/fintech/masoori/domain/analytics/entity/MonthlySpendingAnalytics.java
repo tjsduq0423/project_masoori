@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Builder
 @AllArgsConstructor
@@ -24,6 +25,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "monthly_spending_analytics")
+@ToString(of = {"category", "cost", "analytics"})
 public class MonthlySpendingAnalytics extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,10 +35,10 @@ public class MonthlySpendingAnalytics extends BaseTimeEntity {
 	@Column(name = "category")
 	private String category;
 
-	@Column(name = "category")
+	@Column(name = "cost")
 	private Integer cost;
 
-	@Column(name = "category")
+	@Column(name = "analytics")
 	private String analytics;
 
 	@ManyToOne(fetch = FetchType.LAZY)
