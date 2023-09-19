@@ -2,9 +2,12 @@ package com.fintech.masoori.domain.credit.controller;
 
 import java.util.List;
 
+import com.fintech.masoori.domain.credit.entity.CreditCard;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,13 +31,23 @@ public class CreditCardController {
 	private final UserService userService;
 	private final CreditCardService creditCardService;
 
-	@Operation(summary = "사용자한테 추천해주는 카드 리스트")
+	@Operation(summary = "사용자 추천 카드 리스트 조회 API")
 	@GetMapping("")
 	public ResponseEntity<?> selectAllCreditCardUser(Authentication authentication) {
 		User loginUser = userService.findByEmail(authentication.getPrincipal().toString()).get();
 		CreditCardRes creditCardRes = creditCardService.selectAll(loginUser.getEmail());
 		return ResponseEntity.ok(creditCardRes);
 	}
+
+	@Operation(summary = "카드 상세 정보 조회 API")
+	@GetMapping("/{cardId}")
+	public ResponseEntity<?> selectOne(@Parameter(description = "카드 아이디", required = true, example = "1") @PathVariable Long cardId) {
+		CreditCard creditCard = creditCardService.selectOne(cardId);
+		return ResponseEntity.ok(creditCard);
+	}
+
+
+
 
 	
 

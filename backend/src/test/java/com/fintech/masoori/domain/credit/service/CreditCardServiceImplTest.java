@@ -18,13 +18,11 @@ import jakarta.persistence.EntityManager;
 
 @SpringBootTest
 @Transactional
-@Rollback
+@Rollback()
 class CreditCardServiceImplTest {
 
 	@Autowired
 	CreditCardService creditCardService;
-	@Autowired
-	CreditCardRepository creditCardRepository;
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
@@ -33,7 +31,7 @@ class CreditCardServiceImplTest {
 	@Test
 	void selectAll() {
 		User user = User.builder().email("ssafy@gmail.com").build();
-		userRepository.save(user);
+		em.persist(user);
 		// for (int i = 0; i < 5; i++) {
 		// 	CreditCard card =
 		// 		em.persist(card);
@@ -44,21 +42,21 @@ class CreditCardServiceImplTest {
 		CreditCard card3 = CreditCard.builder().name("나눔카드").company("농협카드").build();
 		CreditCard card4 = CreditCard.builder().name("미소카드").company("우리카드").build();
 		CreditCard card5 = CreditCard.builder().name("해피카드").company("신한카드").build();
-		creditCardRepository.save(card1);
-		creditCardRepository.save(card2);
-		creditCardRepository.save(card3);
-		creditCardRepository.save(card4);
-		creditCardRepository.save(card5);
+		em.persist(card1);
+		em.persist(card2);
+		em.persist(card3);
+		em.persist(card4);
+		em.persist(card5);
 
 		User findUser = userRepository.findUserByEmail(user.getEmail());
 		CreditCardUser creditCardUser1 = CreditCardUser.builder().creditCard(card1).user(user).reason("잘 어울려용").build();
 		CreditCardUser creditCardUser2 = CreditCardUser.builder().creditCard(card3).user(user).reason("써보세용").build();
 		CreditCardUser creditCardUser3 = CreditCardUser.builder().creditCard(card5).user(user).reason("절약돼용").build();
-		creditCardRepository.save(creditCardUser1);
-		creditCardRepository.save(creditCardUser2);
-		creditCardRepository.save(creditCardUser3);
+		em.persist(creditCardUser1);
+		em.persist(creditCardUser2);
+		em.persist(creditCardUser3);
 
-		// creditcard에도 저장해주고 유저의 크레딧카드에도 저장?
+		// 유저의 크레딧카드에도 저장?
 
 		em.flush();
 		em.clear();
@@ -80,9 +78,9 @@ class CreditCardServiceImplTest {
 		CreditCard card1 = CreditCard.builder().name("행복카드").company("현대카드").build();
 		CreditCard card2 = CreditCard.builder().name("사랑카드").company("국민카드").build();
 		CreditCard card3 = CreditCard.builder().name("나눔카드").company("농협카드").build();
-		creditCardRepository.save(card1);
-		creditCardRepository.save(card2);
-		creditCardRepository.save(card3);
+		em.persist(card1);
+		em.persist(card2);
+		em.persist(card3);
 
 		em.flush();
 		em.clear();

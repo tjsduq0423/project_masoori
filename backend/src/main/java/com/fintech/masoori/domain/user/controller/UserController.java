@@ -98,7 +98,7 @@ public class UserController {
 	@Operation(summary = "휴대폰 인증코드 발송 API", description = "입력된 사용자 정보를 업데이트하고 해당 휴대폰번호로 인증코드를 발송한다.")
 	@PostMapping("/sms")
 	public ResponseEntity<?> sendSms(
-		@Parameter(description = "회원")
+		@Parameter(description = "회원 전화번호", required = true)
 		@RequestBody @Validated SendSmsReq sendSmsReq, BindingResult bindingResult, Authentication authentication) {
 		validateRequest(bindingResult);
 		User loginUser = loginUser(authentication);
