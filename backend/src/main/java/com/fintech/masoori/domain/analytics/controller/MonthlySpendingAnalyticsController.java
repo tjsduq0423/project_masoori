@@ -15,9 +15,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/card")
+@RequestMapping("/api/v1/analytics")
 @RequiredArgsConstructor
-@Tag(name = "Card", description = "소비카드 및 챌린지카드 API")
+@Tag(name = "Analytics", description = "월간 소비 분석 API")
 public class MonthlySpendingAnalyticsController {
 	private final MonthlySpendingAnalyticsService monthlySpendingAnalyticsService;
 
