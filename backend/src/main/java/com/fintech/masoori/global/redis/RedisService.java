@@ -30,4 +30,13 @@ public interface RedisService {
 
 	//행운의 색 삭제
 	void deleteUserColor(String email);
+
+	//금전운 저장
+	void setUserFortune(String email, String name, int limitTime);
+
+	//금전운 조회
+	String getUserFortune(String email);
+
+	//금전운 삭제
+	void deleteUserFortune(String email);
 }

@@ -58,4 +58,19 @@ public class RedisServiceImpl implements RedisService {
 		redisTemplate.delete("RC_" + email);
 	}
 
+	@Override
+	public void setUserFortune(String email, String name, int limitTime) {
+		redisTemplate.opsForValue().set("RF_" + email, name, limitTime, TimeUnit.MINUTES);
+	}
+
+	@Override
+	public String getUserFortune(String email) {
+		return redisTemplate.opsForValue().get("RF_" + email);
+	}
+
+	@Override
+	public void deleteUserFortune(String email) {
+		redisTemplate.delete("RF_" + email);
+	}
+
 }
