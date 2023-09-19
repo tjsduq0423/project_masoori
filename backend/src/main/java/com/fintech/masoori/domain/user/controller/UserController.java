@@ -2,6 +2,7 @@ package com.fintech.masoori.domain.user.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -130,7 +131,8 @@ public class UserController {
 
 	@Operation(summary = "마이페이지 유저 정보 조회 API")
 	@GetMapping("/info")
-	public ResponseEntity<InfoRes> userInfo(Authentication authentication) {
+	public ResponseEntity<InfoRes> userInfo(@AuthenticationPrincipal
+		Authentication authentication) {
 		InfoRes infoRes = userService.getUserInfo(authentication.getName());
 		return ResponseEntity.ok().body(infoRes);
 	}

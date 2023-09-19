@@ -2,6 +2,9 @@ package com.fintech.masoori.domain.user.service;
 
 import static com.fintech.masoori.global.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.*;
 
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.temporal.WeekFields;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
+import com.fintech.masoori.domain.deal.entity.Deal;
+import com.fintech.masoori.domain.deal.service.DealService;
 import com.fintech.masoori.domain.user.UserRole;
 import com.fintech.masoori.domain.user.dto.EmailCheckReq;
 import com.fintech.masoori.domain.user.dto.InfoRes;
@@ -114,23 +119,40 @@ public class UserServiceImpl implements UserService {
 		                         .imagePath(user.getCardImage())
 		                         .isPaymentInfoLinked(user.getIsAuthenticated())
 		                         .kakaoAlarm(user.getSmsAlarm())
-		                         .dailySpending(getDailySpending())
-		                         .monthlySpending(getMonthlySpending())
-		                         .weeklySpending(getWeeklySpending())
+		                         .dailySpending(getDailySpending(user))
+		                         .monthlySpending(getMonthlySpending(user))
+		                         .weeklySpending(getWeeklySpending(user))
 		                         .build();
 		return infoRes;
 	}
 
-	private Integer getWeeklySpending() {
-		return null;
+	public Integer getMonthlySpending(User user) {
+		return user.getDealList()
+		           .stream()
+		           .filter(e -> e.getDate().getYear() == LocalDate.now().getYear()
+			           && e.getDate().getMonth() == LocalDate.now().getMonth())
+		           .map(Deal::getAmount)
+		           .reduce(0, Integer::sum);
 	}
 
-	private Integer getMonthlySpending() {
-		return null;
+	public Integer getWeeklySpending(User user) {
+		LocalDate now = LocalDate.now();
+		return user.getDealList()
+		           .stream()
+		           .filter(e -> e.getDate().getYear() == now.getYear()
+			           && e.getDate().get(WeekFields.ISO.weekOfWeekBasedYear()) == now.get(
+			           WeekFields.ISO.weekOfWeekBasedYear()))
+		           .map(Deal::getAmount)
+		           .reduce(0, Integer::sum);
 	}
 
-	private Integer getDailySpending() {
-		return null;
+	public Integer getDailySpending(User user) {
+		LocalDate now = LocalDate.now();
+		return user.getDealList()
+		           .stream()
+		           .filter(e -> e.getDate().isEqual(ChronoLocalDateTime.from(now)))
+		           .map(Deal::getAmount)
+		           .reduce(0, Integer::sum);
 	}
 
 	@Override

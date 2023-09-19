@@ -15,7 +15,7 @@ import jakarta.persistence.EntityManager;
 
 @SpringBootTest
 @Transactional
-@Rollback()
+@Rollback
 class UserServiceImplTest {
 
 	@Autowired
@@ -66,7 +66,12 @@ class UserServiceImplTest {
 
 	@Test
 	public void updateIntegration() {
-		User user = User.builder().email("ssafy@gmail.com").password("123").smsAlarm(false).cardGeneration(false).build();
+		User user = User.builder()
+		                .email("ssafy@gmail.com")
+		                .password("123")
+		                .smsAlarm(false)
+		                .cardGeneration(false)
+		                .build();
 		userRepository.save(user);
 
 		User savedUser = userRepository.findByEmail(user.getEmail()).get();
@@ -81,6 +86,17 @@ class UserServiceImplTest {
 		assertThat(updatedUser.getCardGeneration()).isEqualTo(true);
 	}
 
-
-
+	// 회원가입 검증
+	@Test
+	public void signUpTest() {
+	}
+	@Test
+	public void loginTest() {
+	}
+	// 로컬 로그인 검증
+	// 유저 정보 불러오기 검증
+	@Test
+	public void getUserInfoTest() {
+	}
+	// 로그아웃 검증 생략... 쿠키 값 지우는거라 생략좀 하겠습니다....
 }
