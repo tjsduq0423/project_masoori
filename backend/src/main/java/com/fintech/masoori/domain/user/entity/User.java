@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.hibernate.validator.constraints.Currency;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +32,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @Getter
@@ -68,13 +66,16 @@ public class User extends BaseTimeEntity implements UserDetails {
 	private String phoneNumber;
 
 	@Column(name = "is_authenticated")
-	private Boolean isAuthenticated; // 사용자 휴대폰 인증 여부
+	@Builder.Default
+	private Boolean isAuthenticated = false; // 사용자 휴대폰 인증 여부
 
 	@Column(name = "sms_alarm")
-	private Boolean smsAlarm; // SMS 알림 연동 여부
+	@Builder.Default
+	private Boolean smsAlarm = false; // SMS 알림 연동 여부
 
 	@Column(name = "card_generation")
-	private Boolean cardGeneration; // 소비카드 생성 연동 여부
+	@Builder.Default
+	private Boolean cardGeneration = false; // 소비카드 생성 연동 여부
 
 	@Column(name = "roles")
 	@ElementCollection(fetch = FetchType.LAZY)
@@ -86,12 +87,15 @@ public class User extends BaseTimeEntity implements UserDetails {
 	private ProviderType providerType;
 
 	@OneToMany(mappedBy = "user")
+	@Builder.Default
 	private List<CreditCardUser> creditCardUsers = new ArrayList<>();
 
 	public User(String email, String password) {
 		this.email = email;
 		this.password = password;
 	}
+
+	@OneToMany(mappedBy = "user")
 	@Builder.Default
 	private List<Card> cardList = new ArrayList<>();
 

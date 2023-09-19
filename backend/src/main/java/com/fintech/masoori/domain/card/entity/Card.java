@@ -56,12 +56,12 @@ public class Card extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private CardType cardType;
 
-	@OneToMany(mappedBy = "card", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "card")
 	@Builder.Default
-	private List<Challenge> challenges = new ArrayList<>();
+	private List<Challenge> challengeList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "card", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "card")
 	@Builder.Default
-	private List<Basic> basics = new ArrayList<>();
+	private List<Basic> basicList = new ArrayList<>();
 
 }

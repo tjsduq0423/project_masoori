@@ -16,6 +16,7 @@ public class FortuneRes {
 	private List<Fortune> fortuneList = new ArrayList<>();
 
 	@Data
+	@Builder
 	@AllArgsConstructor
 	public static class Fortune {
 		@Schema(description = "금전운 이름", example = "행운")
