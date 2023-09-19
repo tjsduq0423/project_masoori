@@ -47,13 +47,13 @@ class BasicRepositoryTest {
 						.description("이 카드는 테스트1용 카드")
 						.cardType(CardType.BASIC)
 						.build();
-		card.getBasics().add(basic1);
-		card.getBasics().add(basic2);
-		card.getBasics().add(basic3);
+		card.getBasicList().add(basic1);
+		card.getBasicList().add(basic2);
+		card.getBasicList().add(basic3);
 		cardRepository.save(card);
 		Card findCard = cardRepository.findById(card.getId()).orElse(null);
-		logger.info("BasicCard : {}", findCard.getBasics().get(0).getClass());
-		for (Basic basic : findCard.getBasics()) {
+		logger.info("BasicCard : {}", findCard.getBasicList().get(0).getClass());
+		for (Basic basic : findCard.getBasicList()) {
 			logger.info("Card : {}, {}", findCard, basic);
 			//            logger.info("Basic : {}", basic);
 		}

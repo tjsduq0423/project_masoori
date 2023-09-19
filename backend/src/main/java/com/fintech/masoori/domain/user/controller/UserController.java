@@ -18,12 +18,9 @@ import com.fintech.masoori.domain.user.dto.SendSmsReq;
 import com.fintech.masoori.domain.user.dto.SignUpReq;
 import com.fintech.masoori.domain.user.dto.SmsCheckReq;
 import com.fintech.masoori.domain.user.entity.User;
-import com.fintech.masoori.domain.user.service.EmailService;
-import com.fintech.masoori.domain.user.service.SmsService;
 import com.fintech.masoori.domain.user.service.UserService;
 import com.fintech.masoori.global.config.jwt.TokenInfo;
 import com.fintech.masoori.global.error.exception.InvalidValueException;
-import com.fintech.masoori.global.redis.RedisService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,9 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserController {
 	private final UserService userService;
-	private final EmailService emailService;
-	private final RedisService redisService;
-	private final SmsService smsService;
 
 	@Operation(summary = "회원가입 시 이메일 인증코드 발송 API")
 	@PostMapping("/email/signup")
@@ -138,6 +132,30 @@ public class UserController {
 	public ResponseEntity<?> userInfo(Authentication authentication) {
 		InfoRes infoRes = null;
 		return ResponseEntity.ok().body(infoRes);
+	}
+
+	@Operation(summary = "유령을 통한 SMS, 소비카드 생성 연동 API")
+	@PostMapping("/ghost")
+	public ResponseEntity<?> updateIntegration(Authentication authentication) {
+		User loginUser = loginUser(authentication);
+		userService.updateIntegration(loginUser);
+		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "마이페이지 sms 알림 연동 변경 API")
+	@PostMapping("/alram")
+	public ResponseEntity<?> updateSmsAlarm(Authentication authentication) {
+		User loginUser = loginUser(authentication);
+		userService.updateSmsAlarm(loginUser);
+		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "마이페이지 소비카드 생성 연동 변경 API")
+	@PostMapping("/generation")
+	public ResponseEntity<?> updateCardGeneration(Authentication authentication) {
+		User loginUser = loginUser(authentication);
+		userService.updateCardGeneration(loginUser);
+		return ResponseEntity.ok().build();
 	}
 
 	private void validateRequest(BindingResult bindingResult) {

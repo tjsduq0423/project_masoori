@@ -65,6 +65,15 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Column(name = "phone_number", length = 11)
 	private String phoneNumber;
 
+	@Column(name = "is_authenticated")
+	private Boolean isAuthenticated; // 사용자 휴대폰 인증 여부
+
+	@Column(name = "sms_alarm")
+	private Boolean smsAlarm; // SMS 알림 연동 여부
+
+	@Column(name = "card_generation")
+	private Boolean cardGeneration; // 소비카드 생성 연동 여부
+
 	@Column(name = "roles")
 	@ElementCollection(fetch = FetchType.LAZY)
 	@Builder.Default
@@ -75,12 +84,15 @@ public class User extends BaseTimeEntity implements UserDetails {
 	private ProviderType providerType;
 
 	@OneToMany(mappedBy = "user")
+	@Builder.Default
 	private List<CreditCardUser> creditCardUsers = new ArrayList<>();
 
 	public User(String email, String password) {
 		this.email = email;
 		this.password = password;
 	}
+
+	@OneToMany(mappedBy = "user")
 	@Builder.Default
 	private List<Card> cardList = new ArrayList<>();
 
