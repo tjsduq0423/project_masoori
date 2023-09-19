@@ -16,6 +16,7 @@ public class BasicCardRes {
 	private List<BasicCard> basicCardList = new ArrayList<>();
 
 	@Data
+	@Builder
 	@AllArgsConstructor
 	public static class BasicCard {
 		@Schema(description = "id(PK)", example = "1")
