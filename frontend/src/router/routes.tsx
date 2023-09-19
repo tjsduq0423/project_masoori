@@ -53,6 +53,10 @@ const routes: RouteType[] = [
     path: "/luckcontent",
     element: React.lazy(() => import("@/pages/luckContent")),
   },
+  {
+    path: "/landing",
+    element: React.lazy(() => import("@/pages/landing")),
+  },
   //   {
   //     path: "/",
   //     element: () => <Navigate replace to="/menu" />,
