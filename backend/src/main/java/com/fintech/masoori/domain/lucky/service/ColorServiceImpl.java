@@ -1,6 +1,5 @@
 package com.fintech.masoori.domain.lucky.service;
 
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -12,6 +11,7 @@ import com.fintech.masoori.domain.lucky.dto.ColorRes;
 import com.fintech.masoori.domain.lucky.entity.Color;
 import com.fintech.masoori.domain.lucky.repository.ColorRepository;
 import com.fintech.masoori.global.redis.RedisService;
+import com.fintech.masoori.global.util.CalcEndTime;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +40,7 @@ public class ColorServiceImpl implements ColorService {
 			log.debug("오늘의 색을 조회");
 			List<Color> allColor = colorRepository.findAll();
 			if (!allColor.isEmpty()) {
-				LocalTime now = LocalTime.now();
-				int limitMinute = (23 - now.getHour()) * 60 + (59 - now.getMinute());
+				int limitMinute = CalcEndTime.endMinute();
 				Random random = new Random();
 				int randomIndex = random.nextInt(allColor.size());
 				Color color = allColor.get(randomIndex);
