@@ -1,17 +1,18 @@
 package com.fintech.masoori.global.error;
 
+import org.hibernate.QueryTimeoutException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.fintech.masoori.global.error.exception.BusinessException;
 
+import io.lettuce.core.RedisConnectionException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -47,7 +48,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
 		MethodArgumentTypeMismatchException e) {
-		log.error("handleMethodArgumentTypeMismatchException", e);
+		log.error("MethodArgumentTypeMismatchException", e);
 		final ErrorResponse response = ErrorResponse.of(e);
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
@@ -58,9 +59,26 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
 		HttpRequestMethodNotSupportedException e) {
-		log.error("handleHttpRequestMethodNotSupportedException", e);
+		log.error("HttpRequestMethodNotSupportedException", e);
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.METHOD_NOT_ALLOWED);
 		return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
+	}
+
+	/**
+	 * Redis 서버 연결 실패 시
+	 */
+	@ExceptionHandler(RedisConnectionException.class)
+	protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(RedisConnectionException e) {
+		log.error("RedisConnectionException", e);
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.REDIS_NOT_CONNECTED);
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(QueryTimeoutException.class)
+	protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(QueryTimeoutException e) {
+		log.error("QueryTimeoutException", e);
+		final ErrorResponse response = ErrorResponse.of(ErrorCode.QUERY_TIMEOUT);
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(BusinessException.class)

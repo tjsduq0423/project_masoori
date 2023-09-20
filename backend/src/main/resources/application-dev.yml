@@ -41,13 +41,13 @@ spring:
   # key-value store인  redis 설정 (임시)
   data:
     redis:
-      host: j9b308.p.ssafy.io
+      host: masoori.site
       port: 1234
 
   # main DB 인 MariaDB 설정 (임시)
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://j9b308.p.ssafy.io:5555/masoori?useUnicode=yes&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    url: jdbc:mariadb://masoori.site:5555/masoori?useUnicode=yes&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: ssafy_b308
     password: ssafy_b308_1
 
@@ -79,7 +79,7 @@ logging:
 # OAuth2 redirect url 설정
 app:
   oauth2:
-    authorizedRedirectUris: https://j9b308.p.ssafy.io/oauth/redirect
+    authorizedRedirectUris: https://masoori.site/oauth/redirect
 
 # jwt secret key 설정
 jwt:

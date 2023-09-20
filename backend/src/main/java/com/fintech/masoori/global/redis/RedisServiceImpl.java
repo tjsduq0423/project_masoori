@@ -72,5 +72,4 @@ public class RedisServiceImpl implements RedisService {
 	public void deleteUserFortune(String email) {
 		redisTemplate.delete("RF_" + email);
 	}
-
 }
