@@ -15,6 +15,7 @@ public class ChallengeCardRes {
 	private List<ChallengeCard> challengeCardList = new ArrayList<>();
 
 	@Data
+	@Builder
 	@AllArgsConstructor
 	public static class ChallengeCard {
 		@Schema(description = "카드 기본 정보")

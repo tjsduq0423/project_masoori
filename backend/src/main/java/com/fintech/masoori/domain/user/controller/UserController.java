@@ -85,7 +85,7 @@ public class UserController {
 		@RequestBody @Validated LoginReq loginReq, BindingResult bindingResult) {
 		validateRequest(bindingResult);
 		TokenInfo tokenInfo = userService.login(loginReq);
-		return ResponseEntity.ok().body(tokenInfo);
+		return ResponseEntity.ok(tokenInfo);
 	}
 
 	@Operation(summary = "로그아웃 API", description = "사용자를 로그아웃시키고 메인 페이지로 리다이렉트시킨다.")
@@ -98,7 +98,7 @@ public class UserController {
 	@Operation(summary = "휴대폰 인증코드 발송 API", description = "입력된 사용자 정보를 업데이트하고 해당 휴대폰번호로 인증코드를 발송한다.")
 	@PostMapping("/sms")
 	public ResponseEntity<?> sendSms(
-		@Parameter(description = "회원")
+		@Parameter(description = "회원 전화번호", required = true)
 		@RequestBody @Validated SendSmsReq sendSmsReq, BindingResult bindingResult, Authentication authentication) {
 		validateRequest(bindingResult);
 		User loginUser = loginUser(authentication);
@@ -120,7 +120,7 @@ public class UserController {
 	@GetMapping("/info")
 	public ResponseEntity<?> userInfo(Authentication authentication) {
 		InfoRes infoRes = null;
-		return ResponseEntity.ok().body(infoRes);
+		return ResponseEntity.ok(infoRes);
 	}
 
 	@Operation(summary = "유령을 통한 SMS, 소비카드 생성 연동 API", description = "유령이 나타나서 동의했을 때, SMS 알림과 소비카드 생성을 연동한다.")
