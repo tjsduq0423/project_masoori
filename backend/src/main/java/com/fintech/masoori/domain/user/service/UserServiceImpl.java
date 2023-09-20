@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService {
 
 		InfoRes infoRes = InfoRes.builder()
 		                         .imagePath(user.getCardImage())
-		                         .isPaymentInfoLinked(user.getIsAuthenticated())
+		                         .isAuthenticated(user.getIsAuthenticated())
 		                         .smsAlarm(user.getSmsAlarm())
 		                         // .dailySpending(amountSumByPeriodDay)
 		                         // .monthlySpending(amountSumByPeriodWeek)

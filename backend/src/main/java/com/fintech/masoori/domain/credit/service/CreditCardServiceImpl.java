@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class CreditCardServiceImpl implements CreditCardService {
 	private final UserRepository userRepository;
 	private final CreditCardRepository creditCardRepository;
