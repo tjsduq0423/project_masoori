@@ -19,12 +19,14 @@ public class InfoRes {
 	private Boolean cardGeneration;
 
 	@Schema(description = "일별 소비 금액", example = "10000")
-	private int dailySpending;
+	private Integer dailySpending;
 
 	@Schema(description = "주별 소비 금액", example = "100000")
-	private int weeklySpending;
+	private Integer weeklySpending;
 
 	@Schema(description = "월별 소비 금액", example = "500000")
-	private int monthlySpending;
+	private Integer monthlySpending;
 
+	@Schema(description = "결제 내역 연동 여부 ", example = "true")
+	private Boolean isAuthenticated;
 }
