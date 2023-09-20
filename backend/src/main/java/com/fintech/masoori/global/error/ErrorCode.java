@@ -15,14 +15,17 @@ public enum ErrorCode {
 	EMAIL_DUPLICATION(409, "U001", "Email is Duplicated"),
 	USER_NOT_FOUND(400, "U002", "User Not Found"),
 	INVALID_AUTH_CODE(400, "U003", "Invalid Auth Code"),
-
+	REDIS_NOT_CONNECTED(400, "U004", "Redis Not Connected"),
+	PASSWORD_IS_NOT_MATCHED(400, "U005", "Password is not Matched"),
+	PROVIDER_IS_NOT_MATCHED(400, "U006", "Provider is not Matched"),
 	// Common
 	INVALID_INPUT_VALUE(400, "C001", "Invalid Input Value"),
 	METHOD_NOT_ALLOWED(405, "C002", "Invalid Input Value"),
 	ENTITY_NOT_FOUND(400, "C003", "Entity Not Found"),
 	INTERNAL_SERVER_ERROR(500, "C004", "Server Error"),
 	INVALID_TYPE_VALUE(400, "C005", "Invalid Type Value"),
-	HANDLE_ACCESS_DENIED(403, "C006", "Access is Denied");
+	HANDLE_ACCESS_DENIED(403, "C006", "Access is Denied"),
+	QUERY_TIMEOUT(400, "C007", "Query Timeout");
 
 
 	private final String code;

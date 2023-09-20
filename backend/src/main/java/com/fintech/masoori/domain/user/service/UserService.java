@@ -4,9 +4,7 @@ import java.util.Optional;
 
 import com.fintech.masoori.domain.user.dto.*;
 import com.fintech.masoori.domain.user.entity.User;
-import com.fintech.masoori.global.config.jwt.TokenInfo;
 
-import antlr.Token;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -17,7 +15,9 @@ public interface UserService {
 
 	void signUp(SignUpReq signUpReq);
 
-	TokenInfo login(LoginReq loginReq);
+	LoginRes login(LoginReq loginReq);
+
+	InfoRes getUserInfo(String email);
 
 	void logout(HttpServletRequest request, HttpServletResponse response);
 
@@ -39,6 +39,4 @@ public interface UserService {
 	void updateSmsAlarm(User loginUser);
 
 	void updateCardGeneration(User loginUser);
-
-
 }
