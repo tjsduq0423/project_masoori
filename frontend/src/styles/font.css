@@ -1,0 +1,26 @@
+@font-face {
+    font-family: "Brodies";
+    src: local("Brodies"), url('@/assets/fonts/brodies.ttf');
+}
+
+@font-face {
+    font-family: "Pretendard";
+    src: local("Pretendard"), url('@/assets/fonts/PRETENDARD-MEDIUM.OTF');
+    font-weight: medium;
+}
+
+@font-face {
+    font-family: "Pretendard";
+    src: local("Pretendard"), url('@/assets/fonts/PRETENDARD-BOLD.OTF');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: "Pyeongchangpeace";
+    src: local("Pyeongchangpeace"), url('@/assets/fonts/PYEONGCHANGPEACE-BOLD.OTF');
+}
+
+@font-face {
+    font-family: "Museum";
+    src: local("Museum"), url('@/assets/fonts/국립박물관문화재단클래식M.OTF');
+}
