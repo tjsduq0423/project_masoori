@@ -87,6 +87,11 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Builder.Default
 	private List<CreditCardUser> creditCardUsers = new ArrayList<>();
 
+	public User(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
+
 	@OneToMany(mappedBy = "user")
 	@Builder.Default
 	private List<Card> cardList = new ArrayList<>();
@@ -150,4 +155,10 @@ public class User extends BaseTimeEntity implements UserDetails {
 		fortuneUserList.add(fortuneUser);
 		fortuneUser.setUser(this);
 	}
+
+	public void addCard(Card card) {
+		this.cardList.add(card);
+		card.setUser(this);
+	}
+
 }
