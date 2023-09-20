@@ -18,7 +18,7 @@ public class Challenge {
 	@Schema(description = "챌린지 이름", example = "챌린지 이름")
 	private String name;
 	@Schema(description = "챌린지 달성조건", example = "커피 2번 줄이기")
-	private String content;
+	private String achievementCondition;
 	@Schema(description = "챌린지 시작 시간", example = "20230904")
 	private LocalDateTime startTime;
 	@Schema(description = "챌린지 종료 시간", example = "20230910")
