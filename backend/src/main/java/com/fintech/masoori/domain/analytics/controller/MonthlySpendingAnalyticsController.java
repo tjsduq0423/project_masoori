@@ -23,7 +23,7 @@ public class MonthlySpendingAnalyticsController {
 
 	//월간 소비 분석 전체 조회
 	@Operation(summary = "월간 소비 분석 전체 조회 API", description = "유저의 모든 월간 분석 내용을 조회한다.")
-	@GetMapping("/consume")
+	@GetMapping("/month")
 	public ResponseEntity<MonthlySpendingAnalyticsRes> selectConsumeCard(Principal principal) {
 		MonthlySpendingAnalyticsRes monthlySpendingAnalyticsRes = monthlySpendingAnalyticsService.selectAll(
 			principal.getName());

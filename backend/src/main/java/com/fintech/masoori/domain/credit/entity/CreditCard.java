@@ -44,7 +44,7 @@ public class CreditCard {
 	@Column(name = "overseas")
 	private String overseas;
 
-	@Column(name = "condition")
+	@Column(name = "conditions")
 	private String condition;
 
 	@Column(name = "brands")

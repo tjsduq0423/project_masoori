@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 	private final UserService userService;
 
-	@Operation(summary = "회원가입 시 이메일 인증코드 발송 API")
+	@Operation(summary = "회원가입 시 이메일 인증코드 발송 API", description = "사용자 이메일을 중복체크하고 해당 이메일로 인증코드를 발송한다.")
 	@PostMapping("/email/signup")
 	public ResponseEntity<?> sendSignupEmailCode(
 		@Parameter(description = "회원 이메일", required = true)
@@ -49,7 +49,7 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "비밀번호 재설정 시 이메일 인증코드 발송 API")
+	@Operation(summary = "비밀번호 재설정 시 이메일 인증코드 발송 API", description = "가입된 사용자 이메일이면 해당 이메일로 인증코드를 발송한다.")
 	@PostMapping("/email/password")
 	public ResponseEntity<?> sendPasswordEmailCode(
 		@Parameter(description = "회원 이메일", required = true)
@@ -59,7 +59,7 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "이메일 인증코드 검증 API")
+	@Operation(summary = "이메일 인증코드 검증 API", description = "사용자가 입력한 인증코드와 서버에 저장된 인증코드가 일치하는 지 검증한다.")
 	@PostMapping("/email/check")
 	public ResponseEntity<?> verifyEmailCode(
 		@Parameter(description = "회원 이메일, 인증 코드", required = true)
@@ -69,7 +69,7 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "회원가입 API")
+	@Operation(summary = "회원가입 API", description = "입력된 이메일, 패스워드로 DB에 저장한다.")
 	@PostMapping("/signup")
 	public ResponseEntity<?> signup(
 		@Parameter(description = "이메일, 패스워드", required = true)
@@ -79,7 +79,7 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "로그인 API")
+	@Operation(summary = "로그인 API", description = "입력된 이메일과 패스워드가 일치하는 지 검증한 뒤 로그인 토큰을 전달한다.")
 	@PostMapping("/login")
 	public ResponseEntity<?> login(
 		@Parameter(description = "이메일, 패스워드", required = true)
@@ -89,36 +89,25 @@ public class UserController {
 		return ResponseEntity.ok(loginRes);
 	}
 
-	@Operation(summary = "로그아웃 API")
+	@Operation(summary = "로그아웃 API", description = "사용자를 로그아웃시키고 메인 페이지로 리다이렉트시킨다.")
 	@PostMapping("/logout")
 	public String logout(HttpServletRequest request, HttpServletResponse response) {
 		userService.logout(request, response);
 		return "redirect:https://masoori.site/";
 	}
 
-	//    @Operation(summary = "휴대폰 인증코드 발송 API")
-	//    @PostMapping("/sms")
-	//    public ResponseEntity<?> sendSms(
-	//            @Parameter(description = "회원")
-	//            @RequestBody @Validated SendSmsReq sendSmsReq, BindingResult bindingResult, Authentication authentication) {
-	//        validateRequest(bindingResult);
-	//        User loginUser = loginUser(authentication);
-	//        userService.updateInfoAndSendSms(sendSmsReq, loginUser);
-	//        return ResponseEntity.ok().build();
-	//    }
-
-	@Operation(summary = "휴대폰 인증코드 발송 API")
+	@Operation(summary = "휴대폰 인증코드 발송 API", description = "입력된 사용자 정보를 업데이트하고 해당 휴대폰번호로 인증코드를 발송한다.")
 	@PostMapping("/sms")
 	public ResponseEntity<?> sendSms(
-		@Parameter(description = "회원")
-		@RequestBody @Validated SendSmsReq sendSmsReq, BindingResult bindingResult) {
+		@Parameter(description = "회원 전화번호", required = true)
+		@RequestBody @Validated SendSmsReq sendSmsReq, BindingResult bindingResult, Authentication authentication) {
 		validateRequest(bindingResult);
-		User loginUser = userService.findByEmail(sendSmsReq.getEmail()).get();
+		User loginUser = loginUser(authentication);
 		userService.updateInfoAndSendSms(sendSmsReq, loginUser);
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "휴대폰 인증코드 검증 API")
+	@Operation(summary = "휴대폰 인증코드 검증 API", description = "사용자가 입력한 인증코드와 서버에 저장된 인증코드가 일치하는 지 확인한다.")
 	@PostMapping("/sms/check")
 	public ResponseEntity<?> verifySmsCode(
 		@Parameter(description = "회원 전화번호, 인증 코드", required = true)
@@ -128,14 +117,14 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "마이페이지 유저 정보 조회 API")
+	@Operation(summary = "마이페이지 유저 정보 조회 API", description = "마이페이지에서 필요한 사용자 정보를 조회한다.")
 	@GetMapping("/info")
 	public ResponseEntity<InfoRes> userInfo(Authentication authentication) {
 		InfoRes infoRes = userService.getUserInfo(authentication.getName());
 		return ResponseEntity.ok().body(infoRes);
 	}
 
-	@Operation(summary = "유령을 통한 SMS, 소비카드 생성 연동 API")
+	@Operation(summary = "유령을 통한 SMS, 소비카드 생성 연동 API", description = "유령이 나타나서 동의했을 때, SMS 알림과 소비카드 생성을 연동한다.")
 	@PostMapping("/ghost")
 	public ResponseEntity<?> updateIntegration(Authentication authentication) {
 		User loginUser = loginUser(authentication);
@@ -143,7 +132,7 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "마이페이지 sms 알림 연동 변경 API")
+	@Operation(summary = "마이페이지 sms 알림 연동 변경 API", description = "마이페이지에서 sms 알림 연동 설정을 변경했을 때 토글로 작동한다.")
 	@PostMapping("/alram")
 	public ResponseEntity<?> updateSmsAlarm(Authentication authentication) {
 		User loginUser = loginUser(authentication);
@@ -151,7 +140,7 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
-	@Operation(summary = "마이페이지 소비카드 생성 연동 변경 API")
+	@Operation(summary = "마이페이지 소비카드 생성 연동 변경 API", description = "마이페이지에서 소비카드 생성 연동 설정을 변경했을 때 토글로 작동한다.")
 	@PostMapping("/generation")
 	public ResponseEntity<?> updateCardGeneration(Authentication authentication) {
 		User loginUser = loginUser(authentication);

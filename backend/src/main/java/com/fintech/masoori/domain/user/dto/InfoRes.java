@@ -7,22 +7,24 @@ import lombok.Data;
 
 @Data
 @Builder
+@AllArgsConstructor
 public class InfoRes {
-	@Schema(description = "대표카드 이미지 경로 img src", example = "http://gibhub.io/dshjflhl123898d.png")
+	@Schema(description = "사진 경로", example = "/etc/img")
 	private String imagePath;
 
-	@Schema(description = "결제 연동 여부", example = "true or false")
-	private Boolean isPaymentInfoLinked;
-
-	@Schema(description = "문자 알림 여부(카드 생성 알람 입니다.)", example = "true or false")
+	@Schema(description = "SMS 알림 연동 여부", example = "true")
 	private Boolean smsAlarm;
 
-	@Schema(description = "일간 소비량", example = "40000")
-	private Integer dailySpending;
+	@Schema(description = "소비카드 생성 연동 여부", example = "true")
+	private Boolean cardGeneration;
 
-	@Schema(description = "주간 소비량", example = "430200")
-	private Integer weeklySpending;
+	@Schema(description = "일별 소비 금액", example = "10000")
+	private int dailySpending;
 
-	@Schema(description = "월간 소비량", example = "1300240")
-	private Integer monthlySpending;
+	@Schema(description = "주별 소비 금액", example = "100000")
+	private int weeklySpending;
+
+	@Schema(description = "월별 소비 금액", example = "500000")
+	private int monthlySpending;
+
 }

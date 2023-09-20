@@ -63,13 +63,16 @@ public class User extends BaseTimeEntity implements UserDetails {
 	private String phoneNumber;
 
 	@Column(name = "is_authenticated")
-	private Boolean isAuthenticated; // 사용자 휴대폰 인증 여부
+	@Builder.Default
+	private Boolean isAuthenticated = false; // 사용자 휴대폰 인증 여부
 
 	@Column(name = "sms_alarm")
-	private Boolean smsAlarm; // SMS 알림 연동 여부
+	@Builder.Default
+	private Boolean smsAlarm = false; // SMS 알림 연동 여부
 
 	@Column(name = "card_generation")
-	private Boolean cardGeneration; // 소비카드 생성 연동 여부
+	@Builder.Default
+	private Boolean cardGeneration = false; // 소비카드 생성 연동 여부
 
 	@Column(name = "roles")
 	@ElementCollection(fetch = FetchType.LAZY)
@@ -143,4 +146,8 @@ public class User extends BaseTimeEntity implements UserDetails {
 		return true;
 	}
 
+	public void addFortuneUser(FortuneUser fortuneUser) {
+		fortuneUserList.add(fortuneUser);
+		fortuneUser.setUser(this);
+	}
 }

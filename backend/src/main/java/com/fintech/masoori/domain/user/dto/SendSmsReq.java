@@ -1,5 +1,6 @@
 package com.fintech.masoori.domain.user.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -7,12 +8,11 @@ import lombok.Data;
 public class SendSmsReq {
 
 	@NotBlank
+	@Schema(description = "사용자 이름", example = "홍길동")
 	private String name;
 
 	@NotBlank
+	@Schema(description = "사용자 휴대폰번호", example = "01012345678")
 	private String phoneNumber;
 
-	// 로그인 기능 구현되면 지울 것
-	@NotBlank
-	private String email;
 }
