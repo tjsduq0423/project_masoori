@@ -64,4 +64,19 @@ public class Card extends BaseTimeEntity {
 	@Builder.Default
 	private List<Basic> basicList = new ArrayList<>();
 
+	public void addChallengeList(Challenge challenge) {
+		this.challengeList.add(challenge);
+		challenge.setCard(this);
+	}
+
+	public void addBasicList(Basic basic) {
+		this.basicList.add(basic);
+		basic.setCard(this);
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+		user.getCardList().add(this);
+	}
+
 }

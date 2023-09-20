@@ -49,15 +49,11 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Column(name = "email", length = 80, nullable = false)
 	private String email;
 
-	@Column(name = "nickname")
-	//	@Column(name = "nickname", length = 20, nullable = false)
-	private String nickname;
-
 	@Column(name = "password")
 	private String password;
 
-	@Column(name = "profile")
-	private String profile;
+	@Column(name = "card_image")
+	private String cardImage;
 
 	@Column(name = "name", length = 11)
 	private String name;
@@ -111,12 +107,8 @@ public class User extends BaseTimeEntity implements UserDetails {
 		this.password = password;
 	}
 
-	public void updateProfile(String profile) {
-		this.profile = profile;
-	}
-
-	public void updateNickname(String nickname) {
-		this.nickname = nickname;
+	public void updateProfile(String cardImage) {
+		this.cardImage = cardImage;
 	}
 
 	@Override
@@ -152,6 +144,11 @@ public class User extends BaseTimeEntity implements UserDetails {
 	public void addFortuneUser(FortuneUser fortuneUser) {
 		fortuneUserList.add(fortuneUser);
 		fortuneUser.setUser(this);
+	}
+
+	public void addCard(Card card) {
+		this.cardList.add(card);
+		card.setUser(this);
 	}
 
 }

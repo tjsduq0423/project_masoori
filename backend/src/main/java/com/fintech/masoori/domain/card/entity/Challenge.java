@@ -49,4 +49,9 @@ public class Challenge {
 
 	@Column(name = "end_time")
 	private LocalDateTime endTime;
+
+	public void setCard(Card card) {
+		this.card = card;
+		card.getChallengeList().add(this);
+	}
 }
