@@ -40,4 +40,8 @@ public class FortuneUser extends BaseTimeEntity {
 	@JoinColumn(name = "fortune_id")
 	private Fortune fortune;
 
+	public void setUser(User user) {
+		this.user = user;
+		user.getFortuneUserList().add(this);
+	}
 }
