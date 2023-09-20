@@ -3,11 +3,13 @@ package com.fintech.masoori.domain.card.dto;
 import java.time.LocalDateTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
+@AllArgsConstructor
 public class Card {
 	@Schema(description = "id(PK)", example = "1")
 	private Long id;
@@ -21,4 +23,13 @@ public class Card {
 	private LocalDateTime createdDate;
 	@Schema(description = "카드 타입", example = "BASIC, SPECIAL")
 	private CardType cardType;
+
+	public Card(com.fintech.masoori.domain.card.entity.Card card) {
+		this.id = card.getId();
+		this.name = card.getName();
+		this.imagePath = card.getImagePath();
+		this.description = card.getDescription();
+		this.createdDate = card.getCreatedDate();
+		this.cardType = card.getCardType();
+	}
 }
