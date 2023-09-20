@@ -10,8 +10,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fintech.masoori.domain.analytics.entity.MonthlySpendingAnalytics;
-import com.fintech.masoori.domain.credit.entity.CreditCardUser;
 import com.fintech.masoori.domain.card.entity.Card;
+import com.fintech.masoori.domain.credit.entity.CreditCardUser;
 import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.global.oauth.ProviderType;
 import com.fintech.masoori.global.util.BaseTimeEntity;
@@ -147,6 +147,11 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public void addFortuneUser(FortuneUser fortuneUser) {
+		fortuneUserList.add(fortuneUser);
+		fortuneUser.setUser(this);
 	}
 
 }
