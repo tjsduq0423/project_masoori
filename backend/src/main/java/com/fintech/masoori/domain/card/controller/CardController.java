@@ -1,7 +1,6 @@
 package com.fintech.masoori.domain.card.controller;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fintech.masoori.domain.card.dto.BasicCardRes;
 import com.fintech.masoori.domain.card.dto.ChallengeCardRes;
-import com.fintech.masoori.domain.card.dto.SelectBasicCardReq;
-import com.fintech.masoori.domain.card.dto.SelectChallengeCardReq;
+import com.fintech.masoori.domain.card.dto.RangeCardReq;
 import com.fintech.masoori.domain.card.service.CardService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,39 +34,46 @@ public class CardController {
 		return ResponseEntity.ok().build();
 	}
 
-	//소비 카드 조회
-	@Operation(summary = "소비 카드 조회 API", description = "유저의 모든 소비카드 조회, 연,월을 기준으로 페이지네이션")
+	//소비 카드 범위 조회
+	@Operation(summary = "소비 카드 범위 조회 API", description = "유저의 소비 카드를 연, 월을 기준으로 조회")
 	@GetMapping("/consume")
-	public ResponseEntity<BasicCardRes.BasicCard> selectConsumeCard(
+	public ResponseEntity<BasicCardRes> selectConsumeCard(
 		@Parameter(description = "조회 시작일, 조회 개수")
-		@RequestBody SelectBasicCardReq basicCardReq, Principal principal) {
-		return ResponseEntity.ok().build();
+		@RequestBody RangeCardReq basicCardReq, Principal principal) {
+		BasicCardRes basicCardList = cardService.selectRangeBasicCard(principal.getName(), basicCardReq.getStartTime(),
+			basicCardReq.getEndTime());
+		return ResponseEntity.ok(basicCardList);
 	}
 
-	//소비 카드 상세 조회
-	@Operation(summary = "소비 카드 상세 조회 API", description = "소비카드 한 장을 조회한다.")
+	//소비 카드 조회
+	@Operation(summary = "소비 카드 조회 API", description = "소비 카드 한 장을 조회한다.")
 	@GetMapping("/consume/{id}")
-	public ResponseEntity<BasicCardRes> detailConsumeCard(
+	public ResponseEntity<BasicCardRes.BasicCard> detailConsumeCard(
 		@Parameter(description = "소비카드 id", required = true, example = "1")
 		@PathVariable Long id, Principal principal) {
-		return ResponseEntity.ok().build();
+		BasicCardRes.BasicCard basicCard = cardService.selectBasicCard(principal.getName(), id);
+		return ResponseEntity.ok(basicCard);
 	}
 
-	//챌린지 조회
-	@Operation(summary = "챌린지 조회 API", description = "유저에게 할당되어 있는 챌린지카드와 챌린지를 연,월일을 통해 조회한다.")
+	//챌린지 카드 범위 조회
+	@Operation(summary = "챌린지 카드 범위 조회 API", description = "유저의 챌린지 카드를 연, 월을 기준으로 조회")
 	@GetMapping("/challenge")
-	public ResponseEntity<ChallengeCardRes.ChallengeCard> selectChallenge(
+	public ResponseEntity<ChallengeCardRes> selectChallenge(
 		@Parameter(description = "조회할 연,월(Date 객체)", required = true, example = "2023-09-14T15:30:45")
-		@RequestBody LocalDateTime time, Principal principal) {
-		return ResponseEntity.ok().build();
+		@RequestBody RangeCardReq challengeCardReq, Principal principal) {
+		ChallengeCardRes challengeCardList = cardService.selectRangeChallengeCard(principal.getName(),
+			challengeCardReq.getStartTime(), challengeCardReq.getEndTime());
+		return ResponseEntity.ok(challengeCardList);
 	}
 
 	//챌린지 카드 조회
-	@Operation(summary = "챌린지 카드 조회 API", description = "조회 시작일과 종료일을 통해 유저의 챌린지 카드들을 조회")
-	@GetMapping("/challengecard")
-	public ResponseEntity<ChallengeCardRes> selectChallengeCard(
-		@RequestBody SelectChallengeCardReq challengeCardReq, Principal principal) {
-		return ResponseEntity.ok().build();
+	@Operation(summary = "챌린지 카드 조회 API", description = "챌린지 카드 한 장을 조회한다.")
+	@GetMapping("/challenge/{id}")
+	public ResponseEntity<ChallengeCardRes.ChallengeCard> selectChallengeCard(
+		@Parameter(description = "챌린지카드 id", required = true, example = "1")
+		@PathVariable Long id, Principal principal) {
+		ChallengeCardRes.ChallengeCard challengeCard = cardService.selectChallengeCard(principal.getName(), id);
+		return ResponseEntity.ok(challengeCard);
 	}
 
 }
