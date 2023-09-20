@@ -18,14 +18,8 @@ public class BasicCardRes {
 	@Data
 	@AllArgsConstructor
 	public static class BasicCard {
-		@Schema(description = "id(PK)", example = "1")
-		private Long id;
-		@Schema(description = "카드 이름", example = "카드 이름")
-		private String name;
-		@Schema(description = "사진 경로", example = "/etc/img")
-		private String imagePath;
-		@Schema(description = "카드 설명", example = "이 카드는...")
-		private String description;
+		@Schema(description = "카드 기본 정보")
+		private Card card;
 		@Schema(description = "카드에 속한 소비정보")
 		@Builder.Default
 		private List<Basic> basics = new ArrayList<>();
