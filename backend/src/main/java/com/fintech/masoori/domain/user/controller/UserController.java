@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fintech.masoori.domain.user.dto.EmailCheckReq;
 import com.fintech.masoori.domain.user.dto.InfoRes;
 import com.fintech.masoori.domain.user.dto.LoginReq;
+import com.fintech.masoori.domain.user.dto.LoginRes;
 import com.fintech.masoori.domain.user.dto.SendEmailReq;
 import com.fintech.masoori.domain.user.dto.SendSmsReq;
 import com.fintech.masoori.domain.user.dto.SignUpReq;
@@ -84,8 +85,8 @@ public class UserController {
 		@Parameter(description = "이메일, 패스워드", required = true)
 		@RequestBody @Validated LoginReq loginReq, BindingResult bindingResult) {
 		validateRequest(bindingResult);
-		TokenInfo tokenInfo = userService.login(loginReq);
-		return ResponseEntity.ok().body(tokenInfo);
+		LoginRes loginRes = userService.login(loginReq);
+		return ResponseEntity.ok(loginRes);
 	}
 
 	@Operation(summary = "로그아웃 API", description = "사용자를 로그아웃시키고 메인 페이지로 리다이렉트시킨다.")
@@ -98,7 +99,7 @@ public class UserController {
 	@Operation(summary = "휴대폰 인증코드 발송 API", description = "입력된 사용자 정보를 업데이트하고 해당 휴대폰번호로 인증코드를 발송한다.")
 	@PostMapping("/sms")
 	public ResponseEntity<?> sendSms(
-		@Parameter(description = "회원")
+		@Parameter(description = "회원 전화번호", required = true)
 		@RequestBody @Validated SendSmsReq sendSmsReq, BindingResult bindingResult, Authentication authentication) {
 		validateRequest(bindingResult);
 		User loginUser = loginUser(authentication);
@@ -118,8 +119,8 @@ public class UserController {
 
 	@Operation(summary = "마이페이지 유저 정보 조회 API", description = "마이페이지에서 필요한 사용자 정보를 조회한다.")
 	@GetMapping("/info")
-	public ResponseEntity<?> userInfo(Authentication authentication) {
-		InfoRes infoRes = null;
+	public ResponseEntity<InfoRes> userInfo(Authentication authentication) {
+		InfoRes infoRes = userService.getUserInfo(authentication.getName());
 		return ResponseEntity.ok().body(infoRes);
 	}
 

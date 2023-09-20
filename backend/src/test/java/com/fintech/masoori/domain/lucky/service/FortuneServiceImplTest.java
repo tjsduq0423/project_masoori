@@ -19,6 +19,7 @@ import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
 import com.fintech.masoori.global.redis.RedisService;
 
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest
@@ -38,6 +39,8 @@ class FortuneServiceImplTest {
 	RedisService redisService;
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	EntityManager em;
 
 	/**
 	 * 로그인한 유저가 오늘 처음으로 금전뽑기를 하는 경우
@@ -149,13 +152,17 @@ class FortuneServiceImplTest {
 		fortuneRepository.saveAll(fortuneList);
 
 		User user = User.builder().email("test@gmail.com").password("123").build();
-		userRepository.save(user);
+		// userRepository.save(user);
+		em.persist(user);
 
 		List<FortuneUser> fortuneUserList = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
-			fortuneUserList.add(FortuneUser.builder().user(user).fortune(fortuneList.get(i)).build());
+			FortuneUser fortuneUser = FortuneUser.builder().user(user).fortune(fortuneList.get(i)).build();
+			em.persist(fortuneUser);
+			fortuneUserList.add(fortuneUser);
 		}
-		fortuneUserRepository.saveAll(fortuneUserList);
+		// fortuneUserRepository.saveAll(fortuneUserList);
+		em.flush();
 
 		FortuneRes fortuneRes = fortuneUserService.selectAllUserFortune(user.getEmail());
 		log.info("User's Fortune : {}", fortuneRes);

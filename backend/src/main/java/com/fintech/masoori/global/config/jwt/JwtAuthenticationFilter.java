@@ -51,6 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		if (Objects.equals(validateResult, "vaild")) {
 			setSecurityContextHolder(token);
 		}
+
 		if (Objects.equals(validateResult, "isExpired")) {
 			Optional<String> cookie = CookieUtil.getCookie(request, REFRESH_TOKEN).map(Cookie::getValue);
 
@@ -66,27 +67,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			}
 
 			Claims claims = jwtTokenProvider.parseClaims(token);
-			String subject = claims.getSubject();
+			String email = claims.getSubject();
 			String role = claims.get(AUTHORITIES_KEY, String.class);
 
-			String refreshTokenFromRedis = redisTemplate.opsForValue().get("RT" + subject);
+			String refreshTokenFromRedis = redisTemplate.opsForValue().get("RT" + email);
 			if (refreshTokenFromRedis == null) {
 				chain.doFilter(request, response);
 				return;
 			}
 
 			if (!Objects.equals(refreshTokenFromRedis, refreshTokenFromCookie)) {
-				redisTemplate.opsForValue().getOperations().delete("RT" + subject);
+				redisTemplate.opsForValue().getOperations().delete("RT" + email);
 				chain.doFilter(request, response);
 				return;
 			}
 
 			// 토큰 생성. RTR
-			TokenInfo tokenInfo = jwtTokenProvider.createToken(subject, role);
+			TokenInfo tokenInfo = jwtTokenProvider.createToken(email, role);
 			// from Redis 기존 토큰 burn 그리고 새로 생성후 cookie 에 추가
-			redisTemplate.opsForValue().getOperations().delete("RT" + subject);
+			redisTemplate.opsForValue().getOperations().delete("RT" + email);
 			redisTemplate.opsForValue()
-			             .set("RT" + subject, tokenInfo.getRefreshToken(), tokenInfo.getExpireTime(),
+			             .set("RT" + email, tokenInfo.getRefreshToken(), tokenInfo.getExpireTime(),
 				             TimeUnit.MILLISECONDS);
 
 			// refresh Token -> Http only 쿠키.
@@ -94,7 +95,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			CookieUtil.addCookie(response, REFRESH_TOKEN, tokenInfo.getRefreshToken(),
 				JwtTokenProvider.getRefreshTokenExpireTimeCookie());
 			response.setHeader("x-access-token", tokenInfo.getAccessToken());
-
 			setSecurityContextHolder(token);
 		}
 		chain.doFilter(request, response);

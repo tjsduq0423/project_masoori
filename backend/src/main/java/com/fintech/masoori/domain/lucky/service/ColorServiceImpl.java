@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,12 +40,12 @@ public class ColorServiceImpl implements ColorService {
 			response.setDescription(findColor.getDescription());
 		} else {
 			log.debug("오늘의 색을 조회");
-			List<Color> allColor = colorRepository.findAll();
-			if (!allColor.isEmpty()) {
+			long colorSize = colorRepository.count();
+			int idx = (int)(Math.random() * colorSize);
+			Page<Color> colorPage = colorRepository.findAll(PageRequest.of(idx, 1));
+			if(colorPage.hasContent()){
 				int limitMinute = CalcEndTime.endMinute();
-				Random random = new Random();
-				int randomIndex = random.nextInt(allColor.size());
-				Color color = allColor.get(randomIndex);
+				Color color = colorPage.getContent().get(0);
 				redisService.setUserColor(email, color.getColor(), limitMinute);
 				response.setColor(color.getColor());
 				response.setDescription(color.getDescription());
