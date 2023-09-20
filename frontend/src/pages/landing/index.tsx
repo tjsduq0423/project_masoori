@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import LandingPage from "@/assets/img/LandingPage.jpg";
 import LandingMainLogo from "@/assets/img/LandingMainLogo.png";
@@ -6,6 +6,7 @@ import FinanceLuckCards from "@/assets/img/FinanceLuckCards.png";
 import CreditCards from "@/assets/img/CreditCards.png";
 import Trophy from "@/assets/img/Trophy.png";
 import Bottles from "@/assets/img/Bottles.png";
+import CardFlip from "@/components/CardFlip";
 
 <link rel="stylesheet" type="text/css" href="@/styles.font.css" />;
 
@@ -78,6 +79,15 @@ const Content = styled.div`
   align-items: center;
   height: 70%;
 `;
+
+const ToGoContent = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 70%;
+`;
+
 const Witch = styled.div`
   margin-bottom: 40px;
   height: 7vh;
@@ -188,7 +198,62 @@ const Page5Left = styled.div`
   background-size: contain;
 `;
 
+const SelectToGo = styled.div`
+  height: 20vh;
+  width: 95vh;
+  margin-bottom: 50px;
+  color: #fff;
+  font-family: "PyeongChangPeace";
+  font-size: 45px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  border-radius: 19px;
+  background: rgba(110, 39, 98, 0.5);
+  box-shadow:
+    0px 5px 10px 0px rgba(255, 255, 255, 0.1) inset,
+    5px 0px 10px 0px rgba(255, 255, 255, 0.1) inset,
+    0px -5px 10px 0px rgba(255, 255, 255, 0.1) inset,
+    -5px 0px 10px 0px rgba(255, 255, 255, 0.1) inset;
+`;
+
+const CardSection = styled.div`
+  display: flex;
+  height: 60vh;
+  width: 82.5%;
+  justify-content: center; /* 중앙 정렬 */
+  margin-top: 100px;
+  margin-right: 400px;
+  gap: 300px; /* 카드 사이의 간격 설정 */
+`;
+
+const CardBox = styled.div`
+  width: 110%;
+  height: 85.5%;
+  border-radius: 19px;
+  background: rgba(110, 39, 98, 0.5);
+  box-shadow:
+    0px 5px 10px 0px rgba(255, 255, 255, 0.1) inset,
+    5px 0px 10px 0px rgba(255, 255, 255, 0.1) inset,
+    0px -5px 10px 0px rgba(255, 255, 255, 0.1) inset,
+    -5px 0px 10px 0px rgba(255, 255, 255, 0.1) inset;
+`;
+
 const Landing: React.FC = () => {
+  const [selectedCard, setSelectedCard] = useState<number | null>(null);
+
+  const handleCardClick = (index: number) => {
+    if (selectedCard === null) {
+      // 클릭한 카드를 선택하고 다른 카드의 클릭 가능 상태를 비활성화
+      setSelectedCard(index);
+      console.log("성공");
+    }
+  };
+
+  const isClickable = (index: number) => {
+    return selectedCard === null || selectedCard === index;
+  };
+
   return (
     <Container>
       <MainPage1>
@@ -244,10 +309,29 @@ const Landing: React.FC = () => {
         </Content>
       </MainPages>
       <MainPages>
-        <Content>
-          <div>🌟 어디로 갈 지 골라보겠니? 🌟</div>
-          <div></div>
-        </Content>
+        <ToGoContent>
+          <SelectToGo>🌟 어디로 갈 지 골라보겠니? 🌟</SelectToGo>
+          <CardBox>
+            <CardSection>
+              <CardFlip
+                onClick={() => handleCardClick(0)}
+                isClickable={isClickable(0)}
+              />
+              <CardFlip
+                onClick={() => handleCardClick(1)}
+                isClickable={isClickable(1)}
+              />
+              <CardFlip
+                onClick={() => handleCardClick(2)}
+                isClickable={isClickable(2)}
+              />
+              <CardFlip
+                onClick={() => handleCardClick(3)}
+                isClickable={isClickable(3)}
+              />
+            </CardSection>
+          </CardBox>
+        </ToGoContent>
       </MainPages>
     </Container>
   );
