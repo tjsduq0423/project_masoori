@@ -32,19 +32,19 @@ public class CreditCard {
 	@Column(name = "credit_card_id")
 	private Long id;
 
-	@Column(name = "name", length = 25)
+	@Column(name = "name")
 	private String name;
 
-	@Column(name = "company", length = 25)
+	@Column(name = "company")
 	private String company;
 
-	@Column(name = "domestic", length = 25)
+	@Column(name = "domestic")
 	private String domestic;
 
-	@Column(name = "overseas", length = 25)
+	@Column(name = "overseas")
 	private String overseas;
 
-	@Column(name = "condition", length = 25)
+	@Column(name = "condition")
 	private String condition;
 
 	@Column(name = "brands")

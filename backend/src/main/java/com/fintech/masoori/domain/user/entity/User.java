@@ -59,7 +59,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Column(name = "card_image")
 	private String cardImage;
 
-	@Column(name = "phone_number", length = 11)
+	@Column(name = "phone_number", length = 25)
 	private String phoneNumber;
 
 	@Column(name = "is_authenticated")
@@ -106,6 +106,11 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 	public void updateCardImage(String cardImage) {
 		this.cardImage = cardImage;
+	}
+
+	public void addDealInfo(Deal deal) {
+		dealList.add(deal);
+		deal.setUser(this);
 	}
 
 	@Override

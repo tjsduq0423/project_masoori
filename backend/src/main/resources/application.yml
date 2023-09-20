@@ -52,17 +52,12 @@ spring:
     username: ssafy_b308
     password: ssafy_b308_1
 
-  # H2 설정 (로컬 테스트용)
-  #  datasource:
-  #    url: jdbc:h2:tcp://localhost/~/dataJpa
-  #    username: sa
-  #    password:
-  #    driver-class-name: org.h2.Driver
+
 
   # JPA 설정
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         default_batch_fetch_size: 100

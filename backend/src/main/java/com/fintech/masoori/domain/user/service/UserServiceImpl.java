@@ -2,9 +2,9 @@ package com.fintech.masoori.domain.user.service;
 
 import static com.fintech.masoori.global.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.*;
 
-import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDateTime;
-import java.time.temporal.WeekFields;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -19,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
-import com.fintech.masoori.domain.deal.entity.Deal;
-import com.fintech.masoori.domain.deal.service.DealService;
 import com.fintech.masoori.domain.user.UserRole;
 import com.fintech.masoori.domain.user.dto.EmailCheckReq;
 import com.fintech.masoori.domain.user.dto.InfoRes;
@@ -115,44 +113,41 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public InfoRes getUserInfo(String email) {
 		User user = userRepository.findUserByEmail(email);
+		// 오늘 기준
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime nowEnd = now.withHour(23).withMinute(59).withSecond(59);
+		LocalDateTime nowStart = now.withHour(0).withMinute(0).withSecond(0);
+		// 현재 주의 시작 날짜와 종료 날짜 계산
+		LocalDateTime nowWeekStart = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+		                                .withHour(0)
+		                                .withMinute(0)
+		                                .withSecond(0);
+		LocalDateTime nowWeekEnd = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+		                              .withHour(23)
+		                              .withMinute(59)
+		                              .withSecond(59);
+		// 현재 달의 시작 날짜와 종료 날짜 계산
+		LocalDateTime nowMonthStart = now.with(TemporalAdjusters.firstDayOfMonth())
+		                                 .withHour(0)
+		                                 .withMinute(0)
+		                                 .withSecond(0);
+		LocalDateTime nowMonthEnd = now.with(TemporalAdjusters.lastDayOfMonth())
+		                               .withHour(23)
+		                               .withMinute(59)
+		                               .withSecond(59);
+		// Integer amountSumByPeriodDay = userRepository.getAmountSumByPeriod(email, nowStart, nowEnd);
+		// Integer amountSumByPeriodWeek = userRepository.getAmountSumByPeriod(email, nowWeekStart, nowWeekEnd);
+		// Integer amountSumByPeriodMonth = userRepository.getAmountSumByPeriod(email, nowMonthStart, nowMonthEnd);
+
 		InfoRes infoRes = InfoRes.builder()
 		                         .imagePath(user.getCardImage())
 		                         .isPaymentInfoLinked(user.getIsAuthenticated())
-		                         .kakaoAlarm(user.getSmsAlarm())
-		                         .dailySpending(getDailySpending(user))
-		                         .monthlySpending(getMonthlySpending(user))
-		                         .weeklySpending(getWeeklySpending(user))
+		                         .smsAlarm(user.getSmsAlarm())
+		                         // .dailySpending(amountSumByPeriodDay)
+		                         // .monthlySpending(amountSumByPeriodWeek)
+		                         // .weeklySpending(amountSumByPeriodMonth)
 		                         .build();
 		return infoRes;
-	}
-
-	public Integer getMonthlySpending(User user) {
-		return user.getDealList()
-		           .stream()
-		           .filter(e -> e.getDate().getYear() == LocalDate.now().getYear()
-			           && e.getDate().getMonth() == LocalDate.now().getMonth())
-		           .map(Deal::getAmount)
-		           .reduce(0, Integer::sum);
-	}
-
-	public Integer getWeeklySpending(User user) {
-		LocalDate now = LocalDate.now();
-		return user.getDealList()
-		           .stream()
-		           .filter(e -> e.getDate().getYear() == now.getYear()
-			           && e.getDate().get(WeekFields.ISO.weekOfWeekBasedYear()) == now.get(
-			           WeekFields.ISO.weekOfWeekBasedYear()))
-		           .map(Deal::getAmount)
-		           .reduce(0, Integer::sum);
-	}
-
-	public Integer getDailySpending(User user) {
-		LocalDate now = LocalDate.now();
-		return user.getDealList()
-		           .stream()
-		           .filter(e -> e.getDate().isEqual(ChronoLocalDateTime.from(now)))
-		           .map(Deal::getAmount)
-		           .reduce(0, Integer::sum);
 	}
 
 	@Override

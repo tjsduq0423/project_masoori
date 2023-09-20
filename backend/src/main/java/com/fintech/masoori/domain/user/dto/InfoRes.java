@@ -15,7 +15,7 @@ public class InfoRes {
 	private Boolean isPaymentInfoLinked;
 
 	@Schema(description = "문자 알림 여부(카드 생성 알람 입니다.)", example = "true or false")
-	private Boolean kakaoAlarm;
+	private Boolean smsAlarm;
 
 	@Schema(description = "일간 소비량", example = "40000")
 	private Integer dailySpending;
