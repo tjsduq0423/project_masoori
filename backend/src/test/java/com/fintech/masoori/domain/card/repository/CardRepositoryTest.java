@@ -36,9 +36,9 @@ class CardRepositoryTest {
 		cardRepository.save(card1);
 		User user = User.builder()
 						.email("test@gmail.com")
-						.nickname("테스트")
+						.name("테스트")
 						.password("1234")
-						.profile("C://test/1.jpg")
+						.cardImage("C://test/1.jpg")
 						.providerType(ProviderType.LOCAL)
 						.build();
 		user.getCardList().add(card1);
