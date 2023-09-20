@@ -1,6 +1,6 @@
 package com.fintech.masoori.domain.card.entity;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,8 +45,8 @@ public class Challenge {
 	private String achievementCondition;
 
 	@Column(name = "start_time")
-	private Timestamp startTime;
+	private LocalDateTime startTime;
 
 	@Column(name = "end_time")
-	private Timestamp endTime;
+	private LocalDateTime endTime;
 }
