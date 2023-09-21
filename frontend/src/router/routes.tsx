@@ -61,6 +61,10 @@ const routes: RouteType[] = [
     path: "/dictionary",
     element: React.lazy(() => import("@/pages/dictionary")),
   },
+  {
+    path: "/spend",
+    element: React.lazy(() => import("@/pages/spendPattern")),
+  },
   //   {
   //     path: "/",
   //     element: () => <Navigate replace to="/menu" />,
