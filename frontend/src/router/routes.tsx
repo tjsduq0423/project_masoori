@@ -27,7 +27,7 @@ const routes: RouteType[] = [
   },
   {
     path: "/crystal",
-    element: React.lazy(() => import("@/components/CrystalBall")),
+    element: React.lazy(() => import("@/pages/crystalBall")),
   },
   {
     path: "/login",
@@ -56,6 +56,10 @@ const routes: RouteType[] = [
   {
     path: "/landing",
     element: React.lazy(() => import("@/pages/landing")),
+  },
+  {
+    path: "/dictionary",
+    element: React.lazy(() => import("@/pages/dictionary")),
   },
   {
     path: "/spend",

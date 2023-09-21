@@ -19,7 +19,6 @@ const PageContainer = styled.div`
   background-color: #fdfaf7;
   color: #785e3a;
   border: 1px solid #c2b5a3;
-  overflow: hidden;
 
   &.--left {
     border-right: 0;
@@ -155,7 +154,6 @@ const Book = () => {
         className="demo-book"
         ref={flipBookRef}
         onFlip={handlePageFlip}
-        // 아래 부분에서 누락된 프로퍼티들을 추가합니다.
         style={{ perspective: "2000px" }}
         startPage={0}
         size="fixed"
