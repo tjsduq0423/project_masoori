@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import HTMLFlipBook from "react-pageflip";
 import styled from "styled-components";
 
@@ -132,13 +132,16 @@ const ImagePage = React.forwardRef<HTMLDivElement, { imageUrl: string }>(
   }
 );
 
-const Book = () => {
+interface BookProps {
+  onPageChange: (page: number) => void; // Callback function to notify the parent component
+}
+
+const Book = ({ onPageChange }: BookProps) => {
   const flipBookRef = useRef<any | null>(null); // HTMLFlipBook 타입을 any로 설정
-  const [currentPage, setCurrentPage] = useState<number>(0);
 
   const handlePageFlip = (e: { data: number }) => {
     try {
-      setCurrentPage(e.data);
+      onPageChange(e.data); // Notify the parent component about the current page
     } catch (error) {
       console.error("An error occurred while handling page flip:", error);
     }

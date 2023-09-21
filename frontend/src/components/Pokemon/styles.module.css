@@ -18,8 +18,8 @@
   height: 100vw;
 
   @media screen and (min-width: 600px) {
-    width: clamp(12.9vw, 61vh, 18vw);
-    height: clamp(18vw, 85vh, 25.2vw);
+    width: clamp(12.9vw, 61vh, 24vw);
+    height: clamp(18vw, 85vh, 34.2vw);
   }
 
   position: relative;
@@ -353,14 +353,6 @@
   top: 45%;
 }
 
-html,
-body {
-  height: 100%;
-  background-color: #333844;
-  padding: 0;
-  z-index: 1;
-  transform: translate3d(0, 0, 0.1px);
-}
 .app {
   position: relative;
 }
@@ -369,8 +361,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
-  perspective: 2000px;
   position: relative;
   z-index: 1;
   transform: translate3d(0.1px, 0.1px, 0.1px);
