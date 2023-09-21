@@ -14,10 +14,6 @@ const routes: RouteType[] = [
     element: React.lazy(() => import("@/components/Pokemon")),
   },
   {
-    path: "/deck",
-    element: React.lazy(() => import("@/components/Deck")),
-  },
-  {
     path: "/flip",
     element: React.lazy(() => import("@/components/cardFlip")),
   },
