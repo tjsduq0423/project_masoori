@@ -16,20 +16,31 @@ const PageContainer = styled.div`
   height: 100%;
   background-image: url(${background});
   background-size: cover;
+  background-attachment: scroll;
 `;
 
 const ContentContainer = styled.div`
   display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  flex-direction: row; /* 수평 정렬로 변경 */
+  height: 100%;
 `;
 
-const CardContainer = styled.div``;
+const CardContainer = styled.div`
+  padding: 70px 55px;
+`;
 
 const Title = styled.div`
   font-size: 60px;
   color: white;
+  font-family: "Brodies";
 `;
 
-const TitleContainer = styled.div``;
+const TitleContainer = styled.div`
+  padding: 0px 0px 0px 55px;
+  text-align: left;
+`;
 
 const HashtagContainer = styled.div`
   display: flex;
@@ -39,11 +50,11 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 50px 40px;
+  padding: 25px 0px 25px 0px;
 `;
 
 const TextBubbleContainer = styled.div`
-  margin-bottom: 20px; /* 각 텍스트 버블 사이의 간격 조정 */
+  margin-bottom: 10px; /* 각 텍스트 버블 사이의 간격 조정 */
 `;
 
 const SpendPage: React.FC = () => {
@@ -68,7 +79,7 @@ const SpendPage: React.FC = () => {
     아무래도 수정구가 네게 행운을 가져다 줄 색상을 보여주고 싶은 것 같네.
     아까부터 은하수같은 빛이 나오는 게 보이지?
     손을 대보겠니?`,
-    width: "588PX",
+    width: "650px",
     background: "#4D1B2D80",
     opacity: "1",
     paddingLeftRight: "40px",
@@ -79,7 +90,18 @@ const SpendPage: React.FC = () => {
 
   const crystalTextBubbleProps: StyledTextBubbleProps = {
     text: `🔮 수정구에 손을 올린다 🔮`,
-    width: "588PX",
+    width: "650px",
+    background: "#4D1B2D80",
+    opacity: "1",
+    paddingLeftRight: "40px",
+    paddingTopBottom: "20px",
+    borderRadius: "20px",
+    hoverable: true,
+  };
+
+  const shareTextBubbleProps: StyledTextBubbleProps = {
+    text: `🃏 나의 카드를 다른 사람들에게 공유한다 🃏`,
+    width: "650px",
     background: "#4D1B2D80",
     opacity: "1",
     paddingLeftRight: "40px",
@@ -121,6 +143,9 @@ const SpendPage: React.FC = () => {
             </TextBubbleContainer>
             <TextBubbleContainer>
               <TextBubble {...crystalTextBubbleProps} />
+            </TextBubbleContainer>
+            <TextBubbleContainer>
+              <TextBubble {...shareTextBubbleProps} />
             </TextBubbleContainer>
           </ContentWrapper>
         </TitleContainer>
