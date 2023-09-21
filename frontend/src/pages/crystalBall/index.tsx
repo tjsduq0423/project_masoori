@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { useState, Suspense } from "react";
 import {
   Sphere,
   OrbitControls,
@@ -10,28 +10,82 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { a as aw, useSpring as useSpringWeb } from "@react-spring/web";
 import { a as a3, useSpring as useSpringThree } from "@react-spring/three";
 import * as THREE from "three";
+import styled from "styled-components";
+import AlertModal from "@/components/alertModal";
+import crystalBall from "@/assets/img/crystalBlue.png";
 
-// HSL values
-const options = [
-  [0, 100, 50],
-  [60, 100, 50],
-  [150, 100, 50],
-  [240, 70, 60],
-  [0, 0, 80],
+interface MagicMarbleMaterialProps
+  extends THREE.MeshStandardMaterialParameters {
+  step: number;
+}
+
+const Backdrop = styled.div<{ isOpen: boolean }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+  z-index: 1;
+`;
+
+// Create a modal container
+const ModalContainer = styled.div<{ isOpen: boolean }>`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+  z-index: 2;
+`;
+
+const options: number[][] = [
+  [0, 100, 50], // RED
+  [30, 100, 50], // ORANGE
+  [60, 100, 50], // YELLOW
+  [120, 100, 50], // GREEN
+  [150, 100, 50], // OLIVEGREEN
+  [200, 70, 60], // SKYBLUE
+  [240, 100, 50], // BLUE
+  [270, 100, 50], // PURPLE
+  [310, 65, 50], // PINK
+  [30, 70, 25], // BROWN
+  [0, 0, 100], // WHITE
+  [0, 0, 40], // GRAY
+  [330, 100, 50], // HOTPINK (핫핑크)
 ];
 
-const CrystalBall = () => {
+const randomColorIndex = Math.floor(Math.random() * options.length); // 랜덤 색상 인덱스 선택
+
+const CrystalBallPage = () => {
   const [step, setStep] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 여부 상태
+
+  // 초기 h, s, l 값을 0, 0, 0으로 설정
   const { hsl } = useSpringWeb({
-    hsl: options[step % options.length],
+    hsl: step === 0 ? [210, 80, 50] : options[randomColorIndex],
     config: { tension: 50 },
   });
+
   const springyGradient = hsl.to(
     (h, s, l) =>
       `radial-gradient(hsl(${h}, ${s * 0.7}%, ${l}%), hsl(${h},${s * 0.4}%, ${
         l * 0.2
       }%))`
   );
+
+  // 모달 열기 함수
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  // 모달 닫기 함수
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <aw.div
       style={{ background: springyGradient, width: "100%", height: "100%" }}
@@ -44,15 +98,44 @@ const CrystalBall = () => {
             enablePan={false}
             enableZoom={false}
           />
-          <Marble step={step} setStep={setStep} />
+          <Marble step={step} setStep={setStep} openModal={openModal} />
           <Environment preset="warehouse" />
         </Suspense>
       </Canvas>
+
+      {/* 모달 렌더링 */}
+      <Backdrop isOpen={isModalOpen} onClick={closeModal} />
+      <ModalContainer isOpen={isModalOpen}>
+        <AlertModal
+          width="500px"
+          topText="오늘의 행운의 색은..."
+          middleText="파란색입니다."
+          bottomText="오늘의 행운의 색, '파란색'을 활용하여 하루를 특별하게 만들어보세요!
+          블루베리 스무디로 시작하는 상쾌한 아침, 푸른 바다나 하늘을 연상시키는 파란 색의 옷 차림, 혹은 액세서리를 착용해보세요. 파란색의 노트북이나 펜을 사용해 일상에 행운의 에너지를 불러오세요. 하루 종일 '블루'와 함께라면 더욱 특별하고 행운이 가득한 시간이 될 것입니다!"
+          imageUrl={crystalBall} // 이미지 경로
+          topTextColor="#5E3A66"
+          middleTextColor="#5E3A66"
+          bottomTextColor="white"
+          upperSectionBackground="#EAE2ED"
+          lowerSectionBackground="#5E3A66"
+          topTextFontSize="12px"
+          middleTextFontSize="28px"
+          bottomTextFontSize="12px"
+          topTextPaddingTopBottom="2px"
+          middleTextPaddingTopBottom="2px"
+        />
+      </ModalContainer>
     </aw.div>
   );
 };
 
-function Marble({ step, setStep }) {
+interface MarbleProps {
+  step: number;
+  setStep: (step: number) => void;
+  openModal: () => void; // openModal 함수가 어떤 인자도 받지 않음
+}
+
+const Marble: React.FC<MarbleProps> = ({ step, setStep, openModal }) => {
   const [hover, setHover] = useState(false);
   const [tap, setTap] = useState(false);
   const { scale } = useSpringThree({
@@ -62,13 +145,22 @@ function Marble({ step, setStep }) {
       tension: 300,
     },
   });
+
+  // 구체 클릭 이벤트 핸들러
+  const handleSphereClick = () => {
+    setStep(step + 1); // 스텝 증가
+    setTimeout(() => {
+      openModal(); // 모달 열기
+    }, 1000); // 1000 밀리초(1초) 후에 함수 실행
+  };
+
   return (
     <group>
       <a3.group
         scale={scale}
         onPointerEnter={() => setHover(true)}
         onPointerOut={() => setHover(false)}
-        onClick={() => setStep(step + 1)}
+        onClick={handleSphereClick}
       >
         <Sphere args={[1, 64, 32]}>
           <MagicMarbleMaterial step={step} roughness={0.1} />
@@ -85,15 +177,12 @@ function Marble({ step, setStep }) {
       </Box>
     </group>
   );
-}
+};
 
-/**
- * @typedef MagicMarbleMaterialProps
- * @property {number} step - Which step of the color sequence we're on
- *
- * @param {MagicMarbleMaterialProps & THREE.MeshStandardMaterialParameters}
- */
-function MagicMarbleMaterial({ step, ...props }) {
+const MagicMarbleMaterial: React.FC<MagicMarbleMaterialProps> = ({
+  step,
+  ...props
+}) => {
   // Load the noise textures
   const heightMap = useTexture("noise.jpg");
   const displacementMap = useTexture("noise3D.jpg");
@@ -104,7 +193,7 @@ function MagicMarbleMaterial({ step, ...props }) {
   const [uniforms] = useState(() => ({
     time: { value: 0 },
     colorA: { value: new THREE.Color(0, 0, 0) },
-    colorB: { value: new THREE.Color(1, 0, 0) },
+    colorB: { value: new THREE.Color(0, 0, 0) },
     heightMap: { value: heightMap },
     displacementMap: { value: displacementMap },
     iterations: { value: 48 },
@@ -115,7 +204,7 @@ function MagicMarbleMaterial({ step, ...props }) {
 
   // This spring value allows us to "fast forward" the displacement in the marble
   const { timeOffset } = useSpringThree({
-    hsl: options[step % options.length],
+    hsl: options[randomColorIndex], // 스텝에 따라 옵션에서 색상 가져오기
     timeOffset: step * 0.2,
     config: { tension: 50 },
     onChange: ({ value: { hsl } }) => {
@@ -130,7 +219,7 @@ function MagicMarbleMaterial({ step, ...props }) {
   });
 
   // Add our custom bits to the MeshStandardMaterial
-  const onBeforeCompile = (shader) => {
+  const onBeforeCompile = (shader: THREE.Shader) => {
     // Wire up local uniform references
     shader.uniforms = { ...shader.uniforms, ...uniforms };
 
@@ -250,6 +339,6 @@ function MagicMarbleMaterial({ step, ...props }) {
       customProgramCacheKey={() => onBeforeCompile.toString()}
     />
   );
-}
+};
 
-export default CrystalBall;
+export default CrystalBallPage;
