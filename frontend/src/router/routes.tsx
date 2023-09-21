@@ -14,10 +14,6 @@ const routes: RouteType[] = [
     element: React.lazy(() => import("@/components/Pokemon")),
   },
   {
-    path: "/deck",
-    element: React.lazy(() => import("@/components/Deck")),
-  },
-  {
     path: "/flip",
     element: React.lazy(() => import("@/components/cardFlip")),
   },
@@ -27,7 +23,7 @@ const routes: RouteType[] = [
   },
   {
     path: "/crystal",
-    element: React.lazy(() => import("@/components/CrystalBall")),
+    element: React.lazy(() => import("@/pages/crystalBall")),
   },
   {
     path: "/login",
@@ -60,6 +56,14 @@ const routes: RouteType[] = [
   {
     path: "/login/oauth/redirect",
     element: React.lazy(() => import("@/pages/redirect")),
+  },
+  {
+    path: "/dictionary",
+    element: React.lazy(() => import("@/pages/dictionary")),
+  },
+  {
+    path: "/spend",
+    element: React.lazy(() => import("@/pages/spendPattern")),
   },
   // {
   //   path: "/spend",

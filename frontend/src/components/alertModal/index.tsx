@@ -48,7 +48,7 @@ const LowerSection = styled.div<{ lowerSectionBackground: string }>`
 `;
 
 const ImageContainer = styled.div`
-  width: 500px;
+  width: 50%;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -57,8 +57,8 @@ const ImageContainer = styled.div`
 `;
 
 const Image = styled.img`
-  max-width: 80%;
-  max-height: 80%;
+  max-width: 100%;
+  max-height: 100%;
 `;
 
 const TopText = styled.div<{
@@ -79,6 +79,7 @@ const MiddleText = styled.div<{
 }>`
   color: ${(props) => props.middleTextColor};
   font-size: ${(props) => props.middleTextFontSize};
+  font-weight: 800;
   padding-top: ${(props) => props.middleTextPaddingTopBottom};
   padding-bottom: ${(props) => props.middleTextPaddingTopBottom};
 `;
