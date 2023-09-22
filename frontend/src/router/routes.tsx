@@ -54,6 +54,10 @@ const routes: RouteType[] = [
     element: React.lazy(() => import("@/pages/landing")),
   },
   {
+    path: "/login/oauth/redirect",
+    element: React.lazy(() => import("@/pages/redirect")),
+  },
+  {
     path: "/dictionary",
     element: React.lazy(() => import("@/pages/dictionary")),
   },
@@ -61,6 +65,14 @@ const routes: RouteType[] = [
     path: "/spend",
     element: React.lazy(() => import("@/pages/spendPattern")),
   },
+  {
+    path: "/card",
+    element: React.lazy(() => import("@/pages/cardRecommend")),
+  },
+  // {
+  //   path: "/spend",
+  //   element: React.lazy(() => import("@/pages/spendPattern")),
+  // },
   //   {
   //     path: "/",
   //     element: () => <Navigate replace to="/menu" />,

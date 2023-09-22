@@ -51,13 +51,16 @@ const SpecialHeader = styled.div`
 `;
 
 const SpecialText = styled.div`
+  display: flex;
+  align-items: center;
   font-family: "Pyeongchangpeace";
+  text-align: left;
   color: #d39090;
   font-size: 36px;
+  margin-bottom: 10px;
 `;
 
 const BasicHeader = styled.div`
-  display: "flex";
   width: 100%;
   text-align: left;
 `;
@@ -145,7 +148,10 @@ const DictionaryPage = () => {
         {currentPage === 2 && (
           <div>
             <SpecialHeader>
-              <SpecialText>2023.09</SpecialText>
+              <SpecialText>
+                2023.09 <DcitBtn text="카드변경" />
+                <DcitBtn text="공유하기" />
+              </SpecialText>
             </SpecialHeader>
             <div style={{ display: "flex" }}>
               <PokemonCard />
