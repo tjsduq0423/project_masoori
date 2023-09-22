@@ -349,7 +349,7 @@ const MainPage = () => {
           <canvas ref={canvasRef} />
           <div className="intro-carousel">
             <div className="intro-cell">
-              <img src={masuriImg} className="intro-graphic" />
+              <img src={money} className="intro-graphic" />
               <div className="intro-text">
                 <h2>첫 번째 페이지</h2>
                 <h1>INTRO</h1>
@@ -362,7 +362,7 @@ const MainPage = () => {
               </div>
             </div>
             <div className="intro-cell">
-              <img src={cardhand} className="intro-graphic" />
+              <img src={money} className="intro-graphic" />
               <div className="intro-text">
                 <h2>두번 째 페이지</h2>
                 <h1>오늘의 금전운</h1>
@@ -375,7 +375,7 @@ const MainPage = () => {
               </div>
             </div>
             <div className="intro-cell">
-              <img src={book} className="intro-graphic" />
+              <img src={money} className="intro-graphic" />
               <div className="intro-text">
                 <h2>세번 째 페이지 </h2>
                 <h1>소비패턴 타로</h1>

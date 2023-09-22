@@ -116,7 +116,7 @@ const DictionaryPage = () => {
   return (
     <PageContainer>
       <BookSection>
-        <BookTitle>2023.09</BookTitle>
+        <BookTitle>Collection Book</BookTitle>
         <Book onPageChange={handlePageChange} />
       </BookSection>
       <ContentSection>
