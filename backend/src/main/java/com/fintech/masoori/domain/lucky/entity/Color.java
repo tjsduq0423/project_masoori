@@ -29,6 +29,6 @@ public class Color {
 	@Column(name = "color")
 	private String color;
 
-	@Column(name = "description")
+	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 }
