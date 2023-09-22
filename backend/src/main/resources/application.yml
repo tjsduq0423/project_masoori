@@ -108,6 +108,17 @@ app:
 # jwt secret key 설정
 jwt:
   key: YourewaitingforatrainAtrainthatwilltakeyoufarawayYouknowwhereyouhope
+
+rabbitmq:
+  queue:
+    name1: taro.queue
+    name2: lucky.queue
+  exchange:
+    name: masoori.fanout
+  routing_key:
+    name1: generate.taro
+    name2: generate.lucky
+
 # ssl 설정
 #server:
 #  ssl:

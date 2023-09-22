@@ -15,53 +15,77 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-
-	private final String QUEUE_NAME_1 = "taro.queue";
-	private final String EXCHANGE_NAME = "masoori.direct";
-	private final String ROUTING_KEY = "generate.taro.#";
 	@Value("${spring.rabbitmq.host}")
-	private String rabbitmqHost;
-	@Value("${spring.rabbitmq.port}")
-	private int rabbitmqPort;
+	private String host;
+
 	@Value("${spring.rabbitmq.username}")
-	private String rabbitmqUsername;
+	private String username;
+
 	@Value("${spring.rabbitmq.password}")
-	private String rabbitmqPassword;
+	private String password;
+
+	@Value("${spring.rabbitmq.port}")
+	private int port;
+
+	@Value("${rabbitmq.queue.name1}")
+	private String queue1;
+
+	@Value("${rabbitmq.queue.name2}")
+	private String queue2;
+
+	@Value("${rabbitmq.exchange.name}")
+	private String exchange;
+
+	@Value("${rabbitmq.routing_key.name1}")
+	private String routingKey1;
+
+	@Value("${rabbitmq.routing_key.name2}")
+	private String routingKey2;
 
 	@Bean
 	public Queue queue1() {
-		return new Queue(QUEUE_NAME_1);
+		return new Queue(queue1, false);
 	}
 
 	@Bean
-	public DirectExchange exchange1() {
-		return new DirectExchange(EXCHANGE_NAME);
+	public Queue queue2() {
+		return new Queue(queue2, false);
 	}
 
 	@Bean
-	public Binding binding(Queue queue, DirectExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
+	public DirectExchange directExchange() {
+		return new DirectExchange(exchange);   // Topic Exchange 타입
 	}
 
 	@Bean
-	public ConnectionFactory connectionFactory() {
-		CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-		connectionFactory.setHost(rabbitmqHost);
-		connectionFactory.setPort(rabbitmqPort);
-		connectionFactory.setUsername(rabbitmqUsername);
-		connectionFactory.setPassword(rabbitmqPassword);
-		return connectionFactory;
+	public Binding binding(DirectExchange directExchange, Queue queue1) {
+		return BindingBuilder.bind(queue1).to(directExchange).with(routingKey1);
+	}
+
+	@Bean
+	public Binding binding2(DirectExchange directExchange, Queue queue2) {
+		return BindingBuilder.bind(queue2).to(directExchange).with(routingKey2);
 	}
 
 	@Bean
 	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
 		RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-		rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter());
+		rabbitTemplate.setMessageConverter(messageConverter());
 		return rabbitTemplate;
 	}
 
 	@Bean
-	public MessageConverter jackson2JsonMessageConverter() {
+	public ConnectionFactory connectionFactory() {
+		CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+		connectionFactory.setHost(host);
+		connectionFactory.setPort(port);
+		connectionFactory.setUsername(username);
+		connectionFactory.setPassword(password);
+		return connectionFactory;
+	}
+
+	@Bean
+	public MessageConverter messageConverter() {
 		return new Jackson2JsonMessageConverter();
 	}
 }
