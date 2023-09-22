@@ -7,6 +7,7 @@ import tarotCardBack from "@/assets/img/tarotCard/tarotCardBack.png";
 import HashTag from "@/components/hashtag";
 import TextBubble from "@/components/textBubble";
 import { StyledTextBubbleProps } from "@/types/luckType";
+import GhostModal from "@/components/ghostModal";
 
 const PageContainer = styled.div`
   position: fixed;
@@ -19,12 +20,23 @@ const PageContainer = styled.div`
   background-attachment: scroll;
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+  z-index: 2;
+`;
+
 const ContentContainer = styled.div`
   display: flex;
   justify-content: center; /* 수평 중앙 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
   flex-direction: row; /* 수평 정렬로 변경 */
   height: 100%;
+  width: 100%;
 `;
 
 const CardContainer = styled.div`
@@ -57,7 +69,29 @@ const TextBubbleContainer = styled.div`
   margin-bottom: 10px; /* 각 텍스트 버블 사이의 간격 조정 */
 `;
 
+const ModalContainer = styled.div<{ isOpen: boolean }>`
+  z-index: 3;
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+`;
+
 const SpendPage: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 여부 상태
+
+  // 모달 열기 함수
+  const toggleModal: () => void = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  // 모달 열기 함수
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  // 모달 닫기 함수
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   const titleTextBubbleProps: StyledTextBubbleProps = {
     text: "🌟 마녀 🌟",
     width: "136PX",
@@ -70,15 +104,11 @@ const SpendPage: React.FC = () => {
   };
 
   const contentTextBubbleProps: StyledTextBubbleProps = {
-    text: `오늘은 지출이 많을 것 같은걸? 약속이 있다면 각오해야 할거야.
-    어머! 표정 좀 풀렴. 내가 네 돈을 쓰는 것도 아니잖니?
-    무언가 구매하고 싶다면 참는 게 좋겠어. 별의 흐름이 속삭이길, 오늘은 욕심없이 지내는 게 좋겠다고 하는구나.
-    요정들의 이야기도 들어볼까?
-    음...... 요정들은 돈만 걱정하는 게 아닌 것 같은데?
-    네 눈에는 보이지 않겠지만, 나쁜 요정들도 존재한단다. 그들이 네게 장난칠 궁리를 하는 걸 이 아이들이 들은 모양이야. 오늘은 일찍 집에 가는 게 좋겠어.
-    아무래도 수정구가 네게 행운을 가져다 줄 색상을 보여주고 싶은 것 같네.
-    아까부터 은하수같은 빛이 나오는 게 보이지?
-    손을 대보겠니?`,
+    text: `별들이 제법 많이 떴는걸? 어디 보자......
+    마법 같은 변화가 일어났구나! 🧙‍♀️ 저번주 대비 전체적인 소비금액이 줄어들었지만, 음식에 대한 소비를 많이 했구나
+    이러한 변화가 발생한 이유를 알아보고 더 나은 재정 상태를 유지할 수 있는 방법을 고민해보자.
+    네 미래의 지출도 알고 싶다고? 어렵지 않지. 손을 줘보겠니?
+    아니면, 네 카드를 지금 바로 다른 인간들에게 보여줄래?`,
     width: "650px",
     background: "#4D1B2D80",
     opacity: "1",
@@ -89,7 +119,7 @@ const SpendPage: React.FC = () => {
   };
 
   const crystalTextBubbleProps: StyledTextBubbleProps = {
-    text: `🔮 수정구에 손을 올린다 🔮`,
+    text: `🔮 마녀에게 손을 내민다 🔮`,
     width: "650px",
     background: "#4D1B2D80",
     opacity: "1",
@@ -144,11 +174,15 @@ const SpendPage: React.FC = () => {
             <TextBubbleContainer>
               <TextBubble {...crystalTextBubbleProps} />
             </TextBubbleContainer>
-            <TextBubbleContainer>
+            <TextBubbleContainer onClick={openModal}>
               <TextBubble {...shareTextBubbleProps} />
             </TextBubbleContainer>
           </ContentWrapper>
         </TitleContainer>
+        <ModalContainer isOpen={isModalOpen}>
+          <Backdrop onClick={closeModal} />
+          <GhostModal zIndex={"3"} toggleModal={toggleModal} />
+        </ModalContainer>
       </ContentContainer>
     </PageContainer>
   );
