@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Kakao from "@/assets/img/Kakao.png";
 import Google from "@/assets/img/Google.png";
 import Naver from "@/assets/img/Naver.png";
 import BackCards from "@/assets/img/Login.png";
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import { useNavigate } from "react-router-dom";
+import { userInfoState } from "@/states/userState";
 
 const Container = styled.div`
   height: 100%;
@@ -125,6 +128,22 @@ const FinishButton = styled.button`
 
 const Login: React.FC = () => {
   const [modalState, setModalState] = useState<string>("로그인");
+
+  const OAUTH2_REDIERECT_URI = `${process.env.REACT_APP_BASE_URL}/login/oauth/redirect`; /* 이거에대한페이지 생성 */
+  const onSocialButtonClick = (socialName: string) => {
+    const AUTH_URL = `${process.env.REACT_APP_SERVER_URL}/oauth2/authorization/${socialName}?redirect_uri=${OAUTH2_REDIERECT_URI}`;
+    window.location.href = AUTH_URL;
+  };
+
+  const userInfo = useRecoilValue(userInfoState);
+  const navigate = useNavigate();
+  // 로그인 되어있는 유저라면 main 페이지로
+  useEffect(() => {
+    if (userInfo && userInfo.userId && userInfo.userId > 0) {
+      // navigate(PATH.MAIN);
+    }
+  }, [userInfo, navigate]);
+
   if (modalState === "로그인") {
     return (
       <Container>
@@ -149,19 +168,19 @@ const Login: React.FC = () => {
             <SocialLogin
               src={Kakao}
               onClick={() => {
-                console.log(1);
+                onSocialButtonClick("kakao");
               }}
             />
             <SocialLogin
               src={Google}
               onClick={() => {
-                console.log(2);
+                onSocialButtonClick("google");
               }}
             />
             <SocialLogin
               src={Naver}
               onClick={() => {
-                console.log(3);
+                onSocialButtonClick("naver");
               }}
             />
           </PW>
