@@ -9,9 +9,7 @@ interface RouteType {
 const routes: RouteType[] = [
   {
     path: "/",
-    // guard: LoginGuard,
-    // layout: DashboardLayout,
-    element: React.lazy(() => import("@/components/Pokemon")),
+    element: React.lazy(() => import("@/pages/main")),
   },
   {
     path: "/flip",
@@ -26,7 +24,7 @@ const routes: RouteType[] = [
     element: React.lazy(() => import("@/pages/crystalBall")),
   },
   {
-    path: "/login",
+    path: "/signIn",
     element: React.lazy(() => import("@/pages/login")),
   },
   {
@@ -74,13 +72,9 @@ const routes: RouteType[] = [
     element: React.lazy(() => import("@/pages/cardRecommend")),
   },
   // {
-  //   path: "/spend",
-  //   element: React.lazy(() => import("@/pages/spendPattern")),
+  //   path: "/",
+  //   element: () => <Navigate replace to="/main" />,
   // },
-  //   {
-  //     path: "/",
-  //     element: () => <Navigate replace to="/menu" />,
-  //   },
   //   {
   //     path: "/*",
   //     element: () => <Navigate replace to="/404" />,
