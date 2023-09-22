@@ -39,6 +39,13 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+  # rabbitmq 설정
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: ADMIN
+    password: MASOORI_MQ
+
   # key-value store인  redis 설정 (임시)
   data:
     redis:
