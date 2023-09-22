@@ -49,7 +49,7 @@ public class Card extends BaseTimeEntity {
 	@Column(name = "image_path")
 	private String imagePath;
 
-	@Column(name = "description")
+	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 
 	@Column(name = "card_type")
