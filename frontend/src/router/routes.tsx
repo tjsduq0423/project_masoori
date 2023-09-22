@@ -66,6 +66,10 @@ const routes: RouteType[] = [
     element: React.lazy(() => import("@/pages/spendPattern")),
   },
   {
+    path: "/next",
+    element: React.lazy(() => import("@/pages/nextSpendPattern")),
+  },
+  {
     path: "/card",
     element: React.lazy(() => import("@/pages/cardRecommend")),
   },

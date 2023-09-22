@@ -7,6 +7,7 @@ interface StyledTextBubbleProps {
   paddingTopBottom: string;
   borderRadius: string;
   hoverable: boolean;
+  onClick?: () => void;
 }
 
 export type { StyledTextBubbleProps };

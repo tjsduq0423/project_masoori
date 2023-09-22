@@ -74,7 +74,7 @@ const ModalContainer = styled.div<{ isOpen: boolean }>`
   display: ${(props) => (props.isOpen ? "block" : "none")};
 `;
 
-const SpendPage: React.FC = () => {
+const NextSpendPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 여부 상태
 
   // 모달 열기 함수
@@ -118,17 +118,6 @@ const SpendPage: React.FC = () => {
     hoverable: false,
   };
 
-  const crystalTextBubbleProps: StyledTextBubbleProps = {
-    text: `🔮 마녀에게 손을 내민다 🔮`,
-    width: "650px",
-    background: "#4D1B2D80",
-    opacity: "1",
-    paddingLeftRight: "40px",
-    paddingTopBottom: "20px",
-    borderRadius: "20px",
-    hoverable: true,
-  };
-
   const shareTextBubbleProps: StyledTextBubbleProps = {
     text: `🃏 나의 카드를 다른 사람들에게 공유한다 🃏`,
     width: "650px",
@@ -156,7 +145,7 @@ const SpendPage: React.FC = () => {
           ></TarotCard>
         </CardContainer>
         <TitleContainer>
-          <Title>This Week&apos;s Tarot Card</Title>
+          <Title>Next Week&apos;s Tarot Card</Title>
           <HashtagContainer>
             <HashTag text="Food"></HashTag>
             <HashTag text="Food"></HashTag>
@@ -170,9 +159,6 @@ const SpendPage: React.FC = () => {
             </TextBubbleContainer>
             <TextBubbleContainer>
               <TextBubble {...contentTextBubbleProps} />
-            </TextBubbleContainer>
-            <TextBubbleContainer>
-              <TextBubble {...crystalTextBubbleProps} />
             </TextBubbleContainer>
             <TextBubbleContainer onClick={openModal}>
               <TextBubble {...shareTextBubbleProps} />
@@ -188,4 +174,4 @@ const SpendPage: React.FC = () => {
   );
 };
 
-export default SpendPage;
+export default NextSpendPage;
