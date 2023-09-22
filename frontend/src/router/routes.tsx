@@ -9,7 +9,7 @@ interface RouteType {
 const routes: RouteType[] = [
   {
     path: "/",
-    element: React.lazy(() => import("@/pages/main")),
+    element: React.lazy(() => import("@/pages/landing")),
   },
   {
     path: "/flip",
