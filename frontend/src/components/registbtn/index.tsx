@@ -7,13 +7,13 @@ const StyledButton = styled.button`
   justify-content: center;
   border-radius: 15px;
   background: #cab2d3;
-  width: 366px;
-  height: 91px;
+  width: 18.5rem;
+  height: 5.2rem;
 `;
 
 const StyledText = styled.div`
   color: #813e83;
-  font-size: 40px;
+  font-size: 2.2rem;
   font-weight: 700;
   margin-right: 10px;
 `;
