@@ -55,7 +55,7 @@ public class CreditCard {
 	@Column(name = "image_path")
 	private String imagePath;
 
-	@Column(name = "register_path")
+	@Column(name = "register_path", columnDefinition = "TEXT")
 	private String registerPath;
 
 	@OneToMany(mappedBy = "creditCard")
