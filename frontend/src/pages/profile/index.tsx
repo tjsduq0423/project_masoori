@@ -1,7 +1,6 @@
 import styled from "styled-components"; // Import styled-components
 import ToggleSwitch from "@/components/toggle";
 import DonutChart from "@/components/donutGraph";
-
 import cardFrontImage from "../../assets/img/cardFront.png";
 
 const Container = styled.div`

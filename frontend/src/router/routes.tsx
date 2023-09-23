@@ -1,8 +1,12 @@
-import React, { FC } from "react";
+import React, { ComponentType, FC } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
+import DashboardLayout from "@/layouts/DashboardLayout";
+
+type DashboardLayout = /*unresolved*/ any;
 
 interface RouteType {
   path: string;
+  layout?: FC<DashboardLayout>;
   element: React.LazyExoticComponent<FC>;
 }
 
@@ -17,15 +21,13 @@ const routes: RouteType[] = [
   },
   {
     path: "/main",
+    layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/main")),
   },
   {
     path: "/crystal",
+    layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/crystalBall")),
-  },
-  {
-    path: "/signIn",
-    element: React.lazy(() => import("@/pages/login")),
   },
   {
     path: "/profile",
@@ -33,6 +35,7 @@ const routes: RouteType[] = [
   },
   {
     path: "/menu",
+    layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/menu")),
   },
   {
@@ -41,14 +44,17 @@ const routes: RouteType[] = [
   },
   {
     path: "/luck",
+    layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/luck")),
   },
   {
     path: "/luckcontent",
+    layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/luckContent")),
   },
   {
     path: "/landing",
+    layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/landing")),
   },
   {
@@ -57,10 +63,12 @@ const routes: RouteType[] = [
   },
   {
     path: "/dictionary",
+    layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/dictionary")),
   },
   {
     path: "/spend",
+    layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/spendPattern")),
   },
   {
@@ -87,10 +95,20 @@ const RenderRoutes: FC = () => {
       <Routes>
         {routes.map((route, i) => {
           const RouteElement = route.element;
-          //   const RouteLayout = route.layout || React.Fragment;
+          const RouteLayout = route.layout || React.Fragment;
           //   const Guard = route.guard || React.Fragment;
 
-          return <Route key={i} path={route.path} element={<RouteElement />} />;
+          return (
+            <Route
+              key={i}
+              path={route.path}
+              element={
+                <RouteLayout>
+                  <RouteElement />
+                </RouteLayout>
+              }
+            />
+          );
         })}
       </Routes>
     </React.Suspense>
