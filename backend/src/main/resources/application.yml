@@ -103,7 +103,7 @@ logging:
 # OAuth2 redirect url 설정
 app:
   oauth2:
-    authorizedRedirectUris: https://j9b308.p.ssafy.io/oauth/redirect
+    authorizedRedirectUris: http://localhost:3000/oauth/redirect
 
 # jwt secret key 설정
 jwt:
