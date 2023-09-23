@@ -1,7 +1,7 @@
 package com.fintech.masoori.domain.lucky.service;
 
-import com.fintech.masoori.domain.lucky.dto.FortuneRes;
+import com.fintech.masoori.domain.lucky.dto.UserFortuneRes;
 
 public interface FortuneUserService {
-	FortuneRes selectAllUserFortune(String email);
+	UserFortuneRes selectAllUserFortune(String email);
 }
