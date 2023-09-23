@@ -59,8 +59,6 @@ spring:
     username: ssafy_b308
     password: ssafy_b308_1
 
-
-
   # JPA 설정
   jpa:
     hibernate:
@@ -111,13 +109,16 @@ jwt:
 
 rabbitmq:
   queue:
-    name1: taro.queue
-    name2: lucky.queue
+    name1: realtime.queue
+    name2: weekly.queue
+    name3: recommend.queue
   exchange:
-    name: masoori.fanout
+    name: masoori.direct
   routing_key:
-    name1: generate.taro
-    name2: generate.lucky
+    name1: generate.realtime
+    name2: generate.weekly
+    name3: generate.recommend
+
 
 # ssl 설정
 #server:
