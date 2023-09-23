@@ -1,42 +1,22 @@
 import { instance } from "@/apis/instance";
 
-// 사용자 추천 카드 리스트 조회 API
-const getAllCreditcard = async () => {
-  try {
-    const response = await instance.get(`/api/creditcard`);
-    return response.data;
-  } catch {
-    new Error("api 연동 오류 - getAllCreditcard");
-  }
-};
-
-// 카드 상세 정보 조회 조회 API
-const getCreditcard = async () => {
-  try {
-    const response = await instance.get(`/api/creditcard/{cardId}`);
-    return response.data;
-  } catch {
-    new Error("api 연동 오류 - getCreditcard");
-  }
-};
-
-// 월간 소비 분석 API
-const getAnalyticsMonth = async () => {
-  try {
-    const response = await instance.get(`/api/v1/analytics/month`);
-    return response.data;
-  } catch {
-    new Error("api 연동 오류 - getAnalyticsMonth");
-  }
-};
-
+// 사용자 최초 등록 시 소비카드를 생성한다.
 const postConsume = async () => {
   try {
-    const response = await instance.get(`/api/v1/card/consume`);
+    const response = await instance.post(`/api/v1/card/consume`);
     return response.data;
   } catch {
     new Error("api 연동 오류 - postConsume");
   }
 };
 
-export { getAllCreditcard, getCreditcard, getAnalyticsMonth, postConsume };
+const getConsume = async (id: number) => {
+  try {
+    const response = await instance.get(`/api/v1/card/consume/${id}`);
+    return response.data;
+  } catch {
+    new Error("api 연동 오류 - getConsume");
+  }
+};
+
+export { postConsume, getConsume };
