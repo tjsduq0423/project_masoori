@@ -8,9 +8,12 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fintech.masoori.domain.lucky.dto.FortuneListRes;
 import com.fintech.masoori.domain.lucky.dto.FortuneRes;
+import com.fintech.masoori.domain.lucky.dto.UserFortuneRes;
 import com.fintech.masoori.domain.lucky.entity.Fortune;
 import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.domain.lucky.repository.FortuneRepository;
@@ -25,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest
 @Transactional
+@Rollback
 @Slf4j
 class FortuneServiceImplTest {
 
@@ -61,12 +65,13 @@ class FortuneServiceImplTest {
 		fortuneRepository.save(fortune4);
 		fortuneRepository.save(fortune5);
 		if (redisService.getUserFortune(user.getEmail()) == null) {
-			FortuneRes.Fortune response = fortuneService.selectOneFortune(user.getEmail());
+			FortuneRes response = fortuneService.selectOneFortune(user.getEmail());
 			log.info("Fortune : {}", response);
 			assertThat(redisService.getUserFortune(user.getEmail()).equals(response.getName()));
-			redisService.deleteUserColor(user.getEmail());
+			redisService.deleteUserFortune(user.getEmail());
 			assertThat(redisService.getUserFortune(user.getEmail()) == null);
 		} else {
+			redisService.deleteUserFortune(user.getEmail());
 			fail("이미 Redis에 유저가 존재합니다.");
 		}
 	}
@@ -88,7 +93,7 @@ class FortuneServiceImplTest {
 		fortuneRepository.save(fortune3);
 		fortuneRepository.save(fortune4);
 		fortuneRepository.save(fortune5);
-		FortuneRes.Fortune response = fortuneService.selectOneFortune(user.getEmail());
+		FortuneRes response = fortuneService.selectOneFortune(user.getEmail());
 		if (redisService.getUserFortune(user.getEmail()).equals(response.getName())) {
 			String name = redisService.getUserFortune(user.getEmail());
 			Fortune findFortune = fortuneRepository.findDescriptioneByName(name);
@@ -98,6 +103,7 @@ class FortuneServiceImplTest {
 			redisService.deleteUserFortune(user.getEmail());
 			assertThat(redisService.getUserFortune(user.getEmail()) == null);
 		} else {
+			redisService.deleteUserFortune(user.getEmail());
 			fail("redis에 저장되어 있는 Fortune name과 유저가 뽑은 Fortune의 name이 일치하지 않습니다.");
 		}
 	}
@@ -119,7 +125,7 @@ class FortuneServiceImplTest {
 		fortuneRepository.save(fortune5);
 		String email = "";
 		assertThat(email.equals(""));
-		FortuneRes.Fortune response = fortuneService.selectOneFortune(email);
+		FortuneRes response = fortuneService.selectOneFortune(email);
 		log.info("Non-Login User Fortune(\"\") : {}", response);
 	}
 
@@ -138,7 +144,7 @@ class FortuneServiceImplTest {
 		fortuneRepository.save(fortune3);
 		fortuneRepository.save(fortune4);
 		fortuneRepository.save(fortune5);
-		FortuneRes response = fortuneService.selectAllFortune();
+		FortuneListRes response = fortuneService.selectAllFortune();
 		log.info("FortuneList : {}", response);
 		assertThat(response.getFortuneList().size() == fortuneRepository.count());
 	}
@@ -167,7 +173,7 @@ class FortuneServiceImplTest {
 		// fortuneUserRepository.saveAll(fortuneUserList);
 		em.flush();
 
-		FortuneRes fortuneRes = fortuneUserService.selectAllUserFortune(user.getEmail());
+		UserFortuneRes fortuneRes = fortuneUserService.selectAllUserFortune(user.getEmail());
 		log.info("User's Fortune : {}", fortuneRes);
 		assertThat(fortuneRes.getFortuneList().size() == 3);
 		List<FortuneUser> allByUserId = fortuneUserRepository.findAllByUserId(user.getId());
