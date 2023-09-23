@@ -33,6 +33,9 @@ public class RabbitMQConfig {
 	@Value("${rabbitmq.queue.name2}")
 	private String queue2;
 
+	@Value("${rabbitmq.queue.name3}")
+	private String queue3;
+
 	@Value("${rabbitmq.exchange.name}")
 	private String exchange;
 
@@ -41,6 +44,9 @@ public class RabbitMQConfig {
 
 	@Value("${rabbitmq.routing_key.name2}")
 	private String routingKey2;
+
+	@Value("${rabbitmq.routing_key.name3}")
+	private String routingKey3;
 
 	@Bean
 	public Queue queue1() {
@@ -53,18 +59,28 @@ public class RabbitMQConfig {
 	}
 
 	@Bean
+	public Queue queue3() {
+		return new Queue(queue3, false);
+	}
+
+	@Bean
 	public DirectExchange directExchange() {
 		return new DirectExchange(exchange);   // Topic Exchange 타입
 	}
 
 	@Bean
-	public Binding binding(DirectExchange directExchange, Queue queue1) {
+	public Binding binding1(DirectExchange directExchange, Queue queue1) {
 		return BindingBuilder.bind(queue1).to(directExchange).with(routingKey1);
 	}
 
 	@Bean
 	public Binding binding2(DirectExchange directExchange, Queue queue2) {
 		return BindingBuilder.bind(queue2).to(directExchange).with(routingKey2);
+	}
+
+	@Bean
+	public Binding binding3(DirectExchange directExchange, Queue queue3) {
+		return BindingBuilder.bind(queue3).to(directExchange).with(routingKey3);
 	}
 
 	@Bean
