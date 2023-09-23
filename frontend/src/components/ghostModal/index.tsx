@@ -1,7 +1,8 @@
 import { StyledTextBubbleProps } from "@/types/luckType";
 import styled from "styled-components";
 import TextBubble from "../textBubble";
-import ghost from "@/assets/img/ghost/ghost.png";
+import Lottie from "lottie-react";
+import ghost from "@/assets/img/gif/ghost.json";
 
 export interface StyledGhostModalProps {
   zIndex?: string;
@@ -25,12 +26,6 @@ const ModalContainer = styled.div`
   justify-content: center; /* 수평 중앙 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
   flex-direction: row; /* 수평 정렬로 변경 */
-`;
-
-const Image = styled.img`
-  width: 400px;
-  height: 400px;
-  margin: 80px;
 `;
 
 const TextBubbleContainer = styled.div`
@@ -101,7 +96,10 @@ const GhostModal = ({ zIndex, toggleModal }: StyledGhostModalProps) => {
   return (
     <ModalBackground zIndex={zIndex} toggleModal={toggleModal}>
       <ModalContainer>
-        <Image src={ghost}></Image>
+        <Lottie
+          animationData={ghost}
+          style={{ width: "400px", height: "400px", margin: "80px" }}
+        />
         <ContentWrapper>
           <TextBubbleContainer>
             <TextBubble {...titleTextBubbleProps} />
