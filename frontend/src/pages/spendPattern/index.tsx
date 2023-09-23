@@ -219,18 +219,20 @@ const SpendPage: React.FC = () => {
               imageUrl={puzzle} // 이미지 경로
               topTextColor="#5E3A66"
               middleTextColor="#5E3A66"
-              bottomTextColor="white"
+              bottomTextColor="#EAE2ED"
               upperSectionBackground="#EAE2ED"
               lowerSectionBackground="#5E3A66"
               topTextFontSize="28px"
-              middleTextFontSize="14px"
+              middleTextFontSize="18px"
               bottomTextFontSize="20px"
               topTextPaddingTopBottom="20px"
               middleTextPaddingTopBottom="6px"
+              middleTextPaddingLeftRight="0px"
               topTextFontWeight="bold"
               middleTextFontWeight="medium"
               bottomTextFontWeight="medium"
               zIndex={"3"}
+              routerLink="/dictionary"
             />
           </PuzzleModalContainer>
         </ContentContainer>
