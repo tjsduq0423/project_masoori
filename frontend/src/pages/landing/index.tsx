@@ -6,7 +6,7 @@ import FinanceLuckCards from "@/assets/img/FinanceLuckCards.png";
 import CreditCards from "@/assets/img/CreditCards.png";
 import Trophy from "@/assets/img/Trophy.png";
 import Bottles from "@/assets/img/Bottles.png";
-import CardFlip from "@/components/CardFlip";
+import CardFlip from "@/components/cardFlip";
 
 <link rel="stylesheet" type="text/css" href="@/styles.font.css" />;
 

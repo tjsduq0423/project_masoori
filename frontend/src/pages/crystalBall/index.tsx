@@ -102,7 +102,6 @@ const CrystalBallPage = () => {
           <Environment preset="warehouse" />
         </Suspense>
       </Canvas>
-
       {/* 모달 렌더링 */}
       <Backdrop isOpen={isModalOpen} onClick={closeModal} />
       <ModalContainer isOpen={isModalOpen}>

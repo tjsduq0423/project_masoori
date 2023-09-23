@@ -2,7 +2,6 @@ import { useState } from "react";
 import styled from "styled-components";
 import TextBubble from "@/components/textBubble";
 import { StyledTextBubbleProps } from "@/types/luckType";
-
 import background from "@/assets/img/background/capetBackground.jpg";
 import headerDecorationLeft from "@/assets/img/headerDecorationLeft.png";
 import headerDecorationRight from "@/assets/img/headerDecorationRight.png";

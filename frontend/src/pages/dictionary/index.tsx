@@ -6,7 +6,6 @@ import TextBubble from "@/components/textBubble";
 import { StyledTextBubbleProps } from "@/types/luckType";
 import TarotCard from "@/components/tarotCard";
 import DcitBtn from "@/components/dictBtn";
-
 import card from "@/assets/img/cardFront.png";
 import background from "@/assets/img/background/silkBackground.jpg";
 
