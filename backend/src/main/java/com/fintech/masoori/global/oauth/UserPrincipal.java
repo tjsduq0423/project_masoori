@@ -51,7 +51,7 @@ public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
 
 	@Override
 	public String getUsername() {
-		return name;
+		return email;
 	}
 
 	@Override

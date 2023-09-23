@@ -14,6 +14,7 @@ import com.fintech.masoori.domain.analytics.entity.MonthlySpendingAnalytics;
 import com.fintech.masoori.domain.analytics.repository.MonthlySpendingAnalyticsRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
+import com.fintech.masoori.global.oauth.ProviderType;
 
 import jakarta.persistence.EntityManager;
 
@@ -33,7 +34,7 @@ class MonthlySpendingAnalyticsServiceImplTest {
 
 	@Test
 	public void selectAll() {
-		User user = User.builder().email("ssafy@gmail.com").build();
+		User user = User.builder().email("ssafy@gmail.com").providerType(ProviderType.LOCAL).build();
 		userRepository.save(user);
 		MonthlySpendingAnalytics month1 = MonthlySpendingAnalytics.builder()
 																   .category("음식")

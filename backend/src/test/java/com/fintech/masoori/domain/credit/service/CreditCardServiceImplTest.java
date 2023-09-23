@@ -13,6 +13,7 @@ import com.fintech.masoori.domain.credit.entity.CreditCardUser;
 import com.fintech.masoori.domain.credit.repository.CreditCardRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
+import com.fintech.masoori.global.oauth.ProviderType;
 
 import jakarta.persistence.EntityManager;
 
@@ -30,7 +31,7 @@ class CreditCardServiceImplTest {
 
 	@Test
 	void selectAll() {
-		User user = User.builder().email("ssafy@gmail.com").build();
+		User user = User.builder().email("ssafy@gmail.com").providerType(ProviderType.LOCAL).build();
 		em.persist(user);
 		// for (int i = 0; i < 5; i++) {
 		// 	CreditCard card =
