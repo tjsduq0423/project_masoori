@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/lucky")
+@RequestMapping("/api/lucky")
 @RequiredArgsConstructor
 @Tag(name = "Lucky", description = "금전운 및 행운의 컬러 API")
 public class LuckyController {
