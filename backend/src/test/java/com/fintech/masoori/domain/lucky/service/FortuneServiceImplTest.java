@@ -17,6 +17,7 @@ import com.fintech.masoori.domain.lucky.repository.FortuneRepository;
 import com.fintech.masoori.domain.lucky.repository.FortuneUserRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
+import com.fintech.masoori.global.oauth.ProviderType;
 import com.fintech.masoori.global.redis.RedisService;
 
 import jakarta.persistence.EntityManager;
@@ -47,7 +48,8 @@ class FortuneServiceImplTest {
 	 */
 	@Test
 	void 로그인_처음_뽑기() {
-		User user = User.builder().email("test@gmail.com").build();
+		User user = User.builder().email("test@gmail.com").providerType(ProviderType.LOCAL).build();
+		userRepository.save(user);
 		Fortune fortune1 = Fortune.builder().name("1번 카드").imagePath("이미지 경로1").description("1번 설명").build();
 		Fortune fortune2 = Fortune.builder().name("2번 카드").imagePath("이미지 경로2").description("2번 설명").build();
 		Fortune fortune3 = Fortune.builder().name("3번 카드").imagePath("이미지 경로3").description("3번 설명").build();
@@ -74,7 +76,8 @@ class FortuneServiceImplTest {
 	 */
 	@Test
 	void 로그인_중복_뽑기() {
-		User user = User.builder().email("test@gmail.com").build();
+		User user = User.builder().email("test@gmail.com").providerType(ProviderType.LOCAL).build();
+		userRepository.save(user);
 		Fortune fortune1 = Fortune.builder().name("1번 카드").imagePath("이미지 경로1").description("1번 설명").build();
 		Fortune fortune2 = Fortune.builder().name("2번 카드").imagePath("이미지 경로2").description("2번 설명").build();
 		Fortune fortune3 = Fortune.builder().name("3번 카드").imagePath("이미지 경로3").description("3번 설명").build();
@@ -151,7 +154,7 @@ class FortuneServiceImplTest {
 		}
 		fortuneRepository.saveAll(fortuneList);
 
-		User user = User.builder().email("test@gmail.com").password("123").build();
+		User user = User.builder().email("test@gmail.com").providerType(ProviderType.LOCAL).build();
 		// userRepository.save(user);
 		em.persist(user);
 

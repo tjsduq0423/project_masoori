@@ -40,6 +40,7 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 			FortuneRes.Fortune temp = FortuneRes.Fortune.builder()
 														.name(fortune.getName())
 														.imagePath(fortune.getImagePath())
+														.summary(fortune.getSummary())
 														.description(fortune.getDescription())
 														.build();
 			fortuneResList.add(temp);
@@ -61,6 +62,7 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 				Fortune findFortune = fortuneRepository.findDescriptioneByName(fortuneName);
 				fortune.setName(findFortune.getName());
 				fortune.setImagePath(findFortune.getImagePath());
+				fortune.setSummary(findFortune.getSummary());
 				fortune.setDescription(findFortune.getDescription());
 				return fortune;
 
@@ -74,6 +76,7 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 			Fortune temp = fortunePage.getContent().get(0);
 			fortune.setName(temp.getName());
 			fortune.setImagePath(temp.getImagePath());
+			fortune.setSummary(temp.getSummary());
 			fortune.setDescription(temp.getDescription());
 			if (!email.isEmpty()) {
 				log.debug("Login select fortune");
@@ -95,6 +98,7 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 			fortuneList.add(FortuneRes.Fortune.builder()
 											  .name(fortune.getName())
 											  .imagePath(fortune.getImagePath())
+											  .summary(fortune.getSummary())
 											  .description(fortune.getDescription())
 											  .build());
 		}

@@ -101,10 +101,11 @@ app:
 # jwt secret key 설정
 jwt:
   key: YourewaitingforatrainAtrainthatwilltakeyoufarawayYouknowwhereyouhope
-# ssl 설정
-#server:
-#  ssl:
-#    key-store: classpath:keystore.p12
-#    key-store-password:1q2w3e4r
-#    key-store-type: PKCS12
+  # ssl 설정
+  #server:
+  #  ssl:
+  #    key-store: classpath:keystore.p12
+  #    key-store-password:1q2w3e4r
+  #    key-store-type: PKCS12
 
+  server.ec2-url: masoori.site

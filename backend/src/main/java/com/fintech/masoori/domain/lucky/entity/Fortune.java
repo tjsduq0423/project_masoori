@@ -34,6 +34,9 @@ public class Fortune {
 	@Column(name = "image_path")
 	private String imagePath;
 
-	@Column(name = "description")
+	@Column(name = "summary", columnDefinition = "TEXT")
+	private String summary;
+
+	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 }

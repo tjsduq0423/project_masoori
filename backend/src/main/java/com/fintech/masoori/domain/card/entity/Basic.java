@@ -42,4 +42,9 @@ public class Basic {
 
 	@Column(name = "frequency")
 	private int frequency;
+
+	public void setCard(Card card) {
+		this.card = card;
+		card.getBasicList().add(this);
+	}
 }

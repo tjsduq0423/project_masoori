@@ -49,7 +49,7 @@ public class Card extends BaseTimeEntity {
 	@Column(name = "image_path")
 	private String imagePath;
 
-	@Column(name = "description")
+	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 
 	@Column(name = "card_type")
@@ -63,5 +63,20 @@ public class Card extends BaseTimeEntity {
 	@OneToMany(mappedBy = "card")
 	@Builder.Default
 	private List<Basic> basicList = new ArrayList<>();
+
+	public void addChallengeList(Challenge challenge) {
+		this.challengeList.add(challenge);
+		challenge.setCard(this);
+	}
+
+	public void addBasicList(Basic basic) {
+		this.basicList.add(basic);
+		basic.setCard(this);
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+		user.getCardList().add(this);
+	}
 
 }
