@@ -135,17 +135,17 @@ public class UserServiceImpl implements UserService {
 		                               .withHour(23)
 		                               .withMinute(59)
 		                               .withSecond(59);
-		// Integer amountSumByPeriodDay = userRepository.getAmountSumByPeriod(email, nowStart, nowEnd);
-		// Integer amountSumByPeriodWeek = userRepository.getAmountSumByPeriod(email, nowWeekStart, nowWeekEnd);
-		// Integer amountSumByPeriodMonth = userRepository.getAmountSumByPeriod(email, nowMonthStart, nowMonthEnd);
+		Integer amountSumByPeriodDay = userRepository.getAmountSumByPeriod(email, nowStart, nowEnd);
+		Integer amountSumByPeriodWeek = userRepository.getAmountSumByPeriod(email, nowWeekStart, nowWeekEnd);
+		Integer amountSumByPeriodMonth = userRepository.getAmountSumByPeriod(email, nowMonthStart, nowMonthEnd);
 
 		InfoRes infoRes = InfoRes.builder()
 		                         .imagePath(user.getCardImage())
 		                         .isAuthenticated(user.getIsAuthenticated())
 		                         .smsAlarm(user.getSmsAlarm())
-		                         // .dailySpending(amountSumByPeriodDay)
-		                         // .monthlySpending(amountSumByPeriodWeek)
-		                         // .weeklySpending(amountSumByPeriodMonth)
+		                         .dailySpending(amountSumByPeriodDay)
+		                         .monthlySpending(amountSumByPeriodWeek)
+		                         .weeklySpending(amountSumByPeriodMonth)
 		                         .build();
 		return infoRes;
 	}
