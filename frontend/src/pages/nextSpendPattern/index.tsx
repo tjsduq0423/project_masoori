@@ -20,14 +20,15 @@ const PageContainer = styled.div`
   background-attachment: scroll;
 `;
 
-const Backdrop = styled.div`
+const Backdrop = styled.div<{ isOpen: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
-  z-index: 2;
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+  z-index: 1;
 `;
 
 const ContentContainer = styled.div`
@@ -70,8 +71,13 @@ const TextBubbleContainer = styled.div`
 `;
 
 const ModalContainer = styled.div<{ isOpen: boolean }>`
-  z-index: 3;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
   display: ${(props) => (props.isOpen ? "block" : "none")};
+  z-index: 3;
 `;
 
 const NextSpendPage: React.FC = () => {
@@ -166,10 +172,10 @@ const NextSpendPage: React.FC = () => {
           </ContentWrapper>
         </TitleContainer>
         <ModalContainer isOpen={isModalOpen}>
-          <Backdrop onClick={closeModal} />
           <GhostModal zIndex={"3"} toggleModal={toggleModal} />
         </ModalContainer>
       </ContentContainer>
+      <Backdrop isOpen={isModalOpen} onClick={closeModal} />
     </PageContainer>
   );
 };
