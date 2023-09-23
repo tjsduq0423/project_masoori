@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export interface StyledAlertModalProps {
@@ -16,10 +17,12 @@ export interface StyledAlertModalProps {
   bottomTextFontSize: string;
   topTextPaddingTopBottom: string;
   middleTextPaddingTopBottom: string;
+  middleTextPaddingLeftRight: string;
   topTextFontWeight: string;
   middleTextFontWeight: string;
   bottomTextFontWeight: string;
   zIndex?: string;
+  routerLink: string;
 }
 
 const StyledAlertModal = styled.div<StyledAlertModalProps>`
@@ -83,6 +86,7 @@ const MiddleText = styled.div<{
   middleTextColor: string;
   middleTextFontSize: string;
   middleTextPaddingTopBottom: string;
+  middleTextPaddingLeftRight: string;
   middleTextFontWeight: string;
 }>`
   color: ${(props) => props.middleTextColor};
@@ -90,6 +94,8 @@ const MiddleText = styled.div<{
   font-weight: ${(props) => props.middleTextFontWeight};
   padding-top: ${(props) => props.middleTextPaddingTopBottom};
   padding-bottom: ${(props) => props.middleTextPaddingTopBottom};
+  padding-left: ${(props) => props.middleTextPaddingLeftRight};
+  padding-right: ${(props) => props.middleTextPaddingLeftRight};
 `;
 
 const BottomText = styled.div<{
@@ -102,6 +108,7 @@ const BottomText = styled.div<{
   padding-top: 25px;
   padding-bottom: 25px;
   font-weight: ${(props) => props.bottomTextFontWeight};
+  padding-right: 7px;
 `;
 
 const AlertModal = ({
@@ -120,11 +127,18 @@ const AlertModal = ({
   bottomTextFontSize,
   topTextPaddingTopBottom,
   middleTextPaddingTopBottom,
+  middleTextPaddingLeftRight,
   topTextFontWeight,
   middleTextFontWeight,
   bottomTextFontWeight,
   zIndex,
+  routerLink,
 }: StyledAlertModalProps) => {
+  const navigate = useNavigate();
+
+  const handleLowerSectionClick = () => {
+    navigate(routerLink);
+  };
   return (
     <StyledAlertModal
       width={width}
@@ -142,10 +156,12 @@ const AlertModal = ({
       bottomTextFontSize={bottomTextFontSize}
       topTextPaddingTopBottom={topTextPaddingTopBottom}
       middleTextPaddingTopBottom={middleTextPaddingTopBottom}
+      middleTextPaddingLeftRight={middleTextPaddingLeftRight}
       topTextFontWeight={topTextFontWeight}
       middleTextFontWeight={middleTextFontWeight}
       bottomTextFontWeight={bottomTextFontWeight}
       zIndex={zIndex}
+      routerLink={routerLink}
     >
       <UpperSection upperSectionBackground={upperSectionBackground}>
         <ImageContainer>
@@ -163,12 +179,16 @@ const AlertModal = ({
           middleTextColor={middleTextColor}
           middleTextFontSize={middleTextFontSize}
           middleTextPaddingTopBottom={middleTextPaddingTopBottom}
+          middleTextPaddingLeftRight={middleTextPaddingLeftRight}
           middleTextFontWeight={middleTextFontWeight}
         >
           {middleText}
         </MiddleText>
       </UpperSection>
-      <LowerSection lowerSectionBackground={lowerSectionBackground}>
+      <LowerSection
+        lowerSectionBackground={lowerSectionBackground}
+        onClick={handleLowerSectionClick}
+      >
         <BottomText
           bottomTextColor={bottomTextColor}
           bottomTextFontSize={bottomTextFontSize}
@@ -176,6 +196,18 @@ const AlertModal = ({
         >
           {bottomText}
         </BottomText>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="18"
+          viewBox="0 0 17 28"
+          fill="none"
+        >
+          <path
+            d="M0 2.968L11.0528 14L0 25.032L2.9736 28L17 14L2.9736 0L0 2.968Z"
+            fill="#EAE2ED"
+          />
+        </svg>
       </LowerSection>
     </StyledAlertModal>
   );
