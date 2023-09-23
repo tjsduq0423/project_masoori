@@ -39,6 +39,13 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+  # rabbitmq 설정
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: ADMIN
+    password: MASOORI_MQ
+
   # key-value store인  redis 설정 (임시)
   data:
     redis:
@@ -96,16 +103,27 @@ logging:
 # OAuth2 redirect url 설정
 app:
   oauth2:
-    authorizedRedirectUris: https://j9b308.p.ssafy.io/oauth/redirect
+    authorizedRedirectUris: http://localhost:3000/oauth/redirect
 
 # jwt secret key 설정
 jwt:
   key: YourewaitingforatrainAtrainthatwilltakeyoufarawayYouknowwhereyouhope
-  # ssl 설정
-  #server:
-  #  ssl:
-  #    key-store: classpath:keystore.p12
-  #    key-store-password:1q2w3e4r
-  #    key-store-type: PKCS12
+
+rabbitmq:
+  queue:
+    name1: taro.queue
+    name2: lucky.queue
+  exchange:
+    name: masoori.fanout
+  routing_key:
+    name1: generate.taro
+    name2: generate.lucky
+
+# ssl 설정
+#server:
+#  ssl:
+#    key-store: classpath:keystore.p12
+#    key-store-password:1q2w3e4r
+#    key-store-type: PKCS12
 
   server.ec2-url: masoori.site
