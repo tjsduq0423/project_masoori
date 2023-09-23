@@ -208,7 +208,7 @@ const SpendPage: React.FC = () => {
             </ContentWrapper>
           </TitleContainer>
           <ModalContainer isOpen={isModalOpen}>
-            <GhostModal zIndex={"4"} toggleModal={toggleModal} />
+            <GhostModal zIndex={"3"} toggleModal={toggleModal} />
           </ModalContainer>
           <PuzzleModalContainer isPuzzleOpen={isPuzzleModalOpen}>
             <AlertModal
