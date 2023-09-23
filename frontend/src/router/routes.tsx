@@ -58,7 +58,7 @@ const routes: RouteType[] = [
     element: React.lazy(() => import("@/pages/landing")),
   },
   {
-    path: "/login/oauth/redirect",
+    path: "/oauth/redirect",
     element: React.lazy(() => import("@/pages/redirect")),
   },
   {

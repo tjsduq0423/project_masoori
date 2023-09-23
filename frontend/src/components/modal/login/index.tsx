@@ -133,9 +133,9 @@ const FinishButton = styled.button`
 const Login: React.FC = () => {
   const [modalState, setModalState] = useState<string>("로그인");
 
-  const OAUTH2_REDIERECT_URI = `${process.env.REACT_APP_BASE_URL}/login/oauth/redirect`; /* 이거에대한페이지 생성 */
+  const OAUTH2_REDIERECT_URI = `${process.env.REACT_APP_BASE_URL}/oauth/redirect`; /* 이거에대한페이지 생성 */
   const onSocialButtonClick = (socialName: string) => {
-    const AUTH_URL = `${process.env.REACT_APP_SERVER_URL}/oauth2/authorization/${socialName}?redirect_uri=${OAUTH2_REDIERECT_URI}`;
+    const AUTH_URL = `${process.env.REACT_APP_SERVER_URL}/login/oauth2/authorization/${socialName}?redirect_uri=${OAUTH2_REDIERECT_URI}`;
     window.location.href = AUTH_URL;
   };
 
