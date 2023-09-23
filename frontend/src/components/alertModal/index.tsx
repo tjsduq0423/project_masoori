@@ -16,6 +16,10 @@ export interface StyledAlertModalProps {
   bottomTextFontSize: string;
   topTextPaddingTopBottom: string;
   middleTextPaddingTopBottom: string;
+  topTextFontWeight: string;
+  middleTextFontWeight: string;
+  bottomTextFontWeight: string;
+  zIndex?: string;
 }
 
 const StyledAlertModal = styled.div<StyledAlertModalProps>`
@@ -26,6 +30,7 @@ const StyledAlertModal = styled.div<StyledAlertModalProps>`
   flex-direction: column;
   justify-content: space-between;
   padding: 20px;
+  z-index: ${(props) => props.zIndex};
 `;
 
 const UpperSection = styled.div<{ upperSectionBackground: string }>`
@@ -65,21 +70,24 @@ const TopText = styled.div<{
   topTextColor: string;
   topTextFontSize: string;
   topTextPaddingTopBottom: string;
+  topTextFontWeight: string;
 }>`
   color: ${(props) => props.topTextColor};
   font-size: ${(props) => props.topTextFontSize};
   padding-top: ${(props) => props.topTextPaddingTopBottom};
   padding-bottom: ${(props) => props.topTextPaddingTopBottom};
+  font-weight: ${(props) => props.topTextFontWeight};
 `;
 
 const MiddleText = styled.div<{
   middleTextColor: string;
   middleTextFontSize: string;
   middleTextPaddingTopBottom: string;
+  middleTextFontWeight: string;
 }>`
   color: ${(props) => props.middleTextColor};
   font-size: ${(props) => props.middleTextFontSize};
-  font-weight: 800;
+  font-weight: ${(props) => props.middleTextFontWeight};
   padding-top: ${(props) => props.middleTextPaddingTopBottom};
   padding-bottom: ${(props) => props.middleTextPaddingTopBottom};
 `;
@@ -87,11 +95,13 @@ const MiddleText = styled.div<{
 const BottomText = styled.div<{
   bottomTextColor: string;
   bottomTextFontSize: string;
+  bottomTextFontWeight: string;
 }>`
   color: ${(props) => props.bottomTextColor};
   font-size: ${(props) => props.bottomTextFontSize};
   padding-top: 25px;
   padding-bottom: 25px;
+  font-weight: ${(props) => props.bottomTextFontWeight};
 `;
 
 const AlertModal = ({
@@ -110,6 +120,10 @@ const AlertModal = ({
   bottomTextFontSize,
   topTextPaddingTopBottom,
   middleTextPaddingTopBottom,
+  topTextFontWeight,
+  middleTextFontWeight,
+  bottomTextFontWeight,
+  zIndex,
 }: StyledAlertModalProps) => {
   return (
     <StyledAlertModal
@@ -128,6 +142,10 @@ const AlertModal = ({
       bottomTextFontSize={bottomTextFontSize}
       topTextPaddingTopBottom={topTextPaddingTopBottom}
       middleTextPaddingTopBottom={middleTextPaddingTopBottom}
+      topTextFontWeight={topTextFontWeight}
+      middleTextFontWeight={middleTextFontWeight}
+      bottomTextFontWeight={bottomTextFontWeight}
+      zIndex={zIndex}
     >
       <UpperSection upperSectionBackground={upperSectionBackground}>
         <ImageContainer>
@@ -137,6 +155,7 @@ const AlertModal = ({
           topTextColor={topTextColor}
           topTextFontSize={topTextFontSize}
           topTextPaddingTopBottom={topTextPaddingTopBottom}
+          topTextFontWeight={topTextFontWeight}
         >
           {topText}
         </TopText>
@@ -144,6 +163,7 @@ const AlertModal = ({
           middleTextColor={middleTextColor}
           middleTextFontSize={middleTextFontSize}
           middleTextPaddingTopBottom={middleTextPaddingTopBottom}
+          middleTextFontWeight={middleTextFontWeight}
         >
           {middleText}
         </MiddleText>
@@ -152,6 +172,7 @@ const AlertModal = ({
         <BottomText
           bottomTextColor={bottomTextColor}
           bottomTextFontSize={bottomTextFontSize}
+          bottomTextFontWeight={bottomTextFontWeight}
         >
           {bottomText}
         </BottomText>
