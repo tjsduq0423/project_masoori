@@ -13,6 +13,7 @@ interface RouteType {
 const routes: RouteType[] = [
   {
     path: "/",
+    layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/landing")),
   },
   {
