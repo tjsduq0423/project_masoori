@@ -1,10 +1,13 @@
 package com.fintech.masoori.domain.lucky.service;
 
+import com.fintech.masoori.domain.lucky.dto.FortuneListRes;
 import com.fintech.masoori.domain.lucky.dto.FortuneRes;
+import com.fintech.masoori.domain.lucky.dto.UserFortuneRes;
 
 public interface FortuneService {
 
-	FortuneRes selectAllFortune();
+	FortuneListRes selectAllFortune();
 
-	FortuneRes.Fortune selectOneFortune(String email);
+	FortuneRes selectOneFortune(String email);
+
 }
