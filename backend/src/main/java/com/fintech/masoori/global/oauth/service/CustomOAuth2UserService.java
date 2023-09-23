@@ -73,10 +73,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 	private User createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
 		User user = User.builder()
-		                .email(userInfo.getEmail())
-		                .providerType(providerType)
-		                .roles(Collections.singletonList(UserRole.ROLE_USER.name()))
-		                .build();
+						.email(userInfo.getEmail())
+						.providerType(providerType)
+						.roles(Collections.singletonList(UserRole.ROLE_USER.name()))
+						.build();
 
 		return userRepository.saveAndFlush(user);
 	}

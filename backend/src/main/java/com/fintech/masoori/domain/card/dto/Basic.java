@@ -1,11 +1,13 @@
 package com.fintech.masoori.domain.card.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
+@AllArgsConstructor
 public class Basic {
 	@Schema(description = "id(PK)", example = "1")
 	private Long id;
@@ -15,4 +17,11 @@ public class Basic {
 	private int totalAmount;
 	@Schema(description = "결제 빈도", example = "11")
 	private int frequency;
+
+	public Basic(com.fintech.masoori.domain.card.entity.Basic basic) {
+		this.id = basic.getId();
+		this.keyword = basic.getKeyword();
+		this.totalAmount = basic.getTotalAmount();
+		this.frequency = basic.getFrequency();
+	}
 }

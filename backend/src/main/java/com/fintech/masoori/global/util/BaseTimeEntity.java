@@ -22,4 +22,13 @@ public class BaseTimeEntity {
 	@LastModifiedDate
 	@Column(name = "modified_date")
 	private LocalDateTime modifiedDate;
+
+	/**
+	 * 테스트용 Setter 함수
+	 * @param time
+	 */
+	public void setLocalDateTime(LocalDateTime time) {
+		this.createdDate = time;
+	}
+
 }

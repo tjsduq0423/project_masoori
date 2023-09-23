@@ -51,7 +51,7 @@ class UserServiceImplTest {
 
 	@Test
 	public void sendEmail() {
-		User user = User.builder().email("songsoy95@gmail.com").build();
+		User user = User.builder().email("songsoy95@gmail.com").providerType(ProviderType.LOCAL).build();
 		userRepository.save(user);
 		User findUser = userRepository.findByEmail(user.getEmail()).get();
 		String email = findUser.getEmail();
@@ -69,7 +69,7 @@ class UserServiceImplTest {
 
 	@Test
 	public void updateInfo() {
-		User user = User.builder().email("ssafy@gmail.com").build();
+		User user = User.builder().email("ssafy@gmail.com").providerType(ProviderType.LOCAL).build();
 		userRepository.save(user);
 		User findUser = userRepository.findByEmail(user.getEmail()).get();
 
@@ -86,7 +86,7 @@ class UserServiceImplTest {
 
 	@Test
 	public void sendSms() {
-		User user = User.builder().email("ssafy@gmail.com").phoneNumber("01051548989").build();
+		User user = User.builder().email("ssafy@gmail.com").providerType(ProviderType.LOCAL).phoneNumber("01051548989").build();
 		userRepository.save(user);
 		User findUser = userRepository.findByEmail(user.getEmail()).get();
 
@@ -105,7 +105,7 @@ class UserServiceImplTest {
 
 	@Test
 	public void findByEmail() {
-		User user = User.builder().email("ssafy@gmail.com").build();
+		User user = User.builder().email("ssafy@gmail.com").providerType(ProviderType.LOCAL).build();
 		userRepository.save(user);
 		User savedUser = userRepository.findByEmail(user.getEmail()).get();
 
@@ -114,7 +114,7 @@ class UserServiceImplTest {
 
 	@Test
 	public void updateIntegration() {
-		User user = User.builder().email("ssafy@gmail.com").smsAlarm(false).cardGeneration(false).build();
+		User user = User.builder().email("ssafy@gmail.com").providerType(ProviderType.LOCAL).smsAlarm(false).cardGeneration(false).build();
 		userRepository.save(user);
 		User savedUser = userRepository.findByEmail(user.getEmail()).get();
 
@@ -131,7 +131,7 @@ class UserServiceImplTest {
 
 	@Test
 	public void updateSmsAlarm() {
-		User user = User.builder().email("ssafy@gmail.com").smsAlarm(false).build();
+		User user = User.builder().email("ssafy@gmail.com").providerType(ProviderType.LOCAL).smsAlarm(false).build();
 		userRepository.save(user);
 
 		User savedUser = userRepository.findByEmail(user.getEmail()).get();
@@ -146,7 +146,7 @@ class UserServiceImplTest {
 
 	@Test
 	public void updateCardGeneration() {
-		User user = User.builder().email("ssafy@gmail.com").cardGeneration(false).build();
+		User user = User.builder().email("ssafy@gmail.com").providerType(ProviderType.LOCAL).cardGeneration(false).build();
 		userRepository.save(user);
 
 		User savedUser = userRepository.findByEmail(user.getEmail()).get();
@@ -158,8 +158,6 @@ class UserServiceImplTest {
 
 		assertThat(updatedUser.getCardGeneration()).isEqualTo(true);
 	}
-
-}
 
 	// 회원가입 검증
 	@Test
