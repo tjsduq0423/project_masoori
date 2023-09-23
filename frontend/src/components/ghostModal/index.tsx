@@ -4,7 +4,7 @@ import TextBubble from "../textBubble";
 import ghost from "@/assets/img/ghost/ghost.png";
 
 export interface StyledGhostModalProps {
-  zIndex: string;
+  zIndex?: string;
   toggleModal: () => void;
 }
 
