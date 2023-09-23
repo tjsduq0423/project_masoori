@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fintech.masoori.domain.lucky.dto.FortuneRes;
@@ -25,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest
 @Transactional
+@Rollback
 @Slf4j
 class FortuneServiceImplTest {
 
@@ -64,9 +66,10 @@ class FortuneServiceImplTest {
 			FortuneRes.Fortune response = fortuneService.selectOneFortune(user.getEmail());
 			log.info("Fortune : {}", response);
 			assertThat(redisService.getUserFortune(user.getEmail()).equals(response.getName()));
-			redisService.deleteUserColor(user.getEmail());
+			redisService.deleteUserFortune(user.getEmail());
 			assertThat(redisService.getUserFortune(user.getEmail()) == null);
 		} else {
+			redisService.deleteUserFortune(user.getEmail());
 			fail("이미 Redis에 유저가 존재합니다.");
 		}
 	}
@@ -98,6 +101,7 @@ class FortuneServiceImplTest {
 			redisService.deleteUserFortune(user.getEmail());
 			assertThat(redisService.getUserFortune(user.getEmail()) == null);
 		} else {
+			redisService.deleteUserFortune(user.getEmail());
 			fail("redis에 저장되어 있는 Fortune name과 유저가 뽑은 Fortune의 name이 일치하지 않습니다.");
 		}
 	}
