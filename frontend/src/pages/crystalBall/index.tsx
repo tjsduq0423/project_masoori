@@ -122,6 +122,9 @@ const CrystalBallPage = () => {
           bottomTextFontSize="12px"
           topTextPaddingTopBottom="2px"
           middleTextPaddingTopBottom="2px"
+          topTextFontWeight="medium"
+          middleTextFontWeight="bold"
+          bottomTextFontWeight="medium"
         />
       </ModalContainer>
     </aw.div>

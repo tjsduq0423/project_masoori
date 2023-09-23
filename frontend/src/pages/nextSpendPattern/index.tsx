@@ -8,8 +8,6 @@ import HashTag from "@/components/hashtag";
 import TextBubble from "@/components/textBubble";
 import { StyledTextBubbleProps } from "@/types/luckType";
 import GhostModal from "@/components/ghostModal";
-import AlertModal from "@/components/alertModal";
-import puzzle from "@/assets/img/puzzle.png";
 
 const PageContainer = styled.div`
   position: fixed;
@@ -82,19 +80,8 @@ const ModalContainer = styled.div<{ isOpen: boolean }>`
   z-index: 3;
 `;
 
-const PuzzleModalContainer = styled.div<{ isPuzzleOpen: boolean }>`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 20px;
-  display: ${(props) => (props.isPuzzleOpen ? "block" : "none")};
-  z-index: 3;
-`;
-
-const SpendPage: React.FC = () => {
+const NextSpendPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 여부 상태
-  const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
 
   // 모달 열기 함수
   const toggleModal: () => void = () => {
@@ -109,14 +96,6 @@ const SpendPage: React.FC = () => {
   // 모달 닫기 함수
   const closeModal = () => {
     setIsModalOpen(false);
-  };
-
-  const openPuzzleModal = () => {
-    setIsPuzzleModalOpen(true);
-  };
-
-  const closePuzzleModal = () => {
-    setIsPuzzleModalOpen(false);
   };
 
   const titleTextBubbleProps: StyledTextBubbleProps = {
@@ -145,17 +124,6 @@ const SpendPage: React.FC = () => {
     hoverable: false,
   };
 
-  const crystalTextBubbleProps: StyledTextBubbleProps = {
-    text: `🔮 마녀에게 손을 내민다 🔮`,
-    width: "650px",
-    background: "#4D1B2D80",
-    opacity: "1",
-    paddingLeftRight: "40px",
-    paddingTopBottom: "20px",
-    borderRadius: "20px",
-    hoverable: true,
-  };
-
   const shareTextBubbleProps: StyledTextBubbleProps = {
     text: `🃏 나의 카드를 다른 사람들에게 공유한다 🃏`,
     width: "650px",
@@ -168,77 +136,48 @@ const SpendPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <PageContainer>
-        <ContentContainer>
-          <CardContainer>
-            <TarotCard
-              width="300px"
-              height="402px"
-              cardWidth="100%"
-              cardSrc={tarotCardFront}
-              imageSrc={tarotCardBack}
-              bottomImageWidth="100%"
-              text="Special Card"
-              fontsize="20px"
-            ></TarotCard>
-          </CardContainer>
-          <TitleContainer>
-            <Title>This Week&apos;s Tarot Card</Title>
-            <HashtagContainer>
-              <HashTag text="Food"></HashTag>
-              <HashTag text="Food"></HashTag>
-              <HashTag text="Food"></HashTag>
-              <HashTag text="Food"></HashTag>
-              <HashTag text="Food"></HashTag>
-            </HashtagContainer>
-            <ContentWrapper>
-              <TextBubbleContainer>
-                <TextBubble {...titleTextBubbleProps} />
-              </TextBubbleContainer>
-              <TextBubbleContainer>
-                <TextBubble {...contentTextBubbleProps} />
-              </TextBubbleContainer>
-              <TextBubbleContainer onClick={openPuzzleModal}>
-                <TextBubble {...crystalTextBubbleProps} />
-              </TextBubbleContainer>
-              <TextBubbleContainer onClick={openModal}>
-                <TextBubble {...shareTextBubbleProps} />
-              </TextBubbleContainer>
-            </ContentWrapper>
-          </TitleContainer>
-          <ModalContainer isOpen={isModalOpen}>
-            <GhostModal zIndex={"3"} toggleModal={toggleModal} />
-          </ModalContainer>
-          <PuzzleModalContainer isPuzzleOpen={isPuzzleModalOpen}>
-            <AlertModal
-              width="600px"
-              topText="퍼즐을 찾았어요"
-              middleText="우리 함께 살펴볼까요?"
-              bottomText="내 진행상황 보러가기"
-              imageUrl={puzzle} // 이미지 경로
-              topTextColor="#5E3A66"
-              middleTextColor="#5E3A66"
-              bottomTextColor="white"
-              upperSectionBackground="#EAE2ED"
-              lowerSectionBackground="#5E3A66"
-              topTextFontSize="28px"
-              middleTextFontSize="14px"
-              bottomTextFontSize="20px"
-              topTextPaddingTopBottom="20px"
-              middleTextPaddingTopBottom="6px"
-              topTextFontWeight="bold"
-              middleTextFontWeight="medium"
-              bottomTextFontWeight="medium"
-              zIndex={"3"}
-            />
-          </PuzzleModalContainer>
-        </ContentContainer>
-        <Backdrop isOpen={isModalOpen} onClick={closeModal} />
-        <Backdrop isOpen={isPuzzleModalOpen} onClick={closePuzzleModal} />
-      </PageContainer>
-    </div>
+    <PageContainer>
+      <ContentContainer>
+        <CardContainer>
+          <TarotCard
+            width="300px"
+            height="402px"
+            cardWidth="100%"
+            cardSrc={tarotCardFront}
+            imageSrc={tarotCardBack}
+            bottomImageWidth="100%"
+            text="Special Card"
+            fontsize="20px"
+          ></TarotCard>
+        </CardContainer>
+        <TitleContainer>
+          <Title>Next Week&apos;s Tarot Card</Title>
+          <HashtagContainer>
+            <HashTag text="Food"></HashTag>
+            <HashTag text="Food"></HashTag>
+            <HashTag text="Food"></HashTag>
+            <HashTag text="Food"></HashTag>
+            <HashTag text="Food"></HashTag>
+          </HashtagContainer>
+          <ContentWrapper>
+            <TextBubbleContainer>
+              <TextBubble {...titleTextBubbleProps} />
+            </TextBubbleContainer>
+            <TextBubbleContainer>
+              <TextBubble {...contentTextBubbleProps} />
+            </TextBubbleContainer>
+            <TextBubbleContainer onClick={openModal}>
+              <TextBubble {...shareTextBubbleProps} />
+            </TextBubbleContainer>
+          </ContentWrapper>
+        </TitleContainer>
+        <ModalContainer isOpen={isModalOpen}>
+          <GhostModal zIndex={"3"} toggleModal={toggleModal} />
+        </ModalContainer>
+      </ContentContainer>
+      <Backdrop isOpen={isModalOpen} onClick={closeModal} />
+    </PageContainer>
   );
 };
 
-export default SpendPage;
+export default NextSpendPage;
