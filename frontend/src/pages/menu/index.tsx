@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import ProfilePage from "@/pages/profile";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-
 import menuTitle from "../../assets/img/menuTitle.png";
 
 const Backdrop = styled.div<{ isOpen: boolean }>`

@@ -14,7 +14,7 @@ interface JwtProps {
 const RedirectPage = () => {
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const params = new URLSearchParams(location.search);
-  const accessToken = params.get("code");
+  const accessToken = params.get("accessToken");
   // const userId = jwt<JwtProps>(accessToken!).sub;
   // const userAuth = jwt<JwtProps>(accessToken!).auth;
   localStorage.setItem("accessToken", accessToken!);
@@ -26,9 +26,8 @@ const RedirectPage = () => {
     })
   );
 
-  // window.location.href = PATH.SIGNIN; 리다이렉트시킬 페이지
+  window.location.href = "/main";
   return <></>;
-  // return <div>as;ldfjas;ldf</div>;
 };
 
 export default RedirectPage;

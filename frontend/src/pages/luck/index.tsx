@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import CardFlip from "@/components/cardFlip";
-
 import background from "@/assets/img/background/capetBackground.jpg";
 import headerDecorationLeft from "@/assets/img/headerDecorationLeft.png";
 import headerDecorationRight from "@/assets/img/headerDecorationRight.png";

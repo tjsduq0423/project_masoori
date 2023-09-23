@@ -9,7 +9,11 @@ import { useNavigate } from "react-router-dom";
 import { userInfoState } from "@/states/userState";
 
 const Container = styled.div`
-  height: 100%;
+  position: absolute;
+  left: 15%;
+  top: 15%;
+  height: 70%;
+  width: 70%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -140,7 +144,7 @@ const Login: React.FC = () => {
   // 로그인 되어있는 유저라면 main 페이지로
   useEffect(() => {
     if (userInfo && userInfo.userId && userInfo.userId > 0) {
-      // navigate(PATH.MAIN);
+      navigate("/main");
     }
   }, [userInfo, navigate]);
 
