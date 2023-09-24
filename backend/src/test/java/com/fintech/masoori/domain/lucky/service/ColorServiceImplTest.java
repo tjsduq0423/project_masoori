@@ -31,12 +31,12 @@ class ColorServiceImplTest {
 	 */
 	@Test
 	void firstSelectColor() {
-		Color color1 = Color.builder().color("#111111").description("1번 색").build();
-		Color color2 = Color.builder().color("#222222").description("2번 색").build();
-		Color color3 = Color.builder().color("#333333").description("3번 색").build();
-		Color color4 = Color.builder().color("#444444").description("4번 색").build();
-		Color color5 = Color.builder().color("#555555").description("5번 색").build();
-		Color color6 = Color.builder().color("#666666").description("6번 색").build();
+		Color color1 = Color.builder().color("#111111").colorName("빨간색").description("1번 색").build();
+		Color color2 = Color.builder().color("#222222").colorName("주황색").description("2번 색").build();
+		Color color3 = Color.builder().color("#333333").colorName("노란색").description("3번 색").build();
+		Color color4 = Color.builder().color("#444444").colorName("초록색").description("4번 색").build();
+		Color color5 = Color.builder().color("#555555").colorName("파란색").description("5번 색").build();
+		Color color6 = Color.builder().color("#666666").colorName("남색").description("6번 색").build();
 		colorRepository.save(color1);
 		colorRepository.save(color2);
 		colorRepository.save(color3);
@@ -63,12 +63,12 @@ class ColorServiceImplTest {
 	 */
 	@Test
 	void alreadySelectColor() {
-		Color color1 = Color.builder().color("#111111").description("1번 색").build();
-		Color color2 = Color.builder().color("#222222").description("2번 색").build();
-		Color color3 = Color.builder().color("#333333").description("3번 색").build();
-		Color color4 = Color.builder().color("#444444").description("4번 색").build();
-		Color color5 = Color.builder().color("#555555").description("5번 색").build();
-		Color color6 = Color.builder().color("#666666").description("6번 색").build();
+		Color color1 = Color.builder().color("#111111").colorName("빨간색").description("1번 색").build();
+		Color color2 = Color.builder().color("#222222").colorName("주황색").description("2번 색").build();
+		Color color3 = Color.builder().color("#333333").colorName("노란색").description("3번 색").build();
+		Color color4 = Color.builder().color("#444444").colorName("초록색").description("4번 색").build();
+		Color color5 = Color.builder().color("#555555").colorName("파란색").description("5번 색").build();
+		Color color6 = Color.builder().color("#666666").colorName("남색").description("6번 색").build();
 		colorRepository.save(color1);
 		colorRepository.save(color2);
 		colorRepository.save(color3);

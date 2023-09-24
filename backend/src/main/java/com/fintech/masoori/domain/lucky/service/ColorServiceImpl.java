@@ -37,6 +37,7 @@ public class ColorServiceImpl implements ColorService {
 			String userColor = userColorOptional.get();
 			Color findColor = colorRepository.findDescriptionByColor(userColor);
 			response.setColor(findColor.getColor());
+			response.setColorName(findColor.getColorName());
 			response.setDescription(findColor.getDescription());
 		} else {
 			log.debug("오늘의 색을 조회");
@@ -48,6 +49,7 @@ public class ColorServiceImpl implements ColorService {
 				Color color = colorPage.getContent().get(0);
 				redisService.setUserColor(email, color.getColor(), limitMinute);
 				response.setColor(color.getColor());
+				response.setColorName(color.getColorName());
 				response.setDescription(color.getDescription());
 			}
 		}
