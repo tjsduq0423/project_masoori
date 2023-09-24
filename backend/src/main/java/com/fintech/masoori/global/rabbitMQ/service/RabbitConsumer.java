@@ -10,12 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class RabbitConsumer {
-	// @RabbitListener(queues = {"${rabbitmq.queue.name1}"})
+	// @RabbitListener(queues = {"${rabbitmq.queue.realtime}"})
 	// public void consume(RabbitMessage message) {
 	// 	log.info("{}", message);
 	// }
 
-	@RabbitListener(queues = "#{queue1.name}")
+	@RabbitListener(queues = "${rabbitmq.queue.realtime}")
 	public void consume(RabbitMessage message) {
 		log.info("{}", message);
 	}

@@ -18,13 +18,4 @@ public class RabbitmqController {
 
 	private final RabbitPublisher rabbitPublisher;
 
-	@GetMapping("/send")
-	public void sendMessage() {
-		RabbitMessage rabbitMessage = RabbitMessage.builder().id("1").fName("First Name").lName("Last Name").build();
-
-		IntStream.range(0, 100).forEachOrdered(n -> {
-			rabbitMessage.setId(String.valueOf(n));
-			rabbitPublisher.sendMessage(rabbitMessage);
-		});
-	}
 }
