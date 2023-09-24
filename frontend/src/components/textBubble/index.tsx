@@ -52,6 +52,7 @@ const TextBubble = ({
   paddingTopBottom,
   borderRadius,
   hoverable,
+  onClick,
 }: StyledTextBubbleProps) => {
   return (
     <StyledTextBubble
@@ -63,6 +64,7 @@ const TextBubble = ({
       borderRadius={borderRadius}
       text={text}
       hoverable={hoverable}
+      onClick={onClick}
     >
       {text}
     </StyledTextBubble>

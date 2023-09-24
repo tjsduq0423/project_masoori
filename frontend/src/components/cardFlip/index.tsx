@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { useSpring, a } from "@react-spring/web";
 import styled from "styled-components";
+import TarotCard from "@/components/tarotCard";
 
-import cardFront from "@/assets/img/cardFront.png";
+import tarotCardFront from "@/assets/img/tarotCard/tarotCardFront.png";
 import cardBack from "@/assets/img/cardBack.png";
 
 const CardContainer = styled(a.div)`
   position: absolute;
   max-width: 500px;
   max-height: 500px;
-  width: 200px;
-  height: 300px;
+  width: 265px;
+  height: 400px;
   cursor: pointer;
   border-radius: 10px;
+  margin-left: -9%;
+  margin-top: 2%;
   will-change: transform, opacity;
 `;
 
@@ -21,17 +24,19 @@ const Back = styled(CardContainer)`
   background-image: url(${cardBack});
 `;
 
-const Front = styled(CardContainer)`
-  background-size: cover;
-  background-image: url(${cardFront});
-`;
+const Front = styled(CardContainer)``;
 
 interface CardFlipProps {
   onClick?: () => void;
   isClickable?: boolean;
+  imageSrc?: string; // 이미지 URL을 받아올 속성 추가
 }
 
-const CardFlip: React.FC<CardFlipProps> = ({ onClick, isClickable = true }) => {
+const CardFlip = ({
+  onClick,
+  isClickable = true,
+  imageSrc = "",
+}: CardFlipProps) => {
   const [flipped, setFlipped] = useState(false);
 
   const { transform, opacity } = useSpring({
@@ -65,7 +70,18 @@ const CardFlip: React.FC<CardFlipProps> = ({ onClick, isClickable = true }) => {
           rotateY: "180deg",
         }}
         onClick={handleClick}
-      />
+      >
+        <TarotCard
+          width="265px"
+          height="355px"
+          cardWidth="100%"
+          cardSrc={tarotCardFront}
+          imageSrc={imageSrc}
+          bottomImageWidth="100%"
+          text="Special Card"
+          fontsize="20px"
+        ></TarotCard>
+      </Front>
     </div>
   );
 };

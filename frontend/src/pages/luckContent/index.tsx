@@ -2,18 +2,25 @@ import { useState } from "react";
 import styled from "styled-components";
 import TextBubble from "@/components/textBubble";
 import { StyledTextBubbleProps } from "@/types/luckType";
+import { useRecoilValue } from "recoil";
+import { luckInfoState } from "@/states/luckState";
+import { useNavigate } from "react-router-dom";
+import TarotCard from "@/components/tarotCard";
+
 import background from "@/assets/img/background/capetBackground.jpg";
 import headerDecorationLeft from "@/assets/img/headerDecorationLeft.png";
 import headerDecorationRight from "@/assets/img/headerDecorationRight.png";
-import cardFront from "@/assets/img/cardFront.png";
+import cardFront from "@/assets/img/tarotCard/tarotCardFront.png";
 
-const Container = styled.div`
+const PageContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-image: url(${background});
+  background-size: cover;
+  background-attachment: scroll;
 `;
 
 const Header = styled.div`
@@ -21,7 +28,7 @@ const Header = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 4% 0;
+  margin-top: 3%;
 `;
 
 const Title = styled.div`
@@ -32,11 +39,24 @@ const Title = styled.div`
   margin: 0px 4%;
 `;
 
+const ContentContainer = styled.div`
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  flex-direction: row; /* 수평 정렬로 변경 */
+  height: 75%;
+  width: 100%;
+`;
+
+const CardContainer = styled.div`
+  padding: 70px 55px;
+`;
+
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 50px 40px;
+  padding: 25px 0px 25px 0px;
 `;
 
 const TextBubbleContainer = styled.div`
@@ -53,7 +73,19 @@ const CardImage = styled.img`
   /* 수직 가운데 정렬을 위해 margin을 추가 */
 `;
 
+const TitleContainer = styled.div`
+  padding: 0px 0px 0px 55px;
+  text-align: left;
+`;
+
 const LuckContentPage = () => {
+  const luckInfo = useRecoilValue(luckInfoState);
+  const navigate = useNavigate();
+
+  const goCrystal = () => {
+    navigate("/crystal");
+  };
+
   const titleTextBubbleProps: StyledTextBubbleProps = {
     text: "🌟 마녀 🌟",
     width: "136PX",
@@ -66,15 +98,7 @@ const LuckContentPage = () => {
   };
 
   const contentTextBubbleProps: StyledTextBubbleProps = {
-    text: `오늘은 지출이 많을 것 같은걸? 약속이 있다면 각오해야 할거야.
-    어머! 표정 좀 풀렴. 내가 네 돈을 쓰는 것도 아니잖니?
-    무언가 구매하고 싶다면 참는 게 좋겠어. 별의 흐름이 속삭이길, 오늘은 욕심없이 지내는 게 좋겠다고 하는구나.
-    요정들의 이야기도 들어볼까?
-    음...... 요정들은 돈만 걱정하는 게 아닌 것 같은데?
-    네 눈에는 보이지 않겠지만, 나쁜 요정들도 존재한단다. 그들이 네게 장난칠 궁리를 하는 걸 이 아이들이 들은 모양이야. 오늘은 일찍 집에 가는 게 좋겠어.
-    아무래도 수정구가 네게 행운을 가져다 줄 색상을 보여주고 싶은 것 같네.
-    아까부터 은하수같은 빛이 나오는 게 보이지?
-    손을 대보겠니?`,
+    text: `${luckInfo.description}`,
     width: "588PX",
     background: "#4D1B2D80",
     opacity: "1",
@@ -96,33 +120,40 @@ const LuckContentPage = () => {
   };
 
   return (
-    <Container>
+    <PageContainer>
       <Header>
         <Image src={headerDecorationLeft} alt="Background" />
         <Title>The Witch’s Answer</Title>
         <Image src={headerDecorationRight} alt="Background" />
       </Header>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <CardImage src={cardFront} alt="Background" />
-        <ContentWrapper>
-          <TextBubbleContainer>
-            <TextBubble {...titleTextBubbleProps} />
-          </TextBubbleContainer>
-          <TextBubbleContainer>
-            <TextBubble {...contentTextBubbleProps} />
-          </TextBubbleContainer>
-          <TextBubbleContainer>
-            <TextBubble {...crystalTextBubbleProps} />
-          </TextBubbleContainer>
-        </ContentWrapper>
-      </div>
-    </Container>
+      <ContentContainer>
+        <CardContainer>
+          <TarotCard
+            width="300px"
+            height="402px"
+            cardWidth="100%"
+            cardSrc={cardFront}
+            imageSrc={background}
+            bottomImageWidth="100%"
+            text="Special Card"
+            fontsize="20px"
+          ></TarotCard>
+        </CardContainer>
+        <TitleContainer>
+          <ContentWrapper>
+            <TextBubbleContainer>
+              <TextBubble {...titleTextBubbleProps} />
+            </TextBubbleContainer>
+            <TextBubbleContainer>
+              <TextBubble {...contentTextBubbleProps} />
+            </TextBubbleContainer>
+            <TextBubbleContainer>
+              <TextBubble {...crystalTextBubbleProps} onClick={goCrystal} />
+            </TextBubbleContainer>
+          </ContentWrapper>
+        </TitleContainer>
+      </ContentContainer>
+    </PageContainer>
   );
 };
 
