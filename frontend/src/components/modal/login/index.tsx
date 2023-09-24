@@ -11,13 +11,7 @@ import { userInfoState } from "@/states/userState";
 const Container = styled.div`
   position: absolute;
   left: 15%;
-  top: 15%;
-  height: 70%;
-  width: 70%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  top: 2%;
   /* background-color: rgba(0, 0, 0, 0.5); */
 `;
 
@@ -52,16 +46,17 @@ const PWCheck = styled.div`
   z-index: 1;
 `;
 const FormLabel = styled.p`
-  font-size: x-small;
+  font-size: small;
   display: flex;
   margin-bottom: 2px;
+  color: #5e3a66;
 `;
 
 const Input = styled.input`
   width: 17vw;
   border-radius: 5px;
-  border-width: 2px;
-  border-color: black;
+  border-width: 1px;
+  border-color: #5e3a66;
   height: 30px;
 `;
 
@@ -71,13 +66,14 @@ const SignUp = styled.div`
   margin-right: 5px;
   display: flex;
   justify-content: end;
-  font-size: x-small;
+  font-size: small;
+  color: #5e3a66;
 `;
 
 const LoginButton = styled.button`
   width: 17vw;
   border-radius: 5px;
-  border-color: black;
+  border-color: #5e3a66;
   border-width: 2px;
   margin-bottom: 25px;
   height: 30px;
@@ -107,20 +103,7 @@ const EmailCheck = styled.div`
 const NextButton = styled.button`
   width: 17vw;
   border-radius: 5px;
-  border-color: black;
-  border-width: 2px;
-  margin-top: 20px;
-  height: 30px;
-  background-color: #5e3a66;
-  color: white;
-  font-weight: bold;
-  font-size: smaller;
-`;
-
-const FinishButton = styled.button`
-  width: 17vw;
-  border-radius: 5px;
-  border-color: black;
+  border-color: #5e3a66;
   border-width: 2px;
   margin-top: 30px;
   height: 30px;
@@ -230,7 +213,7 @@ const Login: React.FC = () => {
               <FormLabel>비밀번호 확인</FormLabel>
               <Input />
             </PWCheck>
-            <FinishButton>FINISH</FinishButton>
+            <NextButton>FINISH</NextButton>
           </PW>
         </Img>
       </Container>

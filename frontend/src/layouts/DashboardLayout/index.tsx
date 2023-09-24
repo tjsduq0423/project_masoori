@@ -8,16 +8,14 @@ const StyledContainer = styled.div`
   right: 0px;
   top: 0px;
   height: 8%;
-  width: 4%;
+  width: 10%;
   z-index: 99;
   /* background-color: black; */
 `;
 
 const TransparentContainer = styled(StyledContainer)`
   background-color: rgba(0, 0, 0, 0.5);
-  right: 0px;
-  top: 0px;
-  height: 100%;
+  height: 585%;
   width: 100%;
 `;
 const MenuButtonImage = styled.img`
