@@ -22,7 +22,6 @@ const routes: RouteType[] = [
   },
   {
     path: "/crystal",
-    layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/crystalBall")),
   },
   {

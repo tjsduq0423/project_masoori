@@ -106,25 +106,27 @@ const CrystalBallPage = () => {
       <Backdrop isOpen={isModalOpen} onClick={closeModal} />
       <ModalContainer isOpen={isModalOpen}>
         <AlertModal
-          width="500px"
-          topText="오늘의 행운의 색은..."
-          middleText="파란색입니다."
-          bottomText="오늘의 행운의 색, '파란색'을 활용하여 하루를 특별하게 만들어보세요!
+          width="550px"
+          topText="LUCKY BLUE"
+          middleText="오늘의 행운의 색, '파란색'을 활용하여 하루를 특별하게 만들어보세요!
           블루베리 스무디로 시작하는 상쾌한 아침, 푸른 바다나 하늘을 연상시키는 파란 색의 옷 차림, 혹은 액세서리를 착용해보세요. 파란색의 노트북이나 펜을 사용해 일상에 행운의 에너지를 불러오세요. 하루 종일 '블루'와 함께라면 더욱 특별하고 행운이 가득한 시간이 될 것입니다!"
+          bottomText="메인으로 돌아가기"
           imageUrl={crystalBall} // 이미지 경로
-          topTextColor="#5E3A66"
+          topTextColor="#355EF1"
           middleTextColor="#5E3A66"
-          bottomTextColor="white"
+          bottomTextColor="#EAE2ED"
           upperSectionBackground="#EAE2ED"
           lowerSectionBackground="#5E3A66"
-          topTextFontSize="12px"
-          middleTextFontSize="28px"
-          bottomTextFontSize="12px"
+          topTextFontSize="28px"
+          middleTextFontSize="14px"
+          bottomTextFontSize="20px"
           topTextPaddingTopBottom="2px"
-          middleTextPaddingTopBottom="2px"
-          topTextFontWeight="medium"
-          middleTextFontWeight="bold"
+          middleTextPaddingTopBottom="20px"
+          middleTextPaddingLeftRight="20px"
+          topTextFontWeight="bold"
+          middleTextFontWeight="medium"
           bottomTextFontWeight="medium"
+          routerLink="/main"
         />
       </ModalContainer>
     </aw.div>
