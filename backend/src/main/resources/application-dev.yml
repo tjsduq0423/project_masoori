@@ -90,13 +90,9 @@ jwt:
 # rabbitmq 설정
 rabbitmq:
   queue:
-    name1: realtime.queue
-    name2: weekly.queue
-    name3: recommand.queue
-  exchange:
-    name: masoori.direct
-  routing_key:
-    name: generate
+    realtime: realtime.req
+    weekly: weekly.req
+    recommend: recommend.req
 
 # ssl 설정
 server:

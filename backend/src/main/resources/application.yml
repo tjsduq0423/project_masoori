@@ -109,16 +109,9 @@ jwt:
 
 rabbitmq:
   queue:
-    name1: realtime.queue
-    name2: weekly.queue
-    name3: recommend.queue
-  exchange:
-    name: masoori.direct
-  routing_key:
-    name1: generate.realtime
-    name2: generate.weekly
-    name3: generate.recommend
-
+    realtime: realtime.req
+    weekly: weekly.req
+    recommend: recommend.req
 
 # ssl 설정
 #server:
@@ -127,4 +120,4 @@ rabbitmq:
 #    key-store-password:1q2w3e4r
 #    key-store-type: PKCS12
 
-  server.ec2-url: masoori.site
+

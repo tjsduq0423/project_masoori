@@ -14,5 +14,5 @@ import lombok.ToString;
 @Builder
 @ToString
 public class WeeklyMessage {
-
+	private int id;
 }
