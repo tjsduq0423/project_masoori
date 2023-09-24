@@ -249,17 +249,16 @@ const SelectToGo = styled.div`
 
 const CardSection = styled.div`
   display: flex;
-  height: 60vh;
-  width: 82.5%;
+  height: 62vh;
+  width: 100%;
   justify-content: center; /* 중앙 정렬 */
-  margin-top: 75px;
-  margin-right: 400px;
   gap: 300px; /* 카드 사이의 간격 설정 */
+  margin-left: 4px;
 `;
 
 const CardBox = styled.div`
-  width: 110%;
-  height: 85.5%;
+  width: 109%;
+  height: 100%;
   border-radius: 19px;
   background: rgba(110, 39, 98, 0.5);
   box-shadow:

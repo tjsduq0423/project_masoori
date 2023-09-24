@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import styled from "styled-components";
 import MenuButton from "@/assets/img/MenuButton.png";
 import Modal from "@/components/modal/login";
@@ -10,11 +10,11 @@ const StyledContainer = styled.div`
   top: 0px;
   height: 8%;
   width: 10%;
-  z-index: 99;
+  z-index: 1;
 `;
 
 const TransparentContainer = styled(StyledContainer)`
-  height: 585%;
+  height: 585vh;
   width: 100%;
 `;
 
@@ -25,6 +25,7 @@ const IsModalOpenBack = styled.div`
   width: 100%;
   height: 585%;
   background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
 `;
 
 const MenuButtonImage = styled.img`
@@ -47,6 +48,7 @@ const LoginBackImg = styled.div`
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
+  z-index: 1;
 `;
 
 interface DashboardLayoutProps {
@@ -69,6 +71,21 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       closeModal();
     }
   };
+
+  useEffect(() => {
+    if (isModalOpen) {
+      // 모달이 열릴 때 스크롤바 숨김
+      document.body.style.overflow = "hidden";
+    } else {
+      // 모달이 닫힐 때 스크롤바 복원
+      document.body.style.overflow = "visible";
+    }
+
+    // 컴포넌트가 언마운트될 때 스타일을 원래대로 복원
+    return () => {
+      document.body.style.overflow = "visible";
+    };
+  }, [isModalOpen]);
 
   return (
     <>

@@ -12,7 +12,7 @@ import { userInfoState } from "@/states/userState";
 const Container = styled.div`
   position: absolute;
   left: 39.5%;
-  top: 0.5%;
+  top: 3%;
 `;
 
 const LoginFrontImg = styled.div`
@@ -28,6 +28,7 @@ const LoginFrontImg = styled.div`
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
+  z-index: 99;
 `;
 
 const SignUpFrontImg = styled.div`
@@ -47,20 +48,20 @@ const SignUpFrontImg = styled.div`
 
 const Id = styled.div`
   position: relative;
-  z-index: 1;
+  z-index: 3;
   top: 15%;
 `;
 
 const PW = styled.div`
   position: relative;
   top: 17%;
-  z-index: 1;
+  z-index: 3;
 `;
 
 const PWCheck = styled.div`
   position: relative;
   top: 7%;
-  z-index: 1;
+  z-index: 9;
 `;
 const FormLabel = styled.p`
   font-size: small;
