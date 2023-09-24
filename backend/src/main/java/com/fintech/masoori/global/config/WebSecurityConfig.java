@@ -63,7 +63,7 @@ public class WebSecurityConfig {
 		                                               .authenticated())
 
 		            .oauth2Login(oauth2 -> oauth2.authorizationEndpoint(
-			                                         config -> config.baseUri("/*/oauth2/authorization")
+			                                         config -> config.baseUri("/oauth2/authorization")
 			                                                         .authorizationRequestRepository(
 				                                                         oAuth2AuthorizationRequestBasedOnCookieRepository()))
 		                                         .redirectionEndpoint(config -> config.baseUri("/*/oauth2/code/*"))

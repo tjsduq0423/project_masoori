@@ -9,9 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fintech.masoori.domain.lucky.dto.FortuneListRes;
 import com.fintech.masoori.domain.lucky.dto.FortuneRes;
-import com.fintech.masoori.domain.lucky.dto.UserFortuneRes;
 import com.fintech.masoori.domain.lucky.entity.Fortune;
 import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.domain.lucky.repository.FortuneRepository;
@@ -34,23 +32,26 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 	private final RedisService redisService;
 
 	@Override
-	public FortuneListRes selectAllFortune() {
-		FortuneListRes fortuneListRes = FortuneListRes.builder().build();
-		List<String> fortuneNameList = fortuneRepository.findAllOnlyName();
-		List<FortuneListRes.Fortune> fortuneResList = new ArrayList<>();
-		for (String fortuneName : fortuneNameList) {
-			FortuneListRes.Fortune temp = FortuneListRes.Fortune.builder()
-										.name(fortuneName)
-										.build();
+	public FortuneRes selectAllFortune() {
+		FortuneRes fortuneRes = FortuneRes.builder().build();
+		List<Fortune> fortuneList = fortuneRepository.findAll();
+		List<FortuneRes.Fortune> fortuneResList = new ArrayList<>();
+		for (Fortune fortune : fortuneList) {
+			FortuneRes.Fortune temp = FortuneRes.Fortune.builder()
+														.name(fortune.getName())
+														.imagePath(fortune.getImagePath())
+														.summary(fortune.getSummary())
+														.description(fortune.getDescription())
+														.build();
 			fortuneResList.add(temp);
 		}
-		fortuneListRes.setFortuneList(fortuneResList);
-		return fortuneListRes;
+		fortuneRes.setFortuneList(fortuneResList);
+		return fortuneRes;
 	}
 
 	@Override
-	public FortuneRes selectOneFortune(String email) {
-		FortuneRes fortune = FortuneRes.builder().build();
+	public FortuneRes.Fortune selectOneFortune(String email) {
+		FortuneRes.Fortune fortune = FortuneRes.Fortune.builder().build();
 		//로그인
 		if (!email.isEmpty()) {
 			Optional<String> userFortuneOptional = Optional.ofNullable(redisService.getUserFortune(email));
@@ -87,19 +88,19 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 	}
 
 	@Override
-	public UserFortuneRes selectAllUserFortune(String email) {
+	public FortuneRes selectAllUserFortune(String email) {
 		User user = userRepository.findUserByEmail(email);
 		List<FortuneUser> fortuneUserList = user.getFortuneUserList();
-		UserFortuneRes fortuneRes = UserFortuneRes.builder().build();
-		List<FortuneRes> fortuneList = new ArrayList<>();
+		FortuneRes fortuneRes = FortuneRes.builder().build();
+		List<FortuneRes.Fortune> fortuneList = new ArrayList<>();
 		for (FortuneUser f : fortuneUserList) {
 			Fortune fortune = f.getFortune();
-			fortuneList.add(FortuneRes.builder()
-									  .name(fortune.getName())
-									  .imagePath(fortune.getImagePath())
-									  .summary(fortune.getSummary())
-									  .description(fortune.getDescription())
-									  .build());
+			fortuneList.add(FortuneRes.Fortune.builder()
+											  .name(fortune.getName())
+											  .imagePath(fortune.getImagePath())
+											  .summary(fortune.getSummary())
+											  .description(fortune.getDescription())
+											  .build());
 		}
 		fortuneRes.setFortuneList(fortuneList);
 		return fortuneRes;

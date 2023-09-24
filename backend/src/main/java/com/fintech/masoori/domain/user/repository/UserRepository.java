@@ -34,6 +34,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query("UPDATE User u SET u.smsAlarm = true, u.cardGeneration = true WHERE u.email = :email")
 	void updateIntegration(@Param("email") String email);
 
-	@Query("SELECT sum(d.amount) FROM Deal d WHERE d.user.email = :email AND d.date >= :startDate AND d.date <= :endDate")
+	@Query("SELECT sum(d.amount) FROM Deal d WHERE d.user.email = :email AND d.date BETWEEN :startDate AND :endDate")
 	Integer getAmountSumByPeriod(@Param("email") String email, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 }

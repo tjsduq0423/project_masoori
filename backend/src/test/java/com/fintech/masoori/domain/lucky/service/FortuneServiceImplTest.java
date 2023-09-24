@@ -11,9 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fintech.masoori.domain.lucky.dto.FortuneListRes;
 import com.fintech.masoori.domain.lucky.dto.FortuneRes;
-import com.fintech.masoori.domain.lucky.dto.UserFortuneRes;
 import com.fintech.masoori.domain.lucky.entity.Fortune;
 import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.domain.lucky.repository.FortuneRepository;
@@ -65,7 +63,7 @@ class FortuneServiceImplTest {
 		fortuneRepository.save(fortune4);
 		fortuneRepository.save(fortune5);
 		if (redisService.getUserFortune(user.getEmail()) == null) {
-			FortuneRes response = fortuneService.selectOneFortune(user.getEmail());
+			FortuneRes.Fortune response = fortuneService.selectOneFortune(user.getEmail());
 			log.info("Fortune : {}", response);
 			assertThat(redisService.getUserFortune(user.getEmail()).equals(response.getName()));
 			redisService.deleteUserFortune(user.getEmail());
@@ -93,7 +91,7 @@ class FortuneServiceImplTest {
 		fortuneRepository.save(fortune3);
 		fortuneRepository.save(fortune4);
 		fortuneRepository.save(fortune5);
-		FortuneRes response = fortuneService.selectOneFortune(user.getEmail());
+		FortuneRes.Fortune response = fortuneService.selectOneFortune(user.getEmail());
 		if (redisService.getUserFortune(user.getEmail()).equals(response.getName())) {
 			String name = redisService.getUserFortune(user.getEmail());
 			Fortune findFortune = fortuneRepository.findDescriptioneByName(name);
@@ -125,7 +123,7 @@ class FortuneServiceImplTest {
 		fortuneRepository.save(fortune5);
 		String email = "";
 		assertThat(email.equals(""));
-		FortuneRes response = fortuneService.selectOneFortune(email);
+		FortuneRes.Fortune response = fortuneService.selectOneFortune(email);
 		log.info("Non-Login User Fortune(\"\") : {}", response);
 	}
 
@@ -144,7 +142,7 @@ class FortuneServiceImplTest {
 		fortuneRepository.save(fortune3);
 		fortuneRepository.save(fortune4);
 		fortuneRepository.save(fortune5);
-		FortuneListRes response = fortuneService.selectAllFortune();
+		FortuneRes response = fortuneService.selectAllFortune();
 		log.info("FortuneList : {}", response);
 		assertThat(response.getFortuneList().size() == fortuneRepository.count());
 	}
@@ -173,7 +171,7 @@ class FortuneServiceImplTest {
 		// fortuneUserRepository.saveAll(fortuneUserList);
 		em.flush();
 
-		UserFortuneRes fortuneRes = fortuneUserService.selectAllUserFortune(user.getEmail());
+		FortuneRes fortuneRes = fortuneUserService.selectAllUserFortune(user.getEmail());
 		log.info("User's Fortune : {}", fortuneRes);
 		assertThat(fortuneRes.getFortuneList().size() == 3);
 		List<FortuneUser> allByUserId = fortuneUserRepository.findAllByUserId(user.getId());

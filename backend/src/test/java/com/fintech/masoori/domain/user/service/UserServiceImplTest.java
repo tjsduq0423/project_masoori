@@ -51,7 +51,7 @@ class UserServiceImplTest {
 
 	@Test
 	public void sendEmail() {
-		User user = User.builder().email("songsoy95123@gmail.com").providerType(ProviderType.LOCAL).build();
+		User user = User.builder().email("songsoy95@gmail.com").providerType(ProviderType.LOCAL).build();
 		userRepository.save(user);
 		User findUser = userRepository.findByEmail(user.getEmail()).get();
 		String email = findUser.getEmail();
@@ -84,24 +84,24 @@ class UserServiceImplTest {
 		assertThat(updatedUser.getPhoneNumber()).isEqualTo(phoneNumber);
 	}
 
-	// @Test
-	// public void sendSms() {
-	// 	User user = User.builder().email("ssafy@gmail.com").providerType(ProviderType.LOCAL).phoneNumber("01051548989").build();
-	// 	userRepository.save(user);
-	// 	User findUser = userRepository.findByEmail(user.getEmail()).get();
-	//
-	// 	String phoneNumber = findUser.getPhoneNumber();
-	// 	String code = smsService.createCode(6);
-	// 	redisService.setSmsCode(phoneNumber, code);
-	//
-	// 	try {
-	// 		smsService.sendSms(phoneNumber, code);
-	// 	} catch (CoolsmsException e) {
-	// 		redisService.deleteSmsCode(phoneNumber);
-	// 		throw new SmsMessagingException("Failed To Send Email");
-	// 	}
-	// 	assertThat(redisService.getSmsCode(phoneNumber)).isEqualTo(code);
-	// }
+	@Test
+	public void sendSms() {
+		User user = User.builder().email("ssafy@gmail.com").providerType(ProviderType.LOCAL).phoneNumber("01051548989").build();
+		userRepository.save(user);
+		User findUser = userRepository.findByEmail(user.getEmail()).get();
+
+		String phoneNumber = findUser.getPhoneNumber();
+		String code = smsService.createCode(6);
+		redisService.setSmsCode(phoneNumber, code);
+
+		try {
+			smsService.sendSms(phoneNumber, code);
+		} catch (CoolsmsException e) {
+			redisService.deleteSmsCode(phoneNumber);
+			throw new SmsMessagingException("Failed To Send Email");
+		}
+		assertThat(redisService.getSmsCode(phoneNumber)).isEqualTo(code);
+	}
 
 	@Test
 	public void findByEmail() {
