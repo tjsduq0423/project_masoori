@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fintech.masoori.domain.faq.Dto.FaqRes;
 import com.fintech.masoori.domain.faq.entity.Faq;
 import com.fintech.masoori.domain.faq.service.FaqService;
 
@@ -25,8 +26,8 @@ public class FaqController {
 
 	@Operation(summary = "FAQ 조회")
 	@GetMapping("/faq")
-	public ResponseEntity<?> getFAQ() {
-		List<Faq> faqList = faqService.getFAQ();
+	public ResponseEntity<FaqRes> getFAQ() {
+		FaqRes faqList = faqService.getFAQ();
 		return ResponseEntity.ok().body(faqList);
 	}
 }
