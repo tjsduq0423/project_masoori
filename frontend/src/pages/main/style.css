@@ -2,7 +2,7 @@
 
 /* 이전 버튼 스타일 */
 .flickity-prev-next-button.previous {
-  background-color: #333; /* 배경색 지정 */
+  background-color: #CAB2D34D; /* 배경색 지정 */
   color: #fff; /* 글자색 지정 */
   font-size: 16px; /* 글자 크기 지정 */
   border: none; /* 테두리 제거 */
@@ -22,7 +22,7 @@
 
 /* 다음 버튼 스타일 */
 .flickity-prev-next-button.next {
-  background-color: #333; /* 배경색 지정 */
+  background-color: #CAB2D34D; /* 배경색 지정 */
   color: #fff; /* 글자색 지정 */
   border: none; /* 테두리 제거 */
   padding: 10px 20px; /* 내부 여백 지정 */
@@ -96,17 +96,19 @@ main {
 }
 .intro-text p {
   font-size: 18px;
-  line-height: 1.5;
+  line-height: 1.4;
+  margin-top: 6px;
+  margin-bottom: 9px; 
 }
 .intro-text a {
   display: inline-block;
-  padding: 7px 20px;
+  padding: 10px 25px;
   background: #cab2d3;
   border-radius: 99px;
   text-transform: uppercase;
-  font-weight: bold;
-  font-size: 24px;
+  font-size: 26px;
   color: #813e83;
+  font-family: "Pyeongchangpeace";
   margin-top: 20px;
 }
 .intro-text .feature {
