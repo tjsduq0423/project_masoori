@@ -8,6 +8,10 @@ import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { userInfoState } from "@/states/userState";
 
+interface ImgProps {
+  loaded: boolean;
+}
+
 const Container = styled.div`
   position: absolute;
   left: 15%;
@@ -21,7 +25,7 @@ const Container = styled.div`
   /* background-color: rgba(0, 0, 0, 0.5); */
 `;
 
-const Img = styled.div`
+const Img = styled.div<ImgProps>`
   height: 75vh;
   width: 70vw;
   display: flex;
@@ -32,8 +36,9 @@ const Img = styled.div`
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
+  opacity: ${({ loaded }) => (loaded ? "1" : "0")};
+  transition: opacity 0.5s ease-in-out;
 `;
-
 const Id = styled.div`
   position: relative;
   z-index: 1;
@@ -132,6 +137,16 @@ const FinishButton = styled.button`
 
 const Login: React.FC = () => {
   const [modalState, setModalState] = useState<string>("로그인");
+  const [imageLoaded, setImageLoaded] = useState<boolean>(false); // 이미지 로드 상태
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = BackCards;
+    img.onload = () => {
+      // 이미지 로드가 완료되면 상태 업데이트
+      setImageLoaded(true);
+    };
+  }, []);
 
   const OAUTH2_REDIERECT_URI = `${process.env.REACT_APP_BASE_URL}/oauth/redirect`; /* 이거에대한페이지 생성 */
   const onSocialButtonClick = (socialName: string) => {
@@ -151,7 +166,7 @@ const Login: React.FC = () => {
   if (modalState === "로그인") {
     return (
       <Container>
-        <Img>
+        <Img loaded={imageLoaded}>
           <Id>
             <FormLabel>계정이름</FormLabel>
             <Input />
@@ -194,7 +209,7 @@ const Login: React.FC = () => {
   } else if (modalState === "회원가입1") {
     return (
       <Container>
-        <Img>
+        <Img loaded={imageLoaded}>
           <Email>
             <FormLabel>이메일</FormLabel>
             <Input />
@@ -218,7 +233,7 @@ const Login: React.FC = () => {
   } else {
     return (
       <Container>
-        <Img>
+        <Img loaded={imageLoaded}>
           <Id>
             <FormLabel>아이디</FormLabel>
             <Input />
