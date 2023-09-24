@@ -2,6 +2,7 @@ package com.fintech.masoori.domain.credit.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,8 @@ import com.fintech.masoori.domain.user.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +43,7 @@ public class CreditCardController {
 	@Operation(summary = "카드 상세 정보 조회 API")
 	@GetMapping("/{cardId}")
 	public ResponseEntity<CreditCardRes.CreditCard> selectOne(
-		@Parameter(description = "카드 아이디", required = true, example = "1") @PathVariable Long cardId) {
+		@Parameter(name = "cardId", description = "카드 아이디", required = true, example = "1", in = ParameterIn.PATH) @PathVariable Long cardId) {
 		CreditCard creditCard = creditCardService.selectOne(cardId);
 		CreditCardRes.CreditCard creditCard1 = new CreditCardRes.CreditCard(creditCard);
 		return ResponseEntity.ok(creditCard1);
