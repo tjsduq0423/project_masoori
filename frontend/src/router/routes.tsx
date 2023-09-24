@@ -17,17 +17,12 @@ const routes: RouteType[] = [
     element: React.lazy(() => import("@/pages/landing")),
   },
   {
-    path: "/flip",
-    element: React.lazy(() => import("@/components/cardFlip")),
-  },
-  {
     path: "/main",
     layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/main")),
   },
   {
     path: "/crystal",
-    layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/crystalBall")),
   },
   {
