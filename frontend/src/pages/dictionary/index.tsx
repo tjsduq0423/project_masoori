@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import Book from "@/components/book";
 import styled from "styled-components";
 import PokemonCard from "@/components/Pokemon";
-import TextBubble from "@/components/textBubble";
-import { StyledTextBubbleProps } from "@/types/luckType";
 import TarotCard from "@/components/tarotCard";
 import DcitBtn from "@/components/dictBtn";
 import card from "@/assets/img/cardFront.png";
 import background from "@/assets/img/background/silkBackground.jpg";
+import ChallengeBubble from "@/components/challengeBubble";
+import { StyledChallengeBubbleProps } from "@/types/challengeType";
+import ChallegeSuccess from "@/assets/img/challengeBubble/challengeSuccess.png";
 
 const PageContainer = styled.div`
   position: fixed;
@@ -101,15 +102,17 @@ const DictionaryPage = () => {
     setCurrentPage(page);
   };
 
-  const crystalTextBubbleProps: StyledTextBubbleProps = {
-    text: `🔮 수정구에 손을 올린다 🔮`,
-    width: "300px",
+  const crystalChallengeBubbleProps: StyledChallengeBubbleProps = {
+    text: `사실 말도 안되는 챌린지죠 그치만 어쩌겠습니까 해야지`,
+    width: "340px",
     background: "#4D1B2D80",
     opacity: "1",
     paddingLeftRight: "40px",
-    paddingTopBottom: "20px",
+    paddingTopBottom: "30px",
     borderRadius: "20px",
-    hoverable: false,
+    imgLink: ChallegeSuccess,
+    hoverable: true,
+    titleText: "소비금액 5만원 넘지 않기",
   };
 
   return (
@@ -161,10 +164,10 @@ const DictionaryPage = () => {
                   justifyContent: "space-around",
                 }}
               >
-                <TextBubble {...crystalTextBubbleProps} />
-                <TextBubble {...crystalTextBubbleProps} />
-                <TextBubble {...crystalTextBubbleProps} />
-                <TextBubble {...crystalTextBubbleProps} />
+                <ChallengeBubble {...crystalChallengeBubbleProps} />
+                <ChallengeBubble {...crystalChallengeBubbleProps} />
+                <ChallengeBubble {...crystalChallengeBubbleProps} />
+                <ChallengeBubble {...crystalChallengeBubbleProps} />
               </div>
             </div>
           </div>
