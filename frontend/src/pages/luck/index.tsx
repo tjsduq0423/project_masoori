@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CardFlip from "@/components/cardFlip";
+import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
+import { useFortune } from "@/apis/luck/Queries/useFortune";
+import { luckInfoState } from "@/states/luckState";
+
 import background from "@/assets/img/background/capetBackground.jpg";
 import headerDecorationLeft from "@/assets/img/headerDecorationLeft.png";
 import headerDecorationRight from "@/assets/img/headerDecorationRight.png";
@@ -15,7 +20,7 @@ const Container = styled.div`
 `;
 
 const Image = styled.img`
-  width: 20%; /* 이미지의 너비를 화면 너비의 10%로 조정 */
+  width: 20%;
 `;
 
 const Header = styled.div`
@@ -23,39 +28,67 @@ const Header = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 4% 0; /* 헤더 상단과 하단의 패딩을 10%로 조정 */
+  margin-top: 3%;
 `;
 
 const Title = styled.div`
   color: #fdf1f1;
   font-family: "Brodies";
-  font-size: 3.5vw; /* 글자 크기를 화면 너비의 4%로 조정 */
+  font-size: 3.5vw;
   font-weight: 400;
-  margin: 0px 4%; /* 위 아래 여백을 조정 */
+  margin: 0px 4%;
 `;
 
 const CardSection = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center; /* 중앙 정렬 */
-  gap: 300px; /* 카드 사이의 간격 설정 */
-  margin-right: 200px;
-  flex-grow: 1; /* 나머지 공간을 모두 차지하도록 설정 */
+  justify-content: center;
+  margin-top: 30px;
+  gap: 300px;
+  flex-grow: 1;
 `;
 
-const MoneyLuckPage: React.FC = () => {
+const data = {
+  name: "행운",
+  imagePath:
+    "https://images.unsplash.com/photo-1618654661521-b9b59166b17f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80",
+  description: "이 카드를 뽑은 당신! 오늘은...",
+};
+
+const MoneyLuckPage = () => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
+  const [luckInfo, setLuckInfo] = useRecoilState(luckInfoState);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setLuckInfo(data);
+  }, [setLuckInfo]);
+
+  // const fortuneDto = useFortune();
 
   const handleCardClick = (index: number) => {
     if (selectedCard === null) {
-      // 클릭한 카드를 선택하고 다른 카드의 클릭 가능 상태를 비활성화
       setSelectedCard(index);
       console.log("성공");
+
+      setTimeout(() => {
+        navigate("/luckcontent");
+      }, 1500); // 2초 뒤에 네비게이션
     }
   };
 
-  const isClickable = (index: number) => {
-    return selectedCard === null || selectedCard === index;
+  const isClickable = (index: number) =>
+    selectedCard === null || selectedCard === index;
+
+  const renderCardFlips = () => {
+    return [0, 1, 2, 3].map((index) => (
+      <CardFlip
+        key={index}
+        onClick={() => handleCardClick(index)}
+        isClickable={isClickable(index)}
+        imageSrc={luckInfo.imagePath}
+      />
+    ));
   };
 
   return (
@@ -65,24 +98,7 @@ const MoneyLuckPage: React.FC = () => {
         <Title>Select your Card</Title>
         <Image src={headerDecorationRight} alt="Background" />
       </Header>
-      <CardSection>
-        <CardFlip
-          onClick={() => handleCardClick(0)}
-          isClickable={isClickable(0)}
-        />
-        <CardFlip
-          onClick={() => handleCardClick(1)}
-          isClickable={isClickable(1)}
-        />
-        <CardFlip
-          onClick={() => handleCardClick(2)}
-          isClickable={isClickable(2)}
-        />
-        <CardFlip
-          onClick={() => handleCardClick(3)}
-          isClickable={isClickable(3)}
-        />
-      </CardSection>
+      <CardSection>{renderCardFlips()}</CardSection>
     </Container>
   );
 };

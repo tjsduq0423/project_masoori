@@ -1,6 +1,7 @@
 import React, { ComponentType, FC } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import DashboardLayout from "@/layouts/DashboardLayout";
+import LoadingPage from "@/pages/loading";
 
 type DashboardLayout = /*unresolved*/ any;
 
@@ -13,6 +14,7 @@ interface RouteType {
 const routes: RouteType[] = [
   {
     path: "/",
+    layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/landing")),
   },
   {
@@ -78,23 +80,25 @@ const routes: RouteType[] = [
     path: "/loading",
     element: React.lazy(() => import("@/pages/loading")),
   },
-  {
-    path: "/error",
-    element: React.lazy(() => import("@/pages/404")),
-  },
   // {
   //   path: "/",
   //   element: () => <Navigate replace to="/main" />,
   // },
-  //   {
-  //     path: "/*",
-  //     element: () => <Navigate replace to="/404" />,
-  //   },
+  {
+    path: "/*",
+    element: React.lazy(() => import("@/pages/404")),
+  },
 ];
 
 const RenderRoutes: FC = () => {
   return (
-    <React.Suspense fallback={<div>Loading...</div>}>
+    <React.Suspense
+      fallback={
+        <div>
+          <LoadingPage />
+        </div>
+      }
+    >
       <Routes>
         {routes.map((route, i) => {
           const RouteElement = route.element;

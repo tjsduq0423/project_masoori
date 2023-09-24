@@ -4,13 +4,24 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import menuTitle from "../../assets/img/menuTitle.png";
 
+const PageContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #a37c9b;
+  background-size: cover;
+  background-attachment: scroll;
+`;
+
 const Backdrop = styled.div<{ isOpen: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  background: rgba(0, 0, 0, 0.9); /* Semi-transparent black background */
   display: ${(props) => (props.isOpen ? "block" : "none")};
   z-index: 1;
 `;
@@ -67,15 +78,7 @@ const MenuPage = () => {
   };
 
   return (
-    <div
-      style={{
-        background: "#A37C9B",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <PageContainer>
       <div style={{ width: "100%" }}>
         <div
           style={{
@@ -95,7 +98,7 @@ const MenuPage = () => {
         </ModalContainer>
         <Backdrop isOpen={isModalOpen} onClick={closeModal} />
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

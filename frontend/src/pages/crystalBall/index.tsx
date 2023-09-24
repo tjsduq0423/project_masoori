@@ -41,23 +41,33 @@ const ModalContainer = styled.div<{ isOpen: boolean }>`
   z-index: 2;
 `;
 
-const options: number[][] = [
-  [0, 100, 50], // RED
-  [30, 100, 50], // ORANGE
-  [60, 100, 50], // YELLOW
-  [120, 100, 50], // GREEN
-  [150, 100, 50], // OLIVEGREEN
-  [200, 70, 60], // SKYBLUE
-  [240, 100, 50], // BLUE
-  [270, 100, 50], // PURPLE
-  [310, 65, 50], // PINK
-  [30, 70, 25], // BROWN
-  [0, 0, 100], // WHITE
-  [0, 0, 40], // GRAY
-  [330, 100, 50], // HOTPINK (핫핑크)
-];
+const data = {
+  color: "#ff0000",
+  colorName: "BLUE",
+  description:
+    "오늘의 행운의 색은 {color}입니다. 오늘은 ~~를 하면 좋은 일이 생길것 같습니다....",
+};
 
-const randomColorIndex = Math.floor(Math.random() * options.length); // 랜덤 색상 인덱스 선택
+interface ColorOptions {
+  [key: string]: number[]; // 인덱스 시그니처 추가
+}
+
+const options: ColorOptions = {
+  RED: [0, 100, 50], // 빨간색
+  ORANGE: [30, 100, 50], // 주황색
+  YELLOW: [60, 100, 50], // 노란색
+  GREEN: [120, 100, 50], // 초록색
+  BLUE: [240, 100, 50], // 파란색
+  NAVY: [200, 70, 60], // 남색
+  PURPLE: [270, 100, 50], // 보라색
+  PINK: [330, 100, 50], // 분홍색
+  BROWN: [30, 70, 25], // 갈색
+  WHITE: [0, 0, 100], // 흰색
+  GRAY: [0, 0, 40], // 회색
+  OLIVE: [60, 100, 50], // 올리브색
+  SKYBLUE: [200, 70, 60], // 하늘색
+  MINT: [150, 100, 50], // 민트색
+};
 
 const CrystalBallPage = () => {
   const [step, setStep] = useState(0);
@@ -65,7 +75,7 @@ const CrystalBallPage = () => {
 
   // 초기 h, s, l 값을 0, 0, 0으로 설정
   const { hsl } = useSpringWeb({
-    hsl: step === 0 ? [210, 80, 50] : options[randomColorIndex],
+    hsl: step === 0 ? [210, 80, 50] : options[data.colorName],
     config: { tension: 50 },
   });
 
@@ -107,12 +117,11 @@ const CrystalBallPage = () => {
       <ModalContainer isOpen={isModalOpen}>
         <AlertModal
           width="550px"
-          topText="LUCKY BLUE"
-          middleText="오늘의 행운의 색, '파란색'을 활용하여 하루를 특별하게 만들어보세요!
-          블루베리 스무디로 시작하는 상쾌한 아침, 푸른 바다나 하늘을 연상시키는 파란 색의 옷 차림, 혹은 액세서리를 착용해보세요. 파란색의 노트북이나 펜을 사용해 일상에 행운의 에너지를 불러오세요. 하루 종일 '블루'와 함께라면 더욱 특별하고 행운이 가득한 시간이 될 것입니다!"
+          topText={`Lucky ${data.colorName}`}
+          middleText={`${data.description}`}
           bottomText="메인으로 돌아가기"
-          imageUrl={crystalBall} // 이미지 경로
-          topTextColor="#355EF1"
+          imageUrl={crystalBall}
+          topTextColor={`${data.color}`}
           middleTextColor="#5E3A66"
           bottomTextColor="#EAE2ED"
           upperSectionBackground="#EAE2ED"
@@ -208,7 +217,7 @@ const MagicMarbleMaterial: React.FC<MagicMarbleMaterialProps> = ({
 
   // This spring value allows us to "fast forward" the displacement in the marble
   const { timeOffset } = useSpringThree({
-    hsl: options[randomColorIndex], // 스텝에 따라 옵션에서 색상 가져오기
+    hsl: options[data.colorName], // 스텝에 따라 옵션에서 색상 가져오기
     timeOffset: step * 0.2,
     config: { tension: 50 },
     onChange: ({ value: { hsl } }) => {
