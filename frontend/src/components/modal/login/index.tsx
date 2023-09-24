@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import Kakao from "@/assets/img/Kakao.png";
 import Google from "@/assets/img/Google.png";
 import Naver from "@/assets/img/Naver.png";
-import BackCards from "@/assets/img/Login.png";
+import SignInModalFront from "@/assets/img/signCard/signInModalFront.png";
+import SignUpModalFront from "@/assets/img/signCard/signUpModalFront.png";
 import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
@@ -10,19 +11,35 @@ import { userInfoState } from "@/states/userState";
 
 const Container = styled.div`
   position: absolute;
-  left: 15%;
-  top: 2%;
-  /* background-color: rgba(0, 0, 0, 0.5); */
+  left: 39.5%;
+  top: 0.5%;
 `;
 
-const Img = styled.div`
-  height: 75vh;
-  width: 70vw;
+const LoginFrontImg = styled.div`
+  position: absolute;
+  left: 40%;
+  height: 65vh;
+  width: 21vw;
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
-  background-image: url(${BackCards});
+  background-image: url(${SignInModalFront});
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+`;
+
+const SignUpFrontImg = styled.div`
+  position: absolute;
+  left: 40%;
+  height: 65vh;
+  width: 21vw;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  background-image: url(${SignUpModalFront});
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -48,6 +65,7 @@ const PWCheck = styled.div`
 const FormLabel = styled.p`
   font-size: small;
   display: flex;
+  font-weight: bold;
   margin-bottom: 2px;
   color: #5e3a66;
 `;
@@ -63,9 +81,9 @@ const Input = styled.input`
 const SignUp = styled.div`
   margin-top: 5px;
   margin-bottom: 5px;
-  margin-right: 5px;
   display: flex;
   justify-content: end;
+  font-weight: bold;
   font-size: small;
   color: #5e3a66;
 `;
@@ -75,12 +93,12 @@ const LoginButton = styled.button`
   border-radius: 5px;
   border-color: #5e3a66;
   border-width: 2px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   height: 30px;
   background-color: #5e3a66;
   color: white;
   font-weight: bold;
-  font-size: smaller;
+  font-size: 12px;
 `;
 
 const SocialLogin = styled.img`
@@ -105,12 +123,12 @@ const NextButton = styled.button`
   border-radius: 5px;
   border-color: #5e3a66;
   border-width: 2px;
-  margin-top: 30px;
+  margin-top: 25px;
   height: 30px;
   background-color: #5e3a66;
   color: white;
   font-weight: bold;
-  font-size: smaller;
+  font-size: 12px;
 `;
 
 const Login: React.FC = () => {
@@ -134,7 +152,7 @@ const Login: React.FC = () => {
   if (modalState === "로그인") {
     return (
       <Container>
-        <Img>
+        <LoginFrontImg>
           <Id>
             <FormLabel>계정이름</FormLabel>
             <Input />
@@ -171,13 +189,13 @@ const Login: React.FC = () => {
               }}
             />
           </PW>
-        </Img>
+        </LoginFrontImg>
       </Container>
     );
   } else if (modalState === "회원가입1") {
     return (
       <Container>
-        <Img>
+        <SignUpFrontImg>
           <Email>
             <FormLabel>이메일</FormLabel>
             <Input />
@@ -195,13 +213,13 @@ const Login: React.FC = () => {
               </NextButton>
             </SignUp>
           </EmailCheck>
-        </Img>
+        </SignUpFrontImg>
       </Container>
     );
   } else {
     return (
       <Container>
-        <Img>
+        <SignUpFrontImg>
           <Id>
             <FormLabel>아이디</FormLabel>
             <Input />
@@ -215,7 +233,7 @@ const Login: React.FC = () => {
             </PWCheck>
             <NextButton>FINISH</NextButton>
           </PW>
-        </Img>
+        </SignUpFrontImg>
       </Container>
     );
   }
