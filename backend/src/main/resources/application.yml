@@ -127,4 +127,5 @@ rabbitmq:
 #    key-store-password:1q2w3e4r
 #    key-store-type: PKCS12
 
-  server.ec2-url: masoori.site
+server:
+  ec2-url: https://masoori.site
