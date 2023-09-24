@@ -38,6 +38,13 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+  # rabbitmq 설정
+  rabbitmq:
+    host: masoori.site
+    port: 5672
+    username: ADMIN
+    password: MASOORI_MQ
+
   # key-value store인  redis 설정 (임시)
   data:
     redis:
@@ -51,13 +58,6 @@ spring:
     username: ssafy_b308
     password: ssafy_b308_1
 
-  # H2 설정 (로컬 테스트용)
-  #  datasource:
-  #    url: jdbc:h2:tcp://localhost/~/dataJpa
-  #    username: sa
-  #    password:
-  #    driver-class-name: org.h2.Driver
-
   # JPA 설정
   jpa:
     hibernate:
@@ -70,12 +70,14 @@ spring:
         #        use_sql_comments: true
         #        show_sql: true
         format_sql: true
+
 # log 레벨 설정
 logging:
   level:
     com.fintech.masoori: DEBUG
     org:
       hibernate: debug
+
 # OAuth2 redirect url 설정
 app:
   oauth2:
@@ -84,6 +86,17 @@ app:
 # jwt secret key 설정
 jwt:
   key: YourewaitingforatrainAtrainthatwilltakeyoufarawayYouknowwhereyouhope
+
+# rabbitmq 설정
+rabbitmq:
+  queue:
+    name1: realtime.queue
+    name2: weekly.queue
+    name3: recommand.queue
+  exchange:
+    name: masoori.direct
+  routing_key:
+    name: generate
 
 # ssl 설정
 server:
