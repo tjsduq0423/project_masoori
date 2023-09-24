@@ -1,8 +1,5 @@
 package com.fintech.masoori.global.config;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -27,61 +24,38 @@ public class RabbitMQConfig {
 	@Value("${spring.rabbitmq.port}")
 	private int port;
 
-	@Value("${rabbitmq.queue.name1}")
+	@Value("${rabbitmq.queue.realtime}")
 	private String queue1;
 
-	@Value("${rabbitmq.queue.name2}")
+	@Value("${rabbitmq.queue.weekly}")
 	private String queue2;
 
-	@Value("${rabbitmq.queue.name3}")
+	@Value("${rabbitmq.queue.recommend}")
 	private String queue3;
-
-	@Value("${rabbitmq.exchange.name}")
-	private String exchange;
-
-	@Value("${rabbitmq.routing_key.name1}")
-	private String routingKey1;
-
-	@Value("${rabbitmq.routing_key.name2}")
-	private String routingKey2;
-
-	@Value("${rabbitmq.routing_key.name3}")
-	private String routingKey3;
 
 	@Bean
 	public Queue queue1() {
-		return new Queue(queue1, false);
+		return new Queue(queue1, true);
 	}
 
 	@Bean
 	public Queue queue2() {
-		return new Queue(queue2, false);
+		return new Queue(queue2, true);
 	}
 
 	@Bean
 	public Queue queue3() {
-		return new Queue(queue3, false);
+		return new Queue(queue3, true);
 	}
 
-	@Bean
-	public DirectExchange directExchange() {
-		return new DirectExchange(exchange);   // Topic Exchange 타입
-	}
-
-	@Bean
-	public Binding binding1(DirectExchange directExchange, Queue queue1) {
-		return BindingBuilder.bind(queue1).to(directExchange).with(routingKey1);
-	}
-
-	@Bean
-	public Binding binding2(DirectExchange directExchange, Queue queue2) {
-		return BindingBuilder.bind(queue2).to(directExchange).with(routingKey2);
-	}
-
-	@Bean
-	public Binding binding3(DirectExchange directExchange, Queue queue3) {
-		return BindingBuilder.bind(queue3).to(directExchange).with(routingKey3);
-	}
+	// @Bean
+	// public DirectExchange directExchange() {
+	// 	return new DirectExchange(exchange,true,true);   // Topic Exchange 타입
+	// }
+	// @Bean
+	// public Binding binding1(DirectExchange directExchange, Queue queue1) {
+	// 	return BindingBuilder.bind(queue1).to(directExchange).with(routingKey1);`
+	// }
 
 	@Bean
 	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {

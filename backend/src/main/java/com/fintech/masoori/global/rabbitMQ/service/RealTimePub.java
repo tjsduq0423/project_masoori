@@ -16,13 +16,4 @@ public class RealTimePub {
 
 	private final RabbitTemplate rabbitTemplate;
 
-	@Value("${rabbitmq.exchange.name}")
-	private String exchange;
-
-	@Value("${rabbitmq.routing_key.name1}")
-	private String routingKey;
-
-	public void sendMessage(RealTimeMessage message) {
-		rabbitTemplate.convertAndSend(exchange, routingKey, message);
-	}
 }

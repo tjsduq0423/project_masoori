@@ -16,13 +16,4 @@ public class WeeklyPub {
 
 	private final RabbitTemplate rabbitTemplate;
 
-	@Value("${rabbitmq.exchange.name}")
-	private String exchange;
-
-	@Value("${rabbitmq.routing_key.name2}")
-	private String routingKey;
-
-	public void sendMessage(WeeklyMessage message) {
-		rabbitTemplate.convertAndSend(exchange, routingKey, message);
-	}
 }

@@ -15,14 +15,4 @@ import lombok.extern.slf4j.Slf4j;
 public class RecommendPub {
 
 	private final RabbitTemplate rabbitTemplate;
-
-	@Value("${rabbitmq.exchange.name}")
-	private String exchange;
-
-	@Value("${rabbitmq.routing_key.name3}")
-	private String routingKey;
-
-		public void sendMessage(RecommandMessage message) {
-		rabbitTemplate.convertAndSend(exchange, routingKey, message);
-	}
 }

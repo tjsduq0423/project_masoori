@@ -14,5 +14,5 @@ import lombok.ToString;
 @Builder
 @ToString
 public class RealTimeMessage  {
-
+	private int id;
 }
