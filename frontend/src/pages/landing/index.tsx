@@ -38,20 +38,24 @@ const Container = styled.div`
   background-repeat: no-repeat; /* 이미지 반복 방지 */
   background-attachment: scroll; /* 배경 스크롤 허용 */
   background-position: center center; /* 이미지 중앙 정렬 */
-  height: 700vh; /* 화면 높이만큼 설정 */
+  height: 585vh; /* 화면 높이만큼 설정 */
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 const MainPage1 = styled.div`
-  height: 110vh;
+  height: 100vh;
   width: 75%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 const MainLogo = styled.img`
-  height: 85vh;
-  width: 100%;
+  height: 75vh;
+  width: 85%;
 `;
 
 const MainComment = styled.div`
@@ -66,7 +70,7 @@ const MainComment = styled.div`
 `;
 
 const MainPages = styled.div`
-  height: 110vh;
+  height: 100vh;
   width: 75%;
   display: flex;
   justify-content: center;
@@ -75,7 +79,7 @@ const MainPages = styled.div`
 
 const Content = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   height: 70%;
 `;
@@ -88,8 +92,15 @@ const ToGoContent = styled.div`
   height: 70%;
 `;
 
+const ShiftLeft = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 91%;
+`;
+
 const Witch = styled.div`
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   height: 7vh;
   width: 142px;
   border-radius: 19px;
@@ -121,25 +132,47 @@ const Context = styled.div`
     5px 0px 10px 0px rgba(255, 255, 255, 0.1) inset,
     0px -5px 10px 0px rgba(255, 255, 255, 0.1) inset,
     -5px 0px 10px 0px rgba(255, 255, 255, 0.1) inset;
-  height: 50vh;
-  width: 90.25%;
+  height: 45vh;
+  width: 91%;
   color: #fff;
   font-family: "Pretendard";
   font-size: 19px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: medium;
   line-height: 32px; /* 152.381% */
-  padding: 30px;
+  padding: 37px;
+`;
+
+const Page3Context = styled(Context)`
+  padding-top: 180px;
+  padding-bottom: 180px;
+`;
+
+const Page4Context = styled(Context)`
+  height: 39vh;
+  padding-left: 40px;
+  padding-right: 40px;
+`;
+
+const Page5Context = styled(Context)`
+  height: 40vh;
+  padding-left: 40px;
+  padding-right: 40px;
 `;
 
 const Titles = styled.div`
-  margin-bottom: 20px;
   color: #fff;
   font-family: "PyeongChangPeace";
   font-size: 45px;
   text-align: left;
   width: 100%;
   display: flex;
+  align-items: center;
+`;
+
+const ShiftRightTitles = styled(Titles)`
+  width: 60%;
+  margin-left: 33.75vw;
   align-items: center;
 `;
 
@@ -151,12 +184,14 @@ const Page24Left = styled.div`
   flex-direction: column;
 `;
 
-const Page35Right = styled.div`
-  height: 100%;
-  width: 50%;
+const Page35Right = styled(Page24Left)`
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  flex-direction: column;
 `;
 
-const Page2Right = styled.div`
+const Page2Photo = styled.div`
   height: 100%;
   width: 40%;
   background-image: url(${FinanceLuckCards});
@@ -165,33 +200,27 @@ const Page2Right = styled.div`
   background-size: contain;
 `;
 
-const Page3Left = styled.div`
-  height: 80%;
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+const Page3Photo = styled.div`
+  height: 100%;
+  width: 40%;
   background-image: url(${CreditCards});
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
 `;
 
-const Page4Right = styled.div`
+const Page4Photo = styled.div`
   height: 100%;
-  width: 50%;
+  width: 40%;
   background-image: url(${Trophy});
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
 `;
 
-const Page5Left = styled.div`
-  height: 80%;
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+const Page5Photo = styled.div`
+  height: 100%;
+  width: 40%;
   background-image: url(${Bottles});
   background-position: center;
   background-repeat: no-repeat;
@@ -199,9 +228,10 @@ const Page5Left = styled.div`
 `;
 
 const SelectToGo = styled.div`
-  height: 20vh;
-  width: 95vh;
-  margin-bottom: 50px;
+  padding: 10px;
+  height: 20%;
+  width: 50vw;
+  margin-bottom: 30px;
   color: #fff;
   font-family: "PyeongChangPeace";
   font-size: 45px;
@@ -222,7 +252,7 @@ const CardSection = styled.div`
   height: 60vh;
   width: 82.5%;
   justify-content: center; /* 중앙 정렬 */
-  margin-top: 100px;
+  margin-top: 75px;
   margin-right: 400px;
   gap: 300px; /* 카드 사이의 간격 설정 */
 `;
@@ -261,50 +291,54 @@ const Landing: React.FC = () => {
         <MainComment>•──☾ 소비패턴 분석을 통한 타로카드 생성 ☽──•</MainComment>
       </MainPage1>
       <MainPages>
+        <Titles>
+          <p>나의 소비 패턴을 타로카드로</p>
+        </Titles>
         <Content>
           <Page24Left>
-            <Titles>
-              <p>나의 소비 패턴을 타로카드로</p>
-            </Titles>
             <Witch>🌟 마녀 🌟</Witch>
             <Context>{ToTarotContext}</Context>
           </Page24Left>
-          <Page2Right></Page2Right>
+          <Page2Photo />
         </Content>
       </MainPages>
       <MainPages>
+        <ShiftRightTitles>
+          <p>마녀가 추천해주는 나의 카드</p>
+        </ShiftRightTitles>
         <Content>
-          <Page3Left />
+          <Page3Photo />
           <Page35Right>
-            <Titles>
-              <p>마녀가 추천해주는 나의 카드</p>
-            </Titles>
-            <Witch>🌟 마녀 🌟</Witch>
-            <Context>{RecommendContext}</Context>
+            <ShiftLeft>
+              <Witch>🌟 마녀 🌟</Witch>
+            </ShiftLeft>
+            <Page3Context>{RecommendContext}</Page3Context>
           </Page35Right>
         </Content>
       </MainPages>
       <MainPages>
+        <Titles>
+          <p>챌린지를 통해 소비습관을 교정</p>
+        </Titles>
         <Content>
           <Page24Left>
-            <Titles>
-              <p>챌린지를 통해 소비습관을 교정</p>
-            </Titles>
             <Witch>🌟 마녀 🌟</Witch>
-            <Context>{Chellange}</Context>
+            <Page4Context>{Chellange}</Page4Context>
           </Page24Left>
-          <Page4Right></Page4Right>
+          <Page4Photo />
         </Content>
       </MainPages>
       <MainPages>
+        <ShiftRightTitles>
+          <p>나의 금전운에 대해 알아보자</p>
+        </ShiftRightTitles>
         <Content>
-          <Page5Left></Page5Left>
+          <Page5Photo />
           <Page35Right>
-            <Titles>
-              <p>나의 금전운에 대해 알아보자</p>
-            </Titles>
-            <Witch>🌟 마녀 🌟</Witch>
-            <Context>{FinanceLuck}</Context>
+            <ShiftLeft>
+              <Witch>🌟 마녀 🌟</Witch>
+            </ShiftLeft>
+            <Page5Context>{FinanceLuck}</Page5Context>
           </Page35Right>
         </Content>
       </MainPages>
