@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllCreditcard } from "../dictionaryAPI";
+import { getAllCreditcard } from "@/apis/dictionary/dictionaryAPI";
 
-const useAllCreditCard = () => {
-  const { data } = useQuery(["AllCreditCard"], () => getAllCreditcard());
+const useAllChallengeCard = () => {
+  const { data } = useQuery(["allCreditCard"], () => getAllCreditcard());
   return data;
 };
 
-export { useAllCreditCard };
+export { useAllChallengeCard };
