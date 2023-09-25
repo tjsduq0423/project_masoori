@@ -2,6 +2,7 @@ import { atom } from "recoil";
 
 interface LuckInfo {
   name: string;
+  summary: string;
   imagePath: string;
   description: string;
 }
@@ -9,6 +10,7 @@ interface LuckInfo {
 // userInfoState의 기본값에 대한 타입 정의
 const defaultUserInfo: LuckInfo = {
   name: "",
+  summary: "",
   imagePath: "",
   description: "",
 };

@@ -29,13 +29,15 @@ const Front = styled(CardContainer)``;
 interface CardFlipProps {
   onClick?: () => void;
   isClickable?: boolean;
-  imageSrc?: string; // 이미지 URL을 받아올 속성 추가
+  imageSrc?: string;
+  text?: string;
 }
 
 const CardFlip = ({
   onClick,
   isClickable = true,
   imageSrc = "",
+  text = "",
 }: CardFlipProps) => {
   const [flipped, setFlipped] = useState(false);
 
@@ -78,7 +80,7 @@ const CardFlip = ({
           cardSrc={tarotCardFront}
           imageSrc={imageSrc}
           bottomImageWidth="100%"
-          text="Special Card"
+          text={text}
           fontsize="20px"
         ></TarotCard>
       </Front>

@@ -59,6 +59,9 @@ const TitleContainer = styled.div`
 
 const HashtagContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 700px;
 `;
 
 const ContentWrapper = styled.div`
@@ -186,6 +189,7 @@ const SpendPage: React.FC = () => {
           <TitleContainer>
             <Title>This Week&apos;s Tarot Card</Title>
             <HashtagContainer>
+              <HashTag text="Food"></HashTag>
               <HashTag text="Food"></HashTag>
               <HashTag text="Food"></HashTag>
               <HashTag text="Food"></HashTag>

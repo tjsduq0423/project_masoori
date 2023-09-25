@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Kakao from "@/assets/img/Kakao.png";
 import Google from "@/assets/img/Google.png";
 import Naver from "@/assets/img/Naver.png";
+import BackCards from "@/assets/img/Login.png";
 import SignInModalFront from "@/assets/img/signCard/signInModalFront.png";
 import SignUpModalFront from "@/assets/img/signCard/signUpModalFront.png";
 import styled from "styled-components";
@@ -9,13 +10,17 @@ import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { userInfoState } from "@/states/userState";
 
+interface ImgProps {
+  loaded: boolean;
+}
+
 const Container = styled.div`
   position: absolute;
   left: 39.5%;
   top: 3%;
 `;
 
-const LoginFrontImg = styled.div`
+const LoginFrontImg = styled.div<ImgProps>`
   position: absolute;
   left: 40%;
   height: 65vh;
@@ -29,9 +34,10 @@ const LoginFrontImg = styled.div`
   background-size: contain;
   background-repeat: no-repeat;
   z-index: 99;
+  opacity: ${({ loaded }) => (loaded ? "1" : "0")};
 `;
 
-const SignUpFrontImg = styled.div`
+const SignUpFrontImg = styled.div<ImgProps>`
   position: absolute;
   left: 40%;
   height: 65vh;
@@ -44,6 +50,8 @@ const SignUpFrontImg = styled.div`
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
+  opacity: ${({ loaded }) => (loaded ? "1" : "0")};
+  transition: opacity 0.5s ease-in-out;
 `;
 
 const Id = styled.div`
@@ -134,6 +142,16 @@ const NextButton = styled.button`
 
 const Login: React.FC = () => {
   const [modalState, setModalState] = useState<string>("로그인");
+  const [imageLoaded, setImageLoaded] = useState<boolean>(false); // 이미지 로드 상태
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = BackCards;
+    img.onload = () => {
+      // 이미지 로드가 완료되면 상태 업데이트
+      setImageLoaded(true);
+    };
+  }, []);
 
   const OAUTH2_REDIERECT_URI = `${process.env.REACT_APP_BASE_URL}/oauth/redirect`; /* 이거에대한페이지 생성 */
   const onSocialButtonClick = (socialName: string) => {
@@ -153,7 +171,7 @@ const Login: React.FC = () => {
   if (modalState === "로그인") {
     return (
       <Container>
-        <LoginFrontImg>
+        <LoginFrontImg loaded={imageLoaded}>
           <Id>
             <FormLabel>계정이름</FormLabel>
             <Input />
@@ -196,7 +214,7 @@ const Login: React.FC = () => {
   } else if (modalState === "회원가입1") {
     return (
       <Container>
-        <SignUpFrontImg>
+        <SignUpFrontImg loaded={imageLoaded}>
           <Email>
             <FormLabel>이메일</FormLabel>
             <Input />
@@ -220,7 +238,7 @@ const Login: React.FC = () => {
   } else {
     return (
       <Container>
-        <SignUpFrontImg>
+        <SignUpFrontImg loaded={imageLoaded}>
           <Id>
             <FormLabel>아이디</FormLabel>
             <Input />
