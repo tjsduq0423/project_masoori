@@ -3,7 +3,7 @@ import styled from "styled-components";
 import CardFlip from "@/components/cardFlip";
 import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
-import { useFortune } from "@/apis/luck/Queries/useFortune";
+import { useFortune } from "@/apis/luck/Queries/useFortune"; // useFortune 훅 불러오기
 import { luckInfoState } from "@/states/luckState";
 
 import background from "@/assets/img/background/capetBackground.jpg";
@@ -48,23 +48,17 @@ const CardSection = styled.div`
   flex-grow: 1;
 `;
 
-const data = {
-  name: "행운",
-  imagePath:
-    "https://images.unsplash.com/photo-1618654661521-b9b59166b17f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80",
-  description: "이 카드를 뽑은 당신! 오늘은...",
-};
-
 const MoneyLuckPage = () => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [luckInfo, setLuckInfo] = useRecoilState(luckInfoState);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setLuckInfo(data);
-  }, [setLuckInfo]);
+  // useFortune 훅을 사용하여 데이터 가져오기
+  const fortune = useFortune();
 
-  // const fortuneDto = useFortune();
+  useEffect(() => {
+    setLuckInfo(fortune);
+  }, [setLuckInfo, fortune]);
 
   const handleCardClick = (index: number) => {
     if (selectedCard === null) {
@@ -87,6 +81,7 @@ const MoneyLuckPage = () => {
         onClick={() => handleCardClick(index)}
         isClickable={isClickable(index)}
         imageSrc={luckInfo.imagePath}
+        text={luckInfo.name}
       />
     ));
   };

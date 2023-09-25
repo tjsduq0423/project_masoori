@@ -1,7 +1,9 @@
 import axios, { Axios, AxiosError, AxiosResponse } from "axios";
 
 const instance: Axios = axios.create({
-  baseURL: `${process.env.REACT_APP_SERVER_URL}/api`,
+  //   baseURL: `${process.env.REACT_APP_SERVER_URL}/api`,
+
+  baseURL: `https://masoori.site/api`,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

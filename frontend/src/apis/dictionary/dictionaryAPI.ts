@@ -1,19 +1,10 @@
 import { instance } from "@/apis/instance";
-
-// 유저의 모든 소비카드 조회, 연,월을 기준으로 페이지네이션
-const getAllCard = async () => {
-  try {
-    const response = await instance.get(`/api/v1/card/consume`);
-    return response.data;
-  } catch {
-    new Error("api 연동 오류 - getAllCard");
-  }
-};
+import { AllChallengeCardProps } from "@/types/dictionaryType";
 
 // 사용자 추천 카드 리스트 조회 API
 const getAllCreditcard = async () => {
   try {
-    const response = await instance.get(`/api/creditcard`);
+    const response = await instance.get(`/creditcard`);
     return response.data;
   } catch {
     new Error("api 연동 오류 - getAllCreditcard");
@@ -21,9 +12,9 @@ const getAllCreditcard = async () => {
 };
 
 // 카드 상세 정보 조회 조회 API
-const getCreditcard = async () => {
+const getCreditcard = async (cardId: number) => {
   try {
-    const response = await instance.get(`/api/creditcard/{cardId}`);
+    const response = await instance.get(`/creditcard/${cardId}`);
     return response.data;
   } catch {
     new Error("api 연동 오류 - getCreditcard");
@@ -33,7 +24,7 @@ const getCreditcard = async () => {
 // 월간 소비 분석 API
 const getAnalyticsMonth = async () => {
   try {
-    const response = await instance.get(`/api/v1/analytics/month`);
+    const response = await instance.get(`/analytics/month`);
     return response.data;
   } catch {
     new Error("api 연동 오류 - getAnalyticsMonth");
@@ -41,9 +32,11 @@ const getAnalyticsMonth = async () => {
 };
 
 // 조회 시작일과 종료일을 통해 유저의 챌린지 카드들을 조회
-const getAllChallengeCard = async () => {
+const getAllChallengeCard = async (challengeDate: AllChallengeCardProps) => {
   try {
-    const response = await instance.get(`/api/v1/card/challengecard`);
+    const response = await instance.get(`/card/challengecard`, {
+      params: challengeDate,
+    });
     return response.data;
   } catch {
     new Error("api 연동 오류 - getAnalyticsMonth");
@@ -53,7 +46,7 @@ const getAllChallengeCard = async () => {
 // 유저에게 할당되어 있는 챌린지카드와 챌린지를 연,월일을 통해 조회한다.
 const getChallengeCard = async () => {
   try {
-    const response = await instance.get(`/api/v1/card/challenge`);
+    const response = await instance.get(`/card/challenge`);
     return response.data;
   } catch {
     new Error("api 연동 오류 - getAnalyticsMonth");
@@ -61,7 +54,6 @@ const getChallengeCard = async () => {
 };
 
 export {
-  getAllCard,
   getAllCreditcard,
   getCreditcard,
   getAnalyticsMonth,

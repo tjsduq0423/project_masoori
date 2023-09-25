@@ -77,27 +77,24 @@ const BasicText = styled.div`
 
 const DictionaryPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
-  const [tarotCards, setTarotCards] = useState<JSX.Element[]>([]); // Specify the type as JSX.Element[]
 
-  // Function to add a Tarot card
-  const addTarotCard = () => {
-    const newCard = (
-      <TarotCard
-        key={tarotCards.length} // Use the length of the array as the key
-        width="120px"
-        height="200px"
-        cardWidth="100%"
-        cardSrc={card}
-        imageSrc="path/to/your/image.jpg"
-        bottomImageWidth="80%"
-        text=""
-        fontsize="16px"
-      />
-    );
-    setTarotCards([...tarotCards, newCard]);
-  };
+  const initialTarotCards = Array.from({ length: 30 }, (_, index) => (
+    <TarotCard
+      key={index}
+      width="80%"
+      height="300px"
+      cardWidth="100%"
+      cardSrc={card}
+      imageSrc="path/to/your/image.jpg"
+      bottomImageWidth="80%"
+      text=""
+      fontsize="16px"
+    />
+  ));
 
-  // Function to handle page change
+  const [tarotCards, setTarotCards] =
+    useState<JSX.Element[]>(initialTarotCards);
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -132,17 +129,12 @@ const DictionaryPage = () => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(5, 1fr)", // Adjust the number of columns as needed
-                gap: "20px", // Adjust the gap between cards as needed
+                gridTemplateColumns: "repeat(5, 1fr)",
+                marginTop: "2rem",
               }}
             >
               {tarotCards.map((card, index) => (
-                <div
-                  key={index}
-                  style={{ marginRight: "10px", marginBottom: "20px" }}
-                >
-                  {card}
-                </div>
+                <div key={index}>{card}</div>
               ))}
             </div>
           </div>
@@ -173,24 +165,18 @@ const DictionaryPage = () => {
           </div>
         )}
         {currentPage === 4 && (
-          <div>
+          <div style={{ marginBottom: "100px" }}>
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(5, 1fr)", // Adjust the number of columns as needed
-                gap: "20px", // Adjust the gap between cards as needed
+                gridTemplateColumns: "repeat(4, 1fr)", // Adjust the number of columns as needed
+                marginTop: "30px",
               }}
             >
               {tarotCards.map((card, index) => (
-                <div
-                  key={index}
-                  style={{ marginRight: "10px", marginBottom: "20px" }}
-                >
-                  {card}
-                </div>
+                <div key={index}>{card}</div>
               ))}
             </div>
-            <button onClick={addTarotCard}>Add Tarot Card</button>
           </div>
         )}
       </ContentSection>
