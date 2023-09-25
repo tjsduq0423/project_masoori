@@ -13,11 +13,14 @@ def read_root():
 
 
 # rabbitMQ 변수 정리
-rabbit_mq_server_domain = "localhost"
+rabbit_mq_server_domain = "j9b308.p.ssafy.io"
 pub_queue_name = "weekly.res"
 sub_queue_name = "weekly.req"
 # RabbitMQ 연결 설정
-connection = pika.BlockingConnection(pika.ConnectionParameters(rabbit_mq_server_domain))
+credentials = pika.PlainCredentials(username="admin", password="masoori")
+connection = pika.BlockingConnection(
+    pika.ConnectionParameters(rabbit_mq_server_domain, credentials=credentials)
+)
 channel = connection.channel()
 
 # pub 를 위한 queue 선언

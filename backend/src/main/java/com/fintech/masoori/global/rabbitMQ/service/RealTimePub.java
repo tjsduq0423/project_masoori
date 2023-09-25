@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class RealTimePub {
-
 	private final RabbitTemplate rabbitTemplate;
+
 
 }

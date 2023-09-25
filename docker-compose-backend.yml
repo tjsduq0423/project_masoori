@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  backendDev:
+    container_name: backendDev
+    build:
+      context: ./backend
+      args:
+        SERVER_MODE: dev
+    ports:
+      - "8080:8080"
