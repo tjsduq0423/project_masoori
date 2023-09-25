@@ -42,7 +42,6 @@
 .container {
   box-sizing: border-box;
   font-size: 14px;
-  font-family: "Montserrat", sans-serif;
   line-height: 1.2;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -84,13 +83,13 @@ main {
   color: #ffffff;
 }
 .intro-text h1 {
-  font-family: "Pyeongchangpeace";
+  font-family: "Pyeongchangpeace", sans-serif;;
   font-size: 42px;
   margin: 0;
 }
 .intro-text h2 {
   font-size: 16px;
-  font-family: "Pyeongchangpeace";
+  font-family: "Pyeongchangpeace", sans-serif;;
   text-transform: uppercase;
   margin: 0;
 }
@@ -108,7 +107,7 @@ main {
   text-transform: uppercase;
   font-size: 26px;
   color: #813e83;
-  font-family: "Pyeongchangpeace";
+  font-family: "Pyeongchangpeace", sans-serif;;
   margin-top: 20px;
 }
 .intro-text .feature {

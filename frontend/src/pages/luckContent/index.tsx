@@ -135,7 +135,7 @@ const LuckContentPage = () => {
             cardSrc={cardFront}
             imageSrc={background}
             bottomImageWidth="100%"
-            text="Special Card"
+            text={luckInfo.name}
             fontsize="20px"
           ></TarotCard>
         </CardContainer>

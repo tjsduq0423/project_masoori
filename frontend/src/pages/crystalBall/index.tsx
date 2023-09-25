@@ -97,48 +97,51 @@ const CrystalBallPage = () => {
   };
 
   return (
-    <aw.div
-      style={{ background: springyGradient, width: "100%", height: "100%" }}
-    >
-      <Canvas camera={{ position: [0, 0, 2] }}>
-        <Suspense fallback={null}>
-          <OrbitControls
-            autoRotate
-            enableRotate={false}
-            enablePan={false}
-            enableZoom={false}
-          />
-          <Marble step={step} setStep={setStep} openModal={openModal} />
-          <Environment preset="warehouse" />
-        </Suspense>
-      </Canvas>
+    <>
       {/* 모달 렌더링 */}
       <Backdrop isOpen={isModalOpen} onClick={closeModal} />
-      <ModalContainer isOpen={isModalOpen}>
-        <AlertModal
-          width="550px"
-          topText={`Lucky ${data.colorName}`}
-          middleText={`${data.description}`}
-          bottomText="메인으로 돌아가기"
-          imageUrl={crystalBall}
-          topTextColor={`${data.color}`}
-          middleTextColor="#5E3A66"
-          bottomTextColor="#EAE2ED"
-          upperSectionBackground="#EAE2ED"
-          lowerSectionBackground="#5E3A66"
-          topTextFontSize="28px"
-          middleTextFontSize="14px"
-          bottomTextFontSize="20px"
-          topTextPaddingTopBottom="2px"
-          middleTextPaddingTopBottom="20px"
-          middleTextPaddingLeftRight="20px"
-          topTextFontWeight="bold"
-          middleTextFontWeight="medium"
-          bottomTextFontWeight="medium"
-          routerLink="/main"
-        />
-      </ModalContainer>
-    </aw.div>
+      <aw.div
+        style={{ background: springyGradient, width: "100%", height: "100%" }}
+      >
+        <Canvas camera={{ position: [0, 0, 2] }}>
+          <Suspense fallback={null}>
+            <OrbitControls
+              autoRotate
+              enableRotate={false}
+              enablePan={false}
+              enableZoom={false}
+            />
+            <Marble step={step} setStep={setStep} openModal={openModal} />
+            <Environment preset="warehouse" />
+          </Suspense>
+        </Canvas>
+
+        <ModalContainer isOpen={isModalOpen}>
+          <AlertModal
+            width="550px"
+            topText={`Lucky ${data.colorName}`}
+            middleText={`${data.description}`}
+            bottomText="메인으로 돌아가기"
+            imageUrl={crystalBall}
+            topTextColor={`${data.color}`}
+            middleTextColor="#5E3A66"
+            bottomTextColor="#EAE2ED"
+            upperSectionBackground="#EAE2ED"
+            lowerSectionBackground="#5E3A66"
+            topTextFontSize="28px"
+            middleTextFontSize="14px"
+            bottomTextFontSize="20px"
+            topTextPaddingTopBottom="2px"
+            middleTextPaddingTopBottom="20px"
+            middleTextPaddingLeftRight="20px"
+            topTextFontWeight="bold"
+            middleTextFontWeight="medium"
+            bottomTextFontWeight="medium"
+            routerLink="/main"
+          />
+        </ModalContainer>
+      </aw.div>
+    </>
   );
 };
 
