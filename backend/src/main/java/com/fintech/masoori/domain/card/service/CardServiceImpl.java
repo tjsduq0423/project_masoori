@@ -16,6 +16,7 @@ import com.fintech.masoori.domain.card.repository.CardRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.exception.UserNotFoundException;
 import com.fintech.masoori.domain.user.repository.UserRepository;
+import com.fintech.masoori.global.util.CalcDate;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,10 +34,10 @@ public class CardServiceImpl implements CardService {
 	public BasicCardRes selectRangeBasicCard(String email, LocalDateTime start, LocalDateTime end) {
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다."));
 
-		LocalDateTime startDate = LocalDateTime.of(start.getYear(), start.getMonth(), 1, 0, 0);
-		LocalDateTime endDate = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(), 23, 59);
+		CalcDate.StartEndDate calcDate = CalcDate.calcDate(start, end);
 
-		List<Card> cardList = cardRepository.findRangeCard(user.getId(), CardType.BASIC, startDate, endDate);
+		List<Card> cardList = cardRepository.findRangeCard(user.getId(), CardType.BASIC, calcDate.getStartDate(),
+			calcDate.getEndDate());
 
 		List<BasicCardRes.BasicCard> basicCardList = cardList.stream()
 															 .map(card -> BasicCardRes.BasicCard.builder()
@@ -67,10 +68,10 @@ public class CardServiceImpl implements CardService {
 	public ChallengeCardRes selectRangeChallengeCard(String email, LocalDateTime start, LocalDateTime end) {
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다."));
 
-		LocalDateTime startDate = LocalDateTime.of(start.getYear(), start.getMonth(), 1, 0, 0);
-		LocalDateTime endDate = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(), 23, 59);
+		CalcDate.StartEndDate calcDate = CalcDate.calcDate(start, end);
 
-		List<Card> cardList = cardRepository.findRangeCard(user.getId(), CardType.SPECIAL, startDate, endDate);
+		List<Card> cardList = cardRepository.findRangeCard(user.getId(), CardType.SPECIAL, calcDate.getStartDate(),
+			calcDate.getEndDate());
 
 		List<ChallengeCardRes.ChallengeCard> challengeCardList = cardList.stream()
 																		 .map(

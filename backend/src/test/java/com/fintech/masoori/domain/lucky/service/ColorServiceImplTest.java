@@ -11,6 +11,7 @@ import com.fintech.masoori.domain.lucky.dto.ColorRes;
 import com.fintech.masoori.domain.lucky.entity.Color;
 import com.fintech.masoori.domain.lucky.repository.ColorRepository;
 import com.fintech.masoori.domain.user.entity.User;
+import com.fintech.masoori.global.oauth.ProviderType;
 import com.fintech.masoori.global.redis.RedisService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,19 +32,23 @@ class ColorServiceImplTest {
 	 */
 	@Test
 	void firstSelectColor() {
-		Color color1 = Color.builder().color("#111111").description("1번 색").build();
-		Color color2 = Color.builder().color("#222222").description("2번 색").build();
-		Color color3 = Color.builder().color("#333333").description("3번 색").build();
-		Color color4 = Color.builder().color("#444444").description("4번 색").build();
-		Color color5 = Color.builder().color("#555555").description("5번 색").build();
-		Color color6 = Color.builder().color("#666666").description("6번 색").build();
+		Color color1 = Color.builder().color("#111111").description("1번 색").colorName("빨간색").build();
+		Color color2 = Color.builder().color("#222222").description("2번 색").colorName("주황색").build();
+		Color color3 = Color.builder().color("#333333").description("3번 색").colorName("노란색").build();
+		Color color4 = Color.builder().color("#444444").description("4번 색").colorName("초록색").build();
+		Color color5 = Color.builder().color("#555555").description("5번 색").colorName("파란색").build();
+		Color color6 = Color.builder().color("#666666").description("6번 색").colorName("보라색").build();
 		colorRepository.save(color1);
 		colorRepository.save(color2);
 		colorRepository.save(color3);
 		colorRepository.save(color4);
 		colorRepository.save(color5);
 		colorRepository.save(color6);
-		User user = User.builder().email("test@gmail.com").password("123").build();
+		User user = User.builder()
+						.email("test123232@gmail.com")
+						.password("123")
+						.providerType(ProviderType.LOCAL)
+						.build();
 		if (redisService.getUserColor(user.getEmail()) == null) {
 			//오늘의 색 하나 조회
 			ColorRes response = colorService.selectOneColor(user.getEmail());
@@ -63,28 +68,32 @@ class ColorServiceImplTest {
 	 */
 	@Test
 	void alreadySelectColor() {
-		Color color1 = Color.builder().color("#111111").description("1번 색").build();
-		Color color2 = Color.builder().color("#222222").description("2번 색").build();
-		Color color3 = Color.builder().color("#333333").description("3번 색").build();
-		Color color4 = Color.builder().color("#444444").description("4번 색").build();
-		Color color5 = Color.builder().color("#555555").description("5번 색").build();
-		Color color6 = Color.builder().color("#666666").description("6번 색").build();
+		Color color1 = Color.builder().color("#111111").description("1번 색").colorName("빨간색").build();
+		Color color2 = Color.builder().color("#222222").description("2번 색").colorName("주황색").build();
+		Color color3 = Color.builder().color("#333333").description("3번 색").colorName("노란색").build();
+		Color color4 = Color.builder().color("#444444").description("4번 색").colorName("초록색").build();
+		Color color5 = Color.builder().color("#555555").description("5번 색").colorName("파란색").build();
+		Color color6 = Color.builder().color("#666666").description("6번 색").colorName("보라색").build();
 		colorRepository.save(color1);
 		colorRepository.save(color2);
 		colorRepository.save(color3);
 		colorRepository.save(color4);
 		colorRepository.save(color5);
 		colorRepository.save(color6);
-		User user = User.builder().email("test@gmail.com").password("123").build();
+		User user = User.builder()
+						.email("test12321321@gmail.com")
+						.password("123")
+						.providerType(ProviderType.LOCAL)
+						.build();
 		//유저 방문
 		ColorRes response = colorService.selectOneColor(user.getEmail());
-		if (redisService.getUserColor(user.getEmail()).equals(response.getColor())) {
+		if (redisService.getUserColor(user.getEmail()).equals(response.getColorName())) {
 			//redis에 있는 컬러가 저장된 컬러가 맞는지
 			String color = redisService.getUserColor(user.getEmail());
-			Color findColor = colorRepository.findDescriptionByColor(color);
+			Color findColor = colorRepository.findByColorName(color);
 			log.info("Color : {}", findColor);
-			assertThat(color.equals(response.getColor()));
-			assertThat(color.equals(findColor.getColor()));
+			assertThat(color.equals(response.getColorName()));
+			assertThat(color.equals(findColor.getColorName()));
 			redisService.deleteUserColor(user.getEmail());
 			assertThat(redisService.getUserColor(user.getEmail()) == null);
 		} else {

@@ -1,5 +1,9 @@
 package com.fintech.masoori.domain.analytics.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.fintech.masoori.domain.analytics.dto.MonthlySpendingAnalyticsRes;
@@ -7,6 +11,7 @@ import com.fintech.masoori.domain.analytics.entity.MonthlySpendingAnalytics;
 import com.fintech.masoori.domain.analytics.repository.MonthlySpendingAnalyticsRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
+import com.fintech.masoori.global.util.CalcDate;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,12 +22,24 @@ public class MonthlySpendingAnalyticsServiceImpl implements MonthlySpendingAnaly
 	private final MonthlySpendingAnalyticsRepository monthlySpendingAnalyticsRepository;
 
 	@Override
-	public MonthlySpendingAnalyticsRes selectAll(String userEmail) {
+	public MonthlySpendingAnalyticsRes selectAll(String userEmail, LocalDateTime time) {
 		User user = userRepository.findUserByEmail(userEmail);
-		return new MonthlySpendingAnalyticsRes(user.getMonthlySpendingAnalyticsList()
-		                                           .stream()
-		                                           .map(MonthlySpendingAnalyticsRes.MonthlySpendingAnalytics::new)
-		                                           .toList());
+
+		CalcDate.StartEndDate calcDate = CalcDate.calcDate(time, time);
+
+		List<MonthlySpendingAnalytics> monthlySpendingAnalyticsList = monthlySpendingAnalyticsRepository.findMonthlySpendingAnalyticsByUserId(
+			user.getId(), calcDate.getStartDate(), calcDate.getEndDate());
+		MonthlySpendingAnalyticsRes monthlySpendingAnalyticsRes = MonthlySpendingAnalyticsRes.builder().build();
+
+		List<MonthlySpendingAnalyticsRes.MonthlySpendingAnalytics> monthlySpendingAnalyticsResList = monthlySpendingAnalyticsList.stream()
+																																 .map(
+																																	 MonthlySpendingAnalyticsRes.MonthlySpendingAnalytics::new)
+																																 .collect(
+																																	 Collectors.toList());
+
+		return MonthlySpendingAnalyticsRes.builder()
+										  .monthlySpendingAnalyticsList(monthlySpendingAnalyticsResList)
+										  .build();
 	}
 
 	@Override

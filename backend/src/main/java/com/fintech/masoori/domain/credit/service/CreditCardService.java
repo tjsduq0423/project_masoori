@@ -1,6 +1,6 @@
 package com.fintech.masoori.domain.credit.service;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import com.fintech.masoori.domain.credit.dto.CreditCardRes;
 import com.fintech.masoori.domain.credit.entity.CreditCard;
@@ -11,7 +11,9 @@ public interface CreditCardService {
 	 */
 	CreditCardRes selectAll(String userEmail);
 
+	CreditCardRes selectMonth(String userEmail, LocalDateTime time);
+
 	CreditCard selectOne(Long id);
 
-	void save (CreditCard creditCard);
+	void save(CreditCard creditCard);
 }

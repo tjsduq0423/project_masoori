@@ -17,6 +17,7 @@ import com.fintech.masoori.domain.card.service.CardService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -49,7 +50,7 @@ public class CardController {
 	@Operation(summary = "소비 카드 조회 API", description = "소비 카드 한 장을 조회한다.")
 	@GetMapping("/consume/{id}")
 	public ResponseEntity<BasicCardRes.BasicCard> detailConsumeCard(
-		@Parameter(description = "소비카드 id", required = true, example = "1")
+		@Parameter(name = "cardId", description = "소비카드 id", required = true, example = "1", in = ParameterIn.PATH)
 		@PathVariable Long id, Principal principal) {
 		BasicCardRes.BasicCard basicCard = cardService.selectBasicCard(principal.getName(), id);
 		return ResponseEntity.ok(basicCard);
@@ -70,7 +71,7 @@ public class CardController {
 	@Operation(summary = "챌린지 카드 조회 API", description = "챌린지 카드 한 장을 조회한다.")
 	@GetMapping("/challenge/{id}")
 	public ResponseEntity<ChallengeCardRes.ChallengeCard> selectChallengeCard(
-		@Parameter(description = "챌린지카드 id", required = true, example = "1")
+		@Parameter(name = "cardId", description = "챌린지카드 id", required = true, example = "1", in = ParameterIn.PATH)
 		@PathVariable Long id, Principal principal) {
 		ChallengeCardRes.ChallengeCard challengeCard = cardService.selectChallengeCard(principal.getName(), id);
 		return ResponseEntity.ok(challengeCard);

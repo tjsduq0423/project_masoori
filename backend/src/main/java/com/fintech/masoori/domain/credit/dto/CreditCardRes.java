@@ -1,5 +1,6 @@
 package com.fintech.masoori.domain.credit.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -7,14 +8,17 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @AllArgsConstructor
 public class CreditCardRes {
-	private List<CreditCard> creditCardList;
+	@Builder.Default
+	private List<CreditCard> creditCardList = new ArrayList<>();
 
 	@Data
 	@Builder
 	@AllArgsConstructor
 	public static class CreditCard {
+		private Long id;
 		private String name;
 		private String company;
 		private String domestic;
@@ -27,6 +31,7 @@ public class CreditCardRes {
 		private List<CreditCardRes.Benefit> benefitList;
 
 		public CreditCard(com.fintech.masoori.domain.credit.entity.CreditCard creditCard) {
+			this.id = creditCard.getId();
 			this.name = creditCard.getName();
 			this.company = creditCard.getCompany();
 			this.domestic = creditCard.getDomestic();

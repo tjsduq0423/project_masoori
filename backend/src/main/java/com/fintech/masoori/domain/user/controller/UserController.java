@@ -1,5 +1,7 @@
 package com.fintech.masoori.domain.user.controller;
 
+import java.security.Principal;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
@@ -92,8 +94,8 @@ public class UserController {
 
 	@Operation(summary = "로그아웃 API", description = "사용자를 로그아웃시키고 메인 페이지로 리다이렉트시킨다.")
 	@PostMapping("/logout")
-	public String logout(HttpServletRequest request, HttpServletResponse response) {
-		userService.logout(request, response);
+	public String logout(HttpServletRequest request, HttpServletResponse response, Principal principal) {
+		userService.logout(request, response, principal.getName());
 		return "redirect:https://masoori.site/";
 	}
 
