@@ -39,17 +39,26 @@ const getAllChallengeCard = async (challengeDate: AllChallengeCardProps) => {
     });
     return response.data;
   } catch {
-    new Error("api 연동 오류 - getAnalyticsMonth");
+    new Error("api 연동 오류 - getAllChallengeCard");
   }
 };
 
 // 유저에게 할당되어 있는 챌린지카드와 챌린지를 연,월일을 통해 조회한다.
-const getChallengeCard = async () => {
+const getChallengeCard = async (id: number) => {
   try {
-    const response = await instance.get(`/card/challenge`);
+    const response = await instance.get(`/card/challenge/${id}`);
     return response.data;
   } catch {
-    new Error("api 연동 오류 - getAnalyticsMonth");
+    new Error("api 연동 오류 - getChallengeCard");
+  }
+};
+
+const getConsume = async (id: number) => {
+  try {
+    const response = await instance.get(`/card/consume/${id}`);
+    return response.data;
+  } catch {
+    new Error("api 연동 오류 - getConsume");
   }
 };
 
@@ -59,4 +68,5 @@ export {
   getAnalyticsMonth,
   getChallengeCard,
   getAllChallengeCard,
+  getConsume,
 };
