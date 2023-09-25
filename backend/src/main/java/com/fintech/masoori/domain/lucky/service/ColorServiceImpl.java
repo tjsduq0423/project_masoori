@@ -39,6 +39,7 @@ public class ColorServiceImpl implements ColorService {
 				color.setColor(findColor.getColor());
 				color.setColorName(findColor.getColorName());
 				color.setDescription(findColor.getDescription());
+				color.setImagePath(findColor.getImagePath());
 				return color;
 			}
 		}
@@ -51,6 +52,7 @@ public class ColorServiceImpl implements ColorService {
 			color.setColor(temp.getColor());
 			color.setColorName(temp.getColorName());
 			color.setDescription(temp.getDescription());
+			color.setImagePath(temp.getImagePath());
 			if (!email.isEmpty()) {
 				int limitMinute = CalcEndTime.endMinute();
 				redisService.setUserFortune(email, temp.getColorName(), limitMinute);
