@@ -10,6 +10,7 @@ import { StyledTextBubbleProps } from "@/types/luckType";
 import GhostModal from "@/components/ghostModal";
 import AlertModal from "@/components/alertModal";
 import puzzle from "@/assets/img/puzzle.png";
+import { useRecoilState } from "recoil";
 
 const PageContainer = styled.div`
   position: fixed;
