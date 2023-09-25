@@ -81,7 +81,7 @@ class ColorServiceImplTest {
 		if (redisService.getUserColor(user.getEmail()).equals(response.getColor())) {
 			//redis에 있는 컬러가 저장된 컬러가 맞는지
 			String color = redisService.getUserColor(user.getEmail());
-			Color findColor = colorRepository.findDescriptionByColor(color);
+			Color findColor = colorRepository.findByColorName(color);
 			log.info("Color : {}", findColor);
 			assertThat(color.equals(response.getColor()));
 			assertThat(color.equals(findColor.getColor()));

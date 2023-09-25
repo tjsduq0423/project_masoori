@@ -1,8 +1,6 @@
 package com.fintech.masoori.domain.lucky.service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,30 +27,35 @@ public class ColorServiceImpl implements ColorService {
 
 	@Override
 	public ColorRes selectOneColor(String email) {
-		log.debug("오늘의 색 조회");
-		Optional<String> userColorOptional = Optional.ofNullable(redisService.getUserColor(email));
-		ColorRes response = ColorRes.builder().build();
-		if (userColorOptional.isPresent()) {
-			log.debug("이미 오늘의 색을 조회");
-			String userColor = userColorOptional.get();
-			Color findColor = colorRepository.findDescriptionByColor(userColor);
-			response.setColor(findColor.getColor());
-			response.setColorName(findColor.getColorName());
-			response.setDescription(findColor.getDescription());
-		} else {
-			log.debug("오늘의 색을 조회");
-			long colorSize = colorRepository.count();
-			int idx = (int)(Math.random() * colorSize);
-			Page<Color> colorPage = colorRepository.findAll(PageRequest.of(idx, 1));
-			if(colorPage.hasContent()){
-				int limitMinute = CalcEndTime.endMinute();
-				Color color = colorPage.getContent().get(0);
-				redisService.setUserColor(email, color.getColor(), limitMinute);
-				response.setColor(color.getColor());
-				response.setColorName(color.getColorName());
-				response.setDescription(color.getDescription());
+		ColorRes color = ColorRes.builder().build();
+		//로그인
+		if (!email.isEmpty()) {
+			Optional<String> userColorOptional = Optional.ofNullable(redisService.getUserColor(email));
+			//이미 오늘 조회한 경우
+			if (userColorOptional.isPresent()) {
+				log.debug("Today already select color");
+				String colorName = userColorOptional.get();
+				Color findColor = colorRepository.findByColorName(colorName);
+				color.setColor(findColor.getColor());
+				color.setColorName(findColor.getColorName());
+				color.setDescription(findColor.getDescription());
+				return color;
 			}
 		}
-		return response;
+		//오늘 처음 조회하는 경우, 비로그인인 경우 그냥 진행
+		long colorSize = colorRepository.count();
+		int idx = (int)(Math.random() * colorSize);
+		Page<Color> colorPage = colorRepository.findAll(PageRequest.of(idx, 1));
+		if (colorPage.hasContent()) {
+			Color temp = colorPage.getContent().get(0);
+			color.setColor(temp.getColor());
+			color.setColorName(temp.getColorName());
+			color.setDescription(temp.getDescription());
+			if (!email.isEmpty()) {
+				int limitMinute = CalcEndTime.endMinute();
+				redisService.setUserFortune(email, temp.getColorName(), limitMinute);
+			}
+		}
+		return color;
 	}
 }

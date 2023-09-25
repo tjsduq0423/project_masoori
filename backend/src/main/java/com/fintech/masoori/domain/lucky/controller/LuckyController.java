@@ -30,9 +30,16 @@ public class LuckyController {
 
 	//행운의 색 조회
 	@Operation(summary = "행운의 색 조회 API", description = "하루에 한번 이용할 수 있는 행운의 색을 반환한다.")
-	@GetMapping("/color")
-	public ResponseEntity<ColorRes> selectColor(Principal principal) {
+	@GetMapping("/user/color")
+	public ResponseEntity<ColorRes> selectLoginColor(Principal principal) {
 		ColorRes color = colorService.selectOneColor(principal.getName());
+		return ResponseEntity.ok(color);
+	}
+
+	@Operation(summary = "행운의 색 조회(비로그인) API", description = "비로그인 유저가 사용하는 행운의 색 조회 API")
+	@GetMapping("/color")
+	public ResponseEntity<ColorRes> selectColor() {
+		ColorRes color = colorService.selectOneColor("");
 		return ResponseEntity.ok(color);
 	}
 
