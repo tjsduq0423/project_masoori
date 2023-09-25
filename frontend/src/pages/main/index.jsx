@@ -144,7 +144,9 @@ const MainPage = () => {
     };
 
     const setParticles = () => {
-      for (let i = 0; i < graphicPixels.length; i++) {
+      const maxParticles = 3000; // Change this to the desired number of particles
+
+      for (let i = 0; i < graphicPixels.length && i < maxParticles; i++) {
         if (particles[i]) {
           const pos = getGraphicPos(graphicPixels[i]);
           particles[i].particle.targetPosition.x = pos.x;
@@ -347,56 +349,54 @@ const MainPage = () => {
           <canvas ref={canvasRef} />
           <div className="intro-carousel">
             <div className="intro-cell">
-              <img src={masuriImg} className="intro-graphic" />
+              <img src={money} className="intro-graphic" />
               <div className="intro-text">
-                <h2>첫번 째 페이지</h2>
-                <h1>아마 간단히 설명할 듯?</h1>
+                <h2>첫 번째 페이지</h2>
+                <h1>INTRO</h1>
                 <p>
-                  여기는 좀 길게 자세하게 설명 예정여기는 좀 길게 자세하게 설명
-                  예정여기는 좀 길게 자세하게 설명 예정 여기는 좀 길게 자세하게
-                  설명 예정여기는 좀 길게 자세하게 설명 예정여기는 좀 길게
-                  자세하게 설명 예정
+                  당신의 소비내역으로 만드는 마수리만의 특별한 타로카드.
+                  <br />
+                  마수리와 함께 새로운 시작, 새로운 습관을 만들어보세요.
                 </p>
-                <a>Learn More</a>
+                <a>ENTER</a>
               </div>
             </div>
             <div className="intro-cell">
-              <img src={cardhand} className="intro-graphic" />
+              <img src={money} className="intro-graphic" />
               <div className="intro-text">
                 <h2>두번 째 페이지</h2>
-                <h1>여기서 소비패턴 분석하는 페이지 이동</h1>
+                <h1>오늘의 금전운</h1>
                 <p>
-                  여기서 해당 페이지에 관련하여 간단하게 설명할 예정임 여기서
-                  해당 페이지에 관련하여 간단하게 설명할 예정임 여기서 해당
-                  페이지에 관련하여 간단하게 설명할 예정임
+                  마수리와 함께 오늘의 금전운과 행운의 색깔을 확인하세요!
+                  <br /> 당신의 하루를 더 행복하고 특별하게 만들어 줄 조언들이
+                  기다리고 있습니다.
                 </p>
-                <a>Learn More</a>
+                <a>ENTER</a>
               </div>
             </div>
             <div className="intro-cell">
-              <img src={book} className="intro-graphic" />
+              <img src={money} className="intro-graphic" />
               <div className="intro-text">
                 <h2>세번 째 페이지 </h2>
-                <h1>도감 관련 페이지로 이동하는 곳</h1>
+                <h1>소비패턴 타로</h1>
                 <p>
-                  여기서 해당 페이지에 관련하여 간단하게 설명할 예정임 여기서
-                  해당 페이지에 관련하여 간단하게 설명할 예정임 여기서 해당
-                  페이지에 관련하여 간단하게 설명할 예정임
+                  당신의 주간 소비 패턴으로 탄생하는 단 하나의 타로카드
+                  <br /> 당신만을 위한 특별한 메시지를 받아보세요.
                 </p>
-                <a>Learn More</a>
+                <a>ENTER</a>
               </div>
             </div>
             <div className="intro-cell">
               <img src={money} className="intro-graphic" />
               <div className="intro-text">
                 <h2>네번 째 페이지</h2>
-                <h1>오늘의 금전운 페이지로 이동</h1>
+                <h1>도감 및 카드추천</h1>
                 <p>
-                  여기서 해당 페이지에 관련하여 간단하게 설명할 예정임 여기서
-                  해당 페이지에 관련하여 간단하게 설명할 예정임 여기서 해당
-                  페이지에 관련하여 간단하게 설명할 예정임
+                  당신만의 타로카드를 한 눈에 확인하세요. <br />
+                  더불어, 마수리의 맞춤형 카드 추천 서비스를 통해 똑똑한 소비를
+                  경험해보세요!
                 </p>
-                <a>Learn More</a>
+                <a>ENTER</a>
               </div>
             </div>
           </div>
