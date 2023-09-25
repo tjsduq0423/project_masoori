@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fintech.masoori.domain.credit.dto.CreditCardRes;
 import com.fintech.masoori.domain.credit.entity.CreditCard;
-import com.fintech.masoori.domain.credit.entity.CreditCardUser;
+import com.fintech.masoori.domain.credit.exception.InvalidIDException;
 import com.fintech.masoori.domain.credit.repository.CreditCardRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
@@ -38,7 +38,11 @@ public class CreditCardServiceImpl implements CreditCardService {
 
 	@Override
 	public CreditCard selectOne(Long id) {
-		return creditCardRepository.findCreditCardById(id);
+		CreditCard creditCard = creditCardRepository.findCreditCardById(id);
+		if (creditCard == null) {
+			throw new InvalidIDException("Id is not exist");
+		}
+		return creditCard;
 	}
 
 	@Override
