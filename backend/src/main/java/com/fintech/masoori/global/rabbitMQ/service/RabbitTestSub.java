@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class RabbitTestSub {
-	@RabbitListener(queues = "${rabbitmq.queue.realtime}")
+	@RabbitListener(queues = "${rabbitmq.sub.realtime}")
 	public void subTest(String message) {
 		log.info("{}", message);
 	}

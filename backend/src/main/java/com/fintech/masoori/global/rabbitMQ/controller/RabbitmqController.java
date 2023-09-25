@@ -11,7 +11,7 @@ import com.fintech.masoori.global.rabbitMQ.service.RabbitTestPub;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/rabbit")
+@RequestMapping("/api/rabbit")
 @RequiredArgsConstructor
 public class RabbitmqController {
 	private final RabbitTestPub rabbitTestPub;
