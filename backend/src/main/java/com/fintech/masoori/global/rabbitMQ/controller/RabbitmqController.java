@@ -1,13 +1,12 @@
 package com.fintech.masoori.global.rabbitMQ.controller;
 
-import java.util.stream.IntStream;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fintech.masoori.global.rabbitMQ.dto.RabbitMessage;
-import com.fintech.masoori.global.rabbitMQ.service.RabbitPublisher;
+import com.fintech.masoori.global.rabbitMQ.dto.RabbitTestMessage;
+import com.fintech.masoori.global.rabbitMQ.service.RabbitTestPub;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +14,11 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/rabbit")
 @RequiredArgsConstructor
 public class RabbitmqController {
+	private final RabbitTestPub rabbitTestPub;
 
-	private final RabbitPublisher rabbitPublisher;
-
+	@GetMapping("/pub-test")
+	public ResponseEntity<?> testPub() {
+		rabbitTestPub.sendMessage(new RabbitTestMessage("1", "test", "test"));
+		return ResponseEntity.ok().build();
+	}
 }
