@@ -3,6 +3,8 @@ import Kakao from "@/assets/img/Kakao.png";
 import Google from "@/assets/img/Google.png";
 import Naver from "@/assets/img/Naver.png";
 import BackCards from "@/assets/img/Login.png";
+import SignInModalFront from "@/assets/img/signCard/signInModalFront.png";
+import SignUpModalFront from "@/assets/img/signCard/signUpModalFront.png";
 import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
@@ -14,25 +16,36 @@ interface ImgProps {
 
 const Container = styled.div`
   position: absolute;
-  left: 15%;
-  top: 15%;
-  height: 70%;
-  width: 70%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* background-color: rgba(0, 0, 0, 0.5); */
+  left: 39.5%;
+  top: 0.5%;
 `;
 
-const Img = styled.div<ImgProps>`
-  height: 75vh;
-  width: 70vw;
+const LoginFrontImg = styled.div<ImgProps>`
+  position: absolute;
+  left: 40%;
+  height: 65vh;
+  width: 21vw;
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
-  background-image: url(${BackCards});
+  background-image: url(${SignInModalFront});
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: ${({ loaded }) => (loaded ? "1" : "0")};
+`;
+
+const SignUpFrontImg = styled.div<ImgProps>`
+  position: absolute;
+  left: 40%;
+  height: 65vh;
+  width: 21vw;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  background-image: url(${SignUpModalFront});
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -57,39 +70,42 @@ const PWCheck = styled.div`
   z-index: 1;
 `;
 const FormLabel = styled.p`
-  font-size: x-small;
+  font-size: small;
   display: flex;
+  font-weight: bold;
   margin-bottom: 2px;
+  color: #5e3a66;
 `;
 
 const Input = styled.input`
   width: 17vw;
   border-radius: 5px;
-  border-width: 2px;
-  border-color: black;
+  border-width: 1px;
+  border-color: #5e3a66;
   height: 30px;
 `;
 
 const SignUp = styled.div`
   margin-top: 5px;
   margin-bottom: 5px;
-  margin-right: 5px;
   display: flex;
   justify-content: end;
-  font-size: x-small;
+  font-weight: bold;
+  font-size: small;
+  color: #5e3a66;
 `;
 
 const LoginButton = styled.button`
   width: 17vw;
   border-radius: 5px;
-  border-color: black;
+  border-color: #5e3a66;
   border-width: 2px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   height: 30px;
   background-color: #5e3a66;
   color: white;
   font-weight: bold;
-  font-size: smaller;
+  font-size: 12px;
 `;
 
 const SocialLogin = styled.img`
@@ -112,27 +128,14 @@ const EmailCheck = styled.div`
 const NextButton = styled.button`
   width: 17vw;
   border-radius: 5px;
-  border-color: black;
+  border-color: #5e3a66;
   border-width: 2px;
-  margin-top: 20px;
+  margin-top: 25px;
   height: 30px;
   background-color: #5e3a66;
   color: white;
   font-weight: bold;
-  font-size: smaller;
-`;
-
-const FinishButton = styled.button`
-  width: 17vw;
-  border-radius: 5px;
-  border-color: black;
-  border-width: 2px;
-  margin-top: 30px;
-  height: 30px;
-  background-color: #5e3a66;
-  color: white;
-  font-weight: bold;
-  font-size: smaller;
+  font-size: 12px;
 `;
 
 const Login: React.FC = () => {
@@ -166,7 +169,7 @@ const Login: React.FC = () => {
   if (modalState === "로그인") {
     return (
       <Container>
-        <Img loaded={imageLoaded}>
+        <LoginFrontImg loaded={imageLoaded}>
           <Id>
             <FormLabel>계정이름</FormLabel>
             <Input />
@@ -203,13 +206,13 @@ const Login: React.FC = () => {
               }}
             />
           </PW>
-        </Img>
+        </LoginFrontImg>
       </Container>
     );
   } else if (modalState === "회원가입1") {
     return (
       <Container>
-        <Img loaded={imageLoaded}>
+        <SignUpFrontImg loaded={imageLoaded}>
           <Email>
             <FormLabel>이메일</FormLabel>
             <Input />
@@ -227,13 +230,13 @@ const Login: React.FC = () => {
               </NextButton>
             </SignUp>
           </EmailCheck>
-        </Img>
+        </SignUpFrontImg>
       </Container>
     );
   } else {
     return (
       <Container>
-        <Img loaded={imageLoaded}>
+        <SignUpFrontImg loaded={imageLoaded}>
           <Id>
             <FormLabel>아이디</FormLabel>
             <Input />
@@ -245,9 +248,9 @@ const Login: React.FC = () => {
               <FormLabel>비밀번호 확인</FormLabel>
               <Input />
             </PWCheck>
-            <FinishButton>FINISH</FinishButton>
+            <NextButton>FINISH</NextButton>
           </PW>
-        </Img>
+        </SignUpFrontImg>
       </Container>
     );
   }
