@@ -20,6 +20,7 @@ const Container = styled.div`
   top: 0.5%;
 `;
 
+
 const LoginFrontImg = styled.div<ImgProps>`
   position: absolute;
   left: 40%;
@@ -36,7 +37,7 @@ const LoginFrontImg = styled.div<ImgProps>`
   opacity: ${({ loaded }) => (loaded ? "1" : "0")};
 `;
 
-const SignUpFrontImg = styled.div<ImgProps>`
+const SignUpFrontImg = styled.div`
   position: absolute;
   left: 40%;
   height: 65vh;
@@ -52,6 +53,7 @@ const SignUpFrontImg = styled.div<ImgProps>`
   opacity: ${({ loaded }) => (loaded ? "1" : "0")};
   transition: opacity 0.5s ease-in-out;
 `;
+
 const Id = styled.div`
   position: relative;
   z-index: 1;
