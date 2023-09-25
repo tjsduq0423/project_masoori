@@ -42,7 +42,6 @@ import com.fintech.masoori.global.redis.RedisService;
 import com.fintech.masoori.global.util.CookieUtil;
 
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -80,11 +79,11 @@ public class UserServiceImpl implements UserService {
 			throw new EmailDuplicationException("Email is Duplicated");
 		}
 		User newUser = User.builder()
-		                   .email(signUpReq.getEmail())
-		                   .password(passwordEncoder.encode(signUpReq.getPassword()))
-		                   .roles(Collections.singletonList(UserRole.ROLE_USER.name()))
-		                   .providerType(ProviderType.LOCAL)
-		                   .build();
+						   .email(signUpReq.getEmail())
+						   .password(passwordEncoder.encode(signUpReq.getPassword()))
+						   .roles(Collections.singletonList(UserRole.ROLE_USER.name()))
+						   .providerType(ProviderType.LOCAL)
+						   .build();
 		userRepository.save(newUser);
 	}
 
@@ -104,8 +103,8 @@ public class UserServiceImpl implements UserService {
 		TokenInfo tokenInfo = jwtTokenProvider.createToken(authentication);
 
 		redisTemplate.opsForValue()
-		             .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getExpireTime(),
-			             TimeUnit.MILLISECONDS);
+					 .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getExpireTime(),
+						 TimeUnit.MILLISECONDS);
 		LoginRes loginRes = new LoginRes(tokenInfo.getAccessToken());
 		return loginRes;
 	}
@@ -119,50 +118,43 @@ public class UserServiceImpl implements UserService {
 		LocalDateTime nowStart = now.withHour(0).withMinute(0).withSecond(0);
 		// 현재 주의 시작 날짜와 종료 날짜 계산
 		LocalDateTime nowWeekStart = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-		                                .withHour(0)
-		                                .withMinute(0)
-		                                .withSecond(0);
+										.withHour(0)
+										.withMinute(0)
+										.withSecond(0);
 		LocalDateTime nowWeekEnd = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
-		                              .withHour(23)
-		                              .withMinute(59)
-		                              .withSecond(59);
+									  .withHour(23)
+									  .withMinute(59)
+									  .withSecond(59);
 		// 현재 달의 시작 날짜와 종료 날짜 계산
 		LocalDateTime nowMonthStart = now.with(TemporalAdjusters.firstDayOfMonth())
-		                                 .withHour(0)
-		                                 .withMinute(0)
-		                                 .withSecond(0);
+										 .withHour(0)
+										 .withMinute(0)
+										 .withSecond(0);
 		LocalDateTime nowMonthEnd = now.with(TemporalAdjusters.lastDayOfMonth())
-		                               .withHour(23)
-		                               .withMinute(59)
-		                               .withSecond(59);
+									   .withHour(23)
+									   .withMinute(59)
+									   .withSecond(59);
 		Integer amountSumByPeriodDay = userRepository.getAmountSumByPeriod(email, nowStart, nowEnd);
 		Integer amountSumByPeriodWeek = userRepository.getAmountSumByPeriod(email, nowWeekStart, nowWeekEnd);
 		Integer amountSumByPeriodMonth = userRepository.getAmountSumByPeriod(email, nowMonthStart, nowMonthEnd);
 
 		InfoRes infoRes = InfoRes.builder()
-		                         .imagePath(user.getCardImage())
-		                         .isAuthenticated(user.getIsAuthenticated())
-		                         .smsAlarm(user.getSmsAlarm())
-		                         .dailySpending(amountSumByPeriodDay)
-		                         .monthlySpending(amountSumByPeriodWeek)
-		                         .weeklySpending(amountSumByPeriodMonth)
-		                         .build();
+								 .imagePath(user.getCardImage())
+								 .isAuthenticated(user.getIsAuthenticated())
+								 .smsAlarm(user.getSmsAlarm())
+								 .dailySpending(amountSumByPeriodDay)
+								 .monthlySpending(amountSumByPeriodWeek)
+								 .weeklySpending(amountSumByPeriodMonth)
+								 .build();
 		return infoRes;
 	}
 
 	@Override
-	public void logout(HttpServletRequest request, HttpServletResponse response) {
-		Optional<String> cookie = CookieUtil.getCookie(request, REFRESH_TOKEN).map(Cookie::getValue);
-		// 쿠키 없으면 걍 로그아웃.
-		if (cookie.isEmpty()) {
-			return;
-		}
-		String refreshTokenFromCookie = cookie.get();
-		String userEmail = jwtTokenProvider.parseClaims(refreshTokenFromCookie).getSubject();
+	public void logout(HttpServletRequest request, HttpServletResponse response, String email) {
+		// redis 토큰 삭제
+		redisTemplate.delete("RT:" + email);
 		// 쿠키 삭제
 		CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-		// redis 토큰 삭제
-		redisTemplate.delete("RT" + userEmail);
 	}
 
 	@Override
