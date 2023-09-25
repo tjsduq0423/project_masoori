@@ -55,7 +55,7 @@ public class ColorServiceImpl implements ColorService {
 			color.setImagePath(temp.getImagePath());
 			if (!email.isEmpty()) {
 				int limitMinute = CalcEndTime.endMinute();
-				redisService.setUserFortune(email, temp.getColorName(), limitMinute);
+				redisService.setUserColor(email, temp.getColorName(), limitMinute);
 			}
 		}
 		return color;
