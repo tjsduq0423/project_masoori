@@ -7,12 +7,12 @@ spring:
           google:
             client-id: 796025688077-hqc2e6abkjbg7bj08nhrbqbvu3k21mmb.apps.googleusercontent.com
             client-secret: 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
-            redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
             scope: email
           naver:
             client-id: yJzsI9ggxgPZoCCR9S0l
             client-secret: DNZZ4x_23p
-            redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
             authorization-grant-type: authorization_code
             scope:
               - email
@@ -24,8 +24,9 @@ spring:
               - account_email
             client-name: Kakao
             authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
             client-authentication-method: client_secret_post
+
         provider:
           naver:
             authorization-uri: https://nid.naver.com/oauth2.0/authorize
@@ -40,28 +41,28 @@ spring:
 
   # rabbitmq 설정
   rabbitmq:
-    host: masoori.site
+    host: j9b308.p.ssafy.io
     port: 5672
-    username: ADMIN
-    password: MASOORI_MQ
+    username: admin
+    password: masoori
 
   # key-value store인  redis 설정 (임시)
   data:
     redis:
-      host: masoori.site
+      host: j9b308.p.ssafy.io
       port: 1234
 
   # main DB 인 MariaDB 설정 (임시)
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://masoori.site:5555/masoori?useUnicode=yes&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    url: jdbc:mariadb://j9b308.p.ssafy.io:5555/masoori?useUnicode=yes&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: ssafy_b308
     password: ssafy_b308_1
 
   # JPA 설정
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         default_batch_fetch_size: 100
@@ -71,13 +72,32 @@ spring:
         #        show_sql: true
         format_sql: true
 
+  # 이메일 인증
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: masoori308
+    password: ycpizzmpopiflpca
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+
+  # 휴대폰 인증
+  sms:
+    api: NCSICXQZGOSRQDAU
+    api-secret: RDSPTVRMQWG48BT1TFHO14QWGTIHBMKS
+    from: 01051548989
+
 # log 레벨 설정
 logging:
   level:
     com.fintech.masoori: DEBUG
     org:
       hibernate: debug
-
 # OAuth2 redirect url 설정
 app:
   oauth2:
@@ -87,20 +107,17 @@ app:
 jwt:
   key: YourewaitingforatrainAtrainthatwilltakeyoufarawayYouknowwhereyouhope
 
-# rabbitmq 설정
 rabbitmq:
   queue:
-    name1: realtime.queue
-    name2: weekly.queue
-    name3: recommand.queue
-  exchange:
-    name: masoori.direct
-  routing_key:
-    name: generate
+    realtime: realtime.req
+    weekly: weekly.req
+    recommend: recommend.req
 
 # ssl 설정
 server:
   ssl:
     key-store: classpath:keystore.p12
-    key-store-password: ssafy
+    key-store-password: 1q2w3e4r
     key-store-type: PKCS12
+
+
