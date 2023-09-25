@@ -3,6 +3,7 @@ import styled from "styled-components";
 import TextBubble from "../textBubble";
 import Lottie from "lottie-react";
 import ghost from "@/assets/img/gif/ghost.json";
+import { usePostGhost } from "@/apis/spend/Mutations/usePostGhost";
 
 export interface StyledGhostModalProps {
   zIndex?: string;
@@ -66,7 +67,7 @@ const contentTextBubbleProps: StyledTextBubbleProps = {
   hoverable: false,
 };
 
-const crystalTextBubbleProps: StyledTextBubbleProps = {
+const linkTextBubbleProps: StyledTextBubbleProps = {
   text: `유령의 제안을 수락하고 계정을 연동한다. ( 일주일 간 소비패턴을 분석하고 알림을 보냅니다 )`,
   width: "700px",
   background: "#4D1B2D80",
@@ -92,6 +93,16 @@ const GhostModal = ({ zIndex, toggleModal }: StyledGhostModalProps) => {
   const handleShareClick = () => {
     toggleModal(); // 공유 텍스트 버블을 클릭하면 모달 상태를 토글합니다.
   };
+  const ghostMutation = usePostGhost();
+
+  const handleLinkClick = async () => {
+    try {
+      await ghostMutation.mutateAsync();
+      toggleModal();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <ModalBackground zIndex={zIndex} toggleModal={toggleModal}>
@@ -108,7 +119,7 @@ const GhostModal = ({ zIndex, toggleModal }: StyledGhostModalProps) => {
             <TextBubble {...contentTextBubbleProps} />
           </TextBubbleContainer>
           <TextBubbleContainer>
-            <TextBubble {...crystalTextBubbleProps} />
+            <TextBubble {...linkTextBubbleProps} onClick={handleLinkClick} />
           </TextBubbleContainer>
           <TextBubbleContainer onClick={handleShareClick}>
             <TextBubble {...shareTextBubbleProps} />
