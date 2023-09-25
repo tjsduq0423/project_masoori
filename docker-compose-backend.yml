@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+    networks:
+      - deploy
+
+networks:
+  deploy:
+    external: true
