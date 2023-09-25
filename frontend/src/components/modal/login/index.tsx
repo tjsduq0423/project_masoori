@@ -20,7 +20,6 @@ const Container = styled.div`
   top: 0.5%;
 `;
 
-
 const LoginFrontImg = styled.div<ImgProps>`
   position: absolute;
   left: 40%;
@@ -37,7 +36,7 @@ const LoginFrontImg = styled.div<ImgProps>`
   opacity: ${({ loaded }) => (loaded ? "1" : "0")};
 `;
 
-const SignUpFrontImg = styled.div`
+const SignUpFrontImg = styled.div<ImgProps>`
   position: absolute;
   left: 40%;
   height: 65vh;
