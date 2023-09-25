@@ -5,6 +5,8 @@ services:
     container_name: backend
     build:
       context: ./backend
+      args:
+        SERVER_MODE: dev
     networks:
       - deploy
 

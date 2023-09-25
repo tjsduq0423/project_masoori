@@ -39,10 +39,13 @@ public class CreditCardController {
 
 	@Operation(summary = "카드 상세 정보 조회 API")
 	@GetMapping("/{cardId}")
-	public ResponseEntity<CreditCard> selectOne(
+	public ResponseEntity<CreditCardRes.CreditCard> selectOne(
 		@Parameter(description = "카드 아이디", required = true, example = "1") @PathVariable Long cardId) {
 		CreditCard creditCard = creditCardService.selectOne(cardId);
-		return ResponseEntity.ok(creditCard);
+		CreditCardRes.CreditCard creditCard1 = new CreditCardRes.CreditCard(creditCard);
+		return ResponseEntity.ok(creditCard1);
 	}
+
+
 
 }

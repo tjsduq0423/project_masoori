@@ -29,6 +29,9 @@ public class Color {
 	@Column(name = "color")
 	private String color;
 
+	@Column(name = "color_name")
+	private String colorName;
+
 	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 }
