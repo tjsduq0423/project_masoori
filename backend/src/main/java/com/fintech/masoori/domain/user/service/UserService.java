@@ -2,7 +2,13 @@ package com.fintech.masoori.domain.user.service;
 
 import java.util.Optional;
 
-import com.fintech.masoori.domain.user.dto.*;
+import com.fintech.masoori.domain.user.dto.EmailCheckReq;
+import com.fintech.masoori.domain.user.dto.InfoRes;
+import com.fintech.masoori.domain.user.dto.LoginReq;
+import com.fintech.masoori.domain.user.dto.LoginRes;
+import com.fintech.masoori.domain.user.dto.SendSmsReq;
+import com.fintech.masoori.domain.user.dto.SignUpReq;
+import com.fintech.masoori.domain.user.dto.SmsCheckReq;
 import com.fintech.masoori.domain.user.entity.User;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +25,7 @@ public interface UserService {
 
 	InfoRes getUserInfo(String email);
 
-	void logout(HttpServletRequest request, HttpServletResponse response);
+	void logout(HttpServletRequest request, HttpServletResponse response, String email);
 
 	// 사용자 이메일로 조회
 	Optional<User> findByEmail(String email);

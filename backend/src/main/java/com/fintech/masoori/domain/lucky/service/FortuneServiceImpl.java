@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fintech.masoori.domain.lucky.dto.FortuneListRes;
 import com.fintech.masoori.domain.lucky.dto.FortuneRes;
-import com.fintech.masoori.domain.lucky.dto.UserFortuneRes;
 import com.fintech.masoori.domain.lucky.entity.Fortune;
 import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.domain.lucky.repository.FortuneRepository;
@@ -36,15 +35,12 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 	@Override
 	public FortuneListRes selectAllFortune() {
 		FortuneListRes fortuneListRes = FortuneListRes.builder().build();
-		List<String> fortuneNameList = fortuneRepository.findAllOnlyName();
-		List<FortuneListRes.Fortune> fortuneResList = new ArrayList<>();
-		for (String fortuneName : fortuneNameList) {
-			FortuneListRes.Fortune temp = FortuneListRes.Fortune.builder()
-										.name(fortuneName)
-										.build();
-			fortuneResList.add(temp);
+		List<Fortune> fortuneList = fortuneRepository.findAll();
+		FortuneListRes fortuneResList = FortuneListRes.builder().build();
+		for (Fortune fortune : fortuneList) {
+			FortuneRes temp = new FortuneRes(fortune);
+			fortuneResList.getFortuneList().add(temp);
 		}
-		fortuneListRes.setFortuneList(fortuneResList);
 		return fortuneListRes;
 	}
 
@@ -87,21 +83,20 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 	}
 
 	@Override
-	public UserFortuneRes selectAllUserFortune(String email) {
+	public FortuneListRes selectAllUserFortune(String email) {
+		//유저 정보 조회
 		User user = userRepository.findUserByEmail(email);
+
+		//유저가 가지고 있는 fortune을 조회
 		List<FortuneUser> fortuneUserList = user.getFortuneUserList();
-		UserFortuneRes fortuneRes = UserFortuneRes.builder().build();
-		List<FortuneRes> fortuneList = new ArrayList<>();
-		for (FortuneUser f : fortuneUserList) {
-			Fortune fortune = f.getFortune();
-			fortuneList.add(FortuneRes.builder()
-									  .name(fortune.getName())
-									  .imagePath(fortune.getImagePath())
-									  .summary(fortune.getSummary())
-									  .description(fortune.getDescription())
-									  .build());
+
+		//전체 금전운 조회
+		List<Fortune> fortuneList = new ArrayList<>();
+
+		FortuneListRes fortuneRes = FortuneListRes.builder().build();
+		for (FortuneUser fortuneUser : fortuneUserList) {
+			fortuneList.add(fortuneUser.getFortune());
 		}
-		fortuneRes.setFortuneList(fortuneList);
 		return fortuneRes;
 	}
 }

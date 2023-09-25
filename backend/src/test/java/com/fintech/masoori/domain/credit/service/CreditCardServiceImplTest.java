@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fintech.masoori.domain.credit.entity.CreditCard;
 import com.fintech.masoori.domain.credit.entity.CreditCardUser;
-import com.fintech.masoori.domain.credit.repository.CreditCardRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
 import com.fintech.masoori.global.oauth.ProviderType;
@@ -31,7 +30,7 @@ class CreditCardServiceImplTest {
 
 	@Test
 	void selectAll() {
-		User user = User.builder().email("ssafy@gmail.com").providerType(ProviderType.LOCAL).build();
+		User user = User.builder().email("ssafy1234@gmail.com").providerType(ProviderType.LOCAL).build();
 		em.persist(user);
 		// for (int i = 0; i < 5; i++) {
 		// 	CreditCard card =
@@ -64,14 +63,19 @@ class CreditCardServiceImplTest {
 
 		// 리스트로 뽑아보기
 		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().size()).isEqualTo(3);
-		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(0).getName()).isEqualTo(card1.getName());
-		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(1).getName()).isEqualTo(card3.getName());
-		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(2).getCompany()).isEqualTo(card5.getCompany());
+		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(0).getName()).isEqualTo(
+			card1.getName());
+		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(1).getName()).isEqualTo(
+			card3.getName());
+		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(2).getCompany()).isEqualTo(
+			card5.getCompany());
 		System.out.println(
 			"creditCardService.selectAll(findUser.getEmail()).get(1).getReason() = " + creditCardService.selectAll(
 				findUser.getEmail()).getCreditCardList().get(1).getReason());
-		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(1).getReason()).isEqualTo(creditCardUser2.getReason());
-		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(2).getReason()).isEqualTo(creditCardUser3.getReason());
+		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(1).getReason()).isEqualTo(
+			creditCardUser2.getReason());
+		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(2).getReason()).isEqualTo(
+			creditCardUser3.getReason());
 	}
 
 	@Test

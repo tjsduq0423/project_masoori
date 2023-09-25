@@ -1,5 +1,6 @@
 package com.fintech.masoori.domain.credit.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,9 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fintech.masoori.domain.credit.dto.CreditCardRes;
 import com.fintech.masoori.domain.credit.entity.CreditCard;
 import com.fintech.masoori.domain.credit.entity.CreditCardUser;
+import com.fintech.masoori.domain.credit.exception.InvalidIDException;
 import com.fintech.masoori.domain.credit.repository.CreditCardRepository;
+import com.fintech.masoori.domain.credit.repository.CreditCardUserRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
+import com.fintech.masoori.global.util.CalcDate;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class CreditCardServiceImpl implements CreditCardService {
 	private final UserRepository userRepository;
 	private final CreditCardRepository creditCardRepository;
+	private final CreditCardUserRepository creditCardUserRepository;
 
 	@Override
 	public CreditCardRes selectAll(String userEmail) {
@@ -37,8 +42,32 @@ public class CreditCardServiceImpl implements CreditCardService {
 	}
 
 	@Override
+	public CreditCardRes selectMonth(String userEmail, LocalDateTime time) {
+		User user = userRepository.findUserByEmail(userEmail);
+
+		CalcDate.StartEndDate calcDate = CalcDate.calcDate(time, time);
+
+		List<CreditCardUser> creditCardList = creditCardUserRepository.findCreditCardsByUserId(user.getId(),
+			calcDate.getStartDate(), calcDate.getEndDate());
+
+		List<CreditCardRes.CreditCard> creditCardResList = creditCardList.stream()
+																		 .map(
+																			 creditCardUser -> new CreditCardRes.CreditCard(
+																				 creditCardUser.getCreditCard()))
+																		 .collect(Collectors.toList());
+
+		return CreditCardRes.builder()
+							.creditCardList(creditCardResList)
+							.build();
+	}
+
+	@Override
 	public CreditCard selectOne(Long id) {
-		return creditCardRepository.findCreditCardById(id);
+		CreditCard creditCard = creditCardRepository.findCreditCardById(id);
+		if (creditCard == null) {
+			throw new InvalidIDException("Id is not exist");
+		}
+		return creditCard;
 	}
 
 	@Override
