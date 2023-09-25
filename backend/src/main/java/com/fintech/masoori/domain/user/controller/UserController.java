@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fintech.masoori.domain.user.dto.CheckEmailDupulicatedReq;
+import com.fintech.masoori.domain.user.dto.CheckEmailDupulicatedRes;
 import com.fintech.masoori.domain.user.dto.EmailCheckReq;
 import com.fintech.masoori.domain.user.dto.InfoRes;
 import com.fintech.masoori.domain.user.dto.LoginReq;
@@ -20,7 +22,6 @@ import com.fintech.masoori.domain.user.dto.SignUpReq;
 import com.fintech.masoori.domain.user.dto.SmsCheckReq;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.service.UserService;
-import com.fintech.masoori.global.config.jwt.TokenInfo;
 import com.fintech.masoori.global.error.exception.InvalidValueException;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,8 +43,8 @@ public class UserController {
 	@Operation(summary = "회원가입 시 이메일 인증코드 발송 API", description = "사용자 이메일을 중복체크하고 해당 이메일로 인증코드를 발송한다.")
 	@PostMapping("/email/signup")
 	public ResponseEntity<?> sendSignupEmailCode(
-		@Parameter(description = "회원 이메일", required = true)
-		@RequestBody @Validated SendEmailReq sendEmailReq, BindingResult bindingResult) {
+		@Parameter(description = "회원 이메일", required = true) @RequestBody @Validated SendEmailReq sendEmailReq,
+		BindingResult bindingResult) {
 		validateRequest(bindingResult);
 		userService.sendSignupEmailCode(sendEmailReq.getEmail());
 		return ResponseEntity.ok().build();
@@ -52,8 +53,8 @@ public class UserController {
 	@Operation(summary = "비밀번호 재설정 시 이메일 인증코드 발송 API", description = "가입된 사용자 이메일이면 해당 이메일로 인증코드를 발송한다.")
 	@PostMapping("/email/password")
 	public ResponseEntity<?> sendPasswordEmailCode(
-		@Parameter(description = "회원 이메일", required = true)
-		@RequestBody @Validated SendEmailReq sendEmailReq, BindingResult bindingResult) {
+		@Parameter(description = "회원 이메일", required = true) @RequestBody @Validated SendEmailReq sendEmailReq,
+		BindingResult bindingResult) {
 		validateRequest(bindingResult);
 		userService.sendPasswordEmailCode(sendEmailReq.getEmail());
 		return ResponseEntity.ok().build();
@@ -62,8 +63,8 @@ public class UserController {
 	@Operation(summary = "이메일 인증코드 검증 API", description = "사용자가 입력한 인증코드와 서버에 저장된 인증코드가 일치하는 지 검증한다.")
 	@PostMapping("/email/check")
 	public ResponseEntity<?> verifyEmailCode(
-		@Parameter(description = "회원 이메일, 인증 코드", required = true)
-		@RequestBody @Validated EmailCheckReq emailCheckReq, BindingResult bindingResult) {
+		@Parameter(description = "회원 이메일, 인증 코드", required = true) @RequestBody @Validated EmailCheckReq emailCheckReq,
+		BindingResult bindingResult) {
 		validateRequest(bindingResult);
 		userService.verifyEmailCode(emailCheckReq);
 		return ResponseEntity.ok().build();
@@ -72,8 +73,8 @@ public class UserController {
 	@Operation(summary = "회원가입 API", description = "입력된 이메일, 패스워드로 DB에 저장한다.")
 	@PostMapping("/signup")
 	public ResponseEntity<?> signup(
-		@Parameter(description = "이메일, 패스워드", required = true)
-		@RequestBody @Validated SignUpReq signUpReq, BindingResult bindingResult) {
+		@Parameter(description = "이메일, 패스워드", required = true) @RequestBody @Validated SignUpReq signUpReq,
+		BindingResult bindingResult) {
 		validateRequest(bindingResult);
 		userService.signUp(signUpReq);
 		return ResponseEntity.ok().build();
@@ -82,8 +83,8 @@ public class UserController {
 	@Operation(summary = "로그인 API", description = "입력된 이메일과 패스워드가 일치하는 지 검증한 뒤 로그인 토큰을 전달한다.")
 	@PostMapping("/login")
 	public ResponseEntity<?> login(
-		@Parameter(description = "이메일, 패스워드", required = true)
-		@RequestBody @Validated LoginReq loginReq, BindingResult bindingResult) {
+		@Parameter(description = "이메일, 패스워드", required = true) @RequestBody @Validated LoginReq loginReq,
+		BindingResult bindingResult) {
 		validateRequest(bindingResult);
 		LoginRes loginRes = userService.login(loginReq);
 		return ResponseEntity.ok(loginRes);
@@ -99,8 +100,8 @@ public class UserController {
 	@Operation(summary = "휴대폰 인증코드 발송 API", description = "입력된 사용자 정보를 업데이트하고 해당 휴대폰번호로 인증코드를 발송한다.")
 	@PostMapping("/sms")
 	public ResponseEntity<?> sendSms(
-		@Parameter(description = "회원 전화번호", required = true)
-		@RequestBody @Validated SendSmsReq sendSmsReq, BindingResult bindingResult, Authentication authentication) {
+		@Parameter(description = "회원 전화번호", required = true) @RequestBody @Validated SendSmsReq sendSmsReq,
+		BindingResult bindingResult, Authentication authentication) {
 		validateRequest(bindingResult);
 		User loginUser = loginUser(authentication);
 		userService.updateInfoAndSendSms(sendSmsReq, loginUser);
@@ -110,8 +111,8 @@ public class UserController {
 	@Operation(summary = "휴대폰 인증코드 검증 API", description = "사용자가 입력한 인증코드와 서버에 저장된 인증코드가 일치하는 지 확인한다.")
 	@PostMapping("/sms/check")
 	public ResponseEntity<?> verifySmsCode(
-		@Parameter(description = "회원 전화번호, 인증 코드", required = true)
-		@RequestBody @Validated SmsCheckReq smsCheckReq, BindingResult bindingResult) {
+		@Parameter(description = "회원 전화번호, 인증 코드", required = true) @RequestBody @Validated SmsCheckReq smsCheckReq,
+		BindingResult bindingResult) {
 		validateRequest(bindingResult);
 		userService.verifySmsCode(smsCheckReq);
 		return ResponseEntity.ok().build();
@@ -146,6 +147,15 @@ public class UserController {
 		User loginUser = loginUser(authentication);
 		userService.updateCardGeneration(loginUser);
 		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "사용자 이메일 중복 체크 API", description = "사용자 이메일 입력시 중복 여부 확인을 True false로 알린다.")
+	@PostMapping("/email-duplication/check")
+	public ResponseEntity<CheckEmailDupulicatedRes> checkEmailDupulicated(
+		@Parameter(description = "입력 이메일", required = true) @RequestBody CheckEmailDupulicatedReq checkEmailDupulicatedReq) {
+		CheckEmailDupulicatedRes checkEmailDupulicatedRes = new CheckEmailDupulicatedRes(
+			userService.checkEmail(checkEmailDupulicatedReq.getEmail()));
+		return ResponseEntity.ok(checkEmailDupulicatedRes);
 	}
 
 	private void validateRequest(BindingResult bindingResult) {
