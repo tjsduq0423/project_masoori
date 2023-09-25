@@ -202,7 +202,7 @@ const Login: React.FC = () => {
             <Input />
           </Email>
           <EmailCheck>
-            <FormLabel>이메일 확인</FormLabel>
+            <FormLabel>이메일 인증</FormLabel>
             <Input />
             <SignUp>
               <NextButton
