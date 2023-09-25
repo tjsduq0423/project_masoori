@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public interface UserService {
-	boolean checkEmail(String email) throws Exception;
+	boolean checkEmail(String email);
 
 	boolean checkOAuthAccount(String email);
 
