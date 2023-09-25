@@ -10,13 +10,4 @@ const postConsume = async () => {
   }
 };
 
-const getConsume = async (id: number) => {
-  try {
-    const response = await instance.get(`/api/v1/card/consume/${id}`);
-    return response.data;
-  } catch {
-    new Error("api 연동 오류 - getConsume");
-  }
-};
-
-export { postConsume, getConsume };
+export { postConsume };
