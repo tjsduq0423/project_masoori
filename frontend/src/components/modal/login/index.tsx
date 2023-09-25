@@ -17,7 +17,7 @@ interface ImgProps {
 const Container = styled.div`
   position: absolute;
   left: 39.5%;
-  top: 0.5%;
+  top: 3%;
 `;
 
 const LoginFrontImg = styled.div<ImgProps>`
@@ -33,6 +33,7 @@ const LoginFrontImg = styled.div<ImgProps>`
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
+  z-index: 99;
   opacity: ${({ loaded }) => (loaded ? "1" : "0")};
 `;
 
@@ -55,20 +56,20 @@ const SignUpFrontImg = styled.div<ImgProps>`
 
 const Id = styled.div`
   position: relative;
-  z-index: 1;
+  z-index: 3;
   top: 15%;
 `;
 
 const PW = styled.div`
   position: relative;
   top: 17%;
-  z-index: 1;
+  z-index: 3;
 `;
 
 const PWCheck = styled.div`
   position: relative;
   top: 7%;
-  z-index: 1;
+  z-index: 9;
 `;
 const FormLabel = styled.p`
   font-size: small;
@@ -219,7 +220,7 @@ const Login: React.FC = () => {
             <Input />
           </Email>
           <EmailCheck>
-            <FormLabel>이메일 확인</FormLabel>
+            <FormLabel>이메일 인증</FormLabel>
             <Input />
             <SignUp>
               <NextButton
