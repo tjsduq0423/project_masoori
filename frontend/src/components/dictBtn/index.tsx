@@ -5,6 +5,7 @@ interface StyledButtonProps {
   text: string;
   width?: string;
   height?: string;
+  onClick?: () => void;
 }
 
 const DictionaryButton = styled.button<StyledButtonProps>`
@@ -19,9 +20,14 @@ const DictionaryButton = styled.button<StyledButtonProps>`
   margin-left: 10px;
 `;
 
-const DcitBtn = ({ text, width, height }: StyledButtonProps) => {
+const DcitBtn = ({ text, width, height, onClick }: StyledButtonProps) => {
   return (
-    <DictionaryButton width={width} height={height} text={text}>
+    <DictionaryButton
+      width={width}
+      height={height}
+      text={text}
+      onClick={onClick}
+    >
       {text}
     </DictionaryButton>
   );
