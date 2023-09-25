@@ -9,6 +9,7 @@ import background from "@/assets/img/background/silkBackground.jpg";
 import ChallengeBubble from "@/components/challengeBubble";
 import { StyledChallengeBubbleProps } from "@/types/challengeType";
 import ChallegeSuccess from "@/assets/img/challengeBubble/challengeSuccess.png";
+import ShareModal from "@/components/shareModal";
 
 const PageContainer = styled.div`
   position: fixed;
@@ -19,6 +20,27 @@ const PageContainer = styled.div`
   height: 100vh;
   background-image: url(${background});
   background-size: cover;
+`;
+
+const ModalContainer = styled.div<{ isOpen: boolean }>`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+  z-index: 3;
+`;
+
+const Backdrop = styled.div<{ isOpen: boolean }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+  z-index: 1;
 `;
 
 const BookSection = styled.div`
@@ -77,6 +99,17 @@ const BasicText = styled.div`
 
 const DictionaryPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 모달 열기 함수
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  // 모달 닫기 함수
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const initialTarotCards = Array.from({ length: 30 }, (_, index) => (
     <TarotCard
@@ -144,7 +177,7 @@ const DictionaryPage = () => {
             <SpecialHeader>
               <SpecialText>
                 2023.09 <DcitBtn text="카드변경" />
-                <DcitBtn text="공유하기" />
+                <DcitBtn onClick={openModal} text="공유하기" />
               </SpecialText>
             </SpecialHeader>
             <div style={{ display: "flex" }}>
@@ -180,6 +213,10 @@ const DictionaryPage = () => {
           </div>
         )}
       </ContentSection>
+      <ModalContainer isOpen={isModalOpen}>
+        <ShareModal />
+      </ModalContainer>
+      <Backdrop isOpen={isModalOpen} onClick={closeModal} />
     </PageContainer>
   );
 };
