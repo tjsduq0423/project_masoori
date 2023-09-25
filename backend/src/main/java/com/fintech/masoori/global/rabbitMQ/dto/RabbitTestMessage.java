@@ -13,6 +13,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString
-public class RecommandMessage {
-	private int id;
+public class RabbitTestMessage {
+	private String id;
+	private String fName;
+	private String lName;
 }
