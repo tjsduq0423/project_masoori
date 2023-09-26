@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import LandingPage from "@/assets/img/LandingPage.jpg";
+import LandingPage from "@/assets/img/LandingPageTest.jpg";
 import LandingMainLogo from "@/assets/img/LandingMainLogo.png";
 import FinanceLuckCards from "@/assets/img/FinanceLuckCards.png";
 import CreditCards from "@/assets/img/CreditCards.png";
