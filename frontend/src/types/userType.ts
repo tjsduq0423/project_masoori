@@ -31,7 +31,11 @@ interface CheckSignUpCodeProps {
   code: string;
 }
 
+interface CheckDuplicateEmailProps {
+  email: string;
+}
 export type {
+  CheckDuplicateEmailProps,
   CheckSignUpCodeProps,
   RenewPasswordProps,
   SendSignUpCodeProps,
