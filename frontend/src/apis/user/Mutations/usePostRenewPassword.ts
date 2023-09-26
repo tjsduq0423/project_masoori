@@ -3,8 +3,17 @@ import { useMutation } from "@tanstack/react-query";
 import { RenewPasswordProps } from "@/types/userType";
 
 const usePostRenewPassword = () => {
-  return useMutation((RenewPasswordData: RenewPasswordProps) =>
-    postRenewPassword(RenewPasswordData)
+  return useMutation(
+    (RenewPasswordData: RenewPasswordProps) =>
+      postRenewPassword(RenewPasswordData),
+    {
+      onSuccess: () => {
+        console.log("RenewPassword Success");
+      },
+      onError: (err: Error) => {
+        console.log(err);
+      },
+    }
   );
 };
 

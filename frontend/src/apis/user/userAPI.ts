@@ -7,6 +7,7 @@ import {
   SendSignUpCodeProps,
   RenewPasswordProps,
   CheckSignUpCodeProps,
+  CheckDuplicateEmailProps,
 } from "@/types/userType";
 
 //
@@ -15,7 +16,7 @@ const postSendPhoneSMS = async (SendPhoneSMSData: SendPhoneSMSProps) => {
     const response = await instance.post(`/user/sms`, SendPhoneSMSData);
     return response.data;
   } catch {
-    new Error("api 연동 오류 - postConsume");
+    console.log(new Error("api 연동 오류 - postConsume"));
   }
 };
 
@@ -24,7 +25,7 @@ const postCheckPhoneSMS = async (CheckPhoneSMSData: CheckPhoneSMSProps) => {
     const response = await instance.post(`/user/sms/check`, CheckPhoneSMSData);
     return response.data;
   } catch {
-    new Error("api 연동 오류 - postConsume");
+    console.log(new Error("api 연동 오류 - postConsume"));
   }
 };
 
@@ -33,7 +34,7 @@ const postSignUp = async (SignUpData: SighUpProps) => {
     const response = await instance.post(`/user/signup`, SignUpData);
     return response.data;
   } catch {
-    new Error("api 연동 오류 - postConsume");
+    console.log(new Error("api 연동 오류 - postConsume"));
   }
 };
 
@@ -42,7 +43,7 @@ const postLogout = async () => {
     const response = await instance.post(`/user/logout`);
     return response.data;
   } catch {
-    new Error("api 연동 오류 - postConsume");
+    console.log(new Error("api 연동 오류 - postConsume"));
   }
 };
 
@@ -51,7 +52,7 @@ const postLogin = async (LoginData: LoginProps) => {
     const response = await instance.post(`/user/login`, LoginData);
     return response.data;
   } catch {
-    new Error("api 연동 오류 - postConsume");
+    console.log(new Error("api 연동 오류 - postConsume"));
   }
 };
 
@@ -60,7 +61,7 @@ const postSpendCardConnect = async () => {
     const response = await instance.post(`/user/generation`);
     return response.data;
   } catch {
-    new Error("api 연동 오류 - postConsume");
+    console.log(new Error("api 연동 오류 - postConsume"));
   }
 };
 
@@ -72,7 +73,7 @@ const postSendSignUpCode = async (SendSignUpCodeData: SendSignUpCodeProps) => {
     );
     return response.data;
   } catch {
-    new Error("api 연동 오류 - postConsume");
+    console.log(new Error("api 연동 오류 - postConsume"));
   }
 };
 
@@ -84,7 +85,7 @@ const postRenewPassword = async (RenewPasswordData: RenewPasswordProps) => {
     );
     return response.data;
   } catch {
-    new Error("api 연동 오류 - postConsume");
+    console.log(new Error("api 연동 오류 - postConsume"));
   }
 };
 
@@ -98,11 +99,26 @@ const postCheckSignUpCode = async (
     );
     return response.data;
   } catch {
-    new Error("api 연동 오류 - postConsume");
+    console.log(new Error("api 연동 오류 - postConsume"));
+  }
+};
+
+const postCheckDuplicateEmail = async (
+  CheckDuplicateEmailData: CheckDuplicateEmailProps
+) => {
+  try {
+    const response = await instance.post(
+      `/user/email-duplication/check`,
+      CheckDuplicateEmailData
+    );
+    return response.data;
+  } catch {
+    console.log(new Error("api 연동 오류 - postConsume"));
   }
 };
 
 export {
+  postCheckDuplicateEmail,
   postSendPhoneSMS,
   postCheckPhoneSMS,
   postSignUp,

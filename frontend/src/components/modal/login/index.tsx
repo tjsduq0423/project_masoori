@@ -6,9 +6,14 @@ import BackCards from "@/assets/img/Login.png";
 import SignInModalFront from "@/assets/img/signCard/signInModalFront.png";
 import SignUpModalFront from "@/assets/img/signCard/signUpModalFront.png";
 import styled from "styled-components";
-import { useRecoilValue } from "recoil";
-import { useNavigate } from "react-router-dom";
-import { userInfoState } from "@/states/userState";
+import { usePostLogin } from "@/apis/user/Mutations/usePostLogin";
+import {
+  CheckDuplicateEmailProps,
+  LoginProps,
+  SendSignUpCodeProps,
+} from "@/types/userType";
+import { usePostCheckDuplicateEmail } from "@/apis/user/Mutations/usePostCheckDuplicateEmail";
+import { usePostSendSignUpCode } from "@/apis/user/Mutations/usePostSendSignUpCode";
 
 interface ImgProps {
   loaded: boolean;
@@ -79,6 +84,15 @@ const FormLabel = styled.p`
   color: #5e3a66;
 `;
 
+const CommentLabel = styled.p<{ viewComment: boolean }>`
+  font-size: small;
+  display: flex;
+  font-weight: bold;
+  margin-bottom: 2px;
+  color: red;
+  opacity: ${(props) => (props.viewComment ? "1" : "0")};
+`;
+
 const Input = styled.input`
   width: 17vw;
   border-radius: 5px;
@@ -127,8 +141,26 @@ const EmailCheck = styled.div`
   z-index: 1;
 `;
 
-const NextButton = styled.button`
-  width: 17vw;
+const DisableNextButton = styled.button`
+  width: 16.275vw;
+  border-radius: 5px;
+  border-color: #5e3a66;
+  border-width: 1px;
+  margin-top: 25px;
+  height: 30px;
+  background-color: #eae2ed;
+  color: #5e3a66;
+  font-weight: bold;
+  font-size: 12px;
+`;
+
+const AbleNextButton = styled(DisableNextButton)`
+  background-color: #5e3a66;
+  color: #eae2ed;
+`;
+
+const FinishButton = styled.button`
+  width: 16.275vw;
   border-radius: 5px;
   border-color: #5e3a66;
   border-width: 2px;
@@ -140,15 +172,142 @@ const NextButton = styled.button`
   font-size: 12px;
 `;
 
+const EmailInput = styled.input`
+  width: 11.5vw;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #5e3a66;
+  height: 30px;
+`;
+
+const DuplicateCheckButton = styled.button`
+  width: 4.5vw;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #5e3a66;
+  font-size: 12px;
+  background-color: #5e3a66;
+  height: 30px;
+  color: white;
+  /* font-weight: bold; */
+`;
+
+const DisableSendCodeButton = styled.button`
+  width: 4.5vw;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #5e3a66;
+  font-size: 12px;
+  height: 30px;
+  font-weight: bold;
+  background-color: #5e3a66;
+  color: #eae2ed;
+`;
+
+const AbleSendCodeButton = styled(DisableSendCodeButton)`
+  color: #5e3a66;
+  background-color: #eae2ed;
+`;
+
 const Login: React.FC = () => {
   const [modalState, setModalState] = useState<string>("로그인");
   const [imageLoaded, setImageLoaded] = useState<boolean>(false); // 이미지 로드 상태
+  const [emailCodeComment, setEmailCodeComment] = useState<string>(""); // 이메일 코드 확인 결과 멘트
+
+  //로그인 ~ ----------------------------------------------
+
+  //유저 데이터
+  const [userData, setUserData] = useState<LoginProps>({
+    email: "",
+    password: "",
+  });
+
+  //Login에 usePostLogin(API써서 만들어둔 함수들)
+  const Login = usePostLogin();
+
+  //변수에 할당하여 나중에 호출한다.
+  const handleLogin = () => {
+    Login.mutate(userData);
+  };
+
+  //~ 로그인  ----------------------------------------------
+
+  //이메일 중복 체크 ~  ----------------------------------------------
+
+  const [isDuplicated, setIsDuplicated] = useState<boolean>(false);
+  const [duplicateEmailData, setDuplicateEmailData] =
+    useState<CheckDuplicateEmailProps>({
+      email: "",
+    });
+
+  const CheckDuplicateEmail = usePostCheckDuplicateEmail();
+
+  const handleCheckDuplicateEmail = async () => {
+    try {
+      const result: boolean =
+        await CheckDuplicateEmail.mutateAsync(duplicateEmailData);
+
+      setIsDuplicated(result);
+
+      if (isDuplicated === true) {
+        console.log("중복된 이메일입니다.");
+      } else {
+        console.log("중복되지 않은 이메일입니다.");
+      }
+    } catch (error) {
+      console.error("이메일 중복 확인에 실패했습니다.", error);
+    }
+  };
+
+  // ~ 이메일 중복 체크 ----------------------------------------------
+
+  //이메일 중복 결과 멘트 ~  ----------------------------------------------
+
+  const [emailComment, setEmailComment] = useState<string>(""); // 이메일 중복확인 결과 멘트
+  const [viewComment, setViewComment] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isDuplicated === true) {
+      setEmailComment("* 이미 가입한 회원입니다.");
+    } else {
+      setEmailComment("* 가입 가능한 계정입니다.");
+    }
+  }, [isDuplicated]);
+
+  // ~ 이메일 중복 결과 멘트 ----------------------------------------------
+
+  //이메일 코드 유효성 검사 ~  ----------------------------------------------
+
+  const [sendSignUpCodeData, setSendSignUpCodeData] =
+    useState<SendSignUpCodeProps>({
+      email: "",
+    });
+
+  const SendSignUpCode = usePostSendSignUpCode();
+
+  const handleSendSignUpCode = () => {
+    try {
+      const result = SendSignUpCode.mutate(sendSignUpCodeData);
+
+      console.log(result);
+
+      //   if (isDuplicated === true) {
+      //     console.log("중복된 이메일입니다.");
+      //   } else {
+      //     console.log("중복되지 않은 이메일입니다.");
+      //   }
+    } catch (error) {
+      console.error("회원가입 코드 전송에 실패했습니다.", error);
+    }
+  };
+
+  // ~ 이메일 코드 유효성 검사 ----------------------------------------------
 
   useEffect(() => {
     const img = new Image();
     img.src = BackCards;
     img.onload = () => {
-      // 이미지 로드가 완료되면 상태 업데이트
+      // 이미지   로드가 완료되면 상태 업데이트
       setImageLoaded(true);
     };
   }, []);
@@ -159,26 +318,28 @@ const Login: React.FC = () => {
     window.location.href = AUTH_URL;
   };
 
-  const userInfo = useRecoilValue(userInfoState);
-  const navigate = useNavigate();
-  // 로그인 되어있는 유저라면 main 페이지로
-  useEffect(() => {
-    if (userInfo && userInfo.userId && userInfo.userId > 0) {
-      navigate("/main");
-    }
-  }, [userInfo, navigate]);
-
   if (modalState === "로그인") {
     return (
       <Container>
         <LoginFrontImg loaded={imageLoaded}>
           <Id>
             <FormLabel>계정이름</FormLabel>
-            <Input />
+            <Input
+              value={userData.email}
+              onChange={(e) =>
+                setUserData({ ...userData, email: e.target.value })
+              }
+            />
           </Id>
           <PW>
             <FormLabel>비밀번호</FormLabel>
-            <Input />
+            <Input
+              value={userData.password}
+              type="password"
+              onChange={(e) =>
+                setUserData({ ...userData, password: e.target.value })
+              }
+            />
             <SignUp>
               <button
                 onClick={() => {
@@ -188,7 +349,7 @@ const Login: React.FC = () => {
                 회원가입
               </button>
             </SignUp>
-            <LoginButton>Login</LoginButton>
+            <LoginButton onClick={handleLogin}>Login</LoginButton>
             <SocialLogin
               src={Kakao}
               onClick={() => {
@@ -216,20 +377,80 @@ const Login: React.FC = () => {
       <Container>
         <SignUpFrontImg loaded={imageLoaded}>
           <Email>
-            <FormLabel>이메일</FormLabel>
-            <Input />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <FormLabel>이메일</FormLabel>
+              <CommentLabel viewComment={viewComment}>
+                {emailComment}
+              </CommentLabel>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignContent: "center",
+                justifyContent: "space-between",
+                width: "250px",
+              }}
+            >
+              <EmailInput
+                value={duplicateEmailData.email}
+                onChange={(e) => {
+                  setDuplicateEmailData({
+                    ...duplicateEmailData,
+                    email: e.target.value,
+                  });
+                  setViewComment(false);
+                  setIsDuplicated(false);
+                }}
+              />
+              <DuplicateCheckButton
+                onClick={() => {
+                  handleCheckDuplicateEmail();
+                  setViewComment(!viewComment);
+                }}
+              >
+                중복확인
+              </DuplicateCheckButton>
+            </div>
           </Email>
           <EmailCheck>
-            <FormLabel>이메일 인증</FormLabel>
-            <Input />
+            <FormLabel>이메일 코드 확인</FormLabel>
+            <div
+              style={{
+                display: "flex",
+                alignContent: "center",
+                justifyContent: "space-between",
+                width: "250px",
+              }}
+            >
+              <EmailInput
+                value={sendSignUpCodeData.email}
+                onChange={(e) => {
+                  setSendSignUpCodeData({
+                    ...sendSignUpCodeData,
+                    email: e.target.value,
+                  });
+                }}
+              />
+              {isDuplicated ? (
+                <DisableSendCodeButton>코드전송</DisableSendCodeButton>
+              ) : (
+                <AbleSendCodeButton
+                  onClick={() => {
+                    handleSendSignUpCode;
+                  }}
+                >
+                  코드전송
+                </AbleSendCodeButton>
+              )}
+            </div>
             <SignUp>
-              <NextButton
+              <DisableNextButton
                 onClick={() => {
                   setModalState("회원가입2");
                 }}
               >
                 NEXT
-              </NextButton>
+              </DisableNextButton>
             </SignUp>
           </EmailCheck>
         </SignUpFrontImg>
@@ -250,7 +471,7 @@ const Login: React.FC = () => {
               <FormLabel>비밀번호 확인</FormLabel>
               <Input />
             </PWCheck>
-            <NextButton>FINISH</NextButton>
+            <FinishButton>FINISH</FinishButton>
           </PW>
         </SignUpFrontImg>
       </Container>
