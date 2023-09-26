@@ -3,6 +3,7 @@ import styled from "styled-components";
 import MenuButton from "@/assets/img/MenuButton.png";
 import Modal from "@/components/modal/login";
 import SignInModalBack from "@/assets/img/signCard/signInModalBack.png";
+import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled.div`
   position: absolute;
@@ -71,6 +72,16 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       closeModal();
     }
   };
+
+  const AT = localStorage.getItem("accessToken");
+  const navigate = useNavigate();
+  // 로그인 되어있는 유저라면 main 페이지로
+  useEffect(() => {
+    if (isModalOpen && AT && AT.length > 0) {
+      setIsModalOpen(false);
+      navigate("/menu");
+    }
+  }, [AT, navigate, isModalOpen]);
 
   useEffect(() => {
     if (isModalOpen) {
