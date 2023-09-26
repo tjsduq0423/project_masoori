@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fintech.masoori.domain.analytics.entity.MonthlySpendingAnalytics;
 import com.fintech.masoori.domain.analytics.repository.MonthlySpendingAnalyticsRepository;
-import com.fintech.masoori.domain.credit.dto.CreditCardReq;
 import com.fintech.masoori.domain.credit.dto.MonthlyInfoRes;
 import com.fintech.masoori.domain.credit.entity.CreditCard;
 import com.fintech.masoori.domain.credit.entity.CreditCardUser;
@@ -101,10 +100,8 @@ class CreditCardControllerTest {
 		Authentication auth = new UsernamePasswordAuthenticationToken(testUser.getEmail(), testUser.getPassword());
 		SecurityContextHolder.getContext().setAuthentication(auth);
 
-		CreditCardReq creditCardReq = CreditCardReq.builder().time(LocalDateTime.now()).build();
-
 		ResponseEntity<MonthlyInfoRes> response = creditCardController.selectMonthCreditCardUser(
-			creditCardReq,
+			LocalDateTime.now(),
 			auth);
 
 		log.info("Response : {}", response);

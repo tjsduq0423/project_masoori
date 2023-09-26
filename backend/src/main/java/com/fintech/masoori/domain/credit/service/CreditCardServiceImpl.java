@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fintech.masoori.domain.credit.dto.CreditCardRes;
+import com.fintech.masoori.domain.credit.dto.UserCreditCardRes;
 import com.fintech.masoori.domain.credit.entity.CreditCard;
 import com.fintech.masoori.domain.credit.entity.CreditCardUser;
 import com.fintech.masoori.domain.credit.exception.InvalidIDException;
@@ -18,27 +19,25 @@ import com.fintech.masoori.domain.user.repository.UserRepository;
 import com.fintech.masoori.global.util.CalcDate;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class CreditCardServiceImpl implements CreditCardService {
 	private final UserRepository userRepository;
 	private final CreditCardRepository creditCardRepository;
 	private final CreditCardUserRepository creditCardUserRepository;
 
 	@Override
-	public CreditCardRes selectAll(String userEmail) {
+	public UserCreditCardRes selectAll(String userEmail) {
 		User user = userRepository.findUserByEmail(userEmail);
-		List<CreditCardRes.CreditCard> userCreditCardList = user.getCreditCardUsers().stream().map(e -> {
+		List<UserCreditCardRes.UserCreditCard> userCreditCardList = user.getCreditCardUsers().stream().map(e -> {
 			CreditCard creditCard = e.getCreditCard();
-			String reason = e.getReason();
-			CreditCardRes.CreditCard creditCard1 = new CreditCardRes.CreditCard(creditCard);
-			creditCard1.setReason(reason);
-			return creditCard1;
+			return new UserCreditCardRes.UserCreditCard(creditCard);
 		}).collect(Collectors.toList());
-
-		return new CreditCardRes(userCreditCardList);
+		return UserCreditCardRes.builder().userCreditCardList(userCreditCardList).build();
 	}
 
 	@Override
@@ -46,7 +45,6 @@ public class CreditCardServiceImpl implements CreditCardService {
 		User user = userRepository.findUserByEmail(userEmail);
 
 		CalcDate.StartEndDate calcDate = CalcDate.calcDate(time, time);
-
 		List<CreditCardUser> creditCardList = creditCardUserRepository.findCreditCardsByUserId(user.getId(),
 			calcDate.getStartDate(), calcDate.getEndDate());
 

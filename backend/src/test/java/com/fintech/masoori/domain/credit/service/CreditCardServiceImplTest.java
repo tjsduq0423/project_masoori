@@ -62,20 +62,23 @@ class CreditCardServiceImplTest {
 		em.clear();
 
 		// 리스트로 뽑아보기
-		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().size()).isEqualTo(3);
-		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(0).getName()).isEqualTo(
+		assertThat(creditCardService.selectAll(findUser.getEmail()).getUserCreditCardList().size()).isEqualTo(3);
+		assertThat(creditCardService.selectAll(findUser.getEmail()).getUserCreditCardList().get(0).getName()).isEqualTo(
 			card1.getName());
-		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(1).getName()).isEqualTo(
+		assertThat(creditCardService.selectAll(findUser.getEmail()).getUserCreditCardList().get(1).getName()).isEqualTo(
 			card3.getName());
-		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(2).getCompany()).isEqualTo(
+		assertThat(
+			creditCardService.selectAll(findUser.getEmail()).getUserCreditCardList().get(2).getCompany()).isEqualTo(
 			card5.getCompany());
 		System.out.println(
 			"creditCardService.selectAll(findUser.getEmail()).get(1).getReason() = " + creditCardService.selectAll(
-				findUser.getEmail()).getCreditCardList().get(1).getReason());
-		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(1).getReason()).isEqualTo(
-			creditCardUser2.getReason());
-		assertThat(creditCardService.selectAll(findUser.getEmail()).getCreditCardList().get(2).getReason()).isEqualTo(
-			creditCardUser3.getReason());
+				findUser.getEmail()).getUserCreditCardList().get(1));
+		assertThat(
+			creditCardService.selectAll(findUser.getEmail()).getUserCreditCardList().get(1).getId()).isEqualTo(
+			creditCardUser2.getCreditCard().getId());
+		assertThat(
+			creditCardService.selectAll(findUser.getEmail()).getUserCreditCardList().get(2).getId()).isEqualTo(
+			creditCardUser3.getCreditCard().getId());
 	}
 
 	@Test
