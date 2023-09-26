@@ -26,6 +26,7 @@ public class CreditCardRes {
 		private String condition;
 		private List<String> brandList;
 		private String imagePath;
+		private String imageAttr;
 		private String registerPath;
 		private String reason;
 		private List<CreditCardRes.Benefit> benefitList;
@@ -39,6 +40,7 @@ public class CreditCardRes {
 			this.condition = creditCard.getCondition();
 			this.brandList = creditCard.getBrands();
 			this.imagePath = creditCard.getImagePath();
+			this.imageAttr = creditCard.getImgAttr();
 			this.registerPath = creditCard.getRegisterPath();
 			this.benefitList = creditCard.getBenefits().stream().map(Benefit::new).toList();
 		}
