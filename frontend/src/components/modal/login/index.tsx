@@ -9,11 +9,13 @@ import styled from "styled-components";
 import { usePostLogin } from "@/apis/user/Mutations/usePostLogin";
 import {
   CheckDuplicateEmailProps,
+  CheckSignUpCodeProps,
   LoginProps,
   SendSignUpCodeProps,
 } from "@/types/userType";
 import { usePostCheckDuplicateEmail } from "@/apis/user/Mutations/usePostCheckDuplicateEmail";
 import { usePostSendSignUpCode } from "@/apis/user/Mutations/usePostSendSignUpCode";
+import { usePostCheckSignUpCode } from "@/apis/user/Mutations/usePostCheckSignUpCode";
 
 interface ImgProps {
   loaded: boolean;
@@ -200,13 +202,13 @@ const DisableSendCodeButton = styled.button`
   font-size: 12px;
   height: 30px;
   font-weight: bold;
-  background-color: #5e3a66;
-  color: #eae2ed;
+  color: #5e3a66;
+  background-color: #eae2ed;
 `;
 
 const AbleSendCodeButton = styled(DisableSendCodeButton)`
-  color: #5e3a66;
-  background-color: #eae2ed;
+  background-color: #5e3a66;
+  color: #eae2ed;
 `;
 
 const Login: React.FC = () => {
@@ -276,28 +278,42 @@ const Login: React.FC = () => {
 
   // ~ 이메일 중복 결과 멘트 ----------------------------------------------
 
-  //이메일 코드 유효성 검사 ~  ----------------------------------------------
-
-  const [sendSignUpCodeData, setSendSignUpCodeData] =
-    useState<SendSignUpCodeProps>({
-      email: "",
-    });
+  //이메일 코드 전송 ~  ----------------------------------------------
 
   const SendSignUpCode = usePostSendSignUpCode();
 
-  const handleSendSignUpCode = () => {
+  const handleSendSignUpCode = async () => {
     try {
-      const result = SendSignUpCode.mutate(sendSignUpCodeData);
-
-      console.log(result);
-
-      //   if (isDuplicated === true) {
-      //     console.log("중복된 이메일입니다.");
-      //   } else {
-      //     console.log("중복되지 않은 이메일입니다.");
-      //   }
+      console.log(duplicateEmailData);
+      await SendSignUpCode.mutateAsync(duplicateEmailData);
     } catch (error) {
       console.error("회원가입 코드 전송에 실패했습니다.", error);
+    }
+  };
+
+  // ~ 이메일 코드 전송 ----------------------------------------------
+
+  //이메일 코드 유효성 검사 ~  ----------------------------------------------
+
+  const [signUpCodeData, setSignUpCodeData] = useState<CheckSignUpCodeProps>({
+    email: duplicateEmailData.email,
+    code: "",
+  });
+
+  const CheckSignUpCode = usePostCheckSignUpCode();
+
+  const handleCheckSignUpCode = async () => {
+    try {
+      const signupInfo = {
+        email: duplicateEmailData.email,
+        code: signUpCodeData.code,
+      };
+
+      console.log(signupInfo);
+      const result = await CheckSignUpCode.mutateAsync(signupInfo);
+      console.log(result);
+    } catch (error) {
+      console.error("회원가입 코드 확인에 실패했습니다.", error);
     }
   };
 
@@ -405,7 +421,7 @@ const Login: React.FC = () => {
               <DuplicateCheckButton
                 onClick={() => {
                   handleCheckDuplicateEmail();
-                  setViewComment(!viewComment);
+                  setViewComment(true);
                 }}
               >
                 중복확인
@@ -422,21 +438,25 @@ const Login: React.FC = () => {
                 width: "250px",
               }}
             >
-              <EmailInput
-                value={sendSignUpCodeData.email}
+              <EmailInput //Email 인증 코드
+                value={signUpCodeData.code}
                 onChange={(e) => {
-                  setSendSignUpCodeData({
-                    ...sendSignUpCodeData,
-                    email: e.target.value,
+                  setSignUpCodeData({
+                    ...signUpCodeData,
+                    code: e.target.value,
                   });
+                  console.log(signUpCodeData.code);
+                  if (signUpCodeData.code.length === 8) {
+                    handleCheckSignUpCode();
+                  }
                 }}
               />
-              {isDuplicated ? (
+              {!isDuplicated ? (
                 <DisableSendCodeButton>코드전송</DisableSendCodeButton>
               ) : (
                 <AbleSendCodeButton
                   onClick={() => {
-                    handleSendSignUpCode;
+                    handleSendSignUpCode();
                   }}
                 >
                   코드전송

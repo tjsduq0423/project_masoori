@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import styled from "styled-components";
 import Swiper, { Navigation, Pagination } from "swiper"; // Import Swiper and necessary modules
 import RegistBtn from "@/components/registbtn";
@@ -170,7 +170,7 @@ const StyledSwiperSlide = styled.div`
     width: 90%;
   }
 
-  &.swiper-slide--one {
+  &.swiper-slide--1 {
     background: #0f2027;
     background:
       linear-gradient(to bottom, #2c536400, #203a4303, #0f2027cc),
@@ -183,43 +183,33 @@ const StyledSwiperSlide = styled.div`
     font-weight: 300;
   }
 
-  &.swiper-slide--two {
+  &.swiper-slide--2 {
     background:
       linear-gradient(to bottom, #2c536400, #203a4303, #0f2027cc),
       url("https://api.card-gorilla.com:8080/storage/card/87/card_img/20239/87card.png")
         no-repeat 50% 50% / cover;
   }
 
-  &.swiper-slide--two h3 {
-    font-family: "Noto Serif Vithkuqi", serif;
-    font-weight: 300;
-  }
-
-  &.swiper-slide--three {
+  &.swiper-slide--3 {
     background: url("https://api.card-gorilla.com:8080/storage/card/87/card_img/20239/87card.png")
       no-repeat 50% 50% / cover;
   }
 
-  &.swiper-slide--four {
+  &.swiper-slide--4 {
     background: url("https://api.card-gorilla.com:8080/storage/card/87/card_img/20239/87card.png")
       no-repeat 50% 50% / cover;
   }
 
-  &.swiper-slide--five {
+  &.swiper-slide--5 {
     background: url("https://api.card-gorilla.com:8080/storage/card/87/card_img/20239/87card.png")
       no-repeat 50% 50% / cover;
   }
 
-  &.swiper-slide--six {
+  &.swiper-slide--6 {
     background:
       linear-gradient(to bottom, #2c536400, #203a4303, #0f2027cc),
       url("https://api.card-gorilla.com:8080/storage/card/87/card_img/20239/87card.png")
         no-repeat 50% 50% / cover;
-  }
-
-  &.swiper-slide--six h3 {
-    font-family: "Chonburi", cursive;
-    font-weight: 400;
   }
 
   &.swiper-slide-active {
@@ -253,7 +243,7 @@ const StyledCircle = styled.div`
   left: -8em;
   width: clamp(150px, 40vw, 400px);
   height: clamp(150px, 40vw, 400px);
-  background: black;
+  background: rgba(196, 141, 198, 0.25);
   border-radius: 50%;
   z-index: 1;
   opacity: 0.7;
@@ -279,47 +269,82 @@ const StyledIcon = styled.img`
   margin-right: 20px;
 `;
 
+const StyledRotatedImageWrapper = styled.div<{ shouldRotate?: boolean }>`
+  height: 100%;
+  transform: ${({ shouldRotate }) => (shouldRotate ? "rotate(90deg)" : "none")};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const CardRecommend = () => {
-  const data = [
-    {
-      name: "string",
-      company: "string",
-      domestic: "string",
-      overseas: "string",
-      condition: "string",
-      brandList: ["string"],
-      imagePath:
-        "https://images.unsplash.com/photo-1500258593672-b080c40f4b02?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80",
-      registerPath: "string",
-      reason: "string",
-      benefitList: [
-        {
-          title: "string",
-          description: "string",
-          detailDescription: "string",
-        },
-      ],
-    },
-    {
-      name: "string",
-      company: "string",
-      domestic: "string",
-      overseas: "string",
-      condition: "string",
-      brandList: ["string"],
-      imagePath:
-        "https://images.unsplash.com/photo-1500258593672-b080c40f4b02?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80",
-      registerPath: "string",
-      reason: "string",
-      benefitList: [
-        {
-          title: "string",
-          description: "string",
-          detailDescription: "string",
-        },
-      ],
-    },
-  ];
+  const data = useMemo(
+    () => [
+      {
+        name: "손수형",
+        company: "string",
+        domestic: "string",
+        overseas: "string",
+        condition: "string",
+        brandList: ["string"],
+        imagePath:
+          "https://api.card-gorilla.com:8080/storage/card/87/card_img/20239/87card.png",
+        registerPath: "string",
+        reason: "string",
+        benefitList: [
+          {
+            title: "string",
+            description: "string",
+            detailDescription: "string",
+          },
+        ],
+        shouldRotate: false,
+      },
+      {
+        name: "차지은",
+        company: "string",
+        domestic: "string",
+        overseas: "string",
+        condition: "string",
+        brandList: ["string"],
+        imagePath:
+          "https://api.card-gorilla.com:8080/storage/card/2330/card_img/24131/2330card.png",
+        registerPath: "string",
+        reason: "string",
+        benefitList: [
+          {
+            title: "string",
+            description: "string",
+            detailDescription: "string",
+          },
+        ],
+        shouldRotate: true,
+      },
+      {
+        name: "유민국",
+        company: "string",
+        domestic: "string",
+        overseas: "string",
+        condition: "string",
+        brandList: ["string"],
+        imagePath:
+          "https://api.card-gorilla.com:8080/storage/card/51/card_img/27707/51card.png",
+        registerPath: "string",
+        reason: "string",
+        benefitList: [
+          {
+            title: "string",
+            description: "string",
+            detailDescription: "string",
+          },
+        ],
+        shouldRotate: true,
+      },
+    ],
+    []
+  );
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(data[0]);
+
   Swiper.use([Navigation, Pagination]); // Initialize Swiper with necessary modules
 
   useEffect(() => {
@@ -361,7 +386,25 @@ const CardRecommend = () => {
         },
       },
     });
-  }, []);
+
+    swiper.on("slideChange", function () {
+      // 슬라이드가 변경될 때 호출되는 함수
+      const activeSlide = swiper.slides[swiper.activeIndex];
+      const classNames = activeSlide.className.split(" ");
+      // 현재 활성화된 슬라이드의 클래스 이름 확인
+      const slideNumberMatch = classNames[3].match(/swiper-slide--(\d+)/);
+      if (slideNumberMatch) {
+        const slideNumber = parseInt(slideNumberMatch[1], 10); // 매칭된 숫자 부분 추출 및 정수로 변환
+
+        // slideNumber에 해당하는 데이터 가져오기
+        const currentData = data[slideNumber - 1]; // 슬라이드 인덱스는 0부터 시작하므로 배열 인덱스에 맞게 조정
+
+        // currentData를 원하는 방식으로 활용할 수 있습니다.
+        console.log("Current Data:", currentData);
+        setCurrentSlideIndex(currentData);
+      }
+    });
+  }, [data]);
 
   return (
     <StyledMain>
@@ -379,16 +422,18 @@ const CardRecommend = () => {
           </StyledItem>
         </StyledWrapper>
         <StyledCardName>
-          <CardNameText>KB 국민 My WE:SH 카드</CardNameText>
+          <CardNameText>{currentSlideIndex.name}</CardNameText>
         </StyledCardName>
-        <StyledCardCompany>카드사: KB 국민 카드</StyledCardCompany>
+        <StyledCardCompany>
+          카드사: {currentSlideIndex.company}
+        </StyledCardCompany>
         <StyledCardCondition>
-          연회비 : xxxxxx원 <br />
-          전월 실적 조건 : xxxxxx원
+          연회비 : {currentSlideIndex.domestic}원 <br />
+          전월 실적 조건 : {currentSlideIndex.overseas}원
         </StyledCardCondition>
         <StyledCardBenefits>
           혜택 <br />
-          [나한테 진심 서비스] KB Pay 10% 할인
+          {currentSlideIndex.benefitList[0].title}
         </StyledCardBenefits>
         <StyledCardAlarm>
           * 자세한 사항은 사이트에서 확인해주세요.
@@ -398,24 +443,37 @@ const CardRecommend = () => {
       <StyledSwiperContainer>
         <StyledSwiper className="swiper">
           <div className="swiper-wrapper">
-            <StyledSwiperSlide className="swiper-slide swiper-slide--one">
-              <span>bestseller</span>
-            </StyledSwiperSlide>
-            <StyledSwiperSlide className="swiper-slide swiper-slide--two">
-              <span>bestseller</span>
-            </StyledSwiperSlide>
-            <StyledSwiperSlide className="swiper-slide swiper-slide--three">
-              <span>bestseller</span>
-            </StyledSwiperSlide>
-            <StyledSwiperSlide className="swiper-slide swiper-slide--four">
-              <span>bestseller</span>
-            </StyledSwiperSlide>
-            <StyledSwiperSlide className="swiper-slide swiper-slide--five">
-              <span>bestseller</span>
-            </StyledSwiperSlide>
-            <StyledSwiperSlide className="swiper-slide swiper-slide--six">
-              <span>bestseller</span>
-            </StyledSwiperSlide>
+            {data.map((item, index) => (
+              <StyledSwiperSlide
+                key={index}
+                className={`swiper-slide swiper-slide--${index + 1}`}
+                style={{
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden",
+                  backgroundImage: `linear-gradient(to bottom, #2c536400, #203a4303, #0f2027cc)`,
+                }}
+              >
+                {!item.shouldRotate ? (
+                  <img
+                    src={item.imagePath}
+                    style={{ width: "88%", borderRadius: "10px" }}
+                  />
+                ) : (
+                  <StyledRotatedImageWrapper shouldRotate={item.shouldRotate}>
+                    <img
+                      src={item.imagePath}
+                      alt={`Card ${index + 1}`}
+                      style={{
+                        maxWidth: "140%", // 회전 시에만 최대 너비를 100%로 설정
+                      }}
+                    />
+                  </StyledRotatedImageWrapper>
+                )}
+              </StyledSwiperSlide>
+            ))}
           </div>
         </StyledSwiper>
         <StyledSwiperPagination className="swiper-pagination"></StyledSwiperPagination>
