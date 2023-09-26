@@ -9,6 +9,7 @@ export interface StyledTarotCardProps {
   bottomImageWidth: string;
   text: string;
   fontsize: string;
+  bottom?: string;
 }
 
 const StyledTarotCardContainer = styled.div<{ width: string; height: string }>`
@@ -40,11 +41,20 @@ const StyledTarotCardBottom = styled.div<{ cardWidth: string }>`
 
 const BottomImage = styled.img<{ bottomImageWidth: string }>`
   width: ${(props) => props.bottomImageWidth};
+  border-radius: 20px;
   height: auto;
 `;
 
-const BottomText = styled.div<{ text: string; fontsize: string }>`
-  position: relative;
+const BottomText = styled.div<{
+  text: string;
+  fontsize: string;
+  bottom: string;
+}>`
+  position: absolute;
+  width: 100%;
+  bottom: ${(props) => props.bottom};
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 1;
   font-size: ${(props) => props.fontsize};
   color: #5e3a66;
@@ -59,12 +69,16 @@ const TarotCard = ({
   imageSrc,
   bottomImageWidth,
   text,
+  bottom = "5px",
   fontsize,
 }: StyledTarotCardProps) => {
   return (
     <StyledTarotCardContainer width={width} height={height}>
       <StyledTarotCardTop cardWidth={cardWidth}>
         <TopImage cardWidth={cardWidth} src={cardSrc}></TopImage>
+        <BottomText text={text} fontsize={fontsize} bottom={bottom}>
+          {text}
+        </BottomText>
       </StyledTarotCardTop>
       <StyledTarotCardBottom cardWidth={cardWidth}>
         <BottomImage
@@ -72,9 +86,6 @@ const TarotCard = ({
           src={imageSrc}
         ></BottomImage>
       </StyledTarotCardBottom>
-      <BottomText text={text} fontsize={fontsize}>
-        {text}
-      </BottomText>
     </StyledTarotCardContainer>
   );
 };

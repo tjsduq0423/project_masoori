@@ -13,6 +13,7 @@ import * as THREE from "three";
 import styled from "styled-components";
 import AlertModal from "@/components/alertModal";
 import crystalBall from "@/assets/img/crystalBlue.png";
+import { useLuckyColor } from "@/apis/luck/Queries/useLuckyColor";
 
 interface MagicMarbleMaterialProps
   extends THREE.MeshStandardMaterialParameters {
@@ -41,13 +42,6 @@ const ModalContainer = styled.div<{ isOpen: boolean }>`
   z-index: 2;
 `;
 
-const data = {
-  color: "#ff0000",
-  colorName: "BLUE",
-  description:
-    "오늘의 행운의 색은 {color}입니다. 오늘은 ~~를 하면 좋은 일이 생길것 같습니다....",
-};
-
 interface ColorOptions {
   [key: string]: number[]; // 인덱스 시그니처 추가
 }
@@ -72,10 +66,11 @@ const options: ColorOptions = {
 const CrystalBallPage = () => {
   const [step, setStep] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 여부 상태
+  const colorInfo = useLuckyColor();
 
   // 초기 h, s, l 값을 0, 0, 0으로 설정
   const { hsl } = useSpringWeb({
-    hsl: step === 0 ? [210, 80, 50] : options[data.colorName],
+    hsl: step === 0 ? [210, 80, 50] : options[colorInfo.colorName],
     config: { tension: 50 },
   });
 
@@ -119,11 +114,11 @@ const CrystalBallPage = () => {
         <ModalContainer isOpen={isModalOpen}>
           <AlertModal
             width="550px"
-            topText={`Lucky ${data.colorName}`}
-            middleText={`${data.description}`}
+            topText={`Lucky ${colorInfo.colorName}`}
+            middleText={`${colorInfo.description}`}
             bottomText="메인으로 돌아가기"
-            imageUrl={crystalBall}
-            topTextColor={`${data.color}`}
+            imageUrl={`${colorInfo.imagePath}`}
+            topTextColor={`${colorInfo.color}`}
             middleTextColor="#5E3A66"
             bottomTextColor="#EAE2ED"
             upperSectionBackground="#EAE2ED"
@@ -204,6 +199,7 @@ const MagicMarbleMaterial: React.FC<MagicMarbleMaterialProps> = ({
   const displacementMap = useTexture("noise3D.jpg");
   heightMap.minFilter = displacementMap.minFilter = THREE.NearestFilter;
   displacementMap.wrapS = displacementMap.wrapT = THREE.RepeatWrapping;
+  const colorInfo = useLuckyColor();
 
   // Create persistent local uniforms object
   const [uniforms] = useState(() => ({
@@ -220,7 +216,7 @@ const MagicMarbleMaterial: React.FC<MagicMarbleMaterialProps> = ({
 
   // This spring value allows us to "fast forward" the displacement in the marble
   const { timeOffset } = useSpringThree({
-    hsl: options[data.colorName], // 스텝에 따라 옵션에서 색상 가져오기
+    hsl: options[colorInfo.colorName], // 스텝에 따라 옵션에서 색상 가져오기
     timeOffset: step * 0.2,
     config: { tension: 50 },
     onChange: ({ value: { hsl } }) => {
