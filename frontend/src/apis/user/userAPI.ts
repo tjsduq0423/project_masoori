@@ -71,9 +71,10 @@ const postSendSignUpCode = async (SendSignUpCodeData: SendSignUpCodeProps) => {
       `/user/email/signup`,
       SendSignUpCodeData
     );
-    return response.data;
+    console.log(response);
+    // return response.data;
   } catch {
-    console.log(new Error("api 연동 오류 - postConsume"));
+    new Error("api 연동 오류 - postConsume");
   }
 };
 
