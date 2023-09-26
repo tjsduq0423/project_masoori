@@ -14,6 +14,4 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RealTimePub {
 	private final RabbitTemplate rabbitTemplate;
-
-
 }

@@ -1,21 +1,17 @@
-version: "3.8"
+version: "3.9"
 
 services:
   realtime:
     container_name: realtime
     build:
       context: ./FastAPIs/realtime
-    ports:
-      - "8000:8000"
   recommend:
     container_name: recommend
     build:
       context: ./FastAPIs/recommend
-    ports:
-      - "8001:8001"
   weekly:
     container_name: weekly
     build:
       context: ./FastAPIs/weekly
-    ports:
-      - "8002:8002"
+    # ports:
+    #   - "8083:80"
