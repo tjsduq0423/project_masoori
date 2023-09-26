@@ -55,6 +55,9 @@ public class CreditCard {
 	@Column(name = "image_path")
 	private String imagePath;
 
+	@Column(name = "img_attr")
+	private String imgAttr;
+
 	@Column(name = "register_path", columnDefinition = "TEXT")
 	private String registerPath;
 
