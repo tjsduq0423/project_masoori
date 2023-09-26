@@ -1,6 +1,7 @@
 package com.fintech.masoori.global.util;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 import lombok.Builder;
 import lombok.Data;
@@ -19,8 +20,9 @@ public class CalcDate {
 
 	public static StartEndDate calcDate(LocalDateTime start, LocalDateTime end) {
 		return StartEndDate.builder()
-						   .startDate(LocalDateTime.of(start.getYear(), start.getMonth(), 1, 0, 0))
-						   .endDate(LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(), 23, 59))
+						   .startDate(LocalDateTime.of(start.getYear(), start.getMonth(), 1, 0, 0, 0))
+						   .endDate(LocalDateTime.of(end.getYear(), end.getMonth(),
+							   YearMonth.from(end).atEndOfMonth().getDayOfMonth(), 23, 59, 59))
 						   .build();
 	}
 }
