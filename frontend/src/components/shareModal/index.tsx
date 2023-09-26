@@ -6,9 +6,9 @@ import {
   TwitterShareButton,
 } from "react-share";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useScript } from "@/shareHook/hook";
+// import { useScript } from "@/shareHook/hook";
 import { useEffect } from "react";
-import shareKakao from "@/assets/img/shareIcon/shareKakao.webp";
+import shareKakaoIcon from "@/assets/img/shareIcon/shareKakao.webp";
 
 // 제목과 버튼을 감싸는 컨테이너
 const FlexContainer = styled.div`
@@ -27,6 +27,12 @@ const GridContainer = styled.div`
   margin-bottom: 16px;
 `;
 
+declare global {
+  interface Window {
+    Kakao: any; // 또는 Kakao SDK의 타입 정의를 참조해야 합니다.
+  }
+}
+
 const URLShareButton = styled.button`
   width: 48px;
   height: 48px;
@@ -43,26 +49,40 @@ const URLShareButton = styled.button`
 `;
 
 const ShareModal = () => {
+  const { Kakao } = window;
+  const realUrl = "https://masoori.site/";
   const currentUrl = window.location.href;
 
-  // kakao SDK import하기
-  const status = useScript("https://developers.kakao.com/sdk/js/kakao.js");
-
-  // kakao sdk 초기화하기
-  // status가 변경될 때마다 실행되며, status가 ready일 때 초기화를 시도합니다.
+  // 재랜더링시에 실행되게 해준다.
   useEffect(() => {
-    if (status === "ready" && (window as any).Kakao) {
-      // 중복 initialization 방지
-      if (!(window as any).Kakao.isInitialized()) {
-        // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
-        (window as any).Kakao.init("4ae4faeac2156b8d5592a875fa6888aa");
-      }
-    }
-  }, [status]);
+    // init 해주기 전에 clean up 을 해준다.
+    Kakao.cleanup();
+    // 자신의 js 키를 넣어준다.
+    Kakao.init("4ae4faeac2156b8d5592a875fa6888aa");
+    // 잘 적용되면 true 를 뱉는다.
+    console.log(Kakao.isInitialized());
+  }, [Kakao]);
 
-  const handleKakaoButton = () => {
-    (window as any).Kakao.Link.sendScrap({
-      requestUrl: currentUrl,
+  const shareKakao = () => {
+    Kakao.Share.sendDefault({
+      objectType: "feed",
+      content: {
+        title: "소비패턴 길잡이, 마수리",
+        description: "마녀가 직접 봐주는 나의 소비패턴 타로카드!",
+        imageUrl:
+          "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791197880285.jpg",
+        link: {
+          webUrl: realUrl,
+        },
+      },
+      buttons: [
+        {
+          title: "마녀에게 테스트 받으러 가기",
+          link: {
+            webUrl: realUrl,
+          },
+        },
+      ],
     });
   };
 
@@ -89,8 +109,12 @@ const ShareModal = () => {
         <CopyToClipboard text={currentUrl}>
           <URLShareButton>URL</URLShareButton>
         </CopyToClipboard>
-        <KakaoShareButton onClick={handleKakaoButton}>
-          <KakaoIcon src={shareKakao}></KakaoIcon>
+        <KakaoShareButton
+          onClick={() => {
+            shareKakao();
+          }}
+        >
+          <KakaoIcon src={shareKakaoIcon}></KakaoIcon>
         </KakaoShareButton>
       </GridContainer>
     </FlexContainer>
