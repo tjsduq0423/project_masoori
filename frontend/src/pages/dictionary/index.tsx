@@ -4,7 +4,7 @@ import styled from "styled-components";
 import PokemonCard from "@/components/Pokemon";
 import TarotCard from "@/components/tarotCard";
 import DcitBtn from "@/components/dictBtn";
-import card from "@/assets/img/cardFront.png";
+import frontcard from "@/assets/img/tarotCard/tarotCardFront.png";
 import background from "@/assets/img/background/silkBackground.jpg";
 import ChallengeBubble from "@/components/challengeBubble";
 import { StyledChallengeBubbleProps } from "@/types/challengeType";
@@ -97,6 +97,23 @@ const BasicText = styled.div`
   margin-bottom: 10px;
 `;
 
+const data = [
+  {
+    name: "행운",
+    imagePath:
+      "https://images.unsplash.com/photo-1500258593672-b080c40f4b02?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80",
+    summary: "생각지도 못했던 곳에 갑자기 돈을 쓸 수 있어요.",
+    description: "이 카드를 뽑은 당신! 오늘은...",
+  },
+  {
+    name: "콜라",
+    imagePath:
+      "https://images.unsplash.com/photo-1500258593672-b080c40f4b02?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80",
+    summary: "생각지도 못했던 곳에 갑자기 돈을 쓸 수 있어요.",
+    description: "이 카드를 뽑은 당신! 오늘은...",
+  },
+];
+
 const DictionaryPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -111,17 +128,17 @@ const DictionaryPage = () => {
     setIsModalOpen(false);
   };
 
-  const initialTarotCards = Array.from({ length: 30 }, (_, index) => (
+  const initialTarotCards = data.map((item, index) => (
     <TarotCard
       key={index}
-      width="80%"
-      height="300px"
+      width="140px"
+      height="100%"
       cardWidth="100%"
-      cardSrc={card}
-      imageSrc="path/to/your/image.jpg"
-      bottomImageWidth="80%"
-      text=""
-      fontsize="16px"
+      cardSrc={frontcard}
+      imageSrc={item.imagePath}
+      bottomImageWidth="100%"
+      text={item.name}
+      fontsize="0.8rem"
     />
   ));
 
@@ -207,7 +224,9 @@ const DictionaryPage = () => {
               }}
             >
               {tarotCards.map((card, index) => (
-                <div key={index}>{card}</div>
+                <div key={index} style={{ marginBottom: "20px" }}>
+                  {card}
+                </div>
               ))}
             </div>
           </div>

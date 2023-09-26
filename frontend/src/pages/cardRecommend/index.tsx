@@ -94,51 +94,6 @@ const StyledCardAlarm = styled.p`
   margin-bottom: 30px;
 `;
 
-const StyledCounter = styled.ul`
-  font-weight: 400;
-  display: flex;
-  align-items: center;
-  margin: 2.5em 0 2em 0;
-  gap: 2em;
-`;
-
-const StyledCounterItem = styled.li`
-  display: flex;
-  align-items: center;
-`;
-
-const StyledCounterIcon = styled.i`
-  margin-right: 10px;
-`;
-
-const StyledCounterSpan = styled.span`
-  display: block;
-  text-transform: capitalize;
-  font-size: 0.8rem;
-  color: #c1c1c1;
-  margin-top: 3px;
-`;
-
-const StyledBtn = styled.button`
-  background-color: #d51a6d;
-  border: none;
-  color: white;
-  padding: 12px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  display: inline-block;
-  border-radius: 4px;
-  transition: 0.3s ease-in;
-
-  i {
-    margin-left: 15px;
-  }
-
-  &:hover {
-    background-color: #ae0a53;
-  }
-`;
-
 const StyledSwiperContainer = styled.div`
   position: relative;
   overflow: hidden;
@@ -325,6 +280,46 @@ const StyledIcon = styled.img`
 `;
 
 const CardRecommend = () => {
+  const data = [
+    {
+      name: "string",
+      company: "string",
+      domestic: "string",
+      overseas: "string",
+      condition: "string",
+      brandList: ["string"],
+      imagePath:
+        "https://images.unsplash.com/photo-1500258593672-b080c40f4b02?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80",
+      registerPath: "string",
+      reason: "string",
+      benefitList: [
+        {
+          title: "string",
+          description: "string",
+          detailDescription: "string",
+        },
+      ],
+    },
+    {
+      name: "string",
+      company: "string",
+      domestic: "string",
+      overseas: "string",
+      condition: "string",
+      brandList: ["string"],
+      imagePath:
+        "https://images.unsplash.com/photo-1500258593672-b080c40f4b02?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80",
+      registerPath: "string",
+      reason: "string",
+      benefitList: [
+        {
+          title: "string",
+          description: "string",
+          detailDescription: "string",
+        },
+      ],
+    },
+  ];
   Swiper.use([Navigation, Pagination]); // Initialize Swiper with necessary modules
 
   useEffect(() => {
