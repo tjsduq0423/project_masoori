@@ -1,8 +1,4 @@
-import { userInfoState } from "@/states/userState";
-import { useRecoilState } from "recoil";
-
 const RedirectPage = () => {
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const params = new URLSearchParams(location.search);
   const accessToken = params.get("accessToken");
 
