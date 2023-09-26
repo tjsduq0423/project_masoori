@@ -82,6 +82,7 @@ const CardFlip = ({
           bottomImageWidth="100%"
           text={text}
           fontsize="20px"
+          bottom="0.8rem"
         ></TarotCard>
       </Front>
     </div>
