@@ -1,7 +1,6 @@
 package com.fintech.masoori.domain.credit.controller;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fintech.masoori.domain.analytics.dto.MonthlySpendingAnalyticsRes;
 import com.fintech.masoori.domain.analytics.service.MonthlySpendingAnalyticsService;
+import com.fintech.masoori.domain.credit.dto.CreditCardReq;
 import com.fintech.masoori.domain.credit.dto.CreditCardRes;
 import com.fintech.masoori.domain.credit.dto.MonthlyInfoRes;
 import com.fintech.masoori.domain.credit.entity.CreditCard;
@@ -38,11 +38,11 @@ public class CreditCardController {
 	@GetMapping("")
 	public ResponseEntity<MonthlyInfoRes> selectMonthCreditCardUser(
 		@Parameter(description = "조회할 연, 월", required = true, example = "2023-09-14T15:30:45")
-		@RequestBody LocalDateTime time,
+		@RequestBody CreditCardReq creditCardReq,
 		Principal principal) {
-		CreditCardRes creditCardRes = creditCardService.selectMonth(principal.getName(), time);
+		CreditCardRes creditCardRes = creditCardService.selectMonth(principal.getName(), creditCardReq.getTime());
 		MonthlySpendingAnalyticsRes monthlySpendingAnalyticsRes = monthlySpendingAnalyticsService.selectAll(
-			principal.getName(), time);
+			principal.getName(), creditCardReq.getTime());
 		MonthlyInfoRes monthlyInfoRes = MonthlyInfoRes.builder()
 													  .creditCardRes(creditCardRes)
 													  .monthlySpendingAnalyticsRes(monthlySpendingAnalyticsRes)
@@ -65,7 +65,5 @@ public class CreditCardController {
 		CreditCardRes.CreditCard creditCard1 = new CreditCardRes.CreditCard(creditCard);
 		return ResponseEntity.ok(creditCard1);
 	}
-
-
 
 }
