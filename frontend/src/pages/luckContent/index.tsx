@@ -67,12 +67,6 @@ const Image = styled.img`
   width: 20%; /* 이미지의 너비를 화면 너비의 10%로 조정 */
 `;
 
-const CardImage = styled.img`
-  width: 350px;
-  margin-right: 50px;
-  /* 수직 가운데 정렬을 위해 margin을 추가 */
-`;
-
 const TitleContainer = styled.div`
   padding: 0px 0px 0px 55px;
   text-align: left;
@@ -97,8 +91,17 @@ const LuckContentPage = () => {
     hoverable: false,
   };
 
+  // const formattedDescription = luckInfo.description
+  //   .split("\n")
+  //   .map((line, index) => (
+  //     <React.Fragment key={index}>
+  //       {line}
+  //       <br />
+  //     </React.Fragment>
+  //   ));
+
   const contentTextBubbleProps: StyledTextBubbleProps = {
-    text: `${luckInfo.description}`,
+    text: `${luckInfo.description.replace(/\n/g, "\n")}`,
     width: "588PX",
     background: "#4D1B2D80",
     opacity: "1",
@@ -133,10 +136,11 @@ const LuckContentPage = () => {
             height="402px"
             cardWidth="100%"
             cardSrc={cardFront}
-            imageSrc={background}
+            imageSrc={luckInfo.imagePath}
             bottomImageWidth="100%"
             text={luckInfo.name}
             fontsize="20px"
+            bottom="1rem"
           ></TarotCard>
         </CardContainer>
         <TitleContainer>
