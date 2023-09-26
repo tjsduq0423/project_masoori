@@ -7,11 +7,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 
 @Data
 @Builder
-@Getter
+@AllArgsConstructor
 public class BasicCardRes {
 
 	@Builder.Default
@@ -19,7 +18,6 @@ public class BasicCardRes {
 
 	@Data
 	@Builder
-	@Getter
 	@AllArgsConstructor
 	public static class BasicCard {
 		@Schema(description = "카드 기본 정보")

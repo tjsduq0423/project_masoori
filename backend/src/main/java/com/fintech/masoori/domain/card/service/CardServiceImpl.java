@@ -11,6 +11,7 @@ import com.fintech.masoori.domain.card.dto.BasicCardRes;
 import com.fintech.masoori.domain.card.dto.CardType;
 import com.fintech.masoori.domain.card.dto.Challenge;
 import com.fintech.masoori.domain.card.dto.ChallengeCardRes;
+import com.fintech.masoori.domain.card.dto.UserCardListRes;
 import com.fintech.masoori.domain.card.entity.Card;
 import com.fintech.masoori.domain.card.repository.CardRepository;
 import com.fintech.masoori.domain.user.entity.User;
@@ -31,7 +32,7 @@ public class CardServiceImpl implements CardService {
 	private final UserRepository userRepository;
 
 	@Override
-	public BasicCardRes selectRangeBasicCard(String email, LocalDateTime start, LocalDateTime end) {
+	public UserCardListRes selectRangeBasicCard(String email, LocalDateTime start, LocalDateTime end) {
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다."));
 
 		CalcDate.StartEndDate calcDate = CalcDate.calcDate(start, end);
@@ -39,19 +40,22 @@ public class CardServiceImpl implements CardService {
 		List<Card> cardList = cardRepository.findRangeCard(user.getId(), CardType.BASIC, calcDate.getStartDate(),
 			calcDate.getEndDate());
 
-		List<BasicCardRes.BasicCard> basicCardList = cardList.stream()
-															 .map(card -> BasicCardRes.BasicCard.builder()
-																								.card(
-																									new com.fintech.masoori.domain.card.dto.Card(
-																										card))
-																								.basicList(
-																									card.getBasicList()
-																										.stream()
-																										.map(Basic::new)
-																										.toList())
-																								.build()).toList();
+		List<UserCardListRes.UserCard> userBasicCardList = cardList.stream()
+																   .map(
+																	   card -> UserCardListRes.UserCard.builder()
+																									   .name(
+																										   card.getName())
+																									   .cardType(
+																										   card.getCardType())
+																									   .id(card.getId())
+																									   .createdDate(
+																										   card.getCreatedDate())
+																									   .imagePath(
+																										   card.getImagePath())
+																									   .build())
+																   .toList();
 
-		return BasicCardRes.builder().basicCardList(basicCardList).build();
+		return UserCardListRes.builder().userCardList(userBasicCardList).build();
 	}
 
 	@Override
@@ -65,7 +69,7 @@ public class CardServiceImpl implements CardService {
 	}
 
 	@Override
-	public ChallengeCardRes selectRangeChallengeCard(String email, LocalDateTime start, LocalDateTime end) {
+	public UserCardListRes selectRangeChallengeCard(String email, LocalDateTime start, LocalDateTime end) {
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다."));
 
 		CalcDate.StartEndDate calcDate = CalcDate.calcDate(start, end);
@@ -73,22 +77,22 @@ public class CardServiceImpl implements CardService {
 		List<Card> cardList = cardRepository.findRangeCard(user.getId(), CardType.SPECIAL, calcDate.getStartDate(),
 			calcDate.getEndDate());
 
-		List<ChallengeCardRes.ChallengeCard> challengeCardList = cardList.stream()
-																		 .map(
-																			 card -> ChallengeCardRes.ChallengeCard.builder()
-																												   .card(
-																													   new com.fintech.masoori.domain.card.dto.Card(
-																														   card))
-																												   .challengeList(
-																													   card.getChallengeList()
-																														   .stream()
-																														   .map(
-																															   Challenge::new)
-																														   .toList())
-																												   .build())
-																		 .toList();
+		List<UserCardListRes.UserCard> userChallengeCardList = cardList.stream()
+																	   .map(
+																		   card -> UserCardListRes.UserCard.builder()
+																										   .name(
+																											   card.getName())
+																										   .cardType(
+																											   card.getCardType())
+																										   .id(card.getId())
+																										   .createdDate(
+																											   card.getCreatedDate())
+																										   .imagePath(
+																											   card.getImagePath())
+																										   .build())
+																	   .toList();
 
-		return ChallengeCardRes.builder().challengeCardList(challengeCardList).build();
+		return UserCardListRes.builder().userCardList(userChallengeCardList).build();
 	}
 
 	@Override

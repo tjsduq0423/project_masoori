@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fintech.masoori.domain.card.dto.BasicCardRes;
 import com.fintech.masoori.domain.card.dto.CardType;
 import com.fintech.masoori.domain.card.dto.ChallengeCardRes;
+import com.fintech.masoori.domain.card.dto.UserCardListRes;
 import com.fintech.masoori.domain.card.entity.Basic;
 import com.fintech.masoori.domain.card.entity.Card;
 import com.fintech.masoori.domain.card.entity.Challenge;
@@ -63,18 +64,18 @@ class CardServiceImplTest {
 			cardList.get(i).setLocalDateTime(LocalDateTime.of(2023, 6 + i, 10 + i, 10, 10, 10));
 		}
 		em.flush();
-		BasicCardRes response = cardService.selectRangeBasicCard(user.getEmail(), LocalDateTime.of(2023, 7, 1, 1, 1),
+		UserCardListRes response = cardService.selectRangeBasicCard(user.getEmail(), LocalDateTime.of(2023, 7, 1, 1, 1),
 			LocalDateTime.of(2023, 7, 1, 1, 1));
-		assertThat(response.getBasicCardList().size() == 1);
+		assertThat(response.getUserCardList().size() == 1);
 		response = cardService.selectRangeBasicCard(user.getEmail(), LocalDateTime.of(2023, 8, 1, 1, 1),
 			LocalDateTime.of(2023, 8, 1, 1, 1));
-		assertThat(response.getBasicCardList().size() == 1);
+		assertThat(response.getUserCardList().size() == 1);
 		response = cardService.selectRangeBasicCard(user.getEmail(), LocalDateTime.of(2023, 9, 1, 1, 1),
 			LocalDateTime.of(2023, 9, 1, 1, 1));
-		assertThat(response.getBasicCardList().size() == 0);
+		assertThat(response.getUserCardList().size() == 0);
 		response = cardService.selectRangeBasicCard(user.getEmail(), LocalDateTime.of(2023, 7, 1, 1, 1),
 			LocalDateTime.of(2023, 9, 1, 1, 1));
-		assertThat(response.getBasicCardList().size() == 2);
+		assertThat(response.getUserCardList().size() == 2);
 		log.info("Response : {}", response);
 	}
 
@@ -146,18 +147,18 @@ class CardServiceImplTest {
 			cardList.get(i).setLocalDateTime(LocalDateTime.of(2023, 8 + i, 1, 0, 0));
 		}
 		em.flush();
-		ChallengeCardRes challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(),
+		UserCardListRes challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(),
 			LocalDateTime.of(2023, 7, 1, 1, 1), LocalDateTime.of(2023, 7, 1, 1, 1));
-		assertThat(challengeCardList.getChallengeCardList().size() == 0);
+		assertThat(challengeCardList.getUserCardList().size() == 0);
 		challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(),
 			LocalDateTime.of(2023, 8, 1, 1, 1), LocalDateTime.of(2023, 8, 1, 1, 1));
-		assertThat(challengeCardList.getChallengeCardList().size() == 1);
+		assertThat(challengeCardList.getUserCardList().size() == 1);
 		challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(),
 			LocalDateTime.of(2023, 9, 1, 1, 1), LocalDateTime.of(2023, 9, 1, 1, 1));
-		assertThat(challengeCardList.getChallengeCardList().size() == 1);
+		assertThat(challengeCardList.getUserCardList().size() == 1);
 		challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(),
 			LocalDateTime.of(2023, 8, 1, 1, 1), LocalDateTime.of(2023, 9, 1, 1, 1));
-		assertThat(challengeCardList.getChallengeCardList().size() == 2);
+		assertThat(challengeCardList.getUserCardList().size() == 2);
 	}
 
 	/**

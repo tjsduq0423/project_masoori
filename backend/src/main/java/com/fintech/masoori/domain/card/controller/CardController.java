@@ -1,18 +1,19 @@
 package com.fintech.masoori.domain.card.controller;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fintech.masoori.domain.card.dto.BasicCardRes;
 import com.fintech.masoori.domain.card.dto.ChallengeCardRes;
-import com.fintech.masoori.domain.card.dto.RangeCardReq;
+import com.fintech.masoori.domain.card.dto.UserCardListRes;
 import com.fintech.masoori.domain.card.service.CardService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,11 +39,14 @@ public class CardController {
 	//소비 카드 범위 조회
 	@Operation(summary = "소비 카드 범위 조회 API", description = "유저의 소비 카드를 연, 월을 기준으로 조회")
 	@GetMapping("/consume")
-	public ResponseEntity<BasicCardRes> selectConsumeCard(
-		@Parameter(description = "조회 시작일, 조회 개수")
-		@RequestBody RangeCardReq basicCardReq, Principal principal) {
-		BasicCardRes basicCardList = cardService.selectRangeBasicCard(principal.getName(), basicCardReq.getStartTime(),
-			basicCardReq.getEndTime());
+	public ResponseEntity<UserCardListRes> selectConsumeCard(
+		@Parameter(name = "시작일", description = "조회를 시작할 연, 월", required = true, example = "2023-09-16T07:42:34.76")
+		@RequestParam("startDate") LocalDateTime startDate,
+		@Parameter(name = "종료일", description = "조회를 종료할 연, 월", required = true, example = "2023-09-26T07:42:34.76")
+		@RequestParam("endDate") LocalDateTime endDate,
+		Principal principal) {
+		UserCardListRes basicCardList = cardService.selectRangeBasicCard(principal.getName(), startDate,
+			endDate);
 		return ResponseEntity.ok(basicCardList);
 	}
 
@@ -59,11 +63,13 @@ public class CardController {
 	//챌린지 카드 범위 조회
 	@Operation(summary = "챌린지 카드 범위 조회 API", description = "유저의 챌린지 카드를 연, 월을 기준으로 조회")
 	@GetMapping("/challenge")
-	public ResponseEntity<ChallengeCardRes> selectChallenge(
-		@Parameter(description = "조회할 연,월(Date 객체)", required = true, example = "2023-09-14T15:30:45")
-		@RequestBody RangeCardReq challengeCardReq, Principal principal) {
-		ChallengeCardRes challengeCardList = cardService.selectRangeChallengeCard(principal.getName(),
-			challengeCardReq.getStartTime(), challengeCardReq.getEndTime());
+	public ResponseEntity<UserCardListRes> selectChallenge(
+		@Parameter(name = "시작일", description = "조회를 시작할 연, 월", required = true, example = "2023-09-16T07:42:34.76")
+		@RequestParam("startDate") LocalDateTime startDate,
+		@Parameter(name = "종료일", description = "조회를 종료할 연, 월", required = true, example = "2023-09-26T07:42:34.76")
+		@RequestParam("endDate") LocalDateTime endDate, Principal principal) {
+		UserCardListRes challengeCardList = cardService.selectRangeChallengeCard(principal.getName(),
+			startDate, endDate);
 		return ResponseEntity.ok(challengeCardList);
 	}
 
