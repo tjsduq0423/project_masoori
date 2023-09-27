@@ -36,17 +36,15 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 	public FortuneListRes selectAllFortune() {
 		FortuneListRes fortuneListRes = FortuneListRes.builder().build();
 		List<Fortune> fortuneList = fortuneRepository.findAll();
-		FortuneListRes fortuneResList = FortuneListRes.builder().build();
 		for (Fortune fortune : fortuneList) {
 			FortuneRes temp = new FortuneRes(fortune);
-			fortuneResList.getFortuneList().add(temp);
+			fortuneListRes.getFortuneList().add(temp);
 		}
 		return fortuneListRes;
 	}
 
 	@Override
 	public FortuneRes selectOneFortune(String email) {
-		FortuneRes fortune = FortuneRes.builder().build();
 		//로그인
 		if (!email.isEmpty()) {
 			Optional<String> userFortuneOptional = Optional.ofNullable(redisService.getUserFortune(email));
@@ -55,11 +53,7 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 				log.debug("Today already select fortune");
 				String fortuneName = userFortuneOptional.get();
 				Fortune findFortune = fortuneRepository.findDescriptioneByName(fortuneName);
-				fortune.setName(findFortune.getName());
-				fortune.setImagePath(findFortune.getImagePath());
-				fortune.setSummary(findFortune.getSummary());
-				fortune.setDescription(findFortune.getDescription());
-				return fortune;
+				return new FortuneRes(findFortune);
 
 			}
 		}
@@ -69,17 +63,14 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 		Page<Fortune> fortunePage = fortuneRepository.findAll(PageRequest.of(idx, 1));
 		if (fortunePage.hasContent()) {
 			Fortune temp = fortunePage.getContent().get(0);
-			fortune.setName(temp.getName());
-			fortune.setImagePath(temp.getImagePath());
-			fortune.setSummary(temp.getSummary());
-			fortune.setDescription(temp.getDescription());
 			if (!email.isEmpty()) {
 				log.debug("Login select fortune");
 				int limitMinute = CalcEndTime.endMinute();
 				redisService.setUserFortune(email, temp.getName(), limitMinute);
 			}
+			return new FortuneRes(temp);
 		}
-		return fortune;
+		return null;
 	}
 
 	@Override
@@ -91,12 +82,19 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 		List<FortuneUser> fortuneUserList = user.getFortuneUserList();
 
 		//전체 금전운 조회
-		List<Fortune> fortuneList = new ArrayList<>();
+		FortuneListRes fortuneList = selectAllFortune();
 
-		FortuneListRes fortuneRes = FortuneListRes.builder().build();
+		List<FortuneRes> fortuneResList = new ArrayList<>();
+
 		for (FortuneUser fortuneUser : fortuneUserList) {
-			fortuneList.add(fortuneUser.getFortune());
+			for (FortuneRes fortuneRes : fortuneList.getFortuneList()) {
+				if (fortuneUser.getFortune().getId().equals(fortuneRes.getId())) {
+					fortuneResList.add(new FortuneRes(fortuneUser.getFortune()));
+				} else {
+					fortuneResList.add(null);
+				}
+			}
 		}
-		return fortuneRes;
+		return FortuneListRes.builder().fortuneList(fortuneResList).build();
 	}
 }
