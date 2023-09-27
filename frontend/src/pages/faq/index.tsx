@@ -2,9 +2,15 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components"; // Import styled-components
+import { useFaqData } from "@/apis/menu/Queries/useFaqData";
 
 interface FaqItemProps {
   active: boolean;
+}
+
+interface FAQItem {
+  title: string;
+  content: string;
 }
 
 const PageContainer = styled.div`
@@ -86,30 +92,9 @@ const FaqToggle = styled.button<FaqItemProps>`
   color: ${(props) => (props.active ? "#fff" : "inherit")};
 `;
 
-const FaqPage: React.FC = () => {
-  const [faqList] = useState([
-    {
-      articleNo: "1",
-      subject: "주제1",
-      content: "ㄴ미ㅏㅓㅁ니아ㅓ니",
-    },
-    {
-      articleNo: "2",
-      subject: "삼성 청년 SW 아카데미에는 어떤 사람들이 지원하면 좋을까요?",
-      content:
-        "만 29세 이하의 청년 취업 준비생이라면 누구나 본 과정에 지원할 수 있습니다.- 국내외 4년제 대학 졸업자(학사이상), 전공무관 ※ 졸업자 및 2023년 8월 졸업예정자삼성 청년 SW 아카데미가 희망하는 인재상은 논리적 사고력, 열정, 학습의지를 갖춘 사람입니다. SW를 잘 이해하고 개발하기 위해서는 논리적이고 창의적으로 사고하는 것이 필요합니다. 또한 SW를 학습하고자 하는 열정, 프로젝트 수행에 필요한 협업 능력 등도 중요합니다.교육생 선발도 이러한 내용을 바탕으로 진행됩니다.",
-    },
-    {
-      articleNo: "3",
-      subject: "주제1",
-      content: "ㄴ미ㅏㅓㅁ니아ㅓ니",
-    },
-    {
-      articleNo: "4",
-      subject: "주제1",
-      content: "ㄴ미ㅏㅓㅁ니아ㅓ니",
-    },
-  ]);
+const FaqPage = () => {
+  const faqData: FAQItem[] = useFaqData().faqList;
+
   const [activeItems, setActiveItems] = useState([false, false, false, false]);
 
   const toggleItem = (idx: number) => {
@@ -123,13 +108,13 @@ const FaqPage: React.FC = () => {
       <div className="container">
         <TitleText>FAQ</TitleText>
         <FaqContainer>
-          {faqList.map((faq, idx) => (
+          {faqData.map((faq, idx) => (
             <FaqItem
-              key={faq.articleNo}
+              key={idx}
               active={activeItems[idx]}
               onClick={() => toggleItem(idx)}
             >
-              <h3 className="faq-title">{faq.subject}</h3>
+              <h3 className="faq-title">{faq.title}</h3>
               <p className="faq-text">{faq.content}</p>
               <FaqToggle active={activeItems[idx]}>
                 <FontAwesomeIcon icon={faAngleDown} />

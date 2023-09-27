@@ -2,9 +2,11 @@ import { instance } from "@/apis/instance";
 import { AllChallengeCardProps } from "@/types/dictionaryType";
 
 // 사용자 추천 카드 리스트 조회 API
-const getAllCreditcard = async () => {
+const getAllCreditcard = async (time: string) => {
   try {
-    const response = await instance.get(`/creditcard`);
+    const response = await instance.get(`/creditcard`, {
+      params: { time }, // time 매개변수를 쿼리 매개변수로 전달
+    });
     return response.data;
   } catch {
     new Error("api 연동 오류 - getAllCreditcard");
