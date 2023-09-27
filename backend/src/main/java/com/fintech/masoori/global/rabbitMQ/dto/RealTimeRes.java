@@ -1,18 +1,15 @@
 package com.fintech.masoori.global.rabbitMQ.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Builder
+@AllArgsConstructor
 @ToString
-public class RecommendMessage {
+public class RealTimeRes {
+
 	private int id;
 }
