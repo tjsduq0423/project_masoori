@@ -18,9 +18,13 @@ const StyledText = styled.div`
   margin-right: 10px;
 `;
 
-const RegistBtn = () => {
+interface RegistBtnProps {
+  onClick?: () => void; // Define the onClick prop
+}
+
+const RegistBtn = ({ onClick }: RegistBtnProps) => {
   return (
-    <StyledButton>
+    <StyledButton onClick={onClick}>
       <StyledText>신청하러 가기</StyledText>
       <svg
         xmlns="http://www.w3.org/2000/svg"

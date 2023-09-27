@@ -21,18 +21,6 @@ const StyledChallengeBubble = styled.div<StyledChallengeBubbleProps>`
   position: relative;
   display: flex;
   align-items: center;
-
-  /* hoverable 프로퍼티가 true일 때만 hover 효과 적용 */
-  ${(props) =>
-    props.hoverable &&
-    `
-    &:hover::before {
-      opacity: 1;
-    }
-    &:hover {
-        background: #7B263B;
-    }
-  `}
 `;
 
 const BubbleContainer = styled.div``;
@@ -63,7 +51,6 @@ const ChallengeBubble = ({
   paddingLeftRight,
   paddingTopBottom,
   borderRadius,
-  hoverable,
   imgLink,
   titleText,
 }: StyledChallengeBubbleProps) => {
@@ -78,9 +65,7 @@ const ChallengeBubble = ({
         borderRadius={borderRadius}
         text={text}
         titleText={titleText}
-        hoverable={hoverable}
       >
-        {" "}
         <ImageContainer>
           <Image src={imgLink}></Image>
         </ImageContainer>

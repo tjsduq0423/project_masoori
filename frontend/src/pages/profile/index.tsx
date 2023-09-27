@@ -84,6 +84,16 @@ const LocationContainer = styled.div`
 // Define other styled-components similarly for the remaining classes
 
 const ProfilePage = () => {
+  const data = {
+    imagePath: "/etc/img",
+    smsAlarm: true,
+    cardGeneration: false,
+    dailySpending: 10000,
+    weeklySpending: 100000,
+    monthlySpending: 500000,
+    isAuthenticated: true,
+  };
+
   return (
     <Container>
       <WeatherSide>
@@ -94,15 +104,20 @@ const ProfilePage = () => {
           <InfoTitle>Wallets</InfoTitle>
         </TodayInfo>
         <WeekContainer>
-          <DonutChart value={75} valuelabel="Day" size={115} strokewidth={15} />
           <DonutChart
-            value={75}
+            value={data.dailySpending / 10000}
+            valuelabel="Day"
+            size={115}
+            strokewidth={15}
+          />
+          <DonutChart
+            value={data.weeklySpending / 10000}
             valuelabel="WEEK"
             size={115}
             strokewidth={15}
           />
           <DonutChart
-            value={75}
+            value={data.monthlySpending / 10000}
             valuelabel="MONTH"
             size={115}
             strokewidth={15}
@@ -126,6 +141,7 @@ const ProfilePage = () => {
               textOff="카카오 연동 등록하기"
               backgroundImage="https://www.svgrepo.com/show/368252/kakao.svg"
               backgroundColor="#e0cf19"
+              checked={data.smsAlarm}
             />
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -139,6 +155,7 @@ const ProfilePage = () => {
               textOff="카드 연동 등록하기"
               backgroundImage="https://assets.codepen.io/4175254/boo-face.png"
               backgroundColor="#FFF"
+              checked={data.cardGeneration}
             />
           </div>
         </LocationContainer>

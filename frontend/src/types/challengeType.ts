@@ -6,7 +6,6 @@ interface StyledChallengeBubbleProps {
   paddingLeftRight: string;
   paddingTopBottom: string;
   borderRadius: string;
-  hoverable: boolean;
   imgLink?: string;
   titleText: string;
   onClick?: () => void;
