@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
 interface TextProps {
@@ -10,6 +10,7 @@ interface ToggleSwitchProps {
   textOff: string;
   backgroundImage: string;
   backgroundColor: string;
+  checked: boolean;
 }
 
 const switchAnimation = keyframes`
@@ -165,14 +166,19 @@ const ToggleSwitch = ({
   textOff,
   backgroundImage,
   backgroundColor,
+  checked,
 }: ToggleSwitchProps) => {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(checked);
+
+  useEffect(() => {
+    setIsChecked(checked); // Update the isChecked state when the 'checked' prop changes
+  }, [checked]);
 
   const toggleSwitch = () => {
     setIsChecked(!isChecked);
   };
 
-  const toggleId = Math.random().toString(36).substring(7); // 고유한 id 생성
+  const toggleId = Math.random().toString(36).substring(7);
 
   return (
     <>

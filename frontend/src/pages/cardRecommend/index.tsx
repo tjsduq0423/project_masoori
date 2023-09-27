@@ -2,9 +2,31 @@ import React, { useEffect, useState, useMemo } from "react";
 import styled from "styled-components";
 import Swiper, { Navigation, Pagination } from "swiper"; // Import Swiper and necessary modules
 import RegistBtn from "@/components/registbtn";
+import { useAllCreditCard } from "@/apis/dictionary/Queries/useAllCreditCard";
+import MonthSpendCarousel from "@/components/monthSpend";
 
-import foodIcon from "@/assets/img/foodIcon.png";
-import moneyIcon from "@/assets/img/moneyIcon.png";
+import tarotback from "@/assets/img/tarotCard/tarotCardBack.png";
+
+interface CreditCard {
+  id: number;
+  name: string;
+  company: string;
+  domestic: string;
+  overseas: string;
+  condition: string;
+  brandList: string[];
+  imagePath: string;
+  imageAttr: string;
+  registerPath: string;
+  reason: string;
+  benefitList: Benefit[];
+}
+
+interface Benefit {
+  title: string;
+  description: string;
+  detailDescription: string;
+}
 
 const StyledMain = styled.main`
   position: relative;
@@ -121,7 +143,6 @@ const StyledSwiperSlide = styled.div`
   align-items: self-start;
   position: relative;
   border-radius: 12px;
-  box-shadow: -1px 5px 15px #0000001f;
   text-align: center;
   opacity: 0.4;
   transition: opacity 0.4s ease-in;
@@ -171,45 +192,18 @@ const StyledSwiperSlide = styled.div`
   }
 
   &.swiper-slide--1 {
-    background: #0f2027;
-    background:
-      linear-gradient(to bottom, #2c536400, #203a4303, #0f2027cc),
-      url("https://api.card-gorilla.com:8080/storage/card/87/card_img/20239/87card.png")
-        no-repeat 50% 50% / cover;
-  }
-
-  &.swiper-slide--one h3 {
-    font-family: "Courgette", cursive;
-    font-weight: 300;
   }
 
   &.swiper-slide--2 {
-    background:
-      linear-gradient(to bottom, #2c536400, #203a4303, #0f2027cc),
-      url("https://api.card-gorilla.com:8080/storage/card/87/card_img/20239/87card.png")
-        no-repeat 50% 50% / cover;
   }
 
   &.swiper-slide--3 {
-    background: url("https://api.card-gorilla.com:8080/storage/card/87/card_img/20239/87card.png")
-      no-repeat 50% 50% / cover;
   }
 
   &.swiper-slide--4 {
-    background: url("https://api.card-gorilla.com:8080/storage/card/87/card_img/20239/87card.png")
-      no-repeat 50% 50% / cover;
   }
 
   &.swiper-slide--5 {
-    background: url("https://api.card-gorilla.com:8080/storage/card/87/card_img/20239/87card.png")
-      no-repeat 50% 50% / cover;
-  }
-
-  &.swiper-slide--6 {
-    background:
-      linear-gradient(to bottom, #2c536400, #203a4303, #0f2027cc),
-      url("https://api.card-gorilla.com:8080/storage/card/87/card_img/20239/87card.png")
-        no-repeat 50% 50% / cover;
   }
 
   &.swiper-slide-active {
@@ -256,96 +250,31 @@ const StyledWrapper = styled.div`
   margin: 20px 0 40px;
 `;
 
-const StyledItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Pyeongchangpeace";
-  text-align: left;
-  font-size: 1.5rem;
-`;
-
-const StyledIcon = styled.img`
-  margin-right: 20px;
-`;
-
-const StyledRotatedImageWrapper = styled.div<{ shouldRotate?: boolean }>`
+const StyledRotatedImageWrapper = styled.div<{ imageAttr?: string }>`
   height: 100%;
-  transform: ${({ shouldRotate }) => (shouldRotate ? "rotate(90deg)" : "none")};
+  transform: ${({ imageAttr }) =>
+    imageAttr === "가로" ? "rotate(90deg)" : "none"};
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const CardRecommend = () => {
-  const data = useMemo(
-    () => [
-      {
-        name: "손수형",
-        company: "string",
-        domestic: "string",
-        overseas: "string",
-        condition: "string",
-        brandList: ["string"],
-        imagePath:
-          "https://api.card-gorilla.com:8080/storage/card/87/card_img/20239/87card.png",
-        registerPath: "string",
-        reason: "string",
-        benefitList: [
-          {
-            title: "string",
-            description: "string",
-            detailDescription: "string",
-          },
-        ],
-        shouldRotate: false,
-      },
-      {
-        name: "차지은",
-        company: "string",
-        domestic: "string",
-        overseas: "string",
-        condition: "string",
-        brandList: ["string"],
-        imagePath:
-          "https://api.card-gorilla.com:8080/storage/card/2330/card_img/24131/2330card.png",
-        registerPath: "string",
-        reason: "string",
-        benefitList: [
-          {
-            title: "string",
-            description: "string",
-            detailDescription: "string",
-          },
-        ],
-        shouldRotate: true,
-      },
-      {
-        name: "유민국",
-        company: "string",
-        domestic: "string",
-        overseas: "string",
-        condition: "string",
-        brandList: ["string"],
-        imagePath:
-          "https://api.card-gorilla.com:8080/storage/card/51/card_img/27707/51card.png",
-        registerPath: "string",
-        reason: "string",
-        benefitList: [
-          {
-            title: "string",
-            description: "string",
-            detailDescription: "string",
-          },
-        ],
-        shouldRotate: true,
-      },
-    ],
-    []
-  );
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(data[0]);
+  const time = "2023-09-19T21:11:45";
 
-  Swiper.use([Navigation, Pagination]); // Initialize Swiper with necessary modules
+  const allCreditCard = useAllCreditCard(time);
+  const creditCardRes = allCreditCard.creditCardRes.creditCardList;
+  const MonthData =
+    allCreditCard.monthlySpendingAnalyticsRes.monthlySpendingAnalyticsList;
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(creditCardRes[0]);
+
+  Swiper.use([Navigation, Pagination]); // Initialize Swiper with necessary modules\
+
+  const handleRegistBtnClick = () => {
+    // Use window.location.href to navigate to the specified link
+    // console.log(currentSlideIndex.registerPath);
+    window.open(currentSlideIndex.registerPath, "_blank");
+  };
 
   useEffect(() => {
     const swiper = new Swiper(".swiper", {
@@ -397,14 +326,14 @@ const CardRecommend = () => {
         const slideNumber = parseInt(slideNumberMatch[1], 10); // 매칭된 숫자 부분 추출 및 정수로 변환
 
         // slideNumber에 해당하는 데이터 가져오기
-        const currentData = data[slideNumber - 1]; // 슬라이드 인덱스는 0부터 시작하므로 배열 인덱스에 맞게 조정
+        const currentData = creditCardRes[slideNumber - 1]; // 슬라이드 인덱스는 0부터 시작하므로 배열 인덱스에 맞게 조정
 
         // currentData를 원하는 방식으로 활용할 수 있습니다.
         console.log("Current Data:", currentData);
         setCurrentSlideIndex(currentData);
       }
     });
-  }, [data]);
+  }, [creditCardRes]);
 
   return (
     <StyledMain>
@@ -412,14 +341,7 @@ const CardRecommend = () => {
         <StyledDate>23.09</StyledDate>
         <StyledTitle>이달의 추천카드</StyledTitle>
         <StyledWrapper>
-          <StyledItem>
-            <StyledIcon src={foodIcon} alt="Background" />
-            음식
-          </StyledItem>
-          <StyledItem>
-            <StyledIcon src={moneyIcon} alt="Background" />
-            323,000
-          </StyledItem>
+          <MonthSpendCarousel monthData={MonthData} />
         </StyledWrapper>
         <StyledCardName>
           <CardNameText>{currentSlideIndex.name}</CardNameText>
@@ -433,19 +355,19 @@ const CardRecommend = () => {
         </StyledCardCondition>
         <StyledCardBenefits>
           혜택 <br />
-          {currentSlideIndex.benefitList[0].title}
+          {currentSlideIndex.benefitList[0].description}
         </StyledCardBenefits>
         <StyledCardAlarm>
           * 자세한 사항은 사이트에서 확인해주세요.
         </StyledCardAlarm>
-        <RegistBtn />
+        <RegistBtn onClick={handleRegistBtnClick} />
       </StyledContent>
       <StyledSwiperContainer>
         <StyledSwiper className="swiper">
           <div className="swiper-wrapper">
-            {data.map((item, index) => (
+            {creditCardRes.map((item: CreditCard, index: number) => (
               <StyledSwiperSlide
-                key={index}
+                key={item.id}
                 className={`swiper-slide swiper-slide--${index + 1}`}
                 style={{
                   position: "relative",
@@ -453,24 +375,30 @@ const CardRecommend = () => {
                   alignItems: "center",
                   justifyContent: "center",
                   overflow: "hidden",
-                  backgroundImage: `linear-gradient(to bottom, #2c536400, #203a4303, #0f2027cc)`,
                 }}
               >
-                {!item.shouldRotate ? (
-                  <img
-                    src={item.imagePath}
-                    style={{ width: "88%", borderRadius: "10px" }}
-                  />
-                ) : (
-                  <StyledRotatedImageWrapper shouldRotate={item.shouldRotate}>
+                {item.imagePath ? ( // 이미지가 있는 경우
+                  item.imageAttr === "세로" ? (
                     <img
                       src={item.imagePath}
-                      alt={`Card ${index + 1}`}
-                      style={{
-                        maxWidth: "140%", // 회전 시에만 최대 너비를 100%로 설정
-                      }}
+                      style={{ width: "90%", borderRadius: "10px" }}
                     />
-                  </StyledRotatedImageWrapper>
+                  ) : (
+                    <StyledRotatedImageWrapper imageAttr={item.imageAttr}>
+                      <img
+                        src={item.imagePath}
+                        style={{
+                          maxWidth: "140%", // 회전 시에만 최대 너비를 100%로 설정
+                        }}
+                      />
+                    </StyledRotatedImageWrapper>
+                  )
+                ) : (
+                  // 이미지가 없는 경우
+                  <img
+                    src={tarotback}
+                    style={{ width: "90%", borderRadius: "10px" }}
+                  />
                 )}
               </StyledSwiperSlide>
             ))}

@@ -114,6 +114,52 @@ const data = [
   },
 ];
 
+const challengeCard = {
+  card: {
+    id: 1,
+    name: "카드 이름",
+    imagePath: "http://j9b308.p.ssafy.io/abc.jpg",
+    description: "이 카드는...",
+    createdDate: "2023-09-27T02:24:02.289Z",
+    cardType: "BASIC, SPECIAL",
+  },
+  challengeList: [
+    {
+      id: 1,
+      isSuccess: true,
+      name: "커피 그만 먹어",
+      achievementCondition: "커피 2번 줄이기",
+      startTime: "2023-09-27T02:24:02.289Z",
+      endTime: "2023-09-27T02:24:02.289Z",
+    },
+    {
+      id: 2,
+      isSuccess: true,
+      name: "과자 멈춰",
+      achievementCondition: "과자 2번 줄이기",
+      startTime: "2023-09-27T02:24:02.289Z",
+      endTime: "2023-09-27T02:24:02.289Z",
+    },
+    {
+      id: 3,
+      isSuccess: false,
+      name: "저축은 해야지",
+      achievementCondition: "저축 2번 하기",
+      startTime: "2023-09-27T02:24:02.289Z",
+      endTime: "2023-09-27T02:24:02.289Z",
+    },
+
+    {
+      id: 4,
+      isSuccess: false,
+      name: "다이어트 맨",
+      achievementCondition: "외식 2번 줄이기",
+      startTime: "2023-09-27T02:24:02.289Z",
+      endTime: "2023-09-27T02:24:02.289Z",
+    },
+  ],
+};
+
 const DictionaryPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -158,7 +204,6 @@ const DictionaryPage = () => {
     paddingTopBottom: "30px",
     borderRadius: "20px",
     imgLink: ChallegeSuccess,
-    hoverable: true,
     titleText: "소비금액 5만원 넘지 않기",
   };
 
@@ -206,10 +251,32 @@ const DictionaryPage = () => {
                   justifyContent: "space-around",
                 }}
               >
-                <ChallengeBubble {...crystalChallengeBubbleProps} />
-                <ChallengeBubble {...crystalChallengeBubbleProps} />
-                <ChallengeBubble {...crystalChallengeBubbleProps} />
-                <ChallengeBubble {...crystalChallengeBubbleProps} />
+                {challengeCard.challengeList.map((challenge, index) => (
+                  <ChallengeBubble
+                    key={index}
+                    text={challenge.achievementCondition} // Use achievementCondition as text
+                    titleText={challenge.name} // Use name as titleText
+                    width={crystalChallengeBubbleProps.width}
+                    background={
+                      challenge.isSuccess
+                        ? "#7B263B"
+                        : crystalChallengeBubbleProps.background
+                    }
+                    opacity={
+                      challenge.isSuccess
+                        ? "1"
+                        : crystalChallengeBubbleProps.opacity
+                    }
+                    paddingLeftRight={
+                      crystalChallengeBubbleProps.paddingLeftRight
+                    }
+                    paddingTopBottom={
+                      crystalChallengeBubbleProps.paddingTopBottom
+                    }
+                    borderRadius={crystalChallengeBubbleProps.borderRadius}
+                    imgLink={crystalChallengeBubbleProps.imgLink}
+                  />
+                ))}
               </div>
             </div>
           </div>
