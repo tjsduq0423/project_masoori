@@ -14,4 +14,16 @@ public interface CardService {
 	UserCardListRes selectRangeChallengeCard(String email, LocalDateTime start, LocalDateTime end);
 
 	ChallengeCardRes.ChallengeCard selectChallengeCard(String email, long cardId);
+
+	/**
+	 * 챌린지 카드 등록
+	 * 카드 이름, 사진 경로, 카드 설명 ,type =  SPECIAL , 챌린지 객체 등록, 성공여부 defalut, 챌린지 이름, 달성 조건 , 시간 defalut
+	 */
+	void registerChallengeCard(Long id, ChallengeCardRes.ChallengeCard challengeCard);
+
+	/**
+	 * 기본 소비 카드 등록
+	 */
+	void registerSpendingCard(UserCardListRes.UserCard userCard);
+
 }

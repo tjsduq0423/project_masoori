@@ -41,19 +41,18 @@ public class CardServiceImpl implements CardService {
 			calcDate.getEndDate());
 
 		List<UserCardListRes.UserCard> userBasicCardList = cardList.stream()
-																   .map(
-																	   card -> UserCardListRes.UserCard.builder()
-																									   .name(
-																										   card.getName())
-																									   .cardType(
-																										   card.getCardType())
-																									   .id(card.getId())
-																									   .createdDate(
-																										   card.getCreatedDate())
-																									   .imagePath(
-																										   card.getImagePath())
-																									   .build())
-																   .toList();
+		                                                           .map(card -> UserCardListRes.UserCard.builder()
+		                                                                                                .name(
+			                                                                                                card.getName())
+		                                                                                                .cardType(
+			                                                                                                card.getCardType())
+		                                                                                                .id(card.getId())
+		                                                                                                .createdDate(
+			                                                                                                card.getCreatedDate())
+		                                                                                                .imagePath(
+			                                                                                                card.getImagePath())
+		                                                                                                .build())
+		                                                           .toList();
 
 		return UserCardListRes.builder().userCardList(userBasicCardList).build();
 	}
@@ -63,9 +62,9 @@ public class CardServiceImpl implements CardService {
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다."));
 		Card card = cardRepository.findCard(user.getId(), CardType.BASIC, cardId);
 		return BasicCardRes.BasicCard.builder()
-									 .card(new com.fintech.masoori.domain.card.dto.Card(card))
-									 .basicList(card.getBasicList().stream().map(Basic::new).toList())
-									 .build();
+		                             .card(new com.fintech.masoori.domain.card.dto.Card(card))
+		                             .basicList(card.getBasicList().stream().map(Basic::new).toList())
+		                             .build();
 	}
 
 	@Override
@@ -78,19 +77,18 @@ public class CardServiceImpl implements CardService {
 			calcDate.getEndDate());
 
 		List<UserCardListRes.UserCard> userChallengeCardList = cardList.stream()
-																	   .map(
-																		   card -> UserCardListRes.UserCard.builder()
-																										   .name(
-																											   card.getName())
-																										   .cardType(
-																											   card.getCardType())
-																										   .id(card.getId())
-																										   .createdDate(
-																											   card.getCreatedDate())
-																										   .imagePath(
-																											   card.getImagePath())
-																										   .build())
-																	   .toList();
+		                                                               .map(card -> UserCardListRes.UserCard.builder()
+		                                                                                                    .name(
+			                                                                                                    card.getName())
+		                                                                                                    .cardType(
+			                                                                                                    card.getCardType())
+		                                                                                                    .id(card.getId())
+		                                                                                                    .createdDate(
+			                                                                                                    card.getCreatedDate())
+		                                                                                                    .imagePath(
+			                                                                                                    card.getImagePath())
+		                                                                                                    .build())
+		                                                               .toList();
 
 		return UserCardListRes.builder().userCardList(userChallengeCardList).build();
 	}
@@ -100,9 +98,28 @@ public class CardServiceImpl implements CardService {
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다."));
 		Card card = cardRepository.findCard(user.getId(), CardType.SPECIAL, cardId);
 		return ChallengeCardRes.ChallengeCard.builder()
-											 .card(new com.fintech.masoori.domain.card.dto.Card(card))
-											 .challengeList(
-												 card.getChallengeList().stream().map(Challenge::new).toList())
-											 .build();
+		                                     .card(new com.fintech.masoori.domain.card.dto.Card(card))
+		                                     .challengeList(
+			                                     card.getChallengeList().stream().map(Challenge::new).toList())
+		                                     .build();
+	}
+
+	@Override
+	@Transactional
+	public void registerChallengeCard(Long id, ChallengeCardRes.ChallengeCard challengeCard) {
+		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
+
+		Card newCard = Card.builder()
+		                   .name(challengeCard.getCard().getName())
+		                   .imagePath(challengeCard.getCard().getImagePath())
+		                   .description(challengeCard.getCard().getDescription())
+		                   .cardType(CardType.SPECIAL)
+		                   .build();
+	}
+
+	@Override
+	@Transactional
+	public void registerSpendingCard(UserCardListRes.UserCard userCard) {
+
 	}
 }
