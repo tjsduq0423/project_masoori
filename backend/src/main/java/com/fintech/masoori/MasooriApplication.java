@@ -3,6 +3,7 @@ package com.fintech.masoori;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.servers.Server;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
 	@Server(url = "http://localhost:8080", description = "Local Server URL")
 	})
 @EnableJpaAuditing
+@EnableScheduling
 @SpringBootApplication
 public class MasooriApplication {
 

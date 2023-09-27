@@ -13,6 +13,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString
-public class RealTimeMessage  {
+public class RecommendReq {
 	private int id;
 }

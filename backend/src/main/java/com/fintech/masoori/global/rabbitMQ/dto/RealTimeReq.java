@@ -13,6 +13,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString
-public class WeeklyMessage {
+public class RealTimeReq {
+	
+
 	private int id;
 }
