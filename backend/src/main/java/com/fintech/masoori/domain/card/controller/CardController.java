@@ -40,9 +40,9 @@ public class CardController {
 	@Operation(summary = "소비 카드 범위 조회 API", description = "유저의 소비 카드를 연, 월을 기준으로 조회")
 	@GetMapping("/consume")
 	public ResponseEntity<UserCardListRes> selectConsumeCard(
-		@Parameter(name = "시작일", description = "조회를 시작할 연, 월", required = true, example = "2023-09-16T07:42:34.76")
+		@Parameter(description = "조회를 시작할 연, 월", required = true, example = "2023-09-16T07:42:34.76")
 		@RequestParam("startDate") LocalDateTime startDate,
-		@Parameter(name = "종료일", description = "조회를 종료할 연, 월", required = true, example = "2023-09-26T07:42:34.76")
+		@Parameter(description = "조회를 종료할 연, 월", required = true, example = "2023-09-26T07:42:34.76")
 		@RequestParam("endDate") LocalDateTime endDate,
 		Principal principal) {
 		UserCardListRes basicCardList = cardService.selectRangeBasicCard(principal.getName(), startDate,
@@ -54,7 +54,7 @@ public class CardController {
 	@Operation(summary = "소비 카드 조회 API", description = "소비 카드 한 장을 조회한다.")
 	@GetMapping("/consume/{id}")
 	public ResponseEntity<BasicCardRes.BasicCard> detailConsumeCard(
-		@Parameter(name = "cardId", description = "소비카드 id", required = true, example = "1", in = ParameterIn.PATH)
+		@Parameter(name = "id", description = "소비카드 id", required = true, example = "1", in = ParameterIn.PATH)
 		@PathVariable Long id, Principal principal) {
 		BasicCardRes.BasicCard basicCard = cardService.selectBasicCard(principal.getName(), id);
 		return ResponseEntity.ok(basicCard);
@@ -64,9 +64,9 @@ public class CardController {
 	@Operation(summary = "챌린지 카드 범위 조회 API", description = "유저의 챌린지 카드를 연, 월을 기준으로 조회")
 	@GetMapping("/challenge")
 	public ResponseEntity<UserCardListRes> selectChallenge(
-		@Parameter(name = "시작일", description = "조회를 시작할 연, 월", required = true, example = "2023-09-16T07:42:34.76")
+		@Parameter(description = "조회를 시작할 연, 월", required = true, example = "2023-09-16T07:42:34.76")
 		@RequestParam("startDate") LocalDateTime startDate,
-		@Parameter(name = "종료일", description = "조회를 종료할 연, 월", required = true, example = "2023-09-26T07:42:34.76")
+		@Parameter(description = "조회를 종료할 연, 월", required = true, example = "2023-09-26T07:42:34.76")
 		@RequestParam("endDate") LocalDateTime endDate, Principal principal) {
 		UserCardListRes challengeCardList = cardService.selectRangeChallengeCard(principal.getName(),
 			startDate, endDate);
@@ -77,7 +77,7 @@ public class CardController {
 	@Operation(summary = "챌린지 카드 조회 API", description = "챌린지 카드 한 장을 조회한다.")
 	@GetMapping("/challenge/{id}")
 	public ResponseEntity<ChallengeCardRes.ChallengeCard> selectChallengeCard(
-		@Parameter(name = "cardId", description = "챌린지카드 id", required = true, example = "1", in = ParameterIn.PATH)
+		@Parameter(name = "id", description = "챌린지카드 id", required = true, example = "1", in = ParameterIn.PATH)
 		@PathVariable Long id, Principal principal) {
 		ChallengeCardRes.ChallengeCard challengeCard = cardService.selectChallengeCard(principal.getName(), id);
 		return ResponseEntity.ok(challengeCard);
