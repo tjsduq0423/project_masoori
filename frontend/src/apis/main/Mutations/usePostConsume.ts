@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { postConsume } from "@/apis/spend/spendAPI";
+import { postConsume } from "@/apis/main/mainAPI";
 
 const usePostConsume = () => {
   const queryClient = useQueryClient();
