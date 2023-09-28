@@ -3,6 +3,7 @@ import ProfilePage from "@/pages/profile";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import menuTitle from "../../assets/img/menuTitle.png";
+import { usePostLogout } from "@/apis/user/Mutations/usePostLogout";
 
 const PageContainer = styled.div`
   position: fixed;
@@ -78,6 +79,12 @@ const MenuPage = () => {
     navigate("/faq");
   };
 
+  const Logout = () => {
+    localStorage.removeItem("accessToken");
+    usePostLogout();
+    navigate("/main");
+  };
+
   return (
     <PageContainer>
       <div style={{ width: "100%" }}>
@@ -91,7 +98,7 @@ const MenuPage = () => {
           <MenuTitle></MenuTitle>
         </div>
         <MenuItem onClick={goMain}>MAIN</MenuItem>
-        <MenuItem>LOG OUT</MenuItem>
+        <MenuItem onClick={Logout}>LOG OUT</MenuItem>
         <MenuItem onClick={openModal}>MY PAGE</MenuItem>
         <MenuItem onClick={goFaq}>FAQ</MenuItem>
         <ModalContainer isOpen={isModalOpen}>
