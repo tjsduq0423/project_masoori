@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import background from "@/assets/img/background/silkBackground.jpg";
 import TarotCard from "@/components/tarotCard";
@@ -11,6 +11,9 @@ import GhostModal from "@/components/ghostModal";
 import AlertModal from "@/components/alertModal";
 import puzzle from "@/assets/img/puzzle.png";
 import { useRecoilState } from "recoil";
+import VerifyNumberModal from "@/components/verifyNumberModal";
+import { useGetConsumeId } from "@/apis/spend/Queris/useGetConsumeId";
+import { spendInfoState } from "@/states/verifyState";
 
 const PageContainer = styled.div`
   position: fixed;
@@ -99,6 +102,13 @@ const PuzzleModalContainer = styled.div<{ isPuzzleOpen: boolean }>`
 const SpendPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 여부 상태
   const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
+  const [ConsumeIdInfo, setConsumeIdInfo] = useRecoilState(spendInfoState);
+
+  const consume = useGetConsumeId(4);
+
+  useEffect(() => {
+    setConsumeIdInfo(consume);
+  }, [setConsumeIdInfo, consume]);
 
   // 모달 열기 함수
   const toggleModal: () => void = () => {
@@ -135,11 +145,7 @@ const SpendPage: React.FC = () => {
   };
 
   const contentTextBubbleProps: StyledTextBubbleProps = {
-    text: `별들이 제법 많이 떴는걸? 어디 보자......
-    마법 같은 변화가 일어났구나! 🧙‍♀️ 저번주 대비 전체적인 소비금액이 줄어들었지만, 음식에 대한 소비를 많이 했구나
-    이러한 변화가 발생한 이유를 알아보고 더 나은 재정 상태를 유지할 수 있는 방법을 고민해보자.
-    네 미래의 지출도 알고 싶다고? 어렵지 않지. 손을 줘보겠니?
-    아니면, 네 카드를 지금 바로 다른 인간들에게 보여줄래?`,
+    text: `${ConsumeIdInfo.card.description.replace(/\n/g, "\n")}`,
     width: "650px",
     background: "#4D1B2D80",
     opacity: "1",
@@ -183,19 +189,16 @@ const SpendPage: React.FC = () => {
               cardSrc={tarotCardFront}
               imageSrc={tarotCardBack}
               bottomImageWidth="100%"
-              text="Special Card"
+              text={`${ConsumeIdInfo.card.name}`}
               fontsize="20px"
             ></TarotCard>
           </CardContainer>
           <TitleContainer>
             <Title>This Week&apos;s Tarot Card</Title>
             <HashtagContainer>
-              <HashTag text="Food"></HashTag>
-              <HashTag text="Food"></HashTag>
-              <HashTag text="Food"></HashTag>
-              <HashTag text="Food"></HashTag>
-              <HashTag text="Food"></HashTag>
-              <HashTag text="Food"></HashTag>
+              {ConsumeIdInfo.basicList.map((item) => (
+                <HashTag key={item.id} text={item.keyword} />
+              ))}
             </HashtagContainer>
             <ContentWrapper>
               <TextBubbleContainer>
