@@ -105,4 +105,9 @@ public class CardServiceImpl implements CardService {
 												 card.getChallengeList().stream().map(Challenge::new).toList())
 											 .build();
 	}
+
+	@Override
+	public BasicCardRes.BasicCard selectUserRecentBasicCard(String email, LocalDateTime time) {
+		return null;
+	}
 }

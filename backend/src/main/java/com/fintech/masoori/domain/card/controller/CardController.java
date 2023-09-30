@@ -83,4 +83,10 @@ public class CardController {
 		return ResponseEntity.ok(challengeCard);
 	}
 
+	@Operation(summary = "해당 주차 사용자 소비카드 조회 API", description = "사용자가 이번주에 소비카드를 만들었는지, 만들지 않았는지 판단한다. \n 이번주에 만들어진 카드가 없다면 400(data exist) \n 카드가 만들어지고 있다면(테이블에 id는 존재하는데 값들이 없는 경우) 406(data creating)")
+	@GetMapping("/consume/recent")
+	public ResponseEntity<?> selectUserLastBasicCard() {
+		return ResponseEntity.ok().build();
+	}
+
 }
