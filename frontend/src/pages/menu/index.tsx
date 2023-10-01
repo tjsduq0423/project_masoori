@@ -79,10 +79,16 @@ const MenuPage = () => {
     navigate("/faq");
   };
 
-  const Logout = () => {
-    localStorage.removeItem("accessToken");
-    usePostLogout();
-    navigate("/main");
+  const DoLogout = usePostLogout();
+  const Logout = async () => {
+    try {
+      const result = await DoLogout.mutateAsync();
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+    // localStorage.removeItem("accessToken");
+    // navigate("/main");
   };
 
   return (
