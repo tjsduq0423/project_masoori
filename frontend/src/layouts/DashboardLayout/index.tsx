@@ -3,7 +3,7 @@ import styled from "styled-components";
 import MenuButton from "@/assets/img/MenuButton.png";
 import Modal from "@/components/modal/login";
 import SignInModalBack from "@/assets/img/signCard/signInModalBack.png";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const StyledContainer = styled.div`
   position: absolute;
@@ -58,7 +58,8 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
+  const location = useLocation();
+  console.log(location.pathname);
   const openModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -77,11 +78,19 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   // 로그인 되어있는 유저라면 main 페이지로
   useEffect(() => {
-    if (isModalOpen && AT && AT.length > 0) {
+    if (isModalOpen && AT && AT.length > 0 && location.pathname !== "/menu") {
       setIsModalOpen(false);
       navigate("/menu");
+    } else if (
+      isModalOpen &&
+      AT &&
+      AT.length > 0 &&
+      location.pathname === "/menu"
+    ) {
+      setIsModalOpen(false);
+      navigate("/main");
     }
-  }, [AT, navigate, isModalOpen]);
+  }, [AT, navigate, isModalOpen, location]);
 
   useEffect(() => {
     if (isModalOpen) {

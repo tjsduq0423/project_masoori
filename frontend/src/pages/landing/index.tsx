@@ -7,6 +7,7 @@ import CreditCards from "@/assets/img/CreditCards.png";
 import Trophy from "@/assets/img/Trophy.png";
 import Bottles from "@/assets/img/Bottles.png";
 import CardFlip from "@/components/cardFlip";
+import { useNavigate } from "react-router-dom";
 
 <link rel="stylesheet" type="text/css" href="@/styles.font.css" />;
 
@@ -270,12 +271,32 @@ const CardBox = styled.div`
 
 const Landing: React.FC = () => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const handleCardClick = (index: number) => {
     if (selectedCard === null) {
       // 클릭한 카드를 선택하고 다른 카드의 클릭 가능 상태를 비활성화
       setSelectedCard(index);
       console.log("성공");
+
+      if (index === 0) {
+        // 인덱스별로 어디로 가는지 router 설정해주기
+        setTimeout(() => {
+          navigate("/spend");
+        }, 1500);
+      } else if (index === 1) {
+        setTimeout(() => {
+          navigate("/spend");
+        }, 1500);
+      } else if (index === 2) {
+        setTimeout(() => {
+          navigate("/dictionary");
+        }, 1500);
+      } else if (index === 3) {
+        setTimeout(() => {
+          navigate("/luck");
+        }, 1500);
+      }
     }
   };
 

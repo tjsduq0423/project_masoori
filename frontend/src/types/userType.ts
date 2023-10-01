@@ -8,7 +8,7 @@ interface CheckPhoneSMSProps {
   code: string;
 }
 
-interface SighUpProps {
+interface SignUpProps {
   email: string;
   password: string;
 }
@@ -42,5 +42,5 @@ export type {
   LoginProps,
   SendPhoneSMSProps,
   CheckPhoneSMSProps,
-  SighUpProps,
+  SignUpProps,
 };
