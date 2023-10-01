@@ -195,4 +195,42 @@ class CardServiceImplTest {
 		assertThat(challengeCard.getCard().getId().equals(card.getId()));
 		assertThat(challengeCard.getCard().getName().equals(card.getName()));
 	}
+
+	@Test
+	void 사용자_최근_생성_카드_조회(){
+		User user = User.builder()
+						.email("test@gmail.com")
+						.providerType(ProviderType.LOCAL)
+						.build();
+		em.persist(user);
+		List<Basic> basicList = new ArrayList<>();
+		for (int i = 1; i <= 5; i++) {
+			basicList.add(Basic.builder().keyword("음식").totalAmount(1000 * i).frequency(2 * i).build());
+		}
+		Card card = Card.builder()
+						.user(user)
+						.name("1번 카드")
+						.imagePath("1번 경로")
+						.description("1번 카드 설명")
+						.cardType(CardType.BASIC)
+						.basicList(basicList)
+						.build();
+		em.persist(card);
+		em.flush();
+		card.setLocalDateTime(LocalDateTime.of(2023, 9, 25, 1, 10));
+		em.flush();
+		BasicCardRes.BasicCard basicCard = cardService.selectUserRecentBasicCard(user.getEmail(), LocalDateTime.of(2023, 9, 28, 13, 1));
+		assertThat(basicCard != null && basicCard.getCard() != null);
+		log.info("BasicCard : {}", basicCard.getCard());
+		card.setLocalDateTime(LocalDateTime.of(2023, 9, 23, 1, 10));
+		em.flush();
+		basicCard = cardService.selectUserRecentBasicCard(user.getEmail(), LocalDateTime.of(2023, 9, 28, 13, 1));
+		assertThat(basicCard == null);
+		log.info("이번주에 생성한 카드가 없습니다. : {}", basicCard);
+		card.setLocalDateTime(LocalDateTime.of(2022, 12, 30, 1, 10));
+		em.flush();
+		basicCard = cardService.selectUserRecentBasicCard(user.getEmail(), LocalDateTime.of(2023, 1, 1, 13, 1));
+		assertThat(basicCard != null && basicCard.getCard() != null);
+		log.info("BasicCard : {}", basicCard.getCard());
+	}
 }
