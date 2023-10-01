@@ -180,6 +180,7 @@ const SpendPage: React.FC = () => {
   return (
     <div>
       <PageContainer>
+        <VerifyNumberModal />
         <ContentContainer>
           <CardContainer>
             <TarotCard
