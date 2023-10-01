@@ -3,6 +3,7 @@ import * as THREE from "three";
 import Flickity from "flickity";
 import "flickity/css/flickity.css"; // Import Flickity CSS
 import "./style.css";
+import { useNavigate } from "react-router-dom";
 
 import masuriImg from "../../assets/img/masuri.png";
 import book from "../../assets/img/book.png";
@@ -10,6 +11,7 @@ import cardhand from "../../assets/img/handcard.png";
 import money from "../../assets/img/money.png";
 
 const MainPage = () => {
+  const navigate = useNavigate();
   const canvasRef = useRef(null); // Ref to store the canvas element
 
   useEffect(() => {
@@ -342,6 +344,22 @@ const MainPage = () => {
     };
   }, []);
 
+  const navigateAbout = () => {
+    navigate("/landing");
+  };
+
+  const navigateLuck = () => {
+    navigate("/luck");
+  };
+
+  const navigateSpend = () => {
+    navigate("/spend");
+  };
+
+  const navigateDictionary = () => {
+    navigate("/dictionary");
+  };
+
   return (
     <div className="body">
       <main role="main" id="main">
@@ -351,52 +369,48 @@ const MainPage = () => {
             <div className="intro-cell">
               <img src={money} className="intro-graphic" />
               <div className="intro-text">
-                <h2>첫 번째 페이지</h2>
-                <h1>INTRO</h1>
+                <h1>마수리 이야기</h1>
                 <p>
                   당신의 소비내역으로 만드는 마수리만의 특별한 타로카드.
                   <br />
                   마수리와 함께 새로운 시작, 새로운 습관을 만들어보세요.
                 </p>
-                <a>ENTER</a>
+                <a onClick={navigateAbout}>ENTER</a>
               </div>
             </div>
             <div className="intro-cell">
               <img src={money} className="intro-graphic" />
               <div className="intro-text">
-                <h2>두번 째 페이지</h2>
                 <h1>오늘의 금전운</h1>
                 <p>
                   마수리와 함께 오늘의 금전운과 행운의 색깔을 확인하세요!
                   <br /> 당신의 하루를 더 행복하고 특별하게 만들어 줄 조언들이
                   기다리고 있습니다.
                 </p>
-                <a>ENTER</a>
+                <a onClick={navigateLuck}>ENTER</a>
               </div>
             </div>
             <div className="intro-cell">
               <img src={money} className="intro-graphic" />
               <div className="intro-text">
-                <h2>세번 째 페이지 </h2>
                 <h1>소비패턴 타로</h1>
                 <p>
                   당신의 주간 소비 패턴으로 탄생하는 단 하나의 타로카드
                   <br /> 당신만을 위한 특별한 메시지를 받아보세요.
                 </p>
-                <a>ENTER</a>
+                <a onClick={navigateSpend}>ENTER</a>
               </div>
             </div>
             <div className="intro-cell">
               <img src={money} className="intro-graphic" />
               <div className="intro-text">
-                <h2>네번 째 페이지</h2>
                 <h1>도감 및 카드추천</h1>
                 <p>
                   당신만의 타로카드를 한 눈에 확인하세요. <br />
                   더불어, 마수리의 맞춤형 카드 추천 서비스를 통해 똑똑한 소비를
                   경험해보세요!
                 </p>
-                <a>ENTER</a>
+                <a onClick={navigateDictionary}>ENTER</a>
               </div>
             </div>
           </div>
