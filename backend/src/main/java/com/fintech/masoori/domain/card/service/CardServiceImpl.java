@@ -1,8 +1,11 @@
 package com.fintech.masoori.domain.card.service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,5 +107,19 @@ public class CardServiceImpl implements CardService {
 											 .challengeList(
 												 card.getChallengeList().stream().map(Challenge::new).toList())
 											 .build();
+	}
+
+	@Override
+	public BasicCardRes.BasicCard selectUserRecentBasicCard(String email, LocalDateTime time) {
+		User user = userRepository.findUserByEmail(email);
+		LocalDateTime monday = time.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+		LocalDateTime sunday = time.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+		LocalDateTime startDate = LocalDateTime.of(monday.getYear(), monday.getMonth(), monday.getDayOfMonth(), 0, 0, 0);
+		LocalDateTime endDate = LocalDateTime.of(sunday.getYear(), sunday.getMonth(), sunday.getDayOfMonth(), 23, 59, 59);
+		Card recentCard = cardRepository.findRecentCard(user.getId(), CardType.BASIC, startDate, endDate);
+		if(recentCard == null){
+			return null;
+		}
+		return BasicCardRes.BasicCard.builder().card(new com.fintech.masoori.domain.card.dto.Card(recentCard)).build();
 	}
 }

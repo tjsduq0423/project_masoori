@@ -14,4 +14,6 @@ public interface CardService {
 	UserCardListRes selectRangeChallengeCard(String email, LocalDateTime start, LocalDateTime end);
 
 	ChallengeCardRes.ChallengeCard selectChallengeCard(String email, long cardId);
+
+	BasicCardRes.BasicCard selectUserRecentBasicCard(String email, LocalDateTime time);
 }
