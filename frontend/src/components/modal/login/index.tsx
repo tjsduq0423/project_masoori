@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Kakao from "@/assets/img/Kakao.png";
 import Google from "@/assets/img/Google.png";
 import Naver from "@/assets/img/Naver.png";
@@ -11,11 +11,15 @@ import {
   CheckDuplicateEmailProps,
   CheckSignUpCodeProps,
   LoginProps,
-  SendSignUpCodeProps,
 } from "@/types/userType";
 import { usePostCheckDuplicateEmail } from "@/apis/user/Mutations/usePostCheckDuplicateEmail";
 import { usePostSendSignUpCode } from "@/apis/user/Mutations/usePostSendSignUpCode";
 import { usePostCheckSignUpCode } from "@/apis/user/Mutations/usePostCheckSignUpCode";
+import { usePostSignUp } from "@/apis/user/Mutations/usePostSignUp";
+import { useUserInfo } from "@/apis/menu/Queries/useUserInfo";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { userInfoState } from "@/states/userState";
 
 interface ImgProps {
   loaded: boolean;
@@ -86,7 +90,9 @@ const FormLabel = styled.p`
   color: #5e3a66;
 `;
 
-const CommentLabel = styled.p<{ viewComment: boolean }>`
+const CommentLabel = styled.p<{
+  viewComment: boolean;
+}>`
   font-size: small;
   display: flex;
   font-weight: bold;
@@ -95,12 +101,25 @@ const CommentLabel = styled.p<{ viewComment: boolean }>`
   opacity: ${(props) => (props.viewComment ? "1" : "0")};
 `;
 
+const CodeLabel = styled.p<{
+  codeCommentState?: boolean;
+}>`
+  font-size: small;
+  display: flex;
+  font-weight: bold;
+  margin-bottom: 2px;
+  color: ${(props) => (props.codeCommentState ? "red" : "green")};
+  opacity: ${(props) => (props.codeCommentState ? "1" : "0")};
+`;
+//     props.codeCommentState ? (props.codeState ? "1" : "1") : "0"};
+
 const Input = styled.input`
   width: 17vw;
   border-radius: 5px;
   border-width: 1px;
   border-color: #5e3a66;
   height: 30px;
+  padding-left: 5px;
 `;
 
 const SignUp = styled.div`
@@ -135,12 +154,21 @@ const Email = styled.div`
   position: relative;
   z-index: 1;
   top: 15%;
+  width: "250px";
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 `;
 
 const EmailCheck = styled.div`
+  width: "250px";
   position: relative;
   top: 17%;
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const DisableNextButton = styled.button`
@@ -180,6 +208,7 @@ const EmailInput = styled.input`
   border-width: 1px;
   border-color: #5e3a66;
   height: 30px;
+  padding-left: 5px;
 `;
 
 const DuplicateCheckButton = styled.button`
@@ -214,9 +243,12 @@ const AbleSendCodeButton = styled(DisableSendCodeButton)`
 const Login: React.FC = () => {
   const [modalState, setModalState] = useState<string>("로그인");
   const [imageLoaded, setImageLoaded] = useState<boolean>(false); // 이미지 로드 상태
-  const [emailCodeComment, setEmailCodeComment] = useState<string>(""); // 이메일 코드 확인 결과 멘트
+  const [user, setUser] = useRecoilState(userInfoState);
+  // const UserInfo = useUserInfo();
+  const navigate = useNavigate();
+  //로그인 시작 ----------------------------------------------
 
-  //로그인 ~ ----------------------------------------------
+  const Login = usePostLogin();
 
   //유저 데이터
   const [userData, setUserData] = useState<LoginProps>({
@@ -224,17 +256,40 @@ const Login: React.FC = () => {
     password: "",
   });
 
-  //Login에 usePostLogin(API써서 만들어둔 함수들)
-  const Login = usePostLogin();
+  const handleLogin = async () => {
+    try {
+      const result = await Login.mutateAsync(userData);
+      console.log(result);
 
-  //변수에 할당하여 나중에 호출한다.
-  const handleLogin = () => {
-    Login.mutate(userData);
+      if (result?.status === 200) {
+        // const UserInfo = useUserInfo();
+        //result.data.accessToken으로 데이터 가져오는 api 쓰기
+        // navigate("/");
+
+        console.log(location.pathname); // 현재 경로를 출력
+      }
+    } catch (error) {
+      console.error("로그인에 실패했습니다.", error);
+    }
   };
+  // const AT = localStorage.getItem("accessToken");
 
-  //~ 로그인  ----------------------------------------------
+  // const UserInfo = useUserInfo();
+  // const handleSetUserInfo = useCallback(
+  //   async () => {
+  //     try {
+  //       const result = await UserInfo.mutateAsync();
+  //       console.log(result);
+  //     } catch (error) {
+  //       console.error("회원 정보 세팅에 실패했습니다.", error);
+  //     }
+  //   },
+  //   [UserInfo] // CheckSignUpCode를 의존성 배열에 포함
+  // );
 
-  //이메일 중복 체크 ~  ----------------------------------------------
+  //로그인 종료 ----------------------------------------------
+
+  //이메일 중복 체크 시작 ----------------------------------------------
 
   const [isDuplicated, setIsDuplicated] = useState<boolean>(false);
   const [duplicateEmailData, setDuplicateEmailData] =
@@ -261,9 +316,9 @@ const Login: React.FC = () => {
     }
   };
 
-  // ~ 이메일 중복 체크 ----------------------------------------------
+  //이메일 중복 체크 종료 ----------------------------------------------
 
-  //이메일 중복 결과 멘트 ~  ----------------------------------------------
+  //이메일 중복 결과 멘트 시작 ----------------------------------------------
 
   const [emailComment, setEmailComment] = useState<string>(""); // 이메일 중복확인 결과 멘트
   const [viewComment, setViewComment] = useState<boolean>(false);
@@ -276,9 +331,9 @@ const Login: React.FC = () => {
     }
   }, [isDuplicated]);
 
-  // ~ 이메일 중복 결과 멘트 ----------------------------------------------
+  //이메일 중복 결과 멘트 종료 ----------------------------------------------
 
-  //이메일 코드 전송 ~  ----------------------------------------------
+  //이메일 코드 전송 시작 ----------------------------------------------
 
   const SendSignUpCode = usePostSendSignUpCode();
 
@@ -291,33 +346,124 @@ const Login: React.FC = () => {
     }
   };
 
-  // ~ 이메일 코드 전송 ----------------------------------------------
+  //이메일 코드 전송 종료 ----------------------------------------------
 
-  //이메일 코드 유효성 검사 ~  ----------------------------------------------
+  //이메일 코드 유효성 검사 시작 ----------------------------------------------
 
-  const [signUpCodeData, setSignUpCodeData] = useState<CheckSignUpCodeProps>({
-    email: duplicateEmailData.email,
+  const [signUpCodeData, setSignUpCodeData] = useState<string>("");
+  const CheckSignUpCode = usePostCheckSignUpCode();
+  const [doP, setDoP] = useState<boolean>(false);
+  const [codeState, setCodeState] = useState<boolean>(false);
+  const [codeCommentState, setCodeCommentState] = useState<boolean>(false);
+  const [signupInfo, setSignUpInfo] = useState<CheckSignUpCodeProps>({
+    email: "",
     code: "",
   });
 
-  const CheckSignUpCode = usePostCheckSignUpCode();
+  const handleCheckSignUpCode = useCallback(
+    async ({ email, code }: CheckSignUpCodeProps) => {
+      try {
+        const signupInfo = {
+          email: email,
+          code: code,
+        };
+        const result = await CheckSignUpCode.mutateAsync(signupInfo);
+        console.log(signupInfo);
+        console.log(result);
+        setCodeCommentState(true);
+        if (result === 200) {
+          setCodeState(true);
+        } else {
+          setCodeState(false);
+        }
+      } catch (error) {
+        console.error("회원가입 코드 확인에 실패했습니다.", error);
+      }
+    },
+    [CheckSignUpCode] // CheckSignUpCode를 의존성 배열에 포함
+  );
 
-  const handleCheckSignUpCode = async () => {
-    try {
-      const signupInfo = {
+  useEffect(() => {
+    if (signUpCodeData.length === 8 && doP === false) {
+      handleCheckSignUpCode({
         email: duplicateEmailData.email,
-        code: signUpCodeData.code,
-      };
+        code: signUpCodeData,
+      });
+      setDoP(true);
+    }
+  }, [
+    signUpCodeData.length,
+    duplicateEmailData.email,
+    handleCheckSignUpCode,
+    signUpCodeData,
+    CheckSignUpCode,
+    signupInfo,
+    doP,
+  ]);
 
-      console.log(signupInfo);
-      const result = await CheckSignUpCode.mutateAsync(signupInfo);
+  //이메일 코드 유효성 검사 종료 ----------------------------------------------
+
+  //이메일 코드 유효성 멘트 시작 ----------------------------------------------
+
+  const [codeComment, setCodeComment] = useState<string>(""); // 이메일 중복확인 결과 멘트
+
+  useEffect(() => {
+    if (codeState === true && codeCommentState === true) {
+      setCodeComment("* 유효한 코드입니다.");
+    } else {
+      setCodeComment("* 유효하지 않은 코드입니다.");
+    }
+  }, [codeState, codeCommentState]);
+
+  //이메일 코드 유효성 멘트 종료 ----------------------------------------------
+
+  //회원가입 비밀번호 일치 여부 확인 종료 ----------------------------------------------
+
+  const [signUpPassword, setSignUpPassword] = useState<string>("");
+  const [checkSignUpPassword, setCheckSignUpPassword] = useState<string>("");
+  const [isSame, setIsSame] = useState<boolean>(false);
+  const [passwordCheckState, setPasswordCheckState] = useState<string>("");
+
+  useEffect(() => {
+    if (signUpPassword === checkSignUpPassword && signUpPassword.length > 0) {
+      setIsSame(true);
+      setPasswordCheckState("비밀번호가 일치합니다.");
+      console.log(isSame);
+    } else if (
+      signUpPassword.length === checkSignUpPassword.length &&
+      signUpPassword !== checkSignUpPassword
+    ) {
+      setIsSame(true);
+      setPasswordCheckState("비밀번호가 일치하지 않습니다.");
+    }
+  }, [signUpPassword, checkSignUpPassword, isSame]);
+
+  //회원가입 비밀번호 일치 여부 확인 종료 ----------------------------------------------
+
+  //회원가입 ----------------------------------------------
+
+  const DoSignUp = usePostSignUp();
+
+  const registInfo = {
+    email: duplicateEmailData.email,
+    password: signUpPassword,
+  };
+
+  const handleRegist = async () => {
+    console.log(registInfo);
+    try {
+      const result = await DoSignUp.mutateAsync(registInfo);
       console.log(result);
+      console.log(registInfo);
+      if (result === 200) {
+        navigate("/main");
+      }
     } catch (error) {
-      console.error("회원가입 코드 확인에 실패했습니다.", error);
+      console.error("회원가입에 실패했습니다.", error);
     }
   };
 
-  // ~ 이메일 코드 유효성 검사 ----------------------------------------------
+  //회원가입 종료 ----------------------------------------------
 
   useEffect(() => {
     const img = new Image();
@@ -429,7 +575,18 @@ const Login: React.FC = () => {
             </div>
           </Email>
           <EmailCheck>
-            <FormLabel>이메일 코드 확인</FormLabel>
+            <div
+              style={{
+                width: "250px",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <FormLabel>이메일 코드 확인</FormLabel>
+              <CodeLabel codeCommentState={codeCommentState}>
+                {codeComment}
+              </CodeLabel>
+            </div>
             <div
               style={{
                 display: "flex",
@@ -439,16 +596,12 @@ const Login: React.FC = () => {
               }}
             >
               <EmailInput //Email 인증 코드
-                value={signUpCodeData.code}
+                value={signUpCodeData}
                 onChange={(e) => {
-                  setSignUpCodeData({
-                    ...signUpCodeData,
-                    code: e.target.value,
-                  });
-                  console.log(signUpCodeData.code);
-                  if (signUpCodeData.code.length === 8) {
-                    handleCheckSignUpCode();
-                  }
+                  setSignUpCodeData(e.target.value);
+                  setCodeState(false);
+                  setDoP(false);
+                  setCodeCommentState(false);
                 }}
               />
               {!isDuplicated ? (
@@ -464,13 +617,17 @@ const Login: React.FC = () => {
               )}
             </div>
             <SignUp>
-              <DisableNextButton
-                onClick={() => {
-                  setModalState("회원가입2");
-                }}
-              >
-                NEXT
-              </DisableNextButton>
+              {!codeState ? (
+                <DisableNextButton>NEXT</DisableNextButton>
+              ) : (
+                <AbleNextButton
+                  onClick={() => {
+                    setModalState("회원가입2");
+                  }}
+                >
+                  NEXT
+                </AbleNextButton>
+              )}
             </SignUp>
           </EmailCheck>
         </SignUpFrontImg>
@@ -481,17 +638,53 @@ const Login: React.FC = () => {
       <Container>
         <SignUpFrontImg loaded={imageLoaded}>
           <Id>
-            <FormLabel>아이디</FormLabel>
-            <Input />
+            <FormLabel>이메일</FormLabel>
+            <Input
+              type="text"
+              value={duplicateEmailData.email}
+              disabled
+              style={{ opacity: 0.6 }}
+            />
           </Id>
           <PW>
             <FormLabel>비밀번호</FormLabel>
-            <Input />
+            <Input
+              type="password"
+              value={signUpPassword}
+              onChange={(e) => {
+                setSignUpPassword(e.target.value);
+                setIsSame(false);
+              }}
+            />
             <PWCheck>
-              <FormLabel>비밀번호 확인</FormLabel>
-              <Input />
+              <div
+                style={{
+                  width: "250px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <FormLabel>비밀번호 확인</FormLabel>
+                <CodeLabel codeCommentState={isSame}>
+                  {passwordCheckState}
+                </CodeLabel>
+              </div>
+              <Input
+                type="password"
+                value={checkSignUpPassword}
+                onChange={(e) => {
+                  setCheckSignUpPassword(e.target.value);
+                  setIsSame(false);
+                }}
+              />
             </PWCheck>
-            <FinishButton>FINISH</FinishButton>
+            <FinishButton
+              onClick={() => {
+                handleRegist();
+              }}
+            >
+              FINISH
+            </FinishButton>
           </PW>
         </SignUpFrontImg>
       </Container>

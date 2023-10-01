@@ -1,9 +1,9 @@
 import { postSignUp } from "@/apis/user/userAPI";
 import { useMutation } from "@tanstack/react-query";
-import { SighUpProps } from "@/types/userType";
+import { SignUpProps } from "@/types/userType";
 
 const usePostSignUp = () => {
-  return useMutation((SignUpData: SighUpProps) => postSignUp(SignUpData), {
+  return useMutation((SignUpData: SignUpProps) => postSignUp(SignUpData), {
     onSuccess: () => {
       console.log("SignUp Success");
     },
