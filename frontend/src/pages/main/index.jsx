@@ -5,7 +5,7 @@ import "flickity/css/flickity.css"; // Import Flickity CSS
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 import { useUserInfo } from "@/apis/menu/Queries/useUserInfo";
-import { userInfoState, userLoginState } from "@/states/userState";
+// import { userInfoState, userLoginState } from "@/states/userState";
 import masuriImg from "../../assets/img/masuri.png";
 import book from "../../assets/img/book.png";
 import cardhand from "../../assets/img/handcard.png";
@@ -15,11 +15,11 @@ import { useRecoilState } from "recoil";
 const MainPage = () => {
   const navigate = useNavigate();
   const canvasRef = useRef(null); // Ref to store the canvas element
-  const [isLogin, setIsLogin] = useRecoilState(userLoginState);
-  const [user, setUser] = useRecoilState(userInfoState);
+  // const [isLogin, setIsLogin] = useRecoilState(userLoginState);
+  // const [user, setUser] = useRecoilState(userInfoState);
 
-  const userInfo = useUserInfo(isLogin);
-  console.log(userInfo);
+  // const userInfo = useUserInfo(isLogin);
+  // console.log(userInfo);
 
   // console.log(isLogin);
   // console.log(user);
