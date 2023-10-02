@@ -14,6 +14,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import VerifyNumberModal from "@/components/verifyNumberModal";
 import { useGetConsumeId } from "@/apis/spend/Queries/useGetConsumeId";
 import { spendInfoState } from "@/states/spendState";
+import { spendIdState } from "@/states/dictionaryState";
 
 const PageContainer = styled.div`
   position: fixed;
