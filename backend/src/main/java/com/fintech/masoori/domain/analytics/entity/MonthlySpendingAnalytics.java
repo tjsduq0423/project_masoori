@@ -17,12 +17,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @Entity
 @Table(name = "monthly_spending_analytics")
 @ToString(of = {"category", "cost", "analytics"})
@@ -37,9 +39,6 @@ public class MonthlySpendingAnalytics extends BaseTimeEntity {
 
 	@Column(name = "cost")
 	private Integer cost;
-
-	@Column(name = "analytics")
-	private String analytics;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")

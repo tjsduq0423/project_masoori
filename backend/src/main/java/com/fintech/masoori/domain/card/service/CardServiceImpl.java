@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -144,19 +143,19 @@ public class CardServiceImpl implements CardService {
 	}
 
 	@Override
-		@Transactional
-		public void registerSpendingCard(GeneratedSpendingCard generatedSpendingCard) {
-			User user = userRepository.findById(generatedSpendingCard.getUserId())
-			                          .orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
+	@Transactional
+	public void registerSpendingCard(GeneratedSpendingCard generatedSpendingCard) {
+		User user = userRepository.findById(generatedSpendingCard.getUserId())
+		                          .orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
 
-			Card newCard = Card.builder()
-			                   .cardType(CardType.BASIC)
-			                   .name(generatedSpendingCard.getName())
-			                   .description(generatedSpendingCard.getDescription())
-			                   .imagePath(generatedSpendingCard.getImagePath())
-			                   .build();
+		Card newCard = Card.builder()
+		                   .cardType(CardType.BASIC)
+		                   .name(generatedSpendingCard.getName())
+		                   .description(generatedSpendingCard.getDescription())
+		                   .imagePath(generatedSpendingCard.getImagePath())
+		                   .build();
 
-			List<GeneratedSpending> spendings = generatedSpendingCard.getSpendings();
+		List<GeneratedSpending> spendings = generatedSpendingCard.getSpendings();
 		for (GeneratedSpending s : spendings) {
 			com.fintech.masoori.domain.card.entity.Basic basic = com.fintech.masoori.domain.card.entity.Basic.builder()
 			                                                                                                 .keyword(
@@ -176,10 +175,12 @@ public class CardServiceImpl implements CardService {
 		User user = userRepository.findUserByEmail(email);
 		LocalDateTime monday = time.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 		LocalDateTime sunday = time.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-		LocalDateTime startDate = LocalDateTime.of(monday.getYear(), monday.getMonth(), monday.getDayOfMonth(), 0, 0, 0);
-		LocalDateTime endDate = LocalDateTime.of(sunday.getYear(), sunday.getMonth(), sunday.getDayOfMonth(), 23, 59, 59);
+		LocalDateTime startDate = LocalDateTime.of(monday.getYear(), monday.getMonth(), monday.getDayOfMonth(), 0, 0,
+			0);
+		LocalDateTime endDate = LocalDateTime.of(sunday.getYear(), sunday.getMonth(), sunday.getDayOfMonth(), 23, 59,
+			59);
 		Card recentCard = cardRepository.findRecentCard(user.getId(), CardType.BASIC, startDate, endDate);
-		if(recentCard == null){
+		if (recentCard == null) {
 			return null;
 		}
 		return BasicCardRes.BasicCard.builder().card(new com.fintech.masoori.domain.card.dto.Card(recentCard)).build();
