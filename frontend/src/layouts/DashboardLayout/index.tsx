@@ -73,24 +73,27 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       closeModal();
     }
   };
-
   const AT = localStorage.getItem("accessToken");
   const navigate = useNavigate();
-  // 로그인 되어있는 유저라면 main 페이지로
-  useEffect(() => {
-    if (isModalOpen && AT && AT.length > 0 && location.pathname !== "/menu") {
-      setIsModalOpen(false);
+
+  const navigatePage = () => {
+    if (!AT) {
+      console.log(1);
+      openModal();
+    } else if (AT && AT.length > 0 && location.pathname !== "/menu") {
+      console.log(2);
       navigate("/menu");
-    } else if (
-      isModalOpen &&
-      AT &&
-      AT.length > 0 &&
-      location.pathname === "/menu"
-    ) {
-      setIsModalOpen(false);
+    } else if (AT && AT.length > 0 && location.pathname === "/menu") {
+      console.log(3);
       navigate("/main");
     }
-  }, [AT, navigate, isModalOpen, location]);
+  };
+
+  useEffect(() => {
+    if (AT && AT.length > 0 && location.pathname !== "/menu") {
+      closeModal();
+    }
+  }, [AT, location.pathname]);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -114,7 +117,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <LoginBackImg />
           <TransparentContainer onClick={handleBackgroundClick}>
             <div>
-              <MenuButtonImage src={MenuButton} onClick={openModal} />
+              <MenuButtonImage src={MenuButton} onClick={navigatePage} />
               {isModalOpen && <Modal />}
             </div>
           </TransparentContainer>
@@ -122,7 +125,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       ) : (
         <StyledContainer onClick={handleBackgroundClick}>
           <div>
-            <MenuButtonImage src={MenuButton} onClick={openModal} />
+            <MenuButtonImage src={MenuButton} onClick={navigatePage} />
             {isModalOpen && <Modal />}
           </div>
         </StyledContainer>

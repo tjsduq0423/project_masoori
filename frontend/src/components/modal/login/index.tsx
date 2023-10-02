@@ -19,8 +19,7 @@ import { usePostSignUp } from "@/apis/user/Mutations/usePostSignUp";
 import { useUserInfo } from "@/apis/menu/Queries/useUserInfo";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { userInfoState } from "@/states/userState";
-
+import { userInfoState, userLoginState } from "@/states/userState";
 interface ImgProps {
   loaded: boolean;
 }
@@ -243,8 +242,7 @@ const AbleSendCodeButton = styled(DisableSendCodeButton)`
 const Login: React.FC = () => {
   const [modalState, setModalState] = useState<string>("로그인");
   const [imageLoaded, setImageLoaded] = useState<boolean>(false); // 이미지 로드 상태
-  const [user, setUser] = useRecoilState(userInfoState);
-  // const UserInfo = useUserInfo();
+
   const navigate = useNavigate();
   //로그인 시작 ----------------------------------------------
 
@@ -262,30 +260,12 @@ const Login: React.FC = () => {
       console.log(result);
 
       if (result?.status === 200) {
-        // const UserInfo = useUserInfo();
-        //result.data.accessToken으로 데이터 가져오는 api 쓰기
-        // navigate("/");
-
-        console.log(location.pathname); // 현재 경로를 출력
+        navigate("/main");
       }
     } catch (error) {
       console.error("로그인에 실패했습니다.", error);
     }
   };
-  // const AT = localStorage.getItem("accessToken");
-
-  // const UserInfo = useUserInfo();
-  // const handleSetUserInfo = useCallback(
-  //   async () => {
-  //     try {
-  //       const result = await UserInfo.mutateAsync();
-  //       console.log(result);
-  //     } catch (error) {
-  //       console.error("회원 정보 세팅에 실패했습니다.", error);
-  //     }
-  //   },
-  //   [UserInfo] // CheckSignUpCode를 의존성 배열에 포함
-  // );
 
   //로그인 종료 ----------------------------------------------
 
@@ -453,8 +433,6 @@ const Login: React.FC = () => {
     console.log(registInfo);
     try {
       const result = await DoSignUp.mutateAsync(registInfo);
-      console.log(result);
-      console.log(registInfo);
       if (result === 200) {
         navigate("/main");
       }
