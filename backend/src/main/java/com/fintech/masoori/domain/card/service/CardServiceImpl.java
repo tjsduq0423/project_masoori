@@ -17,6 +17,10 @@ import com.fintech.masoori.domain.card.repository.CardRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.exception.UserNotFoundException;
 import com.fintech.masoori.domain.user.repository.UserRepository;
+import com.fintech.masoori.global.rabbitMQ.dto.GeneratedChallenge;
+import com.fintech.masoori.global.rabbitMQ.dto.GeneratedChallengeCard;
+import com.fintech.masoori.global.rabbitMQ.dto.GeneratedSpending;
+import com.fintech.masoori.global.rabbitMQ.dto.GeneratedSpendingCard;
 import com.fintech.masoori.global.util.CalcDate;
 
 import lombok.RequiredArgsConstructor;
@@ -106,20 +110,61 @@ public class CardServiceImpl implements CardService {
 
 	@Override
 	@Transactional
-	public void registerChallengeCard(Long id, ChallengeCardRes.ChallengeCard challengeCard) {
-		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
+	public void registerChallengeCard(GeneratedChallengeCard generatedChallengeCard) {
+		User user = userRepository.findById(generatedChallengeCard.getUserId())
+		                          .orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
 
 		Card newCard = Card.builder()
-		                   .name(challengeCard.getCard().getName())
-		                   .imagePath(challengeCard.getCard().getImagePath())
-		                   .description(challengeCard.getCard().getDescription())
 		                   .cardType(CardType.SPECIAL)
+		                   .name(generatedChallengeCard.getName())
+		                   .description(generatedChallengeCard.getDescription())
+		                   .imagePath(generatedChallengeCard.getImagePath())
 		                   .build();
+
+		List<GeneratedChallenge> challenges = generatedChallengeCard.getChallenges();
+		for (GeneratedChallenge c : challenges) {
+			com.fintech.masoori.domain.card.entity.Challenge challenge = com.fintech.masoori.domain.card.entity.Challenge.builder()
+			                                                                                                             .isSuccess(
+				                                                                                                             false)
+			                                                                                                             .name(
+				                                                                                                             c.getName())
+			                                                                                                             .achievementCondition(
+				                                                                                                             c.getAchievementCondition())
+			                                                                                                             .startTime(
+				                                                                                                             c.getStartTime())
+			                                                                                                             .endTime(
+				                                                                                                             c.getEndTime())
+			                                                                                                             .build();
+			challenge.setCard(newCard);
+		}
+		newCard.setUser(user);
 	}
 
 	@Override
 	@Transactional
-	public void registerSpendingCard(UserCardListRes.UserCard userCard) {
+	public void registerSpendingCard(GeneratedSpendingCard generatedSpendingCard) {
+		User user = userRepository.findById(generatedSpendingCard.getUserId())
+		                          .orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
 
+		Card newCard = Card.builder()
+		                   .cardType(CardType.BASIC)
+		                   .name(generatedSpendingCard.getName())
+		                   .description(generatedSpendingCard.getDescription())
+		                   .imagePath(generatedSpendingCard.getImagePath())
+		                   .build();
+
+		List<GeneratedSpending> spendings = generatedSpendingCard.getSpendings();
+		for (GeneratedSpending s : spendings) {
+			com.fintech.masoori.domain.card.entity.Basic basic = com.fintech.masoori.domain.card.entity.Basic.builder()
+			                                                                                                 .keyword(
+				                                                                                                 s.getKeyword())
+			                                                                                                 .totalAmount(
+				                                                                                                 s.getTotalAmount())
+			                                                                                                 .frequency(
+				                                                                                                 s.getFrequency())
+			                                                                                                 .build();
+			basic.setCard(newCard);
+		}
+		newCard.setUser(user);
 	}
 }

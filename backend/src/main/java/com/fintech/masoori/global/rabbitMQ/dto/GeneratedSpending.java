@@ -2,19 +2,15 @@ package com.fintech.masoori.global.rabbitMQ.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@ToString
-public class RealTimeReq {
-	
-
-	private int id;
+public class GeneratedSpending {
+	private String keyword;
+	private Integer totalAmount;
+	private Integer frequency;
 }
