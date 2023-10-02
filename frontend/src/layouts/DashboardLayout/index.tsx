@@ -132,11 +132,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                 justifyContent: "space-between",
                 alignContent: "center",
               }}
-              onClick={() => {
-                navigate("/main");
-              }}
             >
-              <MainLogo />
+              <MainLogo
+                onClick={() => {
+                  navigate("/main");
+                }}
+              />
               <MenuButtonImage src={MenuButton} onClick={navigatePage} />
               {isModalOpen && <Modal />}
             </div>
@@ -151,11 +152,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               justifyContent: "space-between",
               alignContent: "center",
             }}
-            onClick={() => {
-              navigate("/main");
-            }}
           >
-            <MainLogo />
+            <MainLogo
+              onClick={() => {
+                navigate("/main");
+              }}
+            />
             <MenuButtonImage src={MenuButton} onClick={navigatePage} />
             {isModalOpen && <Modal />}
           </div>
