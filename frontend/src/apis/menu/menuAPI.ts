@@ -12,7 +12,7 @@ const getFaqData = async () => {
 
 const postAlarm = async () => {
   try {
-    const response = await instance.get(`/api/user/alram`);
+    const response = await instance.get(`/user/alram`);
     return response.data;
   } catch {
     new Error("api 연동 오류 - postAlarm");
@@ -21,8 +21,8 @@ const postAlarm = async () => {
 
 const getUserInfo = async () => {
   try {
-    const response = await instance.get(`/api/user/info`);
-    return response;
+    const response = await instance.get(`/user/info`);
+    return response.data;
   } catch {
     new Error("api 연동 오류 - getUserInfo");
   }
