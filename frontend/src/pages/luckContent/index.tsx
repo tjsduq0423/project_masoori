@@ -101,8 +101,8 @@ const LuckContentPage = () => {
   //   ));
 
   const contentTextBubbleProps: StyledTextBubbleProps = {
-    text: `${luckInfo.description.replace(/\n/g, "\n")}`,
-    width: "588PX",
+    text: `${luckInfo.description.replace(/\n/g, "<br>")}`, // \n을 <br>로 대체
+    width: "588px", // "px" 대문자로 변경
     background: "#4D1B2D80",
     opacity: "1",
     paddingLeftRight: "40px",
