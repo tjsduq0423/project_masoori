@@ -12,7 +12,7 @@ import com.fintech.masoori.domain.card.dto.CardType;
 import com.fintech.masoori.domain.card.entity.Card;
 
 public interface CardRepository extends JpaRepository<Card, Long> {
-	@Query("SELECT c FROM Card c WHERE c.user.id = :userId AND c.cardType = :type AND c.createdDate >= :startDate AND  c.createdDate <= :endDate")
+	@Query("SELECT c FROM Card c WHERE c.user.id = :userId AND c.cardType = :type AND c.createdDate >= :startDate AND  c.createdDate <= :endDate ORDER BY c.createdDate DESC")
 	List<Card> findRangeCard(@Param("userId") long userId, @Param("type") CardType type,
 		@Param("startDate") LocalDateTime startDate,
 		@Param("endDate") LocalDateTime endDate);
