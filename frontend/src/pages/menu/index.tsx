@@ -72,7 +72,7 @@ const MenuPage = () => {
   };
 
   const goMain = () => {
-    navigate("/main");
+    window.location.href = "/main";
   };
 
   const goFaq = () => {
