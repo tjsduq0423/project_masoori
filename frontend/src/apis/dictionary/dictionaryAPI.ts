@@ -64,6 +64,17 @@ const getConsume = async (id: number) => {
   }
 };
 
+const getAllConsume = async (startDate: string, endDate: string) => {
+  try {
+    const response = await instance.get(
+      `/card/consume?startDate=${startDate}&endDate=${endDate}`
+    );
+    return response.data;
+  } catch {
+    new Error("api 연동 오류 - getAllConsume");
+  }
+};
+
 export {
   getAllCreditcard,
   getCreditcard,
@@ -71,4 +82,5 @@ export {
   getChallengeCard,
   getAllChallengeCard,
   getConsume,
+  getAllConsume,
 };
