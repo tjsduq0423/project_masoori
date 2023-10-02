@@ -8,8 +8,10 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.fintech.masoori.global.sse.repository.EmitterRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class NotificationService {
 	private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60; // 60초
@@ -32,6 +34,7 @@ public class NotificationService {
 			try {
 				emitter.send(SseEmitter.event().id(email).name("sse").data(data));
 			} catch (IOException exception) {
+				log.info("sse exception : {}", exception.getMessage());
 				emitterRepository.deleteByEmail(email);
 				emitter.completeWithError(exception);
 			}

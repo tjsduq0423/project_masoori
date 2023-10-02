@@ -71,6 +71,7 @@ spring:
         #        use_sql_comments: true
         #        show_sql: true
         format_sql: true
+    open-in-view: false
 
   # 이메일 인증
   mail:
@@ -110,7 +111,7 @@ jwt:
 rabbitmq:
   queue:
     challenge: challenge.req
-    spending : spending.req
+    spending: spending.req
 
 # ssl 설정
 server:

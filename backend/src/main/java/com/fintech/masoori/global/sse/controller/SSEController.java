@@ -27,6 +27,7 @@ public class SSEController {
 	@Operation(summary = "카드 fetch할 까 말 까?  관련된 데이터받는 API", description = "sse구독을 통해 message를 받는다.")
 	@GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter subscribe(Principal principal) {
+		log.info("email :  {}", principal.getName());
 		return notificationService.subscribe(principal.getName());
 	}
 
