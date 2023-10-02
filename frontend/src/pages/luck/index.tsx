@@ -43,7 +43,7 @@ const CardSection = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 80px;
   gap: 300px;
   flex-grow: 1;
 `;
