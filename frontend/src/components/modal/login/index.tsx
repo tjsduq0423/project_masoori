@@ -22,6 +22,7 @@ interface ImgProps {
 }
 import { modalOpenState } from "@/states/userState";
 import { useRecoilState } from "recoil";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
   position: absolute;
@@ -259,10 +260,19 @@ const Login: React.FC = () => {
       console.log(result);
 
       if (result?.status === 200) {
+        toast.info("👻 환영합니다 👻");
         navigate("/main");
+      } else if (result === undefined) {
+        toast.warning("❗ 입력을 다시 확인해주세요 ❗");
       }
     } catch (error) {
       console.error("로그인에 실패했습니다.", error);
+    }
+  };
+
+  const activeEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleLogin();
     }
   };
 
@@ -320,7 +330,7 @@ const Login: React.FC = () => {
     try {
       console.log(duplicateEmailData);
       await SendSignUpCode.mutateAsync(duplicateEmailData);
-      window.confirm("코드가 전송되었습니다.");
+      toast.info("✉ 코드가 전송되었습니다 ✉");
     } catch (error) {
       console.error("회원가입 코드 전송에 실패했습니다.", error);
     }
@@ -436,6 +446,7 @@ const Login: React.FC = () => {
       const result = await DoSignUp.mutateAsync(registInfo);
       if (result === 200) {
         // window.location.reload;
+        toast.info("🎃회원가입이 완료됬습니다🎃");
         setIsModalOpen(false);
         window.location.href = "/main";
       }
@@ -482,6 +493,7 @@ const Login: React.FC = () => {
               onChange={(e) =>
                 setUserData({ ...userData, password: e.target.value })
               }
+              onKeyPress={activeEnter}
             />
             <SignUp>
               <button
