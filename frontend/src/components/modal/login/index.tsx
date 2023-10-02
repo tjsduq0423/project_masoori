@@ -16,13 +16,12 @@ import { usePostCheckDuplicateEmail } from "@/apis/user/Mutations/usePostCheckDu
 import { usePostSendSignUpCode } from "@/apis/user/Mutations/usePostSendSignUpCode";
 import { usePostCheckSignUpCode } from "@/apis/user/Mutations/usePostCheckSignUpCode";
 import { usePostSignUp } from "@/apis/user/Mutations/usePostSignUp";
-import { useUserInfo } from "@/apis/menu/Queries/useUserInfo";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { userInfoState, userLoginState } from "@/states/userState";
 interface ImgProps {
   loaded: boolean;
 }
+import { modalOpenState } from "@/states/userState";
+import { useRecoilState } from "recoil";
 
 const Container = styled.div`
   position: absolute;
@@ -321,6 +320,7 @@ const Login: React.FC = () => {
     try {
       console.log(duplicateEmailData);
       await SendSignUpCode.mutateAsync(duplicateEmailData);
+      window.confirm("코드가 전송되었습니다.");
     } catch (error) {
       console.error("회원가입 코드 전송에 실패했습니다.", error);
     }
@@ -422,6 +422,7 @@ const Login: React.FC = () => {
 
   //회원가입 ----------------------------------------------
 
+  const [isModalOpen, setIsModalOpen] = useRecoilState(modalOpenState);
   const DoSignUp = usePostSignUp();
 
   const registInfo = {
@@ -434,7 +435,9 @@ const Login: React.FC = () => {
     try {
       const result = await DoSignUp.mutateAsync(registInfo);
       if (result === 200) {
-        navigate("/main");
+        // window.location.reload;
+        setIsModalOpen(false);
+        window.location.href = "/main";
       }
     } catch (error) {
       console.error("회원가입에 실패했습니다.", error);
