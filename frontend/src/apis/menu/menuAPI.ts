@@ -22,7 +22,7 @@ const postAlarm = async () => {
 const getUserInfo = async () => {
   try {
     const response = await instance.get(`/api/user/info`);
-    return response.data;
+    return response;
   } catch {
     new Error("api 연동 오류 - getUserInfo");
   }

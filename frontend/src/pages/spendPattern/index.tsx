@@ -11,7 +11,7 @@ import GhostModal from "@/components/ghostModal";
 import AlertModal from "@/components/alertModal";
 import puzzle from "@/assets/img/puzzle.png";
 import { useRecoilState } from "recoil";
-import VerifyNumberModal from "@/components/verifyNumberModal";
+// import VerifyNumberModal from "@/components/verifyNumberModal";
 import { useGetConsumeId } from "@/apis/spend/Queris/useGetConsumeId";
 import { spendInfoState } from "@/states/verifyState";
 
