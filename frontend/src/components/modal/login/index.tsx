@@ -448,7 +448,9 @@ const Login: React.FC = () => {
         // window.location.reload;
         toast.info("🎃회원가입이 완료됬습니다🎃");
         setIsModalOpen(false);
-        window.location.href = "/main";
+        setTimeout(() => {
+          window.location.href = "/main";
+        }, 1500);
       }
     } catch (error) {
       console.error("회원가입에 실패했습니다.", error);
