@@ -98,6 +98,7 @@ const ContentSection = styled.div`
   height: 100%;
   margin-top: 5%;
   overflow: auto;
+  margin-bottom: 300px;
 `;
 
 const SpecialHeader = styled.div`
@@ -213,7 +214,7 @@ const DictionaryPage = () => {
       </BookSection>
       <ContentSection>
         {currentPage === 0 && (
-          <div>
+          <div style={{ marginBottom: "140px" }}>
             {Object.keys(groupImagesByMonth()).map((month) => (
               <div key={month}>
                 <BasicText>
@@ -228,6 +229,7 @@ const DictionaryPage = () => {
                     display: "grid",
                     gridTemplateColumns: "repeat(5, 1fr)",
                     marginTop: "2rem",
+                    marginBottom: "40px",
                   }}
                 >
                   {groupImagesByMonth()[month].map((item, index) => {
@@ -235,7 +237,7 @@ const DictionaryPage = () => {
                       <TarotCard
                         key={index}
                         width="140px"
-                        height="240px"
+                        height="200px"
                         cardWidth="100%"
                         cardSrc={frontcard}
                         imageSrc={item.imagePath}

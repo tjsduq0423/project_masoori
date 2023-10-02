@@ -261,7 +261,7 @@ const Login: React.FC = () => {
 
       if (result?.status === 200) {
         toast.info("👻 환영합니다 👻");
-        navigate("/main");
+        window.location.href = "/main";
       } else if (result === undefined) {
         toast.warning("❗ 입력을 다시 확인해주세요 ❗");
       }
