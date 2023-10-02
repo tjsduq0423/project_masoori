@@ -10,6 +10,7 @@ export interface StyledTarotCardProps {
   text: string;
   fontsize: string;
   bottom?: string;
+  onClick?: () => void;
 }
 
 const StyledTarotCardContainer = styled.div<{ width: string; height: string }>`
@@ -71,9 +72,10 @@ const TarotCard = ({
   text,
   bottom = "5px",
   fontsize,
+  onClick,
 }: StyledTarotCardProps) => {
   return (
-    <StyledTarotCardContainer width={width} height={height}>
+    <StyledTarotCardContainer width={width} height={height} onClick={onClick}>
       <StyledTarotCardTop cardWidth={cardWidth}>
         <TopImage cardWidth={cardWidth} src={cardSrc}></TopImage>
         <BottomText text={text} fontsize={fontsize} bottom={bottom}>
