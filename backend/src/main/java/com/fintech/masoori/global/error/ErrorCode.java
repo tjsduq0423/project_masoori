@@ -26,7 +26,7 @@ public enum ErrorCode {
 	INVALID_TYPE_VALUE(400, "C005", "Invalid Type Value"),
 	HANDLE_ACCESS_DENIED(403, "C006", "Access is Denied"),
 	QUERY_TIMEOUT(400, "C007", "Query Timeout"),
-	CAN_CREATE(200, "C008", "Can Create Card"),
+	CAN_CREATE(400, "C008", "Can Create Card"),
 	ALREADY_IN_PROGRESS(400, "C009", "Already In Process");
 
 
