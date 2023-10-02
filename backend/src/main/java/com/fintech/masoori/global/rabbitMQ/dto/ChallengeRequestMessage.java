@@ -1,5 +1,8 @@
 package com.fintech.masoori.global.rabbitMQ.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,5 +15,11 @@ import lombok.ToString;
 @Builder
 @ToString
 public class ChallengeRequestMessage {
-	private String id;
+	private Long userId;
+	@Builder.Default
+	private List<UserSpendingCardData> userSpendingDataList = new ArrayList<>();
+
+	public static class UserSpendingCardData {
+		private Long id;
+	}
 }
