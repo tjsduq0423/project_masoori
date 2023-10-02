@@ -1,5 +1,7 @@
 package com.fintech.masoori.global.error;
 
+import java.util.Arrays;
+
 import org.hibernate.QueryTimeoutException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -93,7 +95,7 @@ public class GlobalExceptionHandler {
 	protected ResponseEntity<ErrorResponse> handleException(final Exception e) {
 		log.error("Exception", e);
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
-		response.setMessage(e.getMessage());
+		response.setMessage(e.getMessage() + Arrays.toString(e.getStackTrace()));
 		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
