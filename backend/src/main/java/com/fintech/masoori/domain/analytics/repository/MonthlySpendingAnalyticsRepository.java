@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 import com.fintech.masoori.domain.analytics.entity.MonthlySpendingAnalytics;
 
 public interface MonthlySpendingAnalyticsRepository extends JpaRepository<MonthlySpendingAnalytics, Long> {
-	MonthlySpendingAnalytics save(MonthlySpendingAnalytics monthlySpendingAnalytics);
 
 	@Query("SELECT m FROM MonthlySpendingAnalytics m WHERE m.user.id = :userId AND m.createdDate >= :startDate AND m.createdDate <= :endDate")
 	List<MonthlySpendingAnalytics> findMonthlySpendingAnalyticsByUserId(@Param("userId") Long userId,

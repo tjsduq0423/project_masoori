@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,18 +47,18 @@ public class CardServiceImpl implements CardService {
 			calcDate.getEndDate());
 
 		List<UserCardListRes.UserCard> userBasicCardList = cardList.stream()
-		                                                           .map(card -> UserCardListRes.UserCard.builder()
-		                                                                                                .name(
-			                                                                                                card.getName())
-		                                                                                                .cardType(
-			                                                                                                card.getCardType())
-		                                                                                                .id(card.getId())
-		                                                                                                .createdDate(
-			                                                                                                card.getCreatedDate())
-		                                                                                                .imagePath(
-			                                                                                                card.getImagePath())
-		                                                                                                .build())
-		                                                           .toList();
+																   .map(card -> UserCardListRes.UserCard.builder()
+																										.name(
+																											card.getName())
+																										.cardType(
+																											card.getCardType())
+																										.id(card.getId())
+																										.createdDate(
+																											card.getCreatedDate())
+																										.imagePath(
+																											card.getImagePath())
+																										.build())
+																   .toList();
 
 		return UserCardListRes.builder().userCardList(userBasicCardList).build();
 	}
@@ -69,9 +68,9 @@ public class CardServiceImpl implements CardService {
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다."));
 		Card card = cardRepository.findCard(user.getId(), CardType.BASIC, cardId);
 		return BasicCardRes.BasicCard.builder()
-		                             .card(new com.fintech.masoori.domain.card.dto.Card(card))
-		                             .basicList(card.getBasicList().stream().map(Basic::new).toList())
-		                             .build();
+									 .card(new com.fintech.masoori.domain.card.dto.Card(card))
+									 .basicList(card.getBasicList().stream().map(Basic::new).toList())
+									 .build();
 	}
 
 	@Override
@@ -84,18 +83,18 @@ public class CardServiceImpl implements CardService {
 			calcDate.getEndDate());
 
 		List<UserCardListRes.UserCard> userChallengeCardList = cardList.stream()
-		                                                               .map(card -> UserCardListRes.UserCard.builder()
-		                                                                                                    .name(
-			                                                                                                    card.getName())
-		                                                                                                    .cardType(
-			                                                                                                    card.getCardType())
-		                                                                                                    .id(card.getId())
-		                                                                                                    .createdDate(
-			                                                                                                    card.getCreatedDate())
-		                                                                                                    .imagePath(
-			                                                                                                    card.getImagePath())
-		                                                                                                    .build())
-		                                                               .toList();
+																	   .map(card -> UserCardListRes.UserCard.builder()
+																											.name(
+																												card.getName())
+																											.cardType(
+																												card.getCardType())
+																											.id(card.getId())
+																											.createdDate(
+																												card.getCreatedDate())
+																											.imagePath(
+																												card.getImagePath())
+																											.build())
+																	   .toList();
 
 		return UserCardListRes.builder().userCardList(userChallengeCardList).build();
 	}
@@ -105,39 +104,39 @@ public class CardServiceImpl implements CardService {
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다."));
 		Card card = cardRepository.findCard(user.getId(), CardType.SPECIAL, cardId);
 		return ChallengeCardRes.ChallengeCard.builder()
-		                                     .card(new com.fintech.masoori.domain.card.dto.Card(card))
-		                                     .challengeList(
-			                                     card.getChallengeList().stream().map(Challenge::new).toList())
-		                                     .build();
+											 .card(new com.fintech.masoori.domain.card.dto.Card(card))
+											 .challengeList(
+												 card.getChallengeList().stream().map(Challenge::new).toList())
+											 .build();
 	}
 
 	@Override
 	@Transactional
 	public void registerChallengeCard(GeneratedChallengeCard generatedChallengeCard) {
 		User user = userRepository.findById(generatedChallengeCard.getUserId())
-		                          .orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
+								  .orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
 
 		Card newCard = Card.builder()
-		                   .cardType(CardType.SPECIAL)
-		                   .name(generatedChallengeCard.getName())
-		                   .description(generatedChallengeCard.getDescription())
-		                   .imagePath(generatedChallengeCard.getImagePath())
-		                   .build();
+						   .cardType(CardType.SPECIAL)
+						   .name(generatedChallengeCard.getName())
+						   .description(generatedChallengeCard.getDescription())
+						   .imagePath(generatedChallengeCard.getImagePath())
+						   .build();
 
 		List<GeneratedChallenge> challenges = generatedChallengeCard.getChallenges();
 		for (GeneratedChallenge c : challenges) {
 			com.fintech.masoori.domain.card.entity.Challenge challenge = com.fintech.masoori.domain.card.entity.Challenge.builder()
-			                                                                                                             .isSuccess(
-				                                                                                                             false)
-			                                                                                                             .name(
-				                                                                                                             c.getName())
-			                                                                                                             .achievementCondition(
-				                                                                                                             c.getAchievementCondition())
-			                                                                                                             .startTime(
-				                                                                                                             c.getStartTime())
-			                                                                                                             .endTime(
-				                                                                                                             c.getEndTime())
-			                                                                                                             .build();
+																														 .isSuccess(
+																															 false)
+																														 .name(
+																															 c.getName())
+																														 .achievementCondition(
+																															 c.getAchievementCondition())
+																														 .startTime(
+																															 c.getStartTime())
+																														 .endTime(
+																															 c.getEndTime())
+																														 .build();
 			challenge.setCard(newCard);
 		}
 		newCard.setUser(user);
@@ -147,25 +146,25 @@ public class CardServiceImpl implements CardService {
 	@Transactional
 	public void registerSpendingCard(GeneratedSpendingCard generatedSpendingCard) {
 		User user = userRepository.findById(generatedSpendingCard.getUserId())
-		                          .orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
+								  .orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
 
 		Card newCard = Card.builder()
-		                   .cardType(CardType.BASIC)
-		                   .name(generatedSpendingCard.getName())
-		                   .description(generatedSpendingCard.getDescription())
-		                   .imagePath(generatedSpendingCard.getImagePath())
-		                   .build();
+						   .cardType(CardType.BASIC)
+						   .name(generatedSpendingCard.getName())
+						   .description(generatedSpendingCard.getDescription())
+						   .imagePath(generatedSpendingCard.getImagePath())
+						   .build();
 
 		List<GeneratedSpending> spendings = generatedSpendingCard.getSpendings();
 		for (GeneratedSpending s : spendings) {
 			com.fintech.masoori.domain.card.entity.Basic basic = com.fintech.masoori.domain.card.entity.Basic.builder()
-			                                                                                                 .keyword(
-				                                                                                                 s.getKeyword())
-			                                                                                                 .totalAmount(
-				                                                                                                 s.getTotalAmount())
-			                                                                                                 .frequency(
-				                                                                                                 s.getFrequency())
-			                                                                                                 .build();
+																											 .keyword(
+																												 s.getKeyword())
+																											 .totalAmount(
+																												 s.getTotalAmount())
+																											 .frequency(
+																												 s.getFrequency())
+																											 .build();
 			basic.setCard(newCard);
 		}
 		newCard.setUser(user);
@@ -176,10 +175,12 @@ public class CardServiceImpl implements CardService {
 		User user = userRepository.findUserByEmail(email);
 		LocalDateTime monday = time.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 		LocalDateTime sunday = time.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-		LocalDateTime startDate = LocalDateTime.of(monday.getYear(), monday.getMonth(), monday.getDayOfMonth(), 0, 0, 0);
-		LocalDateTime endDate = LocalDateTime.of(sunday.getYear(), sunday.getMonth(), sunday.getDayOfMonth(), 23, 59, 59);
+		LocalDateTime startDate = LocalDateTime.of(monday.getYear(), monday.getMonth(), monday.getDayOfMonth(), 0, 0,
+			0);
+		LocalDateTime endDate = LocalDateTime.of(sunday.getYear(), sunday.getMonth(), sunday.getDayOfMonth(), 23, 59,
+			59);
 		Card recentCard = cardRepository.findRecentCard(user.getId(), CardType.BASIC, startDate, endDate);
-		if(recentCard == null){
+		if (recentCard == null) {
 			return null;
 		}
 		return BasicCardRes.BasicCard.builder().card(new com.fintech.masoori.domain.card.dto.Card(recentCard)).build();

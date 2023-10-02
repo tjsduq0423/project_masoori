@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fintech.masoori.domain.analytics.dto.MonthlySpendingAnalyticsRes;
 import com.fintech.masoori.domain.analytics.entity.MonthlySpendingAnalytics;
 import com.fintech.masoori.domain.analytics.repository.MonthlySpendingAnalyticsRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
+import com.fintech.masoori.global.rabbitMQ.dto.MonthlySpendingAndCreditcard;
 import com.fintech.masoori.global.util.CalcDate;
 
 import lombok.RequiredArgsConstructor;
@@ -43,7 +45,20 @@ public class MonthlySpendingAnalyticsServiceImpl implements MonthlySpendingAnaly
 	}
 
 	@Override
-	public void save(MonthlySpendingAnalytics monthlySpendingAnalytics) {
-		monthlySpendingAnalyticsRepository.save(monthlySpendingAnalytics);
+	@Transactional
+	public void saveMonthlySpendingAnalytics(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard) {
+		User serviceUser = userRepository.findById(monthlySpendingAndCreditcard.getUserId())
+										 .orElseThrow(() -> new RuntimeException("User Not Found"));
+
+		for (MonthlySpendingAndCreditcard.MonthlySpending spending : monthlySpendingAndCreditcard.getMonthlySpendingList()) {
+			MonthlySpendingAnalytics analytics = MonthlySpendingAnalytics.builder()
+																		 .category(spending.getCategory())
+																		 .cost(spending.getCost())
+																		 .build();
+
+			monthlySpendingAnalyticsRepository.save(analytics);
+			serviceUser.addMonthlySpendingAnalytics(analytics);
+		}
 	}
+
 }

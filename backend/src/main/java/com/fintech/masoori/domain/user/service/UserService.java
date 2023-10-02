@@ -30,6 +30,8 @@ public interface UserService {
 	// 사용자 이메일로 조회
 	Optional<User> findByEmail(String email);
 
+	User findById(Long id);
+
 	void updateInfoAndSendSms(SendSmsReq sendSmsReq, User loginUser);
 
 	void sendSignupEmailCode(String email);
