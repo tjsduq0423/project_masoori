@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-		log.error("handleMethodArgumentNotValidException", e);
+		log.error("MethodArgumentNotValidException", e);
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult());
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(BindException.class)
 	protected ResponseEntity<ErrorResponse> handleBindException(BindException e) {
-		log.error("handleBindException", e);
+		log.error("BindException", e);
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult());
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
@@ -83,16 +83,17 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(BusinessException.class)
 	protected ResponseEntity<ErrorResponse> handleBusinessException(final BusinessException e) {
-		log.error("handleEntityNotFoundException", e);
+		log.error("BusinessException", e);
 		final ErrorCode errorCode = e.getErrorCode();
 		final ErrorResponse response = ErrorResponse.of(errorCode);
 		return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
 	}
 
 	@ExceptionHandler(Exception.class)
-	protected ResponseEntity<ErrorResponse> handleException(Exception e) {
-		log.error("handleEntityNotFoundException", e);
+	protected ResponseEntity<ErrorResponse> handleException(final Exception e) {
+		log.error("Exception", e);
 		final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
+		response.setMessage(e.getMessage());
 		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
