@@ -2,6 +2,8 @@ import styled from "styled-components"; // Import styled-components
 import ToggleSwitch from "@/components/toggle";
 import DonutChart from "@/components/donutGraph";
 import cardFrontImage from "../../assets/img/cardFront.png";
+import { usePostGeneration } from "@/apis/user/Mutations/usePostGeneration";
+import { usePostAlram } from "@/apis/user/Mutations/usePostAlram";
 
 const Container = styled.div`
   border-radius: 25px;
@@ -84,6 +86,36 @@ const LocationContainer = styled.div`
 // Define other styled-components similarly for the remaining classes
 
 const ProfilePage = () => {
+  //마이페이지 소비카드 생성 연동 변경 API 시작
+
+  const ChangeGeneration = usePostGeneration();
+
+  const handleChangeGeneration = async () => {
+    try {
+      const result = await ChangeGeneration.mutateAsync();
+      console.log(result);
+    } catch (error) {
+      console.error("소비카드 생성 연동 변경에 실패했습니다.", error);
+    }
+  };
+
+  //마이페이지 소비카드 생성 연동 변경 API 종료
+
+  //마이페이지 sms 알림 연동 변경 API 시작
+
+  const ChangeAlram = usePostAlram();
+
+  const handleChangeAlram = async () => {
+    try {
+      const result = await ChangeAlram.mutateAsync();
+      console.log(result);
+    } catch (error) {
+      console.error("sms 알림 연동 변경에 실패했습니다.", error);
+    }
+  };
+
+  //마이페이지 sms 알림 연동 변경 API 종료
+
   const data = {
     imagePath: "/etc/img",
     smsAlarm: true,
@@ -130,6 +162,9 @@ const ProfilePage = () => {
               alignItems: "center",
               marginBottom: "10px",
             }}
+            onClick={() => {
+              handleChangeAlram();
+            }}
           >
             <p
               style={{ marginRight: "38px", fontSize: "20px", fontWeight: 700 }}
@@ -144,7 +179,12 @@ const ProfilePage = () => {
               checked={data.smsAlarm}
             />
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div
+            style={{ display: "flex", alignItems: "center" }}
+            onClick={() => {
+              handleChangeGeneration();
+            }}
+          >
             <p
               style={{ marginRight: "30px", fontSize: "20px", fontWeight: 700 }}
             >

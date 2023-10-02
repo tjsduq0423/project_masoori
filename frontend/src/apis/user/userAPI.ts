@@ -124,7 +124,29 @@ const postCheckDuplicateEmail = async (
   }
 };
 
+const postGeneration = async () => {
+  try {
+    const response = await instance.post(`/user/generation`);
+    console.log(response);
+    return response.data;
+  } catch {
+    console.log(new Error("api 연동 오류 - postGeneration"));
+  }
+};
+
+const postAlram = async () => {
+  try {
+    const response = await instance.post(`/user/alram`);
+    console.log(response);
+    return response.data;
+  } catch {
+    console.log(new Error("api 연동 오류 - postAlram"));
+  }
+};
+
 export {
+  postAlram,
+  postGeneration,
   postCheckDuplicateEmail,
   postSendPhoneSMS,
   postCheckPhoneSMS,
