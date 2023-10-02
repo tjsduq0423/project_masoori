@@ -4,6 +4,8 @@ import Swiper, { Navigation, Pagination } from "swiper"; // Import Swiper and ne
 import RegistBtn from "@/components/registbtn";
 import { useAllCreditCard } from "@/apis/dictionary/Queries/useAllCreditCard";
 import MonthSpendCarousel from "@/components/monthSpend";
+import { useRecoilValue } from "recoil";
+import { creditInfoState } from "@/states/dictionaryState";
 
 import tarotback from "@/assets/img/tarotCard/tarotCardBack.png";
 
@@ -260,9 +262,10 @@ const StyledRotatedImageWrapper = styled.div<{ imageAttr?: string }>`
 `;
 
 const CardRecommend = () => {
-  const time = "2023-09-19T21:11:45";
+  const creditInfo = useRecoilValue(creditInfoState);
+  console.log(creditInfo);
 
-  const allCreditCard = useAllCreditCard(time);
+  const allCreditCard = useAllCreditCard(creditInfo);
   const creditCardRes = allCreditCard.creditCardRes.creditCardList;
   const MonthData =
     allCreditCard.monthlySpendingAnalyticsRes.monthlySpendingAnalyticsList;
