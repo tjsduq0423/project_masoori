@@ -10,10 +10,11 @@ import { StyledTextBubbleProps } from "@/types/luckType";
 import GhostModal from "@/components/ghostModal";
 import AlertModal from "@/components/alertModal";
 import puzzle from "@/assets/img/puzzle.png";
-import { useRecoilState } from "recoil";
-// import VerifyNumberModal from "@/components/verifyNumberModal";
+import { useRecoilState, useRecoilValue } from "recoil";
+import VerifyNumberModal from "@/components/verifyNumberModal";
 import { useGetConsumeId } from "@/apis/spend/Queris/useGetConsumeId";
 import { spendInfoState } from "@/states/verifyState";
+import { spendIdState } from "@/states/dictionaryState";
 
 const PageContainer = styled.div`
   position: fixed;
@@ -100,11 +101,12 @@ const PuzzleModalContainer = styled.div<{ isPuzzleOpen: boolean }>`
 `;
 
 const SpendPage: React.FC = () => {
+  const spendId = useRecoilValue(spendIdState);
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 여부 상태
   const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
   const [ConsumeIdInfo, setConsumeIdInfo] = useRecoilState(spendInfoState);
 
-  const consume = useGetConsumeId(4);
+  const consume = useGetConsumeId(spendId);
 
   useEffect(() => {
     setConsumeIdInfo(consume);
