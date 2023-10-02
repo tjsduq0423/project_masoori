@@ -23,6 +23,7 @@ import com.fintech.masoori.domain.user.dto.SendSmsReq;
 import com.fintech.masoori.domain.user.dto.SignUpReq;
 import com.fintech.masoori.domain.user.dto.SmsCheckReq;
 import com.fintech.masoori.domain.user.entity.User;
+import com.fintech.masoori.domain.user.exception.UserNotFoundException;
 import com.fintech.masoori.domain.user.service.UserService;
 import com.fintech.masoori.global.error.exception.InvalidValueException;
 
@@ -166,8 +167,9 @@ public class UserController {
 	}
 
 	// 현재 로그인한 유저 정보를 찾아온다.
-	public User loginUser(Authentication authentication) {
-		return userService.findByEmail(authentication.getPrincipal().toString()).get();
+	public User loginUser(Principal principal) {
+		return userService.findByEmail(principal.getName())
+		                  .orElseThrow(() -> new UserNotFoundException("User is Not Found"));
 	}
 
 }
