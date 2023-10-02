@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postSmsCheck } from "@/apis/main/mainAPI";
-import { UserSmsCheck } from "@/types/verifyInfoType";
+import { UserSmsCheck } from "@/types/spendType";
 
 const usePostSmsCheck = () => {
   const queryClient = useQueryClient();

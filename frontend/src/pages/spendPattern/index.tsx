@@ -12,9 +12,8 @@ import AlertModal from "@/components/alertModal";
 import puzzle from "@/assets/img/puzzle.png";
 import { useRecoilState, useRecoilValue } from "recoil";
 import VerifyNumberModal from "@/components/verifyNumberModal";
-import { useGetConsumeId } from "@/apis/spend/Queris/useGetConsumeId";
-import { spendInfoState } from "@/states/verifyState";
-import { spendIdState } from "@/states/dictionaryState";
+import { useGetConsumeId } from "@/apis/spend/Queries/useGetConsumeId";
+import { spendInfoState } from "@/states/spendState";
 
 const PageContainer = styled.div`
   position: fixed;
