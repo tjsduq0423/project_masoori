@@ -38,7 +38,7 @@ public class MonthlySpendingAnalytics extends BaseTimeEntity {
 	@Column(name = "cost")
 	private Integer cost;
 
-	@Column(name = "analytics")
+	@Column(name = "analytics", columnDefinition = "TEXT")
 	private String analytics;
 
 	@ManyToOne(fetch = FetchType.LAZY)

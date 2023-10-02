@@ -41,7 +41,7 @@ public class Scheduler {
 	 * 소비 카드 -> 주기적으로 연동된 유저에 대해 소비 분석 데이터 생성 요청!
 	 */
 	@Async
-	@Scheduled
+	@Scheduled(fixedRate = 3000)
 	public void spendingAnalytics() {
 		// 연동 여부가 true 인 유저에 대해 유저카드를 등록하고 basic으로 지정 소비 엔티티를 생성해서 append하고 저장.
 		// 실제로 여기서는 pub service를 주입받아 실행할 뿐 실제 동작은 불가능함.
@@ -52,7 +52,7 @@ public class Scheduler {
 	 * 유저에 대한 월간 분석을 실시함. 웛 1회 -> 매달 월요일에 실행.
 	 */
 	@Async
-	@Scheduled
+	@Scheduled(fixedRate = 3000)
 	public void monthlySpendingAnalyticsGenerate() {
 
 	}

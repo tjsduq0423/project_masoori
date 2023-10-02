@@ -112,10 +112,12 @@ rabbitmq:
     realtime: realtime.req
     weekly: weekly.req
     recommend: recommend.req
+    analytics: analytics.req
   sub:
     realtime: realtime.res
     weekly: weekly.res
     recommend: recommend.res
+    analytics: analytics.res
 
 # ssl 설정
 #server:

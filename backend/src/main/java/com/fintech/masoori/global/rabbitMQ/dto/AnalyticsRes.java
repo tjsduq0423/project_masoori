@@ -1,8 +1,6 @@
 package com.fintech.masoori.global.rabbitMQ.dto;
 
-import java.util.List;
-
-import com.fintech.masoori.domain.credit.entity.CreditCardUser;
+import com.fintech.masoori.domain.analytics.entity.MonthlySpendingAnalytics;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,8 +11,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class RecommendRes {
+public class AnalyticsRes {
+	// 분석된 월간 소비내용을 받는다
 	private int id;
-	private List<CreditCardUser> creditCardUserList;
+	private MonthlySpendingAnalytics monthlySpendingAnalytics;
 
 }
