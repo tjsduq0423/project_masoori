@@ -3,7 +3,7 @@ import styled from "styled-components";
 import MenuButton from "@/assets/img/MenuButton.png";
 import Modal from "@/components/modal/login";
 import SignInModalBack from "@/assets/img/signCard/signInModalBack.png";
-import LandingMainLogo from "@/assets/img/LandingMainLogo.png";
+import LandingMainLogo from "@/assets/img/HeaderLogo/masooriHeaderLogo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { modalOpenState } from "@/states/userState";
 import { useRecoilState } from "recoil";
