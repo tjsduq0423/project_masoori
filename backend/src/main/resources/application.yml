@@ -111,6 +111,7 @@ rabbitmq:
   queue:
     challenge: challenge.req
     spending : spending.req
+    analytics: analytics.req
 
 # ssl 설정
 #server:

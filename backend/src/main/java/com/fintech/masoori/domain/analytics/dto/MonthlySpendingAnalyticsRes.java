@@ -19,14 +19,11 @@ public class MonthlySpendingAnalyticsRes {
 		private String category;
 		@Schema(description = "카테고리에 총 사용량", example = "230000")
 		private Integer cost;
-		@Schema(description = "분석내용", example = "해당 카드에 어쩌구 저쩌구~..")
-		private String analytics;
 
 		public MonthlySpendingAnalytics(
 			com.fintech.masoori.domain.analytics.entity.MonthlySpendingAnalytics monthlySpendingAnalytics) {
 			this.category = monthlySpendingAnalytics.getCategory();
 			this.cost = monthlySpendingAnalytics.getCost();
-			this.analytics = monthlySpendingAnalytics.getAnalytics();
 		}
 	}
 }

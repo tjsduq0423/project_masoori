@@ -30,6 +30,10 @@ public class RabbitMQConfig {
 	@Value("${rabbitmq.queue.spending}")
 	private String queue2;
 
+	@Value("${rabbitmq.queue.analytics}")
+	private String queue3;
+
+
 	@Bean
 	public Queue queue1() {
 		return new Queue(queue1, true);
@@ -39,6 +43,12 @@ public class RabbitMQConfig {
 	public Queue queue2() {
 		return new Queue(queue2, true);
 	}
+
+	@Bean
+	public Queue queue3() {
+		return new Queue(queue3, true);
+	}
+
 
 	@Bean
 	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
