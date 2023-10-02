@@ -134,10 +134,10 @@ const AlertModal = ({
   zIndex,
   routerLink,
 }: StyledAlertModalProps) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleLowerSectionClick = () => {
-    navigate(routerLink);
+    window.location.href = routerLink;
   };
   return (
     <StyledAlertModal

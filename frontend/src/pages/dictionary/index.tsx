@@ -15,6 +15,7 @@ import { creditInfoState, spendIdState } from "@/states/dictionaryState";
 import { useNavigate } from "react-router-dom";
 
 import cardBack from "@/assets/img/tarotCard/tarotCardBack.png";
+
 import { useChallengeCard } from "@/apis/dictionary/Queries/useChallengeCard";
 import { useAllUserFortune } from "@/apis/luck/Queries/useAllUserFortune";
 import { useGetAllConsume } from "@/apis/dictionary/Queries/useGetAllConsume";
@@ -136,7 +137,8 @@ const DictionaryPage = () => {
   const setCreditInfo = useSetRecoilState(creditInfoState);
   const setSpendId = useSetRecoilState(spendIdState);
 
-  const challengeCard = useChallengeCard(12);
+  const challengeCard = useChallengeCard(13);
+  console.log(challengeCard);
   const allUserFortune = useAllUserFortune().fortuneList;
   const AllConsume = useGetAllConsume(
     "2000-09-16T07:42:34.76",
@@ -258,7 +260,40 @@ const DictionaryPage = () => {
               </SpecialText>
             </SpecialHeader>
             <div style={{ display: "flex" }}>
-              <PokemonCard />
+              {challengeCard.challengeList.every(
+                (challenge: Challenge) => challenge.isSuccess
+              ) ? (
+                // 모든 챌린지의 isSuccess가 true인 경우 Pokemon 카드 렌더링
+                <PokemonCard
+                  cardWidth="100%"
+                  cardSrc={frontcard}
+                  imageUrl={challengeCard.card.imagePath}
+                  text={challengeCard.card.name}
+                  bottom="20px"
+                  fontsize="32px"
+                />
+              ) : (
+                // 하나 이상의 챌린지의 isSuccess가 false인 경우 Tarot 카드 렌더링
+                <div
+                  style={{
+                    marginRight: "30px",
+                    backgroundColor: "rgba(0, 0, 0, 0.7)",
+                    borderRadius: "20px",
+                  }}
+                >
+                  <TarotCard
+                    width="403px"
+                    height="100%"
+                    cardWidth="100%"
+                    cardSrc={frontcard}
+                    imageSrc={challengeCard.card.imagePath}
+                    bottomImageWidth="100%"
+                    text={challengeCard.card.name}
+                    bottom="20px"
+                    fontsize="32px"
+                  />
+                </div>
+              )}
               <div
                 style={{
                   display: "flex",
@@ -270,8 +305,8 @@ const DictionaryPage = () => {
                   (challenge: Challenge, index: number) => (
                     <ChallengeBubble
                       key={index}
-                      text={challenge.achievementCondition} // Use achievementCondition as text
-                      titleText={challenge.name} // Use name as titleText
+                      text={challenge.achievementCondition}
+                      titleText={challenge.name}
                       width={crystalChallengeBubbleProps.width}
                       background={
                         challenge.isSuccess
