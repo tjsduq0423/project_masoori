@@ -1,17 +1,30 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect } from "react";
 import styled from "styled-components";
 import MenuButton from "@/assets/img/MenuButton.png";
 import Modal from "@/components/modal/login";
 import SignInModalBack from "@/assets/img/signCard/signInModalBack.png";
+import LandingMainLogo from "@/assets/img/LandingMainLogo.png";
 import { useLocation, useNavigate } from "react-router-dom";
+import { modalOpenState } from "@/states/userState";
+import { useRecoilState } from "recoil";
 
 const StyledContainer = styled.div`
   position: absolute;
   right: 0px;
   top: 0px;
   height: 8%;
-  width: 10%;
+  width: 100%;
   z-index: 1;
+`;
+
+const MainLogo = styled.div`
+  height: 100px;
+  width: 200px;
+  background-image: url(${LandingMainLogo});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  margin-left: 15px;
 `;
 
 const TransparentContainer = styled(StyledContainer)`
@@ -57,40 +70,39 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useRecoilState(modalOpenState);
   const location = useLocation();
   console.log(location.pathname);
   const openModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
-      closeModal();
+      setIsModalOpen(false);
+    }
+  };
+  const AT = localStorage.getItem("accessToken");
+  const navigate = useNavigate();
+
+  const navigatePage = () => {
+    if (!AT) {
+      console.log(1);
+      openModal();
+    } else if (AT && AT.length > 0 && location.pathname !== "/menu") {
+      console.log(2);
+      navigate("/menu");
+    } else if (AT && AT.length > 0 && location.pathname === "/menu") {
+      console.log(3);
+      navigate("/main");
     }
   };
 
-  const AT = localStorage.getItem("accessToken");
-  const navigate = useNavigate();
-  // 로그인 되어있는 유저라면 main 페이지로
   useEffect(() => {
-    if (isModalOpen && AT && AT.length > 0 && location.pathname !== "/menu") {
+    if (AT && AT.length > 0 && location.pathname !== "/menu") {
       setIsModalOpen(false);
-      navigate("/menu");
-    } else if (
-      isModalOpen &&
-      AT &&
-      AT.length > 0 &&
-      location.pathname === "/menu"
-    ) {
-      setIsModalOpen(false);
-      navigate("/main");
     }
-  }, [AT, navigate, isModalOpen, location]);
+  }, [AT, location.pathname, setIsModalOpen]);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -113,16 +125,38 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         <IsModalOpenBack>
           <LoginBackImg />
           <TransparentContainer onClick={handleBackgroundClick}>
-            <div>
-              <MenuButtonImage src={MenuButton} onClick={openModal} />
+            <div
+              style={{
+                width: "100vw",
+                display: "flex",
+                justifyContent: "space-between",
+                alignContent: "center",
+              }}
+              onClick={() => {
+                navigate("/main");
+              }}
+            >
+              <MainLogo />
+              <MenuButtonImage src={MenuButton} onClick={navigatePage} />
               {isModalOpen && <Modal />}
             </div>
           </TransparentContainer>
         </IsModalOpenBack>
       ) : (
         <StyledContainer onClick={handleBackgroundClick}>
-          <div>
-            <MenuButtonImage src={MenuButton} onClick={openModal} />
+          <div
+            style={{
+              width: "100vw",
+              display: "flex",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+            onClick={() => {
+              navigate("/main");
+            }}
+          >
+            <MainLogo />
+            <MenuButtonImage src={MenuButton} onClick={navigatePage} />
             {isModalOpen && <Modal />}
           </div>
         </StyledContainer>

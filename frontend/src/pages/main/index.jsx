@@ -12,6 +12,8 @@ import "./style.css";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import { useUserInfo } from "@/apis/menu/Queries/useUserInfo";
+// import { userInfoState, userLoginState } from "@/states/userState";
 import masuriImg from "../../assets/img/masuri.png";
 import book from "../../assets/img/book.png";
 import cardhand from "../../assets/img/handcard.png";
@@ -48,10 +50,29 @@ const ModalContainer = styled.div`
   z-index: 3;
 `;
 
+import { useRecoilState } from "recoil";
+
 const MainPage = () => {
   const navigate = useNavigate();
   const canvasRef = useRef(null); // Ref to store the canvas element
+  // const [isLogin, setIsLogin] = useRecoilState(userLoginState);
+  // const [user, setUser] = useRecoilState(userInfoState);
 
+  // const userInfo = useUserInfo(isLogin);
+  // console.log(userInfo);
+
+  // console.log(isLogin);
+  // console.log(user);
+  // console.log(UserInfo);
+  // setUser({
+  //   imagePath: UserInfo.imagePath,
+  //   smsAlarm: UserInfo.smsAlarm,
+  //   cardGeneration: UserInfo.cardGeneration,
+  //   dailySpending: UserInfo.dailySpending,
+  //   weeklySpending: UserInfo.weeklySpending,
+  //   monthlySpending: UserInfo.monthlySpending,
+  //   isAuthenticated: UserInfo.isAuthenticated,
+  // });
   useEffect(() => {
     let body,
       mainContainer,
