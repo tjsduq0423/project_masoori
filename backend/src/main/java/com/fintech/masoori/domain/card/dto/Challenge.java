@@ -33,4 +33,8 @@ public class Challenge {
 		this.endTime = challenge.getEndTime();
 	}
 
+	public com.fintech.masoori.domain.card.entity.Challenge toEntity() {
+		return com.fintech.masoori.domain.card.entity.Challenge.builder()
+		                                                       .build();
+	}
 }
