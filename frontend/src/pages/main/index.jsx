@@ -1,14 +1,52 @@
-import React, { useEffect, useRef } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import * as THREE from "three";
 import Flickity from "flickity";
 import "flickity/css/flickity.css"; // Import Flickity CSS
 import "./style.css";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 import masuriImg from "../../assets/img/masuri.png";
 import book from "../../assets/img/book.png";
 import cardhand from "../../assets/img/handcard.png";
 import money from "../../assets/img/money.png";
+import VerifyNumberModal from "@/components/verifyNumberModal";
+import { userInfoState } from "@/states/userState";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { nowDateInfoState } from "@/states/spendState";
+import { useGetConsumeRecent } from "@/apis/spend/Queries/useGetConsumeRecent";
+import { usePostSSESendData } from "@/apis/spend/Mutations/usePostSSESendData";
+import { useGetSSESubscribe } from "@/apis/spend/Queries/useGetSSESubscribe";
+import { useUserInfo } from "@/apis/menu/Queries/useUserInfo";
+
+//verifymodal
+
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+  z-index: 1;
+`;
+
+const ModalContainer = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+  z-index: 3;
+`;
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -344,6 +382,7 @@ const MainPage = () => {
     };
   }, []);
 
+  //navigation
   const navigateAbout = () => {
     navigate("/landing");
   };
@@ -352,13 +391,81 @@ const MainPage = () => {
     navigate("/luck");
   };
 
-  const navigateSpend = () => {
-    navigate("/spend");
-  };
+  // const navigateSpend = () => {
+  //   navigate("/spend");
+  // };
 
   const navigateDictionary = () => {
     navigate("/dictionary");
   };
+
+  //modal
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 여부 상태
+
+  // 모달 열기 함수
+  const openModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  // 모달 닫기 함수
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // 로그인 사용자 userInfo:isAuthenticated 체크
+
+  // const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [nowDateInfo, setNowDateInfo] = useRecoilState(nowDateInfoState);
+  const [initialStartDate, setInitialStartDate] = useState("");
+  const [isLogin, setIsLogin] = useState("");
+
+  const nowDateTime = useGetConsumeRecent(initialStartDate);
+  const userInfo = useUserInfo(isLogin);
+  // const usePostSSEMutation = usePostSSESendData();
+  // const useGetSSE = useGetSSESubscribe();
+
+  useEffect(() => {
+    // Check if there is an accessToken in localStorage
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      setIsLogin("true"); // accessToken이 있으면 isLogin을 true로 설정
+      console.log(userInfo);
+    }
+  }, [userInfo]);
+
+  // console.log(userInfo);
+
+  // useEffect(() => {
+  //   setUserInfo(user);
+  // }, [setUserInfo, user]);
+
+  // const postSSEHandler = async () => {
+  //   try {
+  //     await usePostSSEMutation.mutateAsync();
+
+  //     console.log("SSE 구독 성공");
+  //   } catch (error) {
+  //     console.error("SSE 구독  실패:", error);
+  //   }
+  // };
+
+  const checkAuth = () => {
+    if (userInfo.isAuthenticated) {
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
+      const currentSetDate = currentDate.toISOString().slice(0, -2);
+      console.log(currentSetDate);
+
+      setInitialStartDate(currentSetDate);
+      console.log("true라 recent를 호출할거임");
+      console.log("true라 recent를 호출했음");
+    } else if (userInfo.isAuthenticated === false) {
+      console.log("false라 모달이 떴음");
+      setIsModalOpen(!isModalOpen);
+    }
+  };
+
+  console.log(nowDateTime);
 
   return (
     <div className="body">
@@ -398,7 +505,7 @@ const MainPage = () => {
                   당신의 주간 소비 패턴으로 탄생하는 단 하나의 타로카드
                   <br /> 당신만을 위한 특별한 메시지를 받아보세요.
                 </p>
-                <a onClick={navigateSpend}>ENTER</a>
+                <a onClick={checkAuth}>ENTER</a>
               </div>
             </div>
             <div className="intro-cell">
@@ -416,6 +523,10 @@ const MainPage = () => {
           </div>
         </div>
       </main>
+      <ModalContainer isOpen={isModalOpen}>
+        <VerifyNumberModal />
+      </ModalContainer>
+      <Backdrop isOpen={isModalOpen} onClick={closeModal} />
     </div>
   );
 };
