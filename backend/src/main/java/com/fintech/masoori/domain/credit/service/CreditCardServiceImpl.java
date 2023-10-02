@@ -16,6 +16,7 @@ import com.fintech.masoori.domain.credit.repository.CreditCardRepository;
 import com.fintech.masoori.domain.credit.repository.CreditCardUserRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
+import com.fintech.masoori.global.rabbitMQ.dto.MonthlySpendingAndCreditcard;
 import com.fintech.masoori.global.util.CalcDate;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class CreditCardServiceImpl implements CreditCardService {
 	@Override
 	public UserCreditCardRes selectAll(String userEmail) {
 		User user = userRepository.findUserByEmail(userEmail);
-		List<UserCreditCardRes.UserCreditCard> userCreditCardList = user.getCreditCardUsers().stream().map(e -> {
+		List<UserCreditCardRes.UserCreditCard> userCreditCardList = user.getCreditCardUserList().stream().map(e -> {
 			CreditCard creditCard = e.getCreditCard();
 			return new UserCreditCardRes.UserCreditCard(creditCard);
 		}).collect(Collectors.toList());
@@ -69,7 +70,24 @@ public class CreditCardServiceImpl implements CreditCardService {
 	}
 
 	@Override
-	public void save(CreditCard creditCard) {
-		creditCardRepository.save(creditCard);
+	@Transactional
+	public void saveRecommendedCreditCard(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard) {
+		User serviceUser = userRepository.findById(monthlySpendingAndCreditcard.getUserId())
+										 .orElseThrow(() -> new RuntimeException("User Not Found"));
+
+		for (MonthlySpendingAndCreditcard.RecommendedCreditCard recommendedCreditCard : monthlySpendingAndCreditcard.getCreditCardList()) {
+			CreditCard creditCard = creditCardRepository.findById(recommendedCreditCard.getCreditCardId())
+														.orElseThrow(
+															() -> new InvalidIDException("Card Id is Not exist"));
+
+			CreditCardUser creditCardUser = CreditCardUser.builder()
+														  .reason(recommendedCreditCard.getReason())
+														  .build();
+
+			creditCardUserRepository.save(creditCardUser);
+			serviceUser.addCreditCardUser(creditCardUser);
+			creditCard.addCreditCardUser(creditCardUser);
+		}
 	}
+
 }

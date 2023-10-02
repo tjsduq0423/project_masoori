@@ -14,4 +14,5 @@ public interface CreditCardUserRepository extends JpaRepository<CreditCardUser, 
 	@Query("SELECT c FROM CreditCardUser c WHERE c.user.id = :userId AND c.createdDate >= :startDate AND c.createdDate <= :endDate")
 	List<CreditCardUser> findCreditCardsByUserId(@Param("userId") Long userId,
 		@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
 }

@@ -164,6 +164,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public User findById(Long id) {
+		return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User Not Found"));
+	}
+
+	@Override
 	public void sendSignupEmailCode(String email) {
 		Optional<User> findUser = findByEmail(email);
 		// 사용자 존재 => 중복 => 가입 안됨

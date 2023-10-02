@@ -4,8 +4,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.fintech.masoori.global.rabbitMQ.dto.AnalyticsReq;
-import com.fintech.masoori.global.rabbitMQ.dto.RabbitTestMessage;
+import com.fintech.masoori.global.rabbitMQ.dto.AnalyticsRequestMessage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +17,8 @@ public class AnalyticsPubService {
 	@Value("${rabbitmq.queue.analytics}")
 	private String routingKey;
 
-	public void sendMessage(AnalyticsReq analyticsReq) {
-		log.info("Sent Msg : {}", analyticsReq);
-		rabbitTemplate.convertAndSend(routingKey, analyticsReq);
+	public void sendMessage(AnalyticsRequestMessage analyticsRequestMessage) {
+		log.info("Sent Msg : {}", analyticsRequestMessage);
+		rabbitTemplate.convertAndSend(routingKey, analyticsRequestMessage);
 	}
 }
