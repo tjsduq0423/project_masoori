@@ -4,7 +4,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.fintech.masoori.global.rabbitMQ.dto.RealTimeReq;
+import com.fintech.masoori.global.rabbitMQ.dto.ChallengeRequestMessage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,13 +12,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RealTimePubService {
+public class ChallengePubService {
 	private final RabbitTemplate rabbitTemplate;
-	@Value("${rabbitmq.queue.realtime}")
+	@Value("${rabbitmq.queue.challenge}")
 	private String routingKey;
 
-	public void sendMessage(RealTimeReq realTimeReq) {
-		log.info("Sent Msg : {}", realTimeReq);
-		rabbitTemplate.convertAndSend(routingKey, realTimeReq);
+	public void sendMessage(ChallengeRequestMessage message) {
+		log.info("Sent Msg : {}", message);
+		rabbitTemplate.convertAndSend(routingKey, message);
 	}
 }
