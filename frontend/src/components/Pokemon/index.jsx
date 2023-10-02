@@ -1,7 +1,39 @@
 import { useState } from "react";
 import styles from "./styles.module.css";
+import { styled } from "styled-components";
 
-const PokemonCard = () => {
+const StyledTarotCardTop = styled.div`
+  width: ${(props) => props.cardWidth};
+  height: auto;
+  position: absolute;
+  z-index: 1;
+`;
+
+const TopImage = styled.img`
+  width: ${(props) => props.cardWidth};
+  height: auto;
+`;
+
+const BottomText = styled.div`
+  position: absolute;
+  width: 100%;
+  bottom: ${(props) => props.bottom};
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  font-size: ${(props) => props.fontsize};
+  color: #5e3a66;
+  font-family: "Museum";
+`;
+
+const PokemonCard = ({
+  imageUrl,
+  cardWidth,
+  cardSrc,
+  text,
+  fontsize,
+  bottom = "5px",
+}) => {
   const [clickedCard, setClickedCard] = useState(null);
   const [disableHover, setDisableHover] = useState(false); // State to disable hover effect
   const [hoverStyle, setHoverStyle] = useState({}); // State to manage hover style
@@ -61,8 +93,19 @@ const PokemonCard = () => {
           }`}
           onMouseMove={handleCardHover}
           onMouseLeave={handleCardLeave}
-          style={disableHover ? {} : hoverStyle} // Apply hover style only if not disabled
-        ></div>
+          style={{
+            backgroundImage: `url(${imageUrl})`, // Set background image to the passed imageUrl
+            ...(disableHover ? {} : hoverStyle), // Apply hover style only if not disabled
+            // ... Other styles ...
+          }}
+        >
+          <StyledTarotCardTop cardWidth={cardWidth}>
+            <TopImage cardWidth={cardWidth} src={cardSrc}></TopImage>
+            <BottomText text={text} fontsize={fontsize} bottom={bottom}>
+              {text}
+            </BottomText>
+          </StyledTarotCardTop>
+        </div>
         {/* Other card divs with similar event handlers */}
       </section>
     </div>
