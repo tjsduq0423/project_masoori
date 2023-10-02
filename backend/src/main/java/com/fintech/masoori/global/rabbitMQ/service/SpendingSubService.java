@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class SpendingSubService {
-	@RabbitListener(queues = "$spending.res")
+	@RabbitListener(queues = "spending.res")
 	public void subTest(GeneratedSpendingCard message) {
 		log.info("{}", message);
 		//DB 넣기
