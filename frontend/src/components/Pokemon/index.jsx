@@ -6,17 +6,6 @@ const PokemonCard = () => {
   const [disableHover, setDisableHover] = useState(false); // State to disable hover effect
   const [hoverStyle, setHoverStyle] = useState({}); // State to manage hover style
 
-  const handleCardClick = (index) => {
-    if (clickedCard === index) {
-      // If the clicked card is already active, reset the state
-      setClickedCard(null);
-      setDisableHover(false); // Re-enable hover when card is unclicked
-    } else {
-      setClickedCard(index);
-      setDisableHover(true); // Disable hover when card is clicked
-    }
-  };
-
   const handleCardHover = (e) => {
     if (disableHover) {
       return;
@@ -70,7 +59,6 @@ const PokemonCard = () => {
           className={`${styles.card} ${styles.charizard} ${
             clickedCard === 0 ? styles.clicked : ""
           }`}
-          onClick={() => handleCardClick(0)}
           onMouseMove={handleCardHover}
           onMouseLeave={handleCardLeave}
           style={disableHover ? {} : hoverStyle} // Apply hover style only if not disabled
