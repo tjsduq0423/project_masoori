@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SignUpModalFront from "@/assets/img/signCard/signUpModalFront.png";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { usePostSms } from "@/apis/main/Mutations/usePostSms";
 import { usePostSmsCheck } from "@/apis/main/Mutations/usePostSmsCheck";
 import { usePostConsume } from "@/apis/main/Mutations/usePostConsume";
@@ -56,12 +56,6 @@ const Email = styled.div`
   top: 15%;
 `;
 
-const EmailCheck = styled.div`
-  position: relative;
-  top: 17%;
-  z-index: 1;
-`;
-
 const DisableNextButton = styled.button`
   width: 16.275vw;
   border-radius: 5px;
@@ -108,7 +102,7 @@ const DisableSendCodeButton = styled.button`
 `;
 
 const VerifyNumberModal = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [name, setName] = useState("");
@@ -168,9 +162,7 @@ const VerifyNumberModal = () => {
     <Container>
       <SignUpFrontImg loaded={imageLoaded}>
         <Email>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <FormLabel>이름</FormLabel>
-          </div>
+          <FormLabel>이름</FormLabel>
           <div
             style={{
               display: "flex",
@@ -187,9 +179,7 @@ const VerifyNumberModal = () => {
           </div>
         </Email>
         <Email>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <FormLabel>전화번호</FormLabel>
-          </div>
+          <FormLabel>전화번호</FormLabel>
           <div
             style={{
               display: "flex",
@@ -210,7 +200,7 @@ const VerifyNumberModal = () => {
             </DuplicateCheckButton>
           </div>
         </Email>
-        <EmailCheck>
+        <Email>
           <FormLabel>인증번호 확인</FormLabel>
           <div
             style={{
@@ -236,7 +226,7 @@ const VerifyNumberModal = () => {
               연동하기
             </DisableNextButton>
           </SignUp>
-        </EmailCheck>
+        </Email>
       </SignUpFrontImg>
     </Container>
   );

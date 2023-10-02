@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUserInfo } from "@/apis/menu/menuAPI";
 
-const useUserInfo = (loginBoolean: boolean) => {
+const useUserInfo = (isLogin: string) => {
   const { data } = useQuery(
     ["userInfo"],
     () => {
       return getUserInfo();
     },
     {
-      enabled: Boolean(loginBoolean),
+      enabled: Boolean(isLogin),
       suspense: false,
     }
   );

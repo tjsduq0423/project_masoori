@@ -1,9 +1,11 @@
 import {
+  NowDateInfo,
+  SSEInfo,
   SpendInfo,
   UserSms,
   UserSmsCheck,
   UserVerifyInfo,
-} from "@/types/verifyInfoType";
+} from "@/types/spendType";
 import { atom } from "recoil";
 
 export const userSmsInfoState = atom<UserSms>({
@@ -19,6 +21,13 @@ export const userSmsCheckInfoState = atom<UserSmsCheck>({
 export const userVerifyInfoState = atom<UserVerifyInfo>({
   key: "userVerifyInfoState",
   default: {} as UserVerifyInfo,
+});
+
+export const nowDateInfoState = atom<NowDateInfo>({
+  key: "nowDateInfoState",
+  default: {
+    nowDate: "",
+  },
 });
 
 export const spendInfoState = atom<SpendInfo>({
@@ -40,5 +49,12 @@ export const spendInfoState = atom<SpendInfo>({
         frequency: 0,
       },
     ],
+  },
+});
+
+export const SSEInfoState = atom<SSEInfo>({
+  key: "SSEInfoState",
+  default: {
+    timeout: 0,
   },
 });

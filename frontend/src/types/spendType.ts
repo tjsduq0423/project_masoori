@@ -14,6 +14,10 @@ interface UserVerifyInfo {
   code: string;
 }
 
+interface NowDateInfo {
+  nowDate: string;
+}
+
 interface SpendInfo {
   card: {
     id: number;
@@ -33,4 +37,15 @@ interface SpendInfo {
   ];
 }
 
-export type { UserSms, UserSmsCheck, UserVerifyInfo, SpendInfo };
+interface SSEInfo {
+  timeout: number;
+}
+
+export type {
+  UserSms,
+  UserSmsCheck,
+  UserVerifyInfo,
+  NowDateInfo,
+  SpendInfo,
+  SSEInfo,
+};

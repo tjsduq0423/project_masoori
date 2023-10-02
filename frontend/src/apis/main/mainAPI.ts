@@ -1,5 +1,5 @@
 import { instance } from "@/apis/instance";
-import { UserSms, UserSmsCheck } from "@/types/verifyInfoType";
+import { UserSms, UserSmsCheck } from "@/types/spendType";
 
 // 입력된 사용자 정보를 업데이트하고 해당 휴대폰번호로 인증코드를 발송한다.
 const postSms = async (userSms: UserSms) => {
