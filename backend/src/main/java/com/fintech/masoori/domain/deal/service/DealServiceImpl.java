@@ -19,7 +19,7 @@ public class DealServiceImpl implements DealService {
 	@Override
 	public List<Transaction> findDealsByUserAndDateGreaterThanAndDateLessThan(User user, LocalDateTime startTime,
 		LocalDateTime endTime) {
-		return dealRepository.findDealsByUserAndDateGreaterThanAndDateLessThan(startTime, endTime)
+		return dealRepository.findDealsByUserAndDateGreaterThanAndDateLessThan(user, startTime, endTime)
 		                     .stream()
 		                     .map(Transaction::new)
 		                     .toList();
