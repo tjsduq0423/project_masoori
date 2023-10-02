@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Book from "@/components/book";
 import styled from "styled-components";
 import PokemonCard from "@/components/Pokemon";
@@ -10,6 +10,9 @@ import ChallengeBubble from "@/components/challengeBubble";
 import { StyledChallengeBubbleProps } from "@/types/challengeType";
 import ChallegeSuccess from "@/assets/img/challengeBubble/challengeSuccess.png";
 import ShareModal from "@/components/shareModal";
+import { useSetRecoilState } from "recoil";
+import { creditInfoState } from "@/states/dictionaryState";
+import { useNavigate } from "react-router-dom";
 
 import cardBack from "@/assets/img/tarotCard/tarotCardBack.png";
 
@@ -245,14 +248,14 @@ const consumeData = [
     id: 6,
     name: "basic5",
     imagePath: "http://149.28.51.188/outputs/test%40gmail.com_202309251524.png",
-    createdDate: "2023-08-26T19:38:13",
+    createdDate: "2023-08-14T19:38:13",
     cardType: "BASIC",
   },
   {
     id: 7,
     name: "basic6",
     imagePath: "http://149.28.51.188/outputs/test%40gmail.com_202309251525.png",
-    createdDate: "2023-08-26T19:38:14",
+    createdDate: "2023-08-21T19:38:14",
     cardType: "BASIC",
   },
   {
@@ -265,8 +268,17 @@ const consumeData = [
   {
     id: 9,
     name: "basic8",
-    imagePath: "http://149.28.51.188/outputs/test%40gmail.com_202309251527.png",
-    createdDate: "2023-08-26T19:38:15",
+    imagePath:
+      "https://images.unsplash.com/photo-1695997592696-9f5754541a1f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80",
+    createdDate: "2023-08-30T19:38:15",
+    cardType: "BASIC",
+  },
+  {
+    id: 9,
+    name: "basic8",
+    imagePath:
+      "https://images.unsplash.com/photo-1695997592696-9f5754541a1f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80",
+    createdDate: "2023-08-30T19:38:15",
     cardType: "BASIC",
   },
 ];
@@ -274,6 +286,28 @@ const consumeData = [
 const DictionaryPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const setCreditInfo = useSetRecoilState(creditInfoState);
+  const navigate = useNavigate();
+
+  const groupImagesByMonth = () => {
+    const months: Record<string, any[]> = {};
+
+    consumeData.forEach((item) => {
+      const dateParts = item.createdDate.split("T")[0].split("-");
+      const year = dateParts[0];
+      const month = dateParts[1];
+
+      const formattedDate = `${year}.${month}`; // 년도와 월을 결합
+
+      if (!months[formattedDate]) {
+        months[formattedDate] = []; // 해당 월의 배열을 초기화
+      }
+
+      months[formattedDate].push(item); // 해당 월에 데이터 추가
+    });
+
+    return months;
+  };
 
   // 모달 열기 함수
   const openModal = () => {
@@ -289,6 +323,14 @@ const DictionaryPage = () => {
     setCurrentPage(page);
   };
 
+  const goCardRecommend = (month: string) => {
+    const [year, monthNum] = month.split(".");
+    const formattedMonth = `${year}-${monthNum}-01T00:00:00`;
+    console.log(formattedMonth);
+    setCreditInfo(formattedMonth);
+    navigate("/card");
+  };
+
   const crystalChallengeBubbleProps: StyledChallengeBubbleProps = {
     text: `사실 말도 안되는 챌린지죠 그치만 어쩌겠습니까 해야지`,
     width: "340px",
@@ -301,13 +343,6 @@ const DictionaryPage = () => {
     titleText: "소비금액 5만원 넘지 않기",
   };
 
-  const getImagesByMonth = (month: string) => {
-    return consumeData.filter((item) => {
-      const itemMonth = item.createdDate.split("T")[0]; // Extract month from createdDate
-      return itemMonth === month;
-    });
-  };
-
   return (
     <PageContainer>
       <BookSection>
@@ -317,27 +352,40 @@ const DictionaryPage = () => {
       <ContentSection>
         {currentPage === 0 && (
           <div>
-            <BasicHeader>
-              <BasicText>
-                2023.09 <DcitBtn text="카드추천" />
-              </BasicText>
-            </BasicHeader>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(5, 1fr)",
-                marginTop: "2rem",
-              }}
-            >
-              {/* Map over images for the specific month */}
-              {getImagesByMonth("2023-09").map((item, index) => (
-                <img
-                  key={index}
-                  src={item.imagePath}
-                  alt={`Image ${index + 1}`}
-                />
-              ))}
-            </div>
+            {Object.keys(groupImagesByMonth()).map((month) => (
+              <div key={month}>
+                <BasicText>
+                  {month}
+                  <DcitBtn
+                    text="카드추천"
+                    onClick={() => goCardRecommend(month)}
+                  />
+                </BasicText>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(5, 1fr)",
+                    marginTop: "2rem",
+                  }}
+                >
+                  {groupImagesByMonth()[month].map((item, index) => {
+                    return (
+                      <TarotCard
+                        key={index}
+                        width="140px"
+                        height="240px"
+                        cardWidth="100%"
+                        cardSrc={frontcard}
+                        imageSrc={item.imagePath}
+                        bottomImageWidth="100%"
+                        text={item.name}
+                        fontsize="0.8rem"
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         )}
         {currentPage === 2 && (
