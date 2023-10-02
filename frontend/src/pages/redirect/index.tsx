@@ -3,8 +3,9 @@ const RedirectPage = () => {
   const accessToken = params.get("accessToken");
 
   localStorage.setItem("accessToken", accessToken!);
-
-  window.location.href = "/main";
+  if (accessToken && accessToken.length > 0) {
+    window.location.href = "/main";
+  }
   return <></>;
 };
 

@@ -26,6 +26,11 @@ export const userInfoState = atom<UserInfo>({
   default: defaultUserInfo,
 });
 
+export const userLoginState = atom<boolean>({
+  key: "userLoginState",
+  default: false,
+});
+
 /* 
 import { useUserInfo } from "@/apis/menu/Queries/useUserInfo";
 
