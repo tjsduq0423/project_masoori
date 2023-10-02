@@ -18,8 +18,8 @@
   height: 100vw;
 
   @media screen and (min-width: 600px) {
-    width: clamp(12.9vw, 61vh, 24vw);
-    height: clamp(18vw, 85vh, 34.2vw);
+    width: clamp(12.9vw, 61vh, 23.8vw);
+    height: clamp(18vw, 85vh, 35.8vw);
   }
 
   position: relative;
