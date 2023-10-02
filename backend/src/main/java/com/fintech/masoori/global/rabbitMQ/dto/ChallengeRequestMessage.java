@@ -17,9 +17,5 @@ import lombok.ToString;
 public class ChallengeRequestMessage {
 	private Long userId;
 	@Builder.Default
-	private List<UserSpendingCardData> userSpendingDataList = new ArrayList<>();
-
-	public static class UserSpendingCardData {
-		private Long id;
-	}
+	private List<Transaction> userMonthlyTransactionList = new ArrayList<>();
 }

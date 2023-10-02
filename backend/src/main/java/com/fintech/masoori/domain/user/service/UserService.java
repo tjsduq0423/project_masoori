@@ -1,5 +1,6 @@
 package com.fintech.masoori.domain.user.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.fintech.masoori.domain.user.dto.EmailCheckReq;
@@ -15,6 +16,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public interface UserService {
+	List<User> findUsersByIsAuthenticated(Boolean isAuthentication);
+
 	boolean checkEmail(String email);
 
 	boolean checkOAuthAccount(String email);

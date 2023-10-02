@@ -17,9 +17,5 @@ import lombok.ToString;
 public class SpendingRequestMessage {
 	private Long userId;
 	@Builder.Default
-	private List<UserDealingData> userDealingDataList = new ArrayList<>();
-
-	public static class UserDealingData {
-		private Long id;
-	}
+	private List<Transaction> userWeeklyTransactionList = new ArrayList<>();
 }
