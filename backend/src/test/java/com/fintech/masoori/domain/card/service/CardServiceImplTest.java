@@ -20,8 +20,6 @@ import com.fintech.masoori.domain.card.entity.Card;
 import com.fintech.masoori.domain.card.entity.Challenge;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.global.oauth.ProviderType;
-import com.fintech.masoori.global.rabbitMQ.dto.GeneratedChallengeCard;
-import com.fintech.masoori.global.rabbitMQ.dto.GeneratedSpending;
 
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +36,10 @@ class CardServiceImplTest {
 
 	@Test
 	void 사용자_소비카드_범위_조회() {
-		User user = User.builder().email("test@gmail.com").providerType(ProviderType.LOCAL).build();
+		User user = User.builder()
+						.email("test@gmail.com")
+						.providerType(ProviderType.LOCAL)
+						.build();
 		em.persist(user);
 		List<Basic> basicList = new ArrayList<>();
 		for (int i = 1; i <= 5; i++) {
@@ -47,13 +48,14 @@ class CardServiceImplTest {
 		List<Card> cardList = new ArrayList<>();
 		for (int i = 1; i <= 2; i++) {
 			Card card = Card.builder()
-			                .user(user)
-			                .name(i + "번 카드")
-			                .imagePath(i + "번 경로")
-			                .description(i + "번 카드 설명")
-			                .cardType(CardType.BASIC)
-			                .basicList(basicList)
-			                .build();
+							.user(user)
+							.name(i + "번 카드")
+							.imagePath(i + "번 경로")
+							.description(i + "번 카드 설명")
+							.cardType(
+								CardType.BASIC)
+							.basicList(basicList)
+							.build();
 			em.persist(card);
 			cardList.add(card);
 		}
@@ -82,20 +84,23 @@ class CardServiceImplTest {
 	 */
 	@Test
 	void 사용자_소비카드_카드ID_조회() {
-		User user = User.builder().email("test@gmail.com").providerType(ProviderType.LOCAL).build();
+		User user = User.builder()
+						.email("test@gmail.com")
+						.providerType(ProviderType.LOCAL)
+						.build();
 		em.persist(user);
 		List<Basic> basicList = new ArrayList<>();
 		for (int i = 1; i <= 5; i++) {
 			basicList.add(Basic.builder().keyword("음식").totalAmount(1000 * i).frequency(2 * i).build());
 		}
 		Card card = Card.builder()
-		                .user(user)
-		                .name("1번 카드")
-		                .imagePath("1번 경로")
-		                .description("1번 카드 설명")
-		                .cardType(CardType.BASIC)
-		                .basicList(basicList)
-		                .build();
+						.user(user)
+						.name("1번 카드")
+						.imagePath("1번 경로")
+						.description("1번 카드 설명")
+						.cardType(CardType.BASIC)
+						.basicList(basicList)
+						.build();
 		em.persist(card);
 		em.flush();
 		BasicCardRes.BasicCard basicCard = cardService.selectBasicCard(user.getEmail(), card.getId());
@@ -108,28 +113,32 @@ class CardServiceImplTest {
 	 */
 	@Test
 	void 사용자_챌린지카드_범위_조회() {
-		User user = User.builder().email("test@gmail.com").providerType(ProviderType.LOCAL).build();
+		User user = User.builder()
+						.email("test@gmail.com")
+						.providerType(ProviderType.LOCAL)
+						.build();
 		em.persist(user);
 		List<Challenge> challengeList = new ArrayList<>();
 		for (int i = 1; i <= 5; i++) {
 			challengeList.add(Challenge.builder()
-			                           .isSuccess(false)
-			                           .name(i + "번 챌린지")
-			                           .achievementCondition("절약하기")
-			                           .startTime(LocalDateTime.of(2023, 9, 18, 0, 0))
-			                           .endTime(LocalDateTime.of(2023, 9, 24, 23, 59))
-			                           .build());
+									   .isSuccess(false)
+									   .name(i + "번 챌린지")
+									   .achievementCondition("절약하기")
+									   .startTime(LocalDateTime.of(2023, 9, 18, 0, 0))
+									   .endTime(LocalDateTime.of(2023, 9, 24, 23, 59))
+									   .build());
 		}
 		List<Card> cardList = new ArrayList<>();
 		for (int i = 1; i <= 2; i++) {
 			Card card = Card.builder()
-			                .user(user)
-			                .name(i + "번 카드")
-			                .imagePath(i + "번 경로")
-			                .description(i + "번 카드 설명")
-			                .cardType(CardType.SPECIAL)
-			                .challengeList(challengeList)
-			                .build();
+							.user(user)
+							.name(i + "번 카드")
+							.imagePath(i + "번 경로")
+							.description(i + "번 카드 설명")
+							.cardType(
+								CardType.SPECIAL)
+							.challengeList(challengeList)
+							.build();
 			em.persist(card);
 			cardList.add(card);
 		}
@@ -141,14 +150,14 @@ class CardServiceImplTest {
 		UserCardListRes challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(),
 			LocalDateTime.of(2023, 7, 1, 1, 1), LocalDateTime.of(2023, 7, 1, 1, 1));
 		assertThat(challengeCardList.getUserCardList().size() == 0);
-		challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(), LocalDateTime.of(2023, 8, 1, 1, 1),
-			LocalDateTime.of(2023, 8, 1, 1, 1));
+		challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(),
+			LocalDateTime.of(2023, 8, 1, 1, 1), LocalDateTime.of(2023, 8, 1, 1, 1));
 		assertThat(challengeCardList.getUserCardList().size() == 1);
-		challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(), LocalDateTime.of(2023, 9, 1, 1, 1),
-			LocalDateTime.of(2023, 9, 1, 1, 1));
+		challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(),
+			LocalDateTime.of(2023, 9, 1, 1, 1), LocalDateTime.of(2023, 9, 1, 1, 1));
 		assertThat(challengeCardList.getUserCardList().size() == 1);
-		challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(), LocalDateTime.of(2023, 8, 1, 1, 1),
-			LocalDateTime.of(2023, 9, 1, 1, 1));
+		challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(),
+			LocalDateTime.of(2023, 8, 1, 1, 1), LocalDateTime.of(2023, 9, 1, 1, 1));
 		assertThat(challengeCardList.getUserCardList().size() == 2);
 	}
 
@@ -157,26 +166,29 @@ class CardServiceImplTest {
 	 */
 	@Test
 	void 사용자_챌린지카드_카드ID_조회() {
-		User user = User.builder().email("test@gmail.com").providerType(ProviderType.LOCAL).build();
+		User user = User.builder()
+						.email("test@gmail.com")
+						.providerType(ProviderType.LOCAL)
+						.build();
 		em.persist(user);
 		List<Challenge> challengeList = new ArrayList<>();
 		for (int i = 1; i <= 5; i++) {
 			challengeList.add(Challenge.builder()
-			                           .isSuccess(false)
-			                           .name(i + "번 챌린지")
-			                           .achievementCondition("절약하기")
-			                           .startTime(LocalDateTime.of(2023, 9, 18, 0, 0))
-			                           .endTime(LocalDateTime.of(2023, 9, 24, 23, 59))
-			                           .build());
+									   .isSuccess(false)
+									   .name(i + "번 챌린지")
+									   .achievementCondition("절약하기")
+									   .startTime(LocalDateTime.of(2023, 9, 18, 0, 0))
+									   .endTime(LocalDateTime.of(2023, 9, 24, 23, 59))
+									   .build());
 		}
 		Card card = Card.builder()
-		                .user(user)
-		                .name("1번 카드")
-		                .imagePath("1번 경로")
-		                .description("1번 카드 설명")
-		                .cardType(CardType.SPECIAL)
-		                .challengeList(challengeList)
-		                .build();
+						.user(user)
+						.name("1번 카드")
+						.imagePath("1번 경로")
+						.description("1번 카드 설명")
+						.cardType(CardType.SPECIAL)
+						.challengeList(challengeList)
+						.build();
 		em.persist(card);
 		em.flush();
 		ChallengeCardRes.ChallengeCard challengeCard = cardService.selectChallengeCard(user.getEmail(), card.getId());
@@ -184,76 +196,41 @@ class CardServiceImplTest {
 		assertThat(challengeCard.getCard().getName().equals(card.getName()));
 	}
 
-	/**
-	 * 챌린지 카드 등록 테스트
-	 */
 	@Test
-	void 사용자_챌린지_카드_등록() {
-		User user = User.builder().email("test@gmail.com").providerType(ProviderType.LOCAL).build();
+	void 사용자_최근_생성_카드_조회(){
+		User user = User.builder()
+						.email("test@gmail.com")
+						.providerType(ProviderType.LOCAL)
+						.build();
 		em.persist(user);
-		GeneratedChallengeCard generatedChallengeCard = GeneratedChallengeCard.builder()
-		                                                                      .userId(user.getId())
-		                                                                      .name("test용소비 카드 ID")
-		                                                                      .imagePath("test용 이미지Path")
-		                                                                      .description("test용 카드 설명")
-		                                                                      .build();
-
-		List<GeneratedSpending> spendings = new ArrayList<>();
-
+		List<Basic> basicList = new ArrayList<>();
 		for (int i = 1; i <= 5; i++) {
-			spendings.add(
-				GeneratedSpending.builder().keyword("Test키워드" + i).totalAmount(i * 10000).frequency(i * 5).build());
+			basicList.add(Basic.builder().keyword("음식").totalAmount(1000 * i).frequency(2 * i).build());
 		}
-
 		Card card = Card.builder()
-		                .user(user)
-		                .name("1번 카드")
-		                .imagePath("1번 경로")
-		                .description("1번 카드 설명")
-		                .cardType(CardType.SPECIAL)
-		                .build();
-
+						.user(user)
+						.name("1번 카드")
+						.imagePath("1번 경로")
+						.description("1번 카드 설명")
+						.cardType(CardType.BASIC)
+						.basicList(basicList)
+						.build();
 		em.persist(card);
 		em.flush();
-
-		ChallengeCardRes.ChallengeCard challengeCard = cardService.selectChallengeCard(user.getEmail(), card.getId());
-		assertThat(challengeCard.getCard().getId().equals(card.getId()));
-		assertThat(challengeCard.getCard().getName().equals(card.getName()));
-	}
-
-	/**
-	 * 소비 카드 등록 테스트
-	 */
-	@Test
-	void 사용자_소비_카드_등록() {
-		User user = User.builder().email("test@gmail.com").providerType(ProviderType.LOCAL).build();
-		em.persist(user);
-
-		List<Challenge> challengeList = new ArrayList<>();
-		for (int i = 1; i <= 5; i++) {
-			challengeList.add(Challenge.builder()
-			                           .isSuccess(false)
-			                           .name(i + "번 챌린지")
-			                           .achievementCondition("절약하기")
-			                           .startTime(LocalDateTime.of(2023, 9, 18, 0, 0))
-			                           .endTime(LocalDateTime.of(2023, 9, 24, 23, 59))
-			                           .build());
-		}
-
-		Card card = Card.builder()
-		                .user(user)
-		                .name("1번 카드")
-		                .imagePath("1번 경로")
-		                .description("1번 카드 설명")
-		                .cardType(CardType.SPECIAL)
-		                .challengeList(challengeList)
-		                .build();
-
-		em.persist(card);
+		card.setLocalDateTime(LocalDateTime.of(2023, 9, 25, 1, 10));
 		em.flush();
-
-		ChallengeCardRes.ChallengeCard challengeCard = cardService.selectChallengeCard(user.getEmail(), card.getId());
-		assertThat(challengeCard.getCard().getId().equals(card.getId()));
-		assertThat(challengeCard.getCard().getName().equals(card.getName()));
+		BasicCardRes.BasicCard basicCard = cardService.selectUserRecentBasicCard(user.getEmail(), LocalDateTime.of(2023, 9, 28, 13, 1));
+		assertThat(basicCard != null && basicCard.getCard() != null);
+		log.info("BasicCard : {}", basicCard.getCard());
+		card.setLocalDateTime(LocalDateTime.of(2023, 9, 23, 1, 10));
+		em.flush();
+		basicCard = cardService.selectUserRecentBasicCard(user.getEmail(), LocalDateTime.of(2023, 9, 28, 13, 1));
+		assertThat(basicCard == null);
+		log.info("이번주에 생성한 카드가 없습니다. : {}", basicCard);
+		card.setLocalDateTime(LocalDateTime.of(2022, 12, 30, 1, 10));
+		em.flush();
+		basicCard = cardService.selectUserRecentBasicCard(user.getEmail(), LocalDateTime.of(2023, 1, 1, 13, 1));
+		assertThat(basicCard != null && basicCard.getCard() != null);
+		log.info("BasicCard : {}", basicCard.getCard());
 	}
 }

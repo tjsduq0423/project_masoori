@@ -27,4 +27,6 @@ public interface CardService {
 	 * 기본 소비 카드 등록
 	 */
 	void registerSpendingCard(GeneratedSpendingCard generatedSpendingCard);
+
+	BasicCardRes.BasicCard selectUserRecentBasicCard(String email, LocalDateTime time);
 }
