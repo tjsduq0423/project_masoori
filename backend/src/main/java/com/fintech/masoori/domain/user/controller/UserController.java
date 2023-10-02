@@ -3,7 +3,6 @@ package com.fintech.masoori.domain.user.controller;
 import java.security.Principal;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -104,9 +103,9 @@ public class UserController {
 	@PostMapping("/sms")
 	public ResponseEntity<?> sendSms(
 		@Parameter(description = "회원 전화번호", required = true) @RequestBody @Validated SendSmsReq sendSmsReq,
-		BindingResult bindingResult, Authentication authentication) {
+		BindingResult bindingResult, Principal principal) {
 		validateRequest(bindingResult);
-		User loginUser = loginUser(authentication);
+		User loginUser = loginUser(principal);
 		userService.updateInfoAndSendSms(sendSmsReq, loginUser);
 		return ResponseEntity.ok().build();
 	}
@@ -123,31 +122,31 @@ public class UserController {
 
 	@Operation(summary = "마이페이지 유저 정보 조회 API", description = "마이페이지에서 필요한 사용자 정보를 조회한다.")
 	@GetMapping("/info")
-	public ResponseEntity<InfoRes> userInfo(Authentication authentication) {
-		InfoRes infoRes = userService.getUserInfo(authentication.getName());
+	public ResponseEntity<InfoRes> userInfo(Principal principal) {
+		InfoRes infoRes = userService.getUserInfo(principal.getName());
 		return ResponseEntity.ok().body(infoRes);
 	}
 
 	@Operation(summary = "유령을 통한 SMS, 소비카드 생성 연동 API", description = "유령이 나타나서 동의했을 때, SMS 알림과 소비카드 생성을 연동한다.")
 	@PostMapping("/ghost")
-	public ResponseEntity<?> updateIntegration(Authentication authentication) {
-		User loginUser = loginUser(authentication);
+	public ResponseEntity<?> updateIntegration(Principal principal) {
+		User loginUser = loginUser(principal);
 		userService.updateIntegration(loginUser);
 		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "마이페이지 sms 알림 연동 변경 API", description = "마이페이지에서 sms 알림 연동 설정을 변경했을 때 토글로 작동한다.")
 	@PostMapping("/alram")
-	public ResponseEntity<?> updateSmsAlarm(Authentication authentication) {
-		User loginUser = loginUser(authentication);
+	public ResponseEntity<?> updateSmsAlarm(Principal principal) {
+		User loginUser = loginUser(principal);
 		userService.updateSmsAlarm(loginUser);
 		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "마이페이지 소비카드 생성 연동 변경 API", description = "마이페이지에서 소비카드 생성 연동 설정을 변경했을 때 토글로 작동한다.")
 	@PostMapping("/generation")
-	public ResponseEntity<?> updateCardGeneration(Authentication authentication) {
-		User loginUser = loginUser(authentication);
+	public ResponseEntity<?> updateCardGeneration(Principal principal) {
+		User loginUser = loginUser(principal);
 		userService.updateCardGeneration(loginUser);
 		return ResponseEntity.ok().build();
 	}
