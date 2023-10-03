@@ -1,5 +1,6 @@
 interface AllChallengeCardProps {
-  challengeDate: Date;
+  startDate: string;
+  endDate: string;
 }
 
 export type { AllChallengeCardProps };
