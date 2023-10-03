@@ -10,8 +10,12 @@ import ChallengeBubble from "@/components/challengeBubble";
 import { StyledChallengeBubbleProps } from "@/types/challengeType";
 import ChallegeSuccess from "@/assets/img/challengeBubble/challengeSuccess.png";
 import ShareModal from "@/components/shareModal";
-import { useSetRecoilState } from "recoil";
-import { creditInfoState, spendIdState } from "@/states/dictionaryState";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  creditInfoState,
+  specialIdState,
+  spendIdState,
+} from "@/states/dictionaryState";
 import { useNavigate } from "react-router-dom";
 
 import cardBack from "@/assets/img/tarotCard/tarotCardBack.png";
@@ -19,6 +23,7 @@ import cardBack from "@/assets/img/tarotCard/tarotCardBack.png";
 import { useChallengeCard } from "@/apis/dictionary/Queries/useChallengeCard";
 import { useAllUserFortune } from "@/apis/luck/Queries/useAllUserFortune";
 import { useGetAllConsume } from "@/apis/dictionary/Queries/useGetAllConsume";
+import SpecialSelectModal from "@/components/specialSelectModal";
 
 interface Challenge {
   id: number;
@@ -130,6 +135,8 @@ const BasicText = styled.div`
 const DictionaryPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSpecialModalOpen, setIsSpecialModalOpen] = useState(false);
+  const specialId = useRecoilValue(specialIdState);
 
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
@@ -138,7 +145,7 @@ const DictionaryPage = () => {
   const setCreditInfo = useSetRecoilState(creditInfoState);
   const setSpendId = useSetRecoilState(spendIdState);
 
-  const challengeCard = useChallengeCard(13);
+  const challengeCard = useChallengeCard(specialId);
   console.log(challengeCard);
   const allUserFortune = useAllUserFortune().fortuneList;
   const AllConsume = useGetAllConsume(
@@ -178,6 +185,15 @@ const DictionaryPage = () => {
     setIsModalOpen(false);
   };
 
+  const openSpecialModal = () => {
+    setIsSpecialModalOpen(true);
+  };
+
+  // 모달 닫기 함수
+  const closeSpecialModal = () => {
+    setIsSpecialModalOpen(false);
+  };
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -192,6 +208,11 @@ const DictionaryPage = () => {
   const goCardSpend = (id: number) => {
     setSpendId(id);
     navigate("/spend");
+  };
+
+  // 모달 열기 함수
+  const toggleModal: () => void = () => {
+    setIsSpecialModalOpen(!isSpecialModalOpen);
   };
 
   const crystalChallengeBubbleProps: StyledChallengeBubbleProps = {
@@ -257,7 +278,7 @@ const DictionaryPage = () => {
           <div>
             <SpecialHeader>
               <SpecialText>
-                2023.09 <DcitBtn text="카드변경" />
+                2023.09 <DcitBtn onClick={openSpecialModal} text="카드변경" />
                 <DcitBtn onClick={openModal} text="공유하기" />
               </SpecialText>
             </SpecialHeader>
@@ -373,6 +394,10 @@ const DictionaryPage = () => {
         <ShareModal />
       </ModalContainer>
       <Backdrop isOpen={isModalOpen} onClick={closeModal} />
+      <ModalContainer isOpen={isSpecialModalOpen}>
+        <SpecialSelectModal toggleModal={toggleModal} />
+      </ModalContainer>
+      <Backdrop isOpen={isSpecialModalOpen} onClick={closeSpecialModal} />
     </PageContainer>
   );
 };
