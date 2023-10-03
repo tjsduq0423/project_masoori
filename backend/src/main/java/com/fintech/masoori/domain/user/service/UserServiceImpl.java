@@ -256,4 +256,9 @@ public class UserServiceImpl implements UserService {
 	public void updateCardGeneration(User loginUser) {
 		userRepository.updateCardGeneration(loginUser.getEmail());
 	}
+
+	@Override
+	public void updateMonthlySpendingGoal(User loginUser, Integer monthlySpending) {
+		userRepository.updateMonthlySpendingGoal(loginUser.getEmail(), monthlySpending);
+	}
 }
