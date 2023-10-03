@@ -7,12 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fintech.masoori.domain.card.dto.BasicCardRes;
 import com.fintech.masoori.domain.card.dto.ChallengeCardRes;
+import com.fintech.masoori.domain.card.dto.ProfileCardReq;
 import com.fintech.masoori.domain.card.dto.UserCardListRes;
 import com.fintech.masoori.domain.card.exception.CanCreateException;
 import com.fintech.masoori.domain.card.exception.AlreadyInProgressException;
@@ -100,6 +102,13 @@ public class CardController {
 		}
 		//이미 카드가 존재하는 사용자
 		return ResponseEntity.ok(basicCard);
+	}
+
+	@Operation(summary = "프로필 이미지 등록 API", description = "프로필에 등록할 이미지 ID")
+	@PostMapping("/profileimage")
+	public ResponseEntity<?> updateUserProfileCard(@RequestBody ProfileCardReq profileCardReq, Principal principal){
+		cardService.updateUserProfileImage(principal.getName(), profileCardReq.getId());
+		return ResponseEntity.ok().build();
 	}
 
 }

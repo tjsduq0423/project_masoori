@@ -47,4 +47,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query("UPDATE User u SET u.monthlySpendingGoal = :monthlySpendingGoal WHERE u.email = :email")
 	void updateMonthlySpendingGoal(@Param("email") String email, @Param("monthlySpendingGoal") Integer monthlySpendingGoal);
 
+	@Modifying
+	@Query("UPDATE User u SET u.cardImage = :imagePath WHERE u.email = :email")
+	void updateUserProfileImage(@Param("imagePath") String imagePath, @Param("email") String email);
+
 }

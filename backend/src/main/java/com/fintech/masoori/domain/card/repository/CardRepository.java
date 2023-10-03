@@ -22,4 +22,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
 	@Query("SELECT c FROM Card c WHERE c.user.id = :userId AND c.cardType = :type AND c.createdDate >= :startDate AND c.createdDate <= :endDate ")
 	Card findRecentCard(@Param("userId") long userId, @Param("type") CardType type, @Param("startDate")LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+	Card findCardByUserIdAndId(Long userId, Long id);
 }

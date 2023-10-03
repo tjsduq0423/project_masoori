@@ -15,6 +15,7 @@ import com.fintech.masoori.domain.card.dto.Challenge;
 import com.fintech.masoori.domain.card.dto.ChallengeCardRes;
 import com.fintech.masoori.domain.card.dto.UserCardListRes;
 import com.fintech.masoori.domain.card.entity.Card;
+import com.fintech.masoori.domain.card.exception.CardNotFound;
 import com.fintech.masoori.domain.card.repository.CardRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.exception.UserNotFoundException;
@@ -184,5 +185,18 @@ public class CardServiceImpl implements CardService {
 			return null;
 		}
 		return BasicCardRes.BasicCard.builder().card(new com.fintech.masoori.domain.card.dto.Card(recentCard)).build();
+	}
+
+	@Override
+	public void updateUserProfileImage(String email, Long id) {
+		User user = userRepository.findUserByEmail(email);
+		if(user == null){
+			throw new UserNotFoundException("User Is Not Found");
+		}
+		Card card = cardRepository.findCardByUserIdAndId(user.getId(), id);
+		if(card == null){
+			throw new CardNotFound("Card not found");
+		}
+		userRepository.updateUserProfileImage(card.getImagePath(), user.getEmail());
 	}
 }
