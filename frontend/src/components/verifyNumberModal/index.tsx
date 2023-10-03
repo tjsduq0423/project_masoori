@@ -108,6 +108,7 @@ const VerifyNumberModal = () => {
   const [name, setName] = useState("");
   const [phonenumber, setPhonenumber] = useState("");
   const [code, setCode] = useState("");
+  const [isTextEntered, setIsTextEntered] = useState(false);
 
   const usePostSmsMutation = usePostSms();
   const usePostSmsCheckMutation = usePostSmsCheck();
@@ -175,6 +176,9 @@ const VerifyNumberModal = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="이름을 입력하세요"
+              style={{
+                color: isTextEntered ? "#5e3a66" : "initial", // 상황에 따라 텍스트 색상을 조건적으로 변경
+              }}
             />
           </div>
         </Email>
