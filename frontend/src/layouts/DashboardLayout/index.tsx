@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import styled from "styled-components";
 import MenuButton from "@/assets/img/MenuButton.png";
 import Modal from "@/components/modal/login";
@@ -7,6 +7,7 @@ import LandingMainLogo from "@/assets/img/HeaderLogo/masooriHeaderLogo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { modalOpenState } from "@/states/userState";
 import { useRecoilState } from "recoil";
+import MenuPage from "@/pages/menu";
 
 const StyledContainer = styled.div`
   position: absolute;
@@ -14,7 +15,7 @@ const StyledContainer = styled.div`
   top: 0px;
   height: 8%;
   width: 100%;
-  z-index: 1;
+  z-index: 3;
 `;
 
 const MainLogo = styled.div`
@@ -46,6 +47,7 @@ const MenuButtonImage = styled.img`
   position: absolute;
   right: 20px;
   top: 20px;
+  z-index: 2;
 `;
 
 const LoginBackImg = styled.div`
@@ -71,8 +73,20 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useRecoilState(modalOpenState);
+  const [isLogin, setIsLogin] = useState(false);
+  const [whatModal, setWhatModal] = useState(false);
+  const AT = localStorage.getItem("accessToken");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (AT && AT.length > 0) {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+  }, [AT]);
+
   const location = useLocation();
-  console.log(location.pathname);
   const openModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -82,19 +96,16 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       setIsModalOpen(false);
     }
   };
-  const AT = localStorage.getItem("accessToken");
-  const navigate = useNavigate();
 
   const navigatePage = () => {
-    if (!AT) {
+    if (!isLogin) {
       console.log(1);
       openModal();
-    } else if (AT && AT.length > 0 && location.pathname !== "/menu") {
+      setWhatModal(false);
+    } else if (AT && AT.length > 0 && isLogin) {
       console.log(2);
-      navigate("/menu");
-    } else if (AT && AT.length > 0 && location.pathname === "/menu") {
-      console.log(3);
-      navigate("/main");
+      openModal();
+      setWhatModal(true);
     }
   };
 
@@ -139,7 +150,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                 }}
               />
               <MenuButtonImage src={MenuButton} onClick={navigatePage} />
-              {isModalOpen && <Modal />}
+              {isModalOpen && (whatModal ? <MenuPage /> : <Modal />)}
             </div>
           </TransparentContainer>
         </IsModalOpenBack>
@@ -159,7 +170,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               }}
             />
             <MenuButtonImage src={MenuButton} onClick={navigatePage} />
-            {isModalOpen && <Modal />}
+            {isModalOpen && (whatModal ? <MenuPage /> : <Modal />)}
           </div>
         </StyledContainer>
       )}
