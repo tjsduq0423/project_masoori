@@ -3,6 +3,7 @@ package com.fintech.masoori.global.sse.service;
 import java.io.IOException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.fintech.masoori.global.sse.repository.EmitterRepository;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@Transactional
 @RequiredArgsConstructor
 public class NotificationService {
 	private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60; // 60초
@@ -33,6 +35,7 @@ public class NotificationService {
 		if (emitter != null) {
 			try {
 				emitter.send(SseEmitter.event().id(email).name("sse").data(data));
+				log.info("sendToClient : {} , msg : {}", email, data);
 			} catch (IOException exception) {
 				log.info("sse exception : {}", exception.getMessage());
 				emitterRepository.deleteByEmail(email);
