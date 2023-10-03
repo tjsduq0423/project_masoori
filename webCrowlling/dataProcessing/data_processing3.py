@@ -2,7 +2,7 @@ import json
 import re
 
 # JSON 파일 경로
-json_file_path = "updated_credit_card.json"
+json_file_path = "updated_check_card.json"
 # JSON 파일 읽기
 with open(json_file_path, "r", encoding="utf-8") as json_file:
     data = json.load(json_file)
@@ -15,7 +15,7 @@ with open(json_file_path, "r", encoding="utf-8") as json_file:
     ]
 
     # 결과를 새 JSON 파일에 저장
-    with open("filtered_credit_card.json", "w", encoding="utf-8") as json_file:
+    with open("filtered_check_card.json", "w", encoding="utf-8") as json_file:
         json.dump({"data": filtered_data}, json_file, ensure_ascii=False, indent=4)
 
     # # 카드 정보 리스트가 업데이트된 상태로 저장됩니다.
