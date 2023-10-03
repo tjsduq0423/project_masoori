@@ -2,13 +2,12 @@ import pika
 import json
 import asyncio
 import pydantic
-import time
 
 # rabbitMQ 변수 정리
 rabbit_mq_server_domain_name = "j9b308.p.ssafy.io"
 rabbit_mq_server_domain_port = 5672
-pub_queue_name = "realtime.res"
-sub_queue_name = "realtime.req"
+pub_queue_name = "challenge.res"
+sub_queue_name = "challenge.req"
 
 # RabbitMQ 연결 설정
 credentials = pika.PlainCredentials(username="admin", password="masoori")
@@ -19,8 +18,8 @@ connection = pika.BlockingConnection(
         port=rabbit_mq_server_domain_port,
     )
 )
-channel = connection.channel()
 
+channel = connection.channel()
 # pub 를 위한 queue 선언
 channel.queue_declare(queue=pub_queue_name, durable=True)
 
@@ -30,7 +29,7 @@ def callback(ch, method, properties, body):
     # 메시지 처리 로직 작성 - LangChain 모듈 import -> 작성 필수
     # body가 spring boot 서버에서 받은 데이터임 - parsing 해야할 수 있음.data = json.loads(received_message) 이런식으로
     print(f"Received {json.loads(body)}")
-    time.sleep(5)
+
     # 다시 처리 완료 된 값을 메시지로 파싱 - class 형태 -> json.dump 사용하여 json으로 변환 후 직렬화해서 전달
     # import json
     # data = {  # 예시

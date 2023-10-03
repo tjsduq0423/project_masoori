@@ -7,8 +7,8 @@ import time
 # rabbitMQ 변수 정리
 rabbit_mq_server_domain_name = "j9b308.p.ssafy.io"
 rabbit_mq_server_domain_port = 5672
-pub_queue_name = "weekly.res"
-sub_queue_name = "weekly.req"
+pub_queue_name = "spending.res"
+sub_queue_name = "spending.req"
 
 # RabbitMQ 연결 설정
 credentials = pika.PlainCredentials(username="admin", password="masoori")
