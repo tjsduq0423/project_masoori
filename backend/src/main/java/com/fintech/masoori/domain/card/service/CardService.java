@@ -28,7 +28,10 @@ public interface CardService {
 	 */
 	void registerSpendingCard(GeneratedSpendingCard generatedSpendingCard);
 
+	void createSpendingCard(String email);
+
 	BasicCardRes.BasicCard selectUserRecentBasicCard(String email, LocalDateTime time);
 
 	void updateUserProfileImage(String email, Long id);
+
 }

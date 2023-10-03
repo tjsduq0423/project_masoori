@@ -17,6 +17,7 @@ import com.fintech.masoori.domain.card.dto.UserCardListRes;
 import com.fintech.masoori.domain.card.entity.Card;
 import com.fintech.masoori.domain.card.exception.CardNotFound;
 import com.fintech.masoori.domain.card.repository.CardRepository;
+import com.fintech.masoori.domain.deal.service.DealService;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.exception.UserNotFoundException;
 import com.fintech.masoori.domain.user.repository.UserRepository;
@@ -24,6 +25,9 @@ import com.fintech.masoori.global.rabbitMQ.dto.GeneratedChallenge;
 import com.fintech.masoori.global.rabbitMQ.dto.GeneratedChallengeCard;
 import com.fintech.masoori.global.rabbitMQ.dto.GeneratedSpending;
 import com.fintech.masoori.global.rabbitMQ.dto.GeneratedSpendingCard;
+import com.fintech.masoori.global.rabbitMQ.dto.SpendingRequestMessage;
+import com.fintech.masoori.global.rabbitMQ.dto.Transaction;
+import com.fintech.masoori.global.rabbitMQ.service.SpendingPubService;
 import com.fintech.masoori.global.util.CalcDate;
 
 import lombok.RequiredArgsConstructor;
@@ -34,9 +38,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class CardServiceImpl implements CardService {
-
+	private final SpendingPubService spendingPubService;
 	private final CardRepository cardRepository;
 	private final UserRepository userRepository;
+	private final DealService dealService;
 
 	@Override
 	public UserCardListRes selectRangeBasicCard(String email, LocalDateTime start, LocalDateTime end) {
@@ -172,6 +177,18 @@ public class CardServiceImpl implements CardService {
 	}
 
 	@Override
+	public void createSpendingCard(String email) {
+		// 사용자 찾기.
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
+		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
+		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
+			startEndDate.getStartDate(), startEndDate.getEndDate());
+		// 소비 카드 생성 중인지 저장.
+		spendingPubService.sendMessage(
+			SpendingRequestMessage.builder().userId(user.getId()).userWeeklyTransactionList(transactionList).build());
+	}
+
+	@Override
 	public BasicCardRes.BasicCard selectUserRecentBasicCard(String email, LocalDateTime time) {
 		User user = userRepository.findUserByEmail(email);
 		LocalDateTime monday = time.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
@@ -200,3 +217,4 @@ public class CardServiceImpl implements CardService {
 		userRepository.updateUserProfileImage(card.getImagePath(), user.getEmail());
 	}
 }
+
