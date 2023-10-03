@@ -2,7 +2,7 @@
 
 /* 이전 버튼 스타일 */
 .flickity-prev-next-button.previous {
-  background-color: #CAB2D34D; /* 배경색 지정 */
+  background-color: #cab2d34d; /* 배경색 지정 */
   color: #fff; /* 글자색 지정 */
   font-size: 16px; /* 글자 크기 지정 */
   border: none; /* 테두리 제거 */
@@ -22,7 +22,7 @@
 
 /* 다음 버튼 스타일 */
 .flickity-prev-next-button.next {
-  background-color: #CAB2D34D; /* 배경색 지정 */
+  background-color: #cab2d34d; /* 배경색 지정 */
   color: #fff; /* 글자색 지정 */
   border: none; /* 테두리 제거 */
   padding: 10px 20px; /* 내부 여백 지정 */
@@ -39,6 +39,16 @@
   }
 }
 
+/* 이전 버튼 호버 스타일 */
+.flickity-prev-next-button.previous:hover {
+  background-color: #764182; /* 호버 시 배경색 변경 */
+}
+
+/* 다음 버튼 호버 스타일 */
+.flickity-prev-next-button.next:hover {
+  background-color: #764182; /* 호버 시 배경색 변경 */
+}
+
 .body {
   overflow: hidden;
 }
@@ -49,7 +59,6 @@
   line-height: 1.2;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-
 }
 
 main {
@@ -88,13 +97,13 @@ main {
   color: #ffffff;
 }
 .intro-text h1 {
-  font-family: "Pyeongchangpeace", sans-serif;;
+  font-family: "Pyeongchangpeace", sans-serif;
   font-size: 42px;
   margin: 0;
 }
 .intro-text h2 {
   font-size: 16px;
-  font-family: "Pyeongchangpeace", sans-serif;;
+  font-family: "Pyeongchangpeace", sans-serif;
   text-transform: uppercase;
   margin: 0;
 }
@@ -102,7 +111,7 @@ main {
   font-size: 18px;
   line-height: 1.4;
   margin-top: 6px;
-  margin-bottom: 9px; 
+  margin-bottom: 9px;
 }
 .intro-text a {
   display: inline-block;
@@ -112,11 +121,20 @@ main {
   text-transform: uppercase;
   font-size: 26px;
   color: #813e83;
-  font-family: "Pyeongchangpeace", sans-serif;;
+  font-family: "Pyeongchangpeace", sans-serif;
   margin-top: 20px;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 .intro-text .feature {
   height: 800px;
+}
+
+/* 호버 스타일 */
+.intro-text a:hover {
+  background: #813e83; /* 호버 시 배경색 변경 */
+  color: #fff; /* 호버 시 글자색 변경 */
 }
 
 /* Media Queries for Responsiveness */

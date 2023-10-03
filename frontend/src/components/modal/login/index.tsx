@@ -118,6 +118,10 @@ const Input = styled.input`
   border-color: #5e3a66;
   height: 30px;
   padding-left: 5px;
+
+  &:focus {
+    border-color: #5e3a66; /* 클릭했을 때 테두리 색상 변경 */
+  }
 `;
 
 const SignUp = styled.div`
@@ -241,6 +245,7 @@ const AbleSendCodeButton = styled(DisableSendCodeButton)`
 const Login: React.FC = () => {
   const [modalState, setModalState] = useState<string>("로그인");
   const [imageLoaded, setImageLoaded] = useState<boolean>(false); // 이미지 로드 상태
+  const [isTextEntered, setIsTextEntered] = useState(false);
 
   //로그인 시작 ----------------------------------------------
 
@@ -505,9 +510,14 @@ const Login: React.FC = () => {
             <FormLabel>계정이름</FormLabel>
             <Input
               value={userData.email}
-              onChange={(e) =>
-                setUserData({ ...userData, email: e.target.value })
-              }
+              onChange={(e) => {
+                setUserData({ ...userData, email: e.target.value });
+                // 텍스트가 입력되거나 제거될 때 상태 변수 업데이트
+                setIsTextEntered(Boolean(e.target.value));
+              }}
+              style={{
+                color: isTextEntered ? "#5e3a66" : "initial", // 상황에 따라 텍스트 색상을 조건적으로 변경
+              }}
             />
           </Id>
           <PW>
@@ -518,6 +528,9 @@ const Login: React.FC = () => {
               onChange={(e) =>
                 setUserData({ ...userData, password: e.target.value })
               }
+              style={{
+                color: isTextEntered ? "#5e3a66" : "initial", // 상황에 따라 텍스트 색상을 조건적으로 변경
+              }}
               onKeyPress={activeEnter}
             />
             <SignUp>
@@ -581,6 +594,9 @@ const Login: React.FC = () => {
                   setViewComment(false);
                   setIsDuplicated(false);
                 }}
+                style={{
+                  color: isTextEntered ? "#5e3a66" : "initial", // 상황에 따라 텍스트 색상을 조건적으로 변경
+                }}
               />
               <DuplicateCheckButton
                 onClick={() => {
@@ -620,6 +636,9 @@ const Login: React.FC = () => {
                   setCodeState(false);
                   setDoP(false);
                   setCodeCommentState(false);
+                }}
+                style={{
+                  color: isTextEntered ? "#5e3a66" : "initial", // 상황에 따라 텍스트 색상을 조건적으로 변경
                 }}
               />
               {!isDuplicated ? (
@@ -661,7 +680,10 @@ const Login: React.FC = () => {
               type="text"
               value={duplicateEmailData.email}
               disabled
-              style={{ opacity: 0.6 }}
+              style={{
+                opacity: 0.6,
+                color: isTextEntered ? "#5e3a66" : "initial",
+              }}
             />
           </Id>
           <PW>
@@ -672,6 +694,9 @@ const Login: React.FC = () => {
               onChange={(e) => {
                 setSignUpPassword(e.target.value);
                 setIsSame(false);
+              }}
+              style={{
+                color: isTextEntered ? "#5e3a66" : "initial", // 상황에 따라 텍스트 색상을 조건적으로 변경
               }}
             />
             <PWCheck>
@@ -693,6 +718,9 @@ const Login: React.FC = () => {
                 onChange={(e) => {
                   setCheckSignUpPassword(e.target.value);
                   setIsSame(false);
+                }}
+                style={{
+                  color: isTextEntered ? "#5e3a66" : "initial", // 상황에 따라 텍스트 색상을 조건적으로 변경
                 }}
               />
             </PWCheck>
