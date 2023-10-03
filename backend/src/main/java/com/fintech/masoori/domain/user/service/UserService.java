@@ -50,4 +50,6 @@ public interface UserService {
 	void updateSmsAlarm(User loginUser);
 
 	void updateCardGeneration(User loginUser);
+
+	void updateMonthlySpendingGoal(User loginUser, Integer monthlySpending);
 }

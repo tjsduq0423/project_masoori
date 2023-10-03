@@ -43,4 +43,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	Integer getAmountSumByPeriod(@Param("email") String email, @Param("startDate") LocalDateTime startDate,
 		@Param("endDate") LocalDateTime endDate);
 
+	@Modifying
+	@Query("UPDATE User u SET u.monthlySpendingGoal = :monthlySpendingGoal WHERE u.email = :email")
+	void updateMonthlySpendingGoal(@Param("email") String email, @Param("monthlySpendingGoal") Integer monthlySpendingGoal);
+
 }

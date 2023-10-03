@@ -17,6 +17,7 @@ import com.fintech.masoori.domain.user.dto.EmailCheckReq;
 import com.fintech.masoori.domain.user.dto.InfoRes;
 import com.fintech.masoori.domain.user.dto.LoginReq;
 import com.fintech.masoori.domain.user.dto.LoginRes;
+import com.fintech.masoori.domain.user.dto.MonthlySpendingGoalReq;
 import com.fintech.masoori.domain.user.dto.SendEmailReq;
 import com.fintech.masoori.domain.user.dto.SendSmsReq;
 import com.fintech.masoori.domain.user.dto.SignUpReq;
@@ -160,6 +161,15 @@ public class UserController {
 		return ResponseEntity.ok(checkEmailDupulicatedRes);
 	}
 
+	@Operation(summary = "사용자 한 달 소비 목표 금액 update", description = "사용자가 입력한 소비 금액을 사용자 정보에 업데이트한다.")
+	@PostMapping("/monthly-spending")
+	public ResponseEntity<?> updateMonthlySpending(
+		@Parameter(description = "소비 목표 금액", required = true) @RequestBody MonthlySpendingGoalReq monthlySpendingGoalReq, Principal principal) {
+		User loginUser = loginUser(principal);
+		userService.updateMonthlySpendingGoal(loginUser, monthlySpendingGoalReq.getMonthlySpending());
+		return ResponseEntity.ok().build();
+	}
+
 	private void validateRequest(BindingResult bindingResult) {
 		if (bindingResult.hasErrors())
 			throw new InvalidValueException("Invalid Input Value");
@@ -170,5 +180,7 @@ public class UserController {
 		return userService.findByEmail(principal.getName())
 		                  .orElseThrow(() -> new UserNotFoundException("User is Not Found"));
 	}
+
+
 
 }

@@ -83,6 +83,9 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Column(name = "provider_type", length = 20, nullable = false)
 	private ProviderType providerType;
 
+	@Column(name = "monthly_spending_goal")
+	private Integer monthlySpendingGoal;
+
 	@OneToMany(mappedBy = "user")
 	@Builder.Default
 	private List<CreditCardUser> creditCardUserList = new ArrayList<>();
