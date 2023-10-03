@@ -3,7 +3,6 @@ package com.fintech.masoori.global.sse.service;
 import java.io.IOException;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.fintech.masoori.global.sse.repository.EmitterRepository;

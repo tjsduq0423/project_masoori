@@ -12,7 +12,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 
 # JSON 파일 경로
-json_file_path = "check_card_processed.json"
+json_file_path = "credit_card_processed.json"
 
 # JSON 파일 읽기
 with open(json_file_path, "r", encoding="utf-8") as json_file:
@@ -30,28 +30,28 @@ with open(json_file_path, "r", encoding="utf-8") as json_file:
         if card["카드회사"] == "NH농협카드" or card["register_path"] == "":
             card["register_path"] = ""
             continue
+        try:
+            # 'register_path'의 'detail' 문자열을 'bridge'로 변경
+            access_url = card["register_path"].replace("detail", "bridge")
+            print(access_url)
+            # 변경된 URL로 Chrome을 사용하여 접속
+            driver.get(access_url)
 
-        # 'register_path'의 'detail' 문자열을 'bridge'로 변경
-        access_url = card["register_path"].replace("detail", "bridge")
-        print(access_url)
-        # 변경된 URL로 Chrome을 사용하여 접속
-        driver.get(access_url)
+            # URL이 바뀔 때까지 대기 (최대 10초 동안)
+            WebDriverWait(driver, 20).until(EC.url_changes(access_url))
 
-        # 일정 시간 동안 대기
-        time.sleep(3)
+            # 바뀐 URL 가져오기
+            updated_register_path = driver.current_url
+            print(updated_register_path)
 
-        # URL이 바뀔 때까지 대기 (최대 10초 동안)
-        WebDriverWait(driver, 20).until(EC.url_changes(access_url))
-
-        # 바뀐 URL 가져오기
-        updated_register_path = driver.current_url
-        print(updated_register_path)
-
-        card["register_path"] = updated_register_path
-
+            card["register_path"] = updated_register_path
+        except Exception as e:
+            print(e)
+            card["register_path"] = ""
+            continue
     # Chrome 브라우저 종료
     driver.quit()
 
     # 카드 정보 리스트가 업데이트된 상태로 저장됩니다.
-    with open("updated_check_card.json", "w", encoding="utf-8") as file:
+    with open("updated_credit_card.json", "w", encoding="utf-8") as file:
         json.dump(data, file, ensure_ascii=False)
