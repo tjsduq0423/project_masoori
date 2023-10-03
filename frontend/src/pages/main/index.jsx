@@ -44,8 +44,8 @@ const Backdrop = styled.div`
 
 const ModalContainer = styled.div`
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 23%;
+  left: 40%;
   transform: translate(-50%, -50%);
   padding: 20px;
   display: ${(props) => (props.isOpen ? "block" : "none")};
