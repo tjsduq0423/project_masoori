@@ -27,6 +27,9 @@ public class InfoRes {
 	@Schema(description = "월별 소비 금액", example = "500000")
 	private Integer monthlySpending;
 
+	@Schema(description = "월별 소비 목표 금액", example = "1000000")
+	private Integer monthlySpendingGoal;
+
 	@Schema(description = "결제 내역 연동 여부 ", example = "true")
 	private Boolean isAuthenticated;
 }

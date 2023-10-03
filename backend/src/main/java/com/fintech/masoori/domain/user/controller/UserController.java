@@ -161,7 +161,7 @@ public class UserController {
 		return ResponseEntity.ok(checkEmailDupulicatedRes);
 	}
 
-	@Operation(summary = "사용자 한 달 소비 목표 금액 update", description = "사용자가 입력한 소비 금액을 사용자 정보에 업데이트한다.")
+	@Operation(summary = "사용자 월별 소비 목표 금액 설정 API", description = "사용자가 입력한 소비 금액을 사용자 정보에 업데이트한다.")
 	@PostMapping("/monthly-spending")
 	public ResponseEntity<?> updateMonthlySpending(
 		@Parameter(description = "소비 목표 금액", required = true) @RequestBody MonthlySpendingGoalReq monthlySpendingGoalReq, Principal principal) {
