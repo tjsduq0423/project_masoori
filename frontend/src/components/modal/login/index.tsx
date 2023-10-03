@@ -16,7 +16,6 @@ import { usePostCheckDuplicateEmail } from "@/apis/user/Mutations/usePostCheckDu
 import { usePostSendSignUpCode } from "@/apis/user/Mutations/usePostSendSignUpCode";
 import { usePostCheckSignUpCode } from "@/apis/user/Mutations/usePostCheckSignUpCode";
 import { usePostSignUp } from "@/apis/user/Mutations/usePostSignUp";
-import { useNavigate } from "react-router-dom";
 interface ImgProps {
   loaded: boolean;
 }
@@ -243,7 +242,6 @@ const Login: React.FC = () => {
   const [modalState, setModalState] = useState<string>("로그인");
   const [imageLoaded, setImageLoaded] = useState<boolean>(false); // 이미지 로드 상태
 
-  const navigate = useNavigate();
   //로그인 시작 ----------------------------------------------
 
   const Login = usePostLogin();
@@ -261,7 +259,9 @@ const Login: React.FC = () => {
 
       if (result?.status === 200) {
         toast.info("👻 환영합니다 👻");
-        window.location.href = "/main";
+        setTimeout(() => {
+          window.location.href = "/main";
+        }, 1200);
       } else if (result === undefined) {
         toast.warning("❗ 입력을 다시 확인해주세요 ❗");
       }
@@ -460,13 +460,36 @@ const Login: React.FC = () => {
   //회원가입 종료 ----------------------------------------------
 
   useEffect(() => {
-    const img = new Image();
-    img.src = BackCards;
-    img.onload = () => {
-      // 이미지   로드가 완료되면 상태 업데이트
-      setImageLoaded(true);
-    };
-  }, []);
+    if (imageLoaded) {
+      setIsModalOpen(true);
+    }
+  }, [imageLoaded, setIsModalOpen]);
+
+  // 모달이 열릴 때 이미지 로드를 시작합니다.
+  useEffect(() => {
+    if (isModalOpen) {
+      const img1 = new Image();
+      const img2 = new Image();
+      const img3 = new Image();
+      img1.src = BackCards;
+      img2.src = SignInModalFront;
+      img3.src = SignUpModalFront;
+
+      const checkImagesLoaded = () => {
+        if (img1.complete && img2.complete && img3.complete) {
+          setImageLoaded(true);
+        }
+      };
+
+      // 이미지의 로드 상태를 확인하는 이벤트 리스너 추가
+      img1.onload = checkImagesLoaded;
+      img2.onload = checkImagesLoaded;
+      img3.onload = checkImagesLoaded;
+
+      // 이미지 로드 상태를 확인하고 업데이트하는 함수를 호출합니다.
+      checkImagesLoaded();
+    }
+  }, [isModalOpen]);
 
   const OAUTH2_REDIERECT_URI = `${process.env.REACT_APP_BASE_URL}/oauth/redirect`; /* 이거에대한페이지 생성 */
   const onSocialButtonClick = (socialName: string) => {
