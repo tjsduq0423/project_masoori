@@ -423,7 +423,7 @@ const MainPage = () => {
   const [initialStartDate, setInitialStartDate] = useState("");
   const [isLogin, setIsLogin] = useState("");
 
-  const nowDateTime = useGetConsumeRecent(initialStartDate);
+  // const nowDateTime = useGetConsumeRecent(initialStartDate);
   const userInfo = useUserInfo(isLogin);
   // const usePostSSEMutation = usePostSSESendData();
   // const useGetSSE = useGetSSESubscribe();
@@ -437,7 +437,7 @@ const MainPage = () => {
     }
   }, [userInfo]);
 
-  // console.log(userInfo);
+  console.log(userInfo);
 
   // useEffect(() => {
   //   setUserInfo(user);
@@ -469,7 +469,7 @@ const MainPage = () => {
     }
   };
 
-  console.log(nowDateTime);
+  // console.log(nowDateTime);
 
   return (
     <div className="body">
