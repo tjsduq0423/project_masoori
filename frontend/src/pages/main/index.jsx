@@ -418,15 +418,12 @@ const MainPage = () => {
 
   // 로그인 사용자 userInfo:isAuthenticated 체크
 
-  // const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [nowDateInfo, setNowDateInfo] = useRecoilState(nowDateInfoState);
   const [initialStartDate, setInitialStartDate] = useState("");
   const [isLogin, setIsLogin] = useState("");
 
   const nowDateTime = useGetConsumeRecent(initialStartDate);
   const userInfo = useUserInfo(isLogin);
-  // const usePostSSEMutation = usePostSSESendData();
-  // const useGetSSE = useGetSSESubscribe();
 
   useEffect(() => {
     // Check if there is an accessToken in localStorage
@@ -436,22 +433,6 @@ const MainPage = () => {
       console.log(userInfo);
     }
   }, [userInfo]);
-
-  // console.log(userInfo);
-
-  // useEffect(() => {
-  //   setUserInfo(user);
-  // }, [setUserInfo, user]);
-
-  // const postSSEHandler = async () => {
-  //   try {
-  //     await usePostSSEMutation.mutateAsync();
-
-  //     console.log("SSE 구독 성공");
-  //   } catch (error) {
-  //     console.error("SSE 구독  실패:", error);
-  //   }
-  // };
 
   const checkAuth = () => {
     if (userInfo.isAuthenticated) {

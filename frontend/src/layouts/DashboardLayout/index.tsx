@@ -46,6 +46,17 @@ const MenuButtonImage = styled.img`
   position: absolute;
   right: 20px;
   top: 20px;
+
+  /* 호버 시 크기와 트랜지션 설정 */
+  transition:
+    transform 0.3s ease,
+    width 0.3s ease,
+    height 0.3s ease;
+
+  /* 호버 시 크기 확대 */
+  &:hover {
+    transform: scale(1.15); /* 크기 확대 설정 */
+  }
 `;
 
 const LoginBackImg = styled.div`
