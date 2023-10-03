@@ -151,6 +151,7 @@ public class UserServiceImpl implements UserService {
 		                         .dailySpending(amountSumByPeriodDay)
 		                         .monthlySpending(amountSumByPeriodWeek)
 		                         .weeklySpending(amountSumByPeriodMonth)
+								 .monthlySpendingGoal(user.getMonthlySpendingGoal())
 		                         .build();
 		return infoRes;
 	}
@@ -258,7 +259,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateMonthlySpendingGoal(User loginUser, Integer monthlySpending) {
-		userRepository.updateMonthlySpendingGoal(loginUser.getEmail(), monthlySpending);
+	public void updateMonthlySpendingGoal(User loginUser, Integer monthlySpendingGoal) {
+		userRepository.updateMonthlySpendingGoal(loginUser.getEmail(), monthlySpendingGoal);
 	}
 }
