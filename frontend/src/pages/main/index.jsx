@@ -17,7 +17,10 @@ import { useUserInfo } from "@/apis/menu/Queries/useUserInfo";
 import masuriImg from "../../assets/img/masuri.png";
 import book from "../../assets/img/book.png";
 import cardhand from "../../assets/img/handcard.png";
-import money from "../../assets/img/money.png";
+import money from "../../assets/img/mainLogo/money.png";
+import dictionary from "../../assets/img/mainLogo/dictionary.jpg";
+import masooriStory from "../../assets/img/mainLogo/masooriStory.jpg";
+import spendtarot from "../../assets/img/mainLogo/spendtarot.jpg";
 import VerifyNumberModal from "@/components/verifyNumberModal";
 import { userInfoState } from "@/states/userState";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -475,7 +478,7 @@ const MainPage = () => {
           <canvas ref={canvasRef} />
           <div className="intro-carousel">
             <div className="intro-cell">
-              <img src={money} className="intro-graphic" />
+              <img src={masooriStory} className="intro-graphic" />
               <div className="intro-text">
                 <h1>마수리 이야기</h1>
                 <p>
@@ -499,7 +502,7 @@ const MainPage = () => {
               </div>
             </div>
             <div className="intro-cell">
-              <img src={money} className="intro-graphic" />
+              <img src={spendtarot} className="intro-graphic" />
               <div className="intro-text">
                 <h1>소비패턴 타로</h1>
                 <p>
@@ -510,7 +513,7 @@ const MainPage = () => {
               </div>
             </div>
             <div className="intro-cell">
-              <img src={money} className="intro-graphic" />
+              <img src={dictionary} className="intro-graphic" />
               <div className="intro-text">
                 <h1>도감 및 카드추천</h1>
                 <p>

@@ -1,10 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAllChallengeCard } from "@/apis/dictionary/dictionaryAPI";
-import { AllChallengeCardProps } from "@/types/dictionaryType";
 
-const useAllChallengeCard = (challengeDate: AllChallengeCardProps) => {
-  const { data } = useQuery(["allChallengeCard", challengeDate], () =>
-    getAllChallengeCard(challengeDate)
+const useAllChallengeCard = (startDate: string, endDate: string) => {
+  const { data } = useQuery(["allChallengeCard", startDate, endDate], () =>
+    getAllChallengeCard(startDate, endDate)
   );
   return data;
 };

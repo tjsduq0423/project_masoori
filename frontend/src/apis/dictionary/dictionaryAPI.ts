@@ -1,5 +1,4 @@
 import { instance } from "@/apis/instance";
-import { AllChallengeCardProps } from "@/types/dictionaryType";
 
 // 사용자 추천 카드 리스트 조회 API
 const getAllCreditcard = async (time: string) => {
@@ -34,11 +33,11 @@ const getAnalyticsMonth = async () => {
 };
 
 // 조회 시작일과 종료일을 통해 유저의 챌린지 카드들을 조회
-const getAllChallengeCard = async (challengeDate: AllChallengeCardProps) => {
+const getAllChallengeCard = async (startDate: string, endDate: string) => {
   try {
-    const response = await instance.get(`/card/challengecard`, {
-      params: challengeDate,
-    });
+    const response = await instance.get(
+      `/card/challenge?startDate=${startDate}&endDate=${endDate}`
+    );
     return response.data;
   } catch {
     new Error("api 연동 오류 - getAllChallengeCard");
