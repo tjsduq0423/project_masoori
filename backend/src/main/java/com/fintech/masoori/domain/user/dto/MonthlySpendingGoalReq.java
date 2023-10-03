@@ -8,5 +8,5 @@ import lombok.Data;
 public class MonthlySpendingGoalReq {
 	@NotNull
 	@Schema(description = "한 달 소비 목표 금액", example = "1000000")
-	private Integer monthlySpending;
+	private Integer monthlySpendingGoal;
 }
