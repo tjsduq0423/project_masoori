@@ -166,7 +166,7 @@ public class UserController {
 	public ResponseEntity<?> updateMonthlySpending(
 		@Parameter(description = "소비 목표 금액", required = true) @RequestBody MonthlySpendingGoalReq monthlySpendingGoalReq, Principal principal) {
 		User loginUser = loginUser(principal);
-		userService.updateMonthlySpendingGoal(loginUser, monthlySpendingGoalReq.getMonthlySpending());
+		userService.updateMonthlySpendingGoal(loginUser, monthlySpendingGoalReq.getMonthlySpendingGoal());
 		return ResponseEntity.ok().build();
 	}
 
