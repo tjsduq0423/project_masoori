@@ -3,6 +3,7 @@ package com.fintech.masoori.global.sse.controller;
 import java.security.Principal;
 
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,8 +34,9 @@ public class SSEController {
 
 	@Operation(summary = "카드 데이터 구독 테스트 용 API", description = "서버 to 클라이언트 test 문자열 날림")
 	@PostMapping("/send-data")
-	public void sendData(Principal principal) {
+	public ResponseEntity<?> sendData(Principal principal) {
 		notificationService.notify(principal.getName(), "TEST DATA");
+		return ResponseEntity.ok().build();
 	}
 
 }
