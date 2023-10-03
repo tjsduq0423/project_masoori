@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import LandingPage from "@/assets/img/LandingPageTest.jpg";
 import LandingMainLogo from "@/assets/img/LandingMainLogo.png";
@@ -8,6 +8,7 @@ import Trophy from "@/assets/img/Trophy.png";
 import Bottles from "@/assets/img/Bottles.png";
 import CardFlip from "@/components/cardFlip";
 import { useNavigate } from "react-router-dom";
+import LoadingPage from "../loading";
 
 <link rel="stylesheet" type="text/css" href="@/styles.font.css" />;
 
@@ -299,12 +300,20 @@ const Landing: React.FC = () => {
       }
     }
   };
+  const [backgroundReady, setBackgroundReady] = useState(false);
+  useEffect(() => {
+    const img = new Image();
+    img.src = LandingPage;
+    img.onload = () => {
+      setBackgroundReady(true);
+    };
+  }, []);
 
   const isClickable = (index: number) => {
     return selectedCard === null || selectedCard === index;
   };
 
-  return (
+  return backgroundReady ? (
     <Container>
       <MainPage1>
         <MainLogo src={LandingMainLogo} />
@@ -388,6 +397,8 @@ const Landing: React.FC = () => {
         </ToGoContent>
       </MainPages>
     </Container>
+  ) : (
+    <LoadingPage />
   );
 };
 

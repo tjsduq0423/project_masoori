@@ -422,7 +422,7 @@ const MainPage = () => {
   const [initialStartDate, setInitialStartDate] = useState("");
   const [isLogin, setIsLogin] = useState("");
 
-  const nowDateTime = useGetConsumeRecent(initialStartDate);
+  // const nowDateTime = useGetConsumeRecent(initialStartDate);
   const userInfo = useUserInfo(isLogin);
 
   useEffect(() => {
@@ -450,7 +450,7 @@ const MainPage = () => {
     }
   };
 
-  console.log(nowDateTime);
+  // console.log(nowDateTime);
 
   return (
     <div className="body">

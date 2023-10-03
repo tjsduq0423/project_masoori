@@ -138,7 +138,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <TransparentContainer onClick={handleBackgroundClick}>
             <div
               style={{
-                width: "100vw",
+                width: "98vw",
                 display: "flex",
                 justifyContent: "space-between",
                 alignContent: "center",
@@ -158,7 +158,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         <StyledContainer onClick={handleBackgroundClick}>
           <div
             style={{
-              width: "100vw",
+              width: "98vw",
               display: "flex",
               justifyContent: "space-between",
               alignContent: "center",
