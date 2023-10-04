@@ -20,13 +20,11 @@ import masooriStory from "../../assets/img/mainLogo/masooriStory.jpg";
 import spendtarot from "../../assets/img/mainLogo/spendtarot.jpg";
 
 import VerifyNumberModal from "@/components/verifyNumberModal";
-import { userInfoState } from "@/states/userState";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { nowDateInfoState } from "@/states/spendState";
 import { useGetConsumeRecent } from "@/apis/spend/Queries/useGetConsumeRecent";
-import { usePostSSESendData } from "@/apis/spend/Mutations/usePostSSESendData";
-import { useGetSSESubscribe } from "@/apis/spend/Queries/useGetSSESubscribe";
 import { spendIdState } from "@/states/dictionaryState";
+import { modalOpenState } from "@/states/userState";
 
 //verifymodal
 
@@ -385,6 +383,10 @@ const MainPage = () => {
     };
   }, []);
 
+  //modal
+  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false); // 모달 열림 여부 상태
+  const [isModalOpen, setIsModalOpen] = useRecoilState(modalOpenState);
+
   //navigation
   const navigateAbout = () => {
     navigate("/landing");
@@ -397,20 +399,14 @@ const MainPage = () => {
   const navigateDictionary = () => {
     if (isLogin === "true") {
       navigate("/dictionary");
+    } else {
+      setIsModalOpen(!isModalOpen);
     }
-  };
-
-  //modal
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 여부 상태
-
-  // 모달 열기 함수
-  const openModal = () => {
-    setIsModalOpen(!isModalOpen);
   };
 
   // 모달 닫기 함수
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsVerifyModalOpen(false);
   };
 
   // 로그인 사용자 userInfo:isAuthenticated 체크
@@ -424,7 +420,7 @@ const MainPage = () => {
   useEffect(() => {
     setNowDateInfo("");
     if (consumeRecent === "인증") {
-      setIsModalOpen(!isModalOpen);
+      setIsVerifyModalOpen(!isVerifyModalOpen);
     }
 
     if (consumeRecent && consumeRecent.card) {
@@ -433,7 +429,7 @@ const MainPage = () => {
       console.log(spendId);
       window.location.href = "/spend";
     }
-  }, [consumeRecent, setNowDateInfo, setSpendId, spendId, isModalOpen]);
+  }, [consumeRecent, setNowDateInfo, setSpendId, spendId, isVerifyModalOpen]);
 
   useEffect(() => {
     // Check if there is an accessToken in localStorage
@@ -453,10 +449,10 @@ const MainPage = () => {
         console.log("true라 recent를 호출할거임");
       } else {
         console.log("false라 모달이 떴음");
-        setIsModalOpen(!isModalOpen);
+        setIsVerifyModalOpen(!isVerifyModalOpen);
       }
     } else {
-      console.log("하이");
+      setIsModalOpen(!isModalOpen);
     }
   };
 
@@ -516,10 +512,10 @@ const MainPage = () => {
           </div>
         </div>
       </main>
-      <ModalContainer isOpen={isModalOpen}>
+      <ModalContainer isOpen={isVerifyModalOpen}>
         <VerifyNumberModal />
       </ModalContainer>
-      <Backdrop isOpen={isModalOpen} onClick={closeModal} />
+      <Backdrop isOpen={isVerifyModalOpen} onClick={closeModal} />
     </div>
   );
 };

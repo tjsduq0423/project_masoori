@@ -7,7 +7,29 @@ const GlobalStyle = createGlobalStyle`
         margin: 0;
         box-sizing: border-box;
         /* color: ${({ theme }) => theme.color.white}; */
+        &::-webkit-scrollbar-track
+        {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            background-color: #D0BDCC;
+        }
+
+        &::-webkit-scrollbar
+        {
+            width: 8px;
+            background-color: #D0BDCC;
+        }
+
+        &::-webkit-scrollbar-thumb
+        {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #813E83;
+        }
     }
+
+
+
 
     ul, ol, li {
         list-style: none;
