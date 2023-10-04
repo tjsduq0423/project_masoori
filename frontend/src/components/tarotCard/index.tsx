@@ -24,6 +24,16 @@ const StyledTarotCardTop = styled.div<{ cardWidth: string }>`
   height: auto;
   position: absolute;
   z-index: 1;
+
+  transition: transform 0.2s ease; /* 호버 애니메이션 추가 */
+  transform-origin: center center;
+
+  /* 호버 시 확대 스타일 */
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(255, 138, 208, 0.8);
+    border-radius: 15px;
+  }
 `;
 
 const TopImage = styled.img<{ cardWidth: string }>`
