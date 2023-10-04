@@ -9,6 +9,9 @@ import { useRecoilState } from "recoil";
 import { settingModalOpenState } from "@/states/spendState";
 import { getUserInfo } from "@/apis/menu/menuAPI";
 import { useState, useEffect } from "react";
+import TarotCard from "@/components/tarotCard";
+
+import tarotCardFront from "@/assets/img/tarotCard/tarotCardFront.png";
 
 const Container = styled.div`
   border-radius: 25px;
@@ -122,7 +125,7 @@ const ProfilePage = () => {
   //마이페이지 sms 알림 연동 변경 API 종료
 
   interface UserData {
-    imagePath?: string;
+    imagePath?: string | undefined;
     smsAlarm?: boolean;
     cardGeneration?: boolean;
     dailySpending?: number;
@@ -182,7 +185,17 @@ const ProfilePage = () => {
   return (
     <Container>
       <WeatherSide>
-        <WeatherGradient />
+        <TarotCard
+          width="347px"
+          height="500px"
+          cardWidth="100%"
+          cardSrc={tarotCardFront}
+          imageSrc={userInfo.imagePath || ""}
+          bottomImageWidth="100%"
+          text="내 프로필 사진"
+          fontsize="20px"
+          bottom="1.2rem"
+        ></TarotCard>
       </WeatherSide>
       <InfoSide>
         <TodayInfo>
@@ -237,8 +250,8 @@ const ProfilePage = () => {
               CARD
             </p>
             <ToggleSwitch
-              textOn="카카오 연동 취소하기"
-              textOff="카카오 연동 등록하기"
+              textOn="문자 연동 취소하기"
+              textOff="문자 연동 등록하기"
               backgroundImage="https://www.svgrepo.com/show/368252/kakao.svg"
               backgroundColor="#e0cf19"
               checked={userInfo.smsAlarm!}

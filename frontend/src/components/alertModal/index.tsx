@@ -139,6 +139,7 @@ const AlertModal = ({
   const handleLowerSectionClick = () => {
     window.location.href = routerLink;
   };
+
   return (
     <StyledAlertModal
       width={width}

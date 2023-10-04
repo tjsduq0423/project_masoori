@@ -3,18 +3,18 @@ import styled from "styled-components";
 import background from "@/assets/img/background/silkBackground.jpg";
 import TarotCard from "@/components/tarotCard";
 import tarotCardFront from "@/assets/img/tarotCard/tarotCardFront.png";
-import tarotCardBack from "@/assets/img/tarotCard/tarotCardBack.png";
 import HashTag from "@/components/hashtag";
 import TextBubble from "@/components/textBubble";
 import { StyledTextBubbleProps } from "@/types/luckType";
 import GhostModal from "@/components/ghostModal";
 import AlertModal from "@/components/alertModal";
-import puzzle from "@/assets/img/puzzle.png";
 import { useRecoilState, useRecoilValue } from "recoil";
-import VerifyNumberModal from "@/components/verifyNumberModal";
 import { useGetConsumeId } from "@/apis/spend/Queries/useGetConsumeId";
 import { spendInfoState } from "@/states/spendState";
 import { spendIdState } from "@/states/dictionaryState";
+import { useProfileImage } from "@/apis/menu/Mutations/useProfileImage";
+import { toast } from "react-toastify";
+import ShareModal from "@/components/shareModal";
 
 const PageContainer = styled.div`
   position: fixed;
@@ -90,21 +90,22 @@ const ModalContainer = styled.div<{ isOpen: boolean }>`
   z-index: 3;
 `;
 
-const PuzzleModalContainer = styled.div<{ isPuzzleOpen: boolean }>`
+const ShareModalContainer = styled.div<{ isShareOpen: boolean }>`
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px;
-  display: ${(props) => (props.isPuzzleOpen ? "block" : "none")};
+  display: ${(props) => (props.isShareOpen ? "block" : "none")};
   z-index: 3;
 `;
 
 const SpendPage: React.FC = () => {
   const spendId = useRecoilValue(spendIdState);
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 여부 상태
-  const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [ConsumeIdInfo, setConsumeIdInfo] = useRecoilState(spendInfoState);
+  const profileImage = useProfileImage();
 
   const consume = useGetConsumeId(spendId);
 
@@ -119,20 +120,26 @@ const SpendPage: React.FC = () => {
 
   // 모달 열기 함수
   const openModal = () => {
-    setIsModalOpen(true);
+    setIsShareModalOpen(true);
   };
 
   // 모달 닫기 함수
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsShareModalOpen(false);
   };
 
-  const openPuzzleModal = () => {
-    setIsPuzzleModalOpen(true);
+  const settingProfileImage = async () => {
+    try {
+      // 이름과 전화번호를 사용하여 SMS를 보냅니다.
+      await profileImage.mutateAsync(consume.card.id);
+      toast.info("🃏 프로필 카드 등록 완료 🃏");
+    } catch (error) {
+      console.error("인증 코드 전송 실패:", error);
+    }
   };
 
-  const closePuzzleModal = () => {
-    setIsPuzzleModalOpen(false);
+  const closeShareModal = () => {
+    setIsShareModalOpen(false);
   };
 
   const titleTextBubbleProps: StyledTextBubbleProps = {
@@ -158,7 +165,7 @@ const SpendPage: React.FC = () => {
   };
 
   const crystalTextBubbleProps: StyledTextBubbleProps = {
-    text: `🔮 마녀에게 손을 내민다 🔮`,
+    text: `🖼 해당 카드를 프로필 이미지로 설정한다. 🖼`,
     width: "650px",
     background: "#4D1B2D80",
     opacity: "1",
@@ -182,7 +189,6 @@ const SpendPage: React.FC = () => {
   return (
     <div>
       <PageContainer>
-        <VerifyNumberModal />
         <ContentContainer>
           <CardContainer>
             <TarotCard
@@ -190,10 +196,11 @@ const SpendPage: React.FC = () => {
               height="402px"
               cardWidth="100%"
               cardSrc={tarotCardFront}
-              imageSrc={tarotCardBack}
+              imageSrc={consume.card.imagePath}
               bottomImageWidth="100%"
               text={`${ConsumeIdInfo.card.name}`}
               fontsize="20px"
+              bottom="18px"
             ></TarotCard>
           </CardContainer>
           <TitleContainer>
@@ -210,7 +217,7 @@ const SpendPage: React.FC = () => {
               <TextBubbleContainer>
                 <TextBubble {...contentTextBubbleProps} />
               </TextBubbleContainer>
-              <TextBubbleContainer onClick={openPuzzleModal}>
+              <TextBubbleContainer onClick={settingProfileImage}>
                 <TextBubble {...crystalTextBubbleProps} />
               </TextBubbleContainer>
               <TextBubbleContainer onClick={openModal}>
@@ -221,34 +228,12 @@ const SpendPage: React.FC = () => {
           <ModalContainer isOpen={isModalOpen}>
             <GhostModal zIndex={"3"} toggleModal={toggleModal} />
           </ModalContainer>
-          <PuzzleModalContainer isPuzzleOpen={isPuzzleModalOpen}>
-            <AlertModal
-              width="600px"
-              topText="퍼즐을 찾았어요"
-              middleText="우리 함께 살펴볼까요?"
-              bottomText="내 진행상황 보러가기"
-              imageUrl={puzzle} // 이미지 경로
-              topTextColor="#5E3A66"
-              middleTextColor="#5E3A66"
-              bottomTextColor="#EAE2ED"
-              upperSectionBackground="#EAE2ED"
-              lowerSectionBackground="#5E3A66"
-              topTextFontSize="28px"
-              middleTextFontSize="18px"
-              bottomTextFontSize="20px"
-              topTextPaddingTopBottom="20px"
-              middleTextPaddingTopBottom="6px"
-              middleTextPaddingLeftRight="0px"
-              topTextFontWeight="bold"
-              middleTextFontWeight="medium"
-              bottomTextFontWeight="medium"
-              zIndex={"3"}
-              routerLink="/dictionary"
-            />
-          </PuzzleModalContainer>
+          <ShareModalContainer isShareOpen={isShareModalOpen}>
+            <ShareModal />
+          </ShareModalContainer>
         </ContentContainer>
         <Backdrop isOpen={isModalOpen} onClick={closeModal} />
-        <Backdrop isOpen={isPuzzleModalOpen} onClick={closePuzzleModal} />
+        <Backdrop isOpen={isShareModalOpen} onClick={closeShareModal} />
       </PageContainer>
     </div>
   );

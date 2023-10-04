@@ -1,5 +1,4 @@
 import {
-  NowDateInfo,
   SSEInfo,
   SpendInfo,
   UserSms,
@@ -23,11 +22,9 @@ export const userVerifyInfoState = atom<UserVerifyInfo>({
   default: {} as UserVerifyInfo,
 });
 
-export const nowDateInfoState = atom<NowDateInfo>({
+export const nowDateInfoState = atom<string>({
   key: "nowDateInfoState",
-  default: {
-    nowDate: "",
-  },
+  default: "",
 });
 
 export const spendInfoState = atom<SpendInfo>({

@@ -14,3 +14,8 @@ export const specialIdState = atom<number>({
   key: "specialIdState",
   default: 13,
 });
+
+export const specialImageUrlState = atom<string>({
+  key: "specialImageUrlState",
+  default: "",
+});

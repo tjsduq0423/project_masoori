@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import SignUpModalFront from "@/assets/img/signCard/signUpModalFront.png";
+import tarotPhoneVerify from "@/assets/img/tarotPhoneVerify.png";
 import styled from "styled-components";
 // import { useNavigate } from "react-router-dom";
 import { usePostSms } from "@/apis/main/Mutations/usePostSms";
 import { usePostSmsCheck } from "@/apis/main/Mutations/usePostSmsCheck";
 import { usePostConsume } from "@/apis/main/Mutations/usePostConsume";
+import { toast } from "react-toastify";
 
 interface ImgProps {
   loaded: boolean;
@@ -25,7 +26,7 @@ const SignUpFrontImg = styled.div<ImgProps>`
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
-  background-image: url(${SignUpModalFront});
+  background-image: url(${tarotPhoneVerify});
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -122,9 +123,9 @@ const VerifyNumberModal = () => {
         phoneNumber: phonenumber,
       });
 
-      console.log("인증 코드 전송 성공");
+      toast.info("✉ 인증 코드 전송 성공 ✉");
     } catch (error) {
-      console.error("인증 코드 전송 실패:", error);
+      toast.warning("✉ 인증 코드 전송 실패 ✉");
     }
   };
 
@@ -135,9 +136,9 @@ const VerifyNumberModal = () => {
         code: code,
       });
 
-      console.log("인증 코드 전송 성공");
+      toast.info("✉ 인증 코드 인증 성공 ✉");
     } catch (error) {
-      console.error("인증 코드 전송 실패:", error);
+      toast.warning("✉ 인증 코드 인증 실패 ✉");
     }
   };
 
@@ -145,7 +146,7 @@ const VerifyNumberModal = () => {
     try {
       await usePostConsumeMutation.mutateAsync();
 
-      console.log("연동 성공");
+      toast.info("⛓ 연동 성공 ⛓");
     } catch (error) {
       console.error("연동 실패:", error);
     }
@@ -153,7 +154,7 @@ const VerifyNumberModal = () => {
 
   useEffect(() => {
     const img = new Image();
-    img.src = SignUpModalFront;
+    img.src = tarotPhoneVerify;
     img.onload = () => {
       setImageLoaded(true);
     };

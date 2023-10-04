@@ -93,7 +93,7 @@ const MenuPage = () => {
       if (result?.status === 200) {
         console.log("logout");
         localStorage.removeItem("accessToken");
-        navigate("/main");
+        window.location.href = "/main";
       }
     } catch (error) {
       console.log(error);

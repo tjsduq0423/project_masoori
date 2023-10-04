@@ -3,8 +3,9 @@ import { EventSourcePolyfill, NativeEventSource } from "event-source-polyfill";
 import { Route, Routes, Navigate } from "react-router-dom";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import LoadingPage from "@/pages/loading";
+import { error } from "console";
 
-type DashboardLayout = /*unresolved*/ any;
+type DashboardLayout = any;
 
 interface RouteType {
   path: string;
@@ -92,43 +93,6 @@ const routes: RouteType[] = [
 ];
 
 const RenderRoutes = () => {
-  // const [sseData, setSSEData] = useState(null);
-
-  useEffect(() => {
-    let eventSource: EventSource | null = null;
-    const EventSource = EventSourcePolyfill || NativeEventSource;
-
-    const fetchData = () => {
-      try {
-        eventSource = new EventSource(
-          "https://masoori.site/api/sse/subscribe",
-          {
-            withCredentials: true,
-            headers: {
-              Authorization: `Bearer ${
-                localStorage.getItem("accessToken") || ""
-              }`,
-            },
-          }
-        );
-
-        eventSource.onmessage = (event) => {
-          console.log(event);
-        };
-      } catch (error) {
-        console.error("Error creating EventSource:", error);
-      }
-    };
-
-    fetchData();
-
-    return () => {
-      if (eventSource) {
-        eventSource.close();
-      }
-    };
-  }, []);
-
   return (
     <React.Suspense
       fallback={

@@ -14,9 +14,12 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   creditInfoState,
   specialIdState,
+  specialImageUrlState,
   spendIdState,
 } from "@/states/dictionaryState";
 import { useNavigate } from "react-router-dom";
+import { useProfileImage } from "@/apis/menu/Mutations/useProfileImage";
+import { toast } from "react-toastify";
 
 import cardBack from "@/assets/img/tarotCard/tarotCardBack.png";
 
@@ -24,6 +27,7 @@ import { useChallengeCard } from "@/apis/dictionary/Queries/useChallengeCard";
 import { useAllUserFortune } from "@/apis/luck/Queries/useAllUserFortune";
 import { useGetAllConsume } from "@/apis/dictionary/Queries/useGetAllConsume";
 import SpecialSelectModal from "@/components/specialSelectModal";
+import card from "@/assets/img/cardFront.png";
 
 interface Challenge {
   id: number;
@@ -137,6 +141,7 @@ const DictionaryPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSpecialModalOpen, setIsSpecialModalOpen] = useState(false);
   const specialId = useRecoilValue(specialIdState);
+  const profileImage = useProfileImage();
 
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
@@ -144,9 +149,10 @@ const DictionaryPage = () => {
 
   const setCreditInfo = useSetRecoilState(creditInfoState);
   const setSpendId = useSetRecoilState(spendIdState);
+  const setSpecialImageUrl = useSetRecoilState(specialImageUrlState);
 
   const challengeCard = useChallengeCard(specialId);
-  console.log(challengeCard);
+  setSpecialImageUrl(challengeCard.card.imagePath);
   const allUserFortune = useAllUserFortune().fortuneList;
   const AllConsume = useGetAllConsume(
     "2000-09-16T07:42:34.76",
@@ -215,6 +221,16 @@ const DictionaryPage = () => {
     setIsSpecialModalOpen(!isSpecialModalOpen);
   };
 
+  const settingProfileImage = async () => {
+    try {
+      // 이름과 전화번호를 사용하여 SMS를 보냅니다.
+      await profileImage.mutateAsync(challengeCard.card.id);
+      toast.info("🃏 프로필 카드 등록완료 🃏");
+    } catch (error) {
+      console.error("인증 코드 전송 실패:", error);
+    }
+  };
+
   const crystalChallengeBubbleProps: StyledChallengeBubbleProps = {
     text: `사실 말도 안되는 챌린지죠 그치만 어쩌겠습니까 해야지`,
     width: "340px",
@@ -226,6 +242,20 @@ const DictionaryPage = () => {
     imgLink: ChallegeSuccess,
     titleText: "소비금액 5만원 넘지 않기",
   };
+
+  const formatSpecialDateString = (SpecialdateString: string) => {
+    const date = new Date(SpecialdateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
+    const formatSpecialDateString = `${year}.${month
+      .toString()
+      .padStart(2, "0")}`;
+    return formatSpecialDateString;
+  };
+
+  const formattedSpecialDate = formatSpecialDateString(
+    challengeCard.card.createdDate
+  );
 
   return (
     <PageContainer>
@@ -278,7 +308,9 @@ const DictionaryPage = () => {
           <div>
             <SpecialHeader>
               <SpecialText>
-                2023.09 <DcitBtn onClick={openSpecialModal} text="카드변경" />
+                {formattedSpecialDate}
+                <DcitBtn onClick={settingProfileImage} text="프로필 설정" />
+                <DcitBtn onClick={openSpecialModal} text="카드변경" />
                 <DcitBtn onClick={openModal} text="공유하기" />
               </SpecialText>
             </SpecialHeader>
