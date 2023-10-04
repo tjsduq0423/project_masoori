@@ -107,7 +107,7 @@ const ContentSection = styled.div`
   width: 50%;
   height: 100%;
   padding-left: 20px;
-  margin-top: 5%;
+  margin-top: 6%;
   overflow: auto;
   margin-bottom: 300px;
 `;
@@ -333,14 +333,15 @@ const DictionaryPage = () => {
                 // 하나 이상의 챌린지의 isSuccess가 false인 경우 Tarot 카드 렌더링
                 <div
                   style={{
-                    marginRight: "30px",
-                    backgroundColor: "rgba(0, 0, 0, 0.7)",
+                    marginRight: "20px",
                     borderRadius: "20px",
+                    marginTop: "19px",
+                    marginLeft: "20px",
                   }}
                 >
                   <TarotCard
-                    width="403px"
-                    height="100%"
+                    width="405px"
+                    height="80%"
                     cardWidth="100%"
                     cardSrc={frontcard}
                     imageSrc={challengeCard.card.imagePath}
@@ -355,7 +356,7 @@ const DictionaryPage = () => {
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "space-around",
+                  gap: "15px",
                 }}
               >
                 {challengeCard.challengeList.map(
