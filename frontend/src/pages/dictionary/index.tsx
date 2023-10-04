@@ -235,11 +235,11 @@ const DictionaryPage = () => {
 
   const crystalChallengeBubbleProps: StyledChallengeBubbleProps = {
     text: `사실 말도 안되는 챌린지죠 그치만 어쩌겠습니까 해야지`,
-    width: "340px",
+    width: "300px",
     background: "#4D1B2D80",
     opacity: "1",
     paddingLeftRight: "40px",
-    paddingTopBottom: "30px",
+    paddingTopBottom: "20px",
     borderRadius: "20px",
     imgLink: ChallegeSuccess,
     titleText: "소비금액 5만원 넘지 않기",
@@ -340,7 +340,7 @@ const DictionaryPage = () => {
                   }}
                 >
                   <TarotCard
-                    width="405px"
+                    width="365px"
                     height="80%"
                     cardWidth="100%"
                     cardSrc={frontcard}
@@ -354,6 +354,7 @@ const DictionaryPage = () => {
               )}
               <div
                 style={{
+                  marginTop: "50px",
                   display: "flex",
                   flexDirection: "column",
                   gap: "15px",
