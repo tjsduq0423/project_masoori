@@ -14,10 +14,6 @@ interface UserVerifyInfo {
   code: string;
 }
 
-interface NowDateInfo {
-  nowDate: string;
-}
-
 interface SpendInfo {
   card: {
     id: number;
@@ -41,11 +37,4 @@ interface SSEInfo {
   timeout: number;
 }
 
-export type {
-  UserSms,
-  UserSmsCheck,
-  UserVerifyInfo,
-  NowDateInfo,
-  SpendInfo,
-  SSEInfo,
-};
+export type { UserSms, UserSmsCheck, UserVerifyInfo, SpendInfo, SSEInfo };

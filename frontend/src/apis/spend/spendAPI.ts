@@ -1,4 +1,7 @@
 import { instance } from "@/apis/instance";
+import { toast } from "react-toastify";
+import { useRecoilState } from "recoil";
+import { nowDateInfoState } from "@/states/spendState";
 
 const postGhost = async () => {
   try {
@@ -47,15 +50,13 @@ const getConsumeRecent = async (nowDate: string) => {
       error.response.status === 400 &&
       error.response.data.code === "C009"
     ) {
-      alert("카드 생성 중입니다. error code : C009");
-      console.error("400 에러가 발생했습니다.");
+      toast.info("🃏 아직 카드 생성중... 🃏");
     } else if (
       error.response &&
       error.response.status === 400 &&
       error.response.data.code === "C008"
     ) {
-      alert("카드 생성 중입니다. error code : C008");
-      console.error("400 에러가 발생했습니다.");
+      return "인증";
     } else {
       // 다른 에러 처리
       console.error("API 연동 오류 - getConsumeRecent:", error);
