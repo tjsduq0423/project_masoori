@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ChallengeSubService {
 	private final CardService cardService;
 	private final UserRepository userRepository;
-	private final NotificationService notificationService;
 
 	@RabbitListener(queues = "challenge.res")
 	public void subscribeChallengeQueue(GeneratedChallengeCard generatedChallengeCard) {
@@ -27,7 +26,6 @@ public class ChallengeSubService {
 		String email = userRepository.findById(generatedChallengeCard.getUserId())
 		                             .orElseThrow(() -> new UserNotFoundException("User is Not Found"))
 		                             .getEmail();
-		//sse 사용자 알리기.
-		notificationService.notify(email, "ChallengeCard is generated");
+		// 여기
 	}
 }

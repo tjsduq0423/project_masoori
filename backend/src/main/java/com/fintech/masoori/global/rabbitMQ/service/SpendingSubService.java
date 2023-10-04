@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 public class SpendingSubService {
 	private final CardService cardService;
 	private final UserRepository userRepository;
-	private final NotificationService notificationService;
 
 	@RabbitListener(queues = "spending.res")
 	public void subscribeSpendingQueue(GeneratedSpendingCard generatedSpendingCard) {
@@ -27,7 +26,6 @@ public class SpendingSubService {
 		String email = userRepository.findById(generatedSpendingCard.getUserId())
 		                             .orElseThrow(() -> new UserNotFoundException("User is Not Found"))
 		                             .getEmail();
-		//sse 사용자 알리기.
-		notificationService.notify(email, "SpendingCard is generated");
+		//여기.
 	}
 }

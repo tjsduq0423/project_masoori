@@ -16,15 +16,27 @@ import lombok.ToString;
 @Builder
 @ToString
 public class Transaction {
+	private Long id;
 	private LocalDateTime date;
 	private String content;
 	private Integer amount;
 	private String dealPlaceName;
 
 	public Transaction(Deal deal) {
+		this.id = deal.getId();
 		this.date = deal.getDate();
 		this.content = deal.getContent();
 		this.amount = deal.getAmount();
 		this.dealPlaceName = deal.getDealPlaceName();
+	}
+
+	public Deal toEntity() {
+		return Deal.builder()
+		           .id(this.id)
+		           .date(this.date)
+		           .content(this.content)
+		           .amount(this.amount)
+		           .dealPlaceName(this.dealPlaceName)
+		           .build();
 	}
 }

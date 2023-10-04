@@ -7,7 +7,6 @@ import com.fintech.masoori.domain.analytics.service.MonthlySpendingAnalyticsServ
 import com.fintech.masoori.domain.credit.service.CreditCardService;
 import com.fintech.masoori.domain.user.service.UserService;
 import com.fintech.masoori.global.rabbitMQ.dto.MonthlySpendingAndCreditcard;
-import com.fintech.masoori.global.sse.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class AnalyticsSubService {
-	private UserService userService;
-	private MonthlySpendingAnalyticsService monthlySpendingAnalyticsService;
-	private CreditCardService creditCardService;
-	private NotificationService notificationService;
+	private final UserService userService;
+	private final MonthlySpendingAnalyticsService monthlySpendingAnalyticsService;
+	private final CreditCardService creditCardService;
 
 	@RabbitListener(queues = "analytics.res")
 	public void subscribe(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard) {
@@ -28,8 +26,7 @@ public class AnalyticsSubService {
 		creditCardService.saveRecommendedCreditCard(monthlySpendingAndCreditcard);
 
 		String email = userService.findById(monthlySpendingAndCreditcard.getUserId()).getEmail();
-		notificationService.notify(email, "Monthly analytics and card recommendations completed");
-
+		// 여기
 	}
 
 }
