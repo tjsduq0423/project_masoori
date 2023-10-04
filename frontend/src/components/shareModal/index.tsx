@@ -9,6 +9,8 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 // import { useScript } from "@/shareHook/hook";
 import { useEffect } from "react";
 import shareKakaoIcon from "@/assets/img/shareIcon/shareKakao.webp";
+import { useRecoilValue } from "recoil";
+import { specialImageUrlState } from "../../states/dictionaryState";
 
 // 제목과 버튼을 감싸는 컨테이너
 const FlexContainer = styled.div`
@@ -52,6 +54,7 @@ const ShareModal = () => {
   const { Kakao } = window;
   const realUrl = "https://masoori.site/";
   const currentUrl = window.location.href;
+  const specialImageUrl = useRecoilValue(specialImageUrlState);
 
   // 재랜더링시에 실행되게 해준다.
   useEffect(() => {
@@ -69,8 +72,7 @@ const ShareModal = () => {
       content: {
         title: "소비패턴 길잡이, 마수리",
         description: "마녀가 직접 봐주는 나의 소비패턴 타로카드!",
-        imageUrl:
-          "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791197880285.jpg",
+        imageUrl: specialImageUrl,
         link: {
           webUrl: realUrl,
         },
