@@ -76,6 +76,7 @@ const LoginBackImg = styled.div`
   background-size: contain;
   background-repeat: no-repeat;
   z-index: 1;
+  transition: opacity 0.5s ease-in-out;
 `;
 
 interface DashboardLayoutProps {
