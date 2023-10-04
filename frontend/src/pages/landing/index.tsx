@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import LandingPage from "@/assets/img/LandingPageTest.jpg";
 import LandingMainLogo from "@/assets/img/LandingMainLogo.png";
-import FinanceLuckCards from "@/assets/img/FinanceLuckCards.png";
+import LandingTarot from "@/assets/img/landingImage/landingTarot.png";
 import CreditCards from "@/assets/img/CreditCards.png";
 import Trophy from "@/assets/img/Trophy.png";
 import Bottles from "@/assets/img/Bottles.png";
@@ -196,7 +196,7 @@ const Page35Right = styled(Page24Left)`
 const Page2Photo = styled.div`
   height: 100%;
   width: 40%;
-  background-image: url(${FinanceLuckCards});
+  background-image: url(${LandingTarot});
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;

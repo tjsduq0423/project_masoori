@@ -26,6 +26,17 @@ const MainLogo = styled.div`
   background-position: center;
   background-size: contain;
   margin-left: 15px;
+
+  /* 호버 시 크기와 트랜지션 설정 */
+  transition:
+    transform 0.3s ease,
+    width 0.3s ease,
+    height 0.3s ease;
+
+  /* 호버 시 크기 확대 */
+  &:hover {
+    transform: scale(1.07); /* 크기 확대 설정 */
+  }
 `;
 
 const TransparentContainer = styled(StyledContainer)`

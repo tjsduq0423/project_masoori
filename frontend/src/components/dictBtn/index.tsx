@@ -18,6 +18,11 @@ const DictionaryButton = styled.button<StyledButtonProps>`
   font-size: 16px;
   font-weight: 700;
   margin-left: 10px;
+
+  &:hover {
+    background-color: #901818; /* 호버 시 배경색 변경 */
+    color: white;
+  }
 `;
 
 const DcitBtn = ({ text, width, height, onClick }: StyledButtonProps) => {

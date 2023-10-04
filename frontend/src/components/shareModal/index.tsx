@@ -53,7 +53,7 @@ const URLShareButton = styled.button`
 const ShareModal = () => {
   const { Kakao } = window;
   const realUrl = "https://masoori.site/";
-  const currentUrl = window.location.href;
+  // const currentUrl = window.location.href;
   const specialImageUrl = useRecoilValue(specialImageUrlState);
 
   // 재랜더링시에 실행되게 해준다.
