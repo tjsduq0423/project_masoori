@@ -24,7 +24,7 @@ const Container = styled.div<StyledSpecialSelectModalProps>`
 `;
 
 const Card = styled.div`
-  height: 215px;
+  height: 340px;
   position: relative;
   overflow: hidden;
   border-radius: 8px;
@@ -59,7 +59,7 @@ const P = styled.p`
 const Img = styled.img`
   position: absolute;
   top: 0;
-  height: 110%;
+  height: 120%;
   width: 100%;
   z-index: -1;
   transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);

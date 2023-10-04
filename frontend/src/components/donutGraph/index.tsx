@@ -88,7 +88,7 @@ function DonutChart({ value, valuelabel, size, strokewidth }: DonutChartProps) {
       />
       <DonutText x={halfsize} y={halfsize} style={{ textAnchor: "middle" }}>
         <DonutTextVal>{value}</DonutTextVal>
-        <DonutTextPercent>만원</DonutTextPercent>
+        <DonutTextPercent>%</DonutTextPercent>
         <DonutTextLabel x={halfsize} y={halfsize + 17} fill="#DACBD7">
           {valuelabel}
         </DonutTextLabel>
