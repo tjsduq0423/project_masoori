@@ -6,6 +6,7 @@ import { useAllCreditCard } from "@/apis/dictionary/Queries/useAllCreditCard";
 import MonthSpendCarousel from "@/components/monthSpend";
 import { useRecoilValue } from "recoil";
 import { creditInfoState } from "@/states/dictionaryState";
+import { toast } from "react-toastify";
 
 import tarotback from "@/assets/img/tarotCard/tarotCardBack.png";
 
@@ -275,8 +276,12 @@ const CardRecommend = () => {
 
   const handleRegistBtnClick = () => {
     // Use window.location.href to navigate to the specified link
-    // console.log(currentSlideIndex.registerPath);
-    window.open(currentSlideIndex.registerPath, "_blank");
+
+    if (currentSlideIndex.registerPath) {
+      window.open(currentSlideIndex.registerPath, "_blank");
+    } else {
+      toast.warning("온라인 신청이 불가합니다");
+    }
   };
 
   useEffect(() => {
