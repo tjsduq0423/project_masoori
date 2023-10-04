@@ -106,7 +106,10 @@ const SettingFinancialGoals: React.FC<MyComponentProps> = ({
 
   const handleSetGoals = async () => {
     try {
-      const result = await setGoals.mutateAsync(goalValue);
+      const price = goalValue.monthlySpendingGoal * 10000;
+      const result = await setGoals.mutateAsync({
+        monthlySpendingGoal: price,
+      });
       console.log(result);
       if (result?.status === 200) {
         toast.info("💲 변경되었습니다 💲");
@@ -121,7 +124,7 @@ const SettingFinancialGoals: React.FC<MyComponentProps> = ({
     <Container>
       <CardImg>
         <Context>
-          <FormLabel>이번달 목표 ( 30일 기준 )</FormLabel>
+          <FormLabel>이번달 목표 ( 30일 기준 ) [ 단위 : 만원 ]</FormLabel>
           <Input
             value={goalValue.monthlySpendingGoal}
             onChange={(e) =>
