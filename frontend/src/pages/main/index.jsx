@@ -24,8 +24,9 @@ import VerifyNumberModal from "@/components/verifyNumberModal";
 import { useRecoilState } from "recoil";
 import { nowDateInfoState } from "@/states/spendState";
 import { useGetConsumeRecent } from "@/apis/spend/Queries/useGetConsumeRecent";
-import { spendIdState } from "@/states/dictionaryState";
+import { spendIdState, specialIdState } from "@/states/dictionaryState";
 import { modalOpenState } from "@/states/userState";
+import { usePostConsume } from "@/apis/main/Mutations/usePostConsume";
 
 //verifymodal
 
@@ -417,18 +418,38 @@ const MainPage = () => {
     setIsVerifyModalOpen(false);
   };
 
+  const closeVerifyModal = () => {
+    setIsVerifyModalOpen(false);
+    setIsAuth(true);
+  };
+
   // 로그인 사용자 userInfo:isAuthenticated 체크
   const [spendId, setSpendId] = useRecoilState(spendIdState);
   const [nowDateInfo, setNowDateInfo] = useRecoilState(nowDateInfoState);
   const [isLogin, setIsLogin] = useState("");
+  const [isAuth, setIsAuth] = useState(false);
+
+  const usePostConsumeMutation = usePostConsume();
+
+  const postConsumeHandler = useCallback(async () => {
+    try {
+      await usePostConsumeMutation.mutateAsync();
+      toast.info("⛓ 연동 성공 ⛓");
+    } catch (error) {
+      console.error("연동 실패:", error);
+    }
+  }, [usePostConsumeMutation]);
 
   const consumeRecent = useGetConsumeRecent(nowDateInfo);
   const userInfo = useUserInfo(isLogin);
 
+  console.log(userInfo);
+
   useEffect(() => {
     setNowDateInfo("");
     if (consumeRecent === "인증") {
-      setIsVerifyModalOpen(!isVerifyModalOpen);
+      console.log("인증");
+      postConsumeHandler();
     }
 
     if (consumeRecent && consumeRecent.card) {
@@ -437,7 +458,14 @@ const MainPage = () => {
       console.log(spendId);
       window.location.href = "/spend";
     }
-  }, [consumeRecent, setNowDateInfo, setSpendId, spendId, isVerifyModalOpen]);
+  }, [
+    consumeRecent,
+    setNowDateInfo,
+    setSpendId,
+    spendId,
+    isVerifyModalOpen,
+    postConsumeHandler,
+  ]);
 
   useEffect(() => {
     // Check if there is an accessToken in localStorage
@@ -449,7 +477,7 @@ const MainPage = () => {
 
   const checkAuth = () => {
     if (isLogin === "true") {
-      if (userInfo.isAuthenticated !== undefined) {
+      if (userInfo.isAuthenticated === true || isAuth === true) {
         const currentDate = new Date();
         currentDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
         const initialEndDate = currentDate.toISOString().slice(0, -2);
@@ -521,7 +549,7 @@ const MainPage = () => {
         </div>
       </main>
       <ModalContainer isOpen={isVerifyModalOpen}>
-        <VerifyNumberModal />
+        <VerifyNumberModal closeModal={closeVerifyModal} />
       </ModalContainer>
       <Backdrop isOpen={isVerifyModalOpen} onClick={closeModal} />
     </div>

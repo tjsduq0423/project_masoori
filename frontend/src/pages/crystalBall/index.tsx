@@ -135,7 +135,7 @@ const CrystalBallPage = () => {
           <AlertModal
             width="550px"
             topText={`Lucky ${isColor.colorName}`}
-            middleText={`${isColor.description}`}
+            middleText={`${isColor.description.replace(/\\n/g, "<br/>")}`}
             bottomText="메인으로 돌아가기"
             imageUrl={`${isColor.imagePath}`}
             topTextColor={`${isColor.color}`}
