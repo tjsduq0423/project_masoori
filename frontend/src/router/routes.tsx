@@ -48,6 +48,11 @@ const routes: RouteType[] = [
     element: React.lazy(() => import("@/pages/luck")),
   },
   {
+    path: "/userluck",
+    layout: DashboardLayout,
+    element: React.lazy(() => import("@/pages/userLuck")),
+  },
+  {
     path: "/luckcontent",
     layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/luckContent")),

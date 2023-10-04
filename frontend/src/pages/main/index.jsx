@@ -18,6 +18,7 @@ import money from "../../assets/img/mainLogo/money.png";
 import dictionary from "../../assets/img/mainLogo/dictionary.jpg";
 import masooriStory from "../../assets/img/mainLogo/masooriStory.jpg";
 import spendtarot from "../../assets/img/mainLogo/spendtarot.jpg";
+import { toast } from "react-toastify";
 
 import VerifyNumberModal from "@/components/verifyNumberModal";
 import { useRecoilState } from "recoil";
@@ -393,7 +394,14 @@ const MainPage = () => {
   };
 
   const navigateLuck = () => {
-    navigate("/luck");
+    if (isLogin === "true") {
+      navigate("/userluck");
+    } else {
+      toast.info("비로그인 시 카드 저장 불가");
+      setTimeout(() => {
+        navigate("/luck");
+      }, 1000); // 1초 뒤에 "/luck"으로 이동
+    }
   };
 
   const navigateDictionary = () => {

@@ -89,14 +89,7 @@ const LuckContentPage = () => {
     hoverable: false,
   };
 
-  // const formattedDescription = luckInfo.description
-  //   .split("\n")
-  //   .map((line, index) => (
-  //     <React.Fragment key={index}>
-  //       {line}
-  //       <br />
-  //     </React.Fragment>
-  //   ));
+  console.log(luckInfo.description.split("\n").join("<br>"));
 
   const contentTextBubbleProps: StyledTextBubbleProps = {
     text: `${luckInfo.description.replace(/\n/g, "<br>")}`, // \n을 <br>로 대체

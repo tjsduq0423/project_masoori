@@ -3,7 +3,7 @@ import styled from "styled-components";
 import CardFlip from "@/components/cardFlip";
 import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
-import { useFortune } from "@/apis/luck/Queries/useFortune"; // useFortune 훅 불러오기
+import { useUserFortune } from "@/apis/luck/Queries/useUserFortune";
 import { luckInfoState } from "@/states/luckState";
 
 import background from "@/assets/img/background/capetBackground.jpg";
@@ -48,14 +48,13 @@ const CardSection = styled.div`
   flex-grow: 1;
 `;
 
-const MoneyLuckPage = () => {
+const MoneyUserLuckPage = () => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [luckInfo, setLuckInfo] = useRecoilState(luckInfoState);
-
   const navigate = useNavigate();
 
   // useFortune 훅을 사용하여 데이터 가져오기
-  const fortune = useFortune();
+  const fortune = useUserFortune();
 
   useEffect(() => {
     setLuckInfo(fortune);
@@ -99,4 +98,4 @@ const MoneyLuckPage = () => {
   );
 };
 
-export default MoneyLuckPage;
+export default MoneyUserLuckPage;
