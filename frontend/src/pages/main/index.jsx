@@ -18,7 +18,7 @@ import money from "../../assets/img/mainLogo/money.png";
 import dictionary from "../../assets/img/mainLogo/dictionary.jpg";
 import masooriStory from "../../assets/img/mainLogo/masooriStory.jpg";
 import spendtarot from "../../assets/img/mainLogo/spendtarot.jpg";
-import tarotPhoneVerify from "@/assets/img/tarotPhoneVerify.png";
+
 import VerifyNumberModal from "@/components/verifyNumberModal";
 import { userInfoState } from "@/states/userState";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -26,6 +26,7 @@ import { nowDateInfoState } from "@/states/spendState";
 import { useGetConsumeRecent } from "@/apis/spend/Queries/useGetConsumeRecent";
 import { usePostSSESendData } from "@/apis/spend/Mutations/usePostSSESendData";
 import { useGetSSESubscribe } from "@/apis/spend/Queries/useGetSSESubscribe";
+import { spendIdState } from "@/states/dictionaryState";
 
 //verifymodal
 
@@ -393,12 +394,10 @@ const MainPage = () => {
     navigate("/luck");
   };
 
-  // const navigateSpend = () => {
-  //   navigate("/spend");
-  // };
-
   const navigateDictionary = () => {
-    navigate("/dictionary");
+    if (isLogin === "true") {
+      navigate("/dictionary");
+    }
   };
 
   //modal
@@ -415,40 +414,51 @@ const MainPage = () => {
   };
 
   // 로그인 사용자 userInfo:isAuthenticated 체크
-
+  const [spendId, setSpendId] = useRecoilState(spendIdState);
   const [nowDateInfo, setNowDateInfo] = useRecoilState(nowDateInfoState);
-  const [initialStartDate, setInitialStartDate] = useState("");
   const [isLogin, setIsLogin] = useState("");
 
-  // const nowDateTime = useGetConsumeRecent(initialStartDate);
+  const consumeRecent = useGetConsumeRecent(nowDateInfo);
   const userInfo = useUserInfo(isLogin);
+
+  useEffect(() => {
+    setNowDateInfo("");
+    if (consumeRecent === "인증") {
+      setIsModalOpen(!isModalOpen);
+    }
+
+    if (consumeRecent && consumeRecent.card) {
+      // Access consumeRecent.card safely
+      setSpendId(consumeRecent.card.id);
+      console.log(spendId);
+      window.location.href = "/spend";
+    }
+  }, [consumeRecent, setNowDateInfo, setSpendId, spendId, isModalOpen]);
 
   useEffect(() => {
     // Check if there is an accessToken in localStorage
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       setIsLogin("true"); // accessToken이 있으면 isLogin을 true로 설정
-      console.log(userInfo);
     }
   }, [userInfo]);
 
   const checkAuth = () => {
-    if (userInfo.isAuthenticated) {
-      const currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
-      const currentSetDate = currentDate.toISOString().slice(0, -2);
-      console.log(currentSetDate);
-
-      setInitialStartDate(currentSetDate);
-      console.log("true라 recent를 호출할거임");
-      console.log("true라 recent를 호출했음");
-    } else if (userInfo.isAuthenticated === false) {
-      console.log("false라 모달이 떴음");
-      setIsModalOpen(!isModalOpen);
+    if (isLogin === "true") {
+      if (userInfo.isAuthenticated !== undefined) {
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
+        const initialEndDate = currentDate.toISOString().slice(0, -2);
+        setNowDateInfo(initialEndDate);
+        console.log("true라 recent를 호출할거임");
+      } else {
+        console.log("false라 모달이 떴음");
+        setIsModalOpen(!isModalOpen);
+      }
+    } else {
+      console.log("하이");
     }
   };
-
-  // console.log(nowDateTime);
 
   return (
     <div className="body">
