@@ -221,10 +221,10 @@ public class CardServiceImpl implements CardService {
 	}
 
 	@Override
-	public Long selectRecentlyChallengeCard(String email) {
+	public Long findTopByUserIdRecentlyChallengeCard(String email) {
 		User loginUser = userRepository.findUserByEmail(email);
 		LocalDateTime now = LocalDateTime.now();
-		Card recentlyChallengeCard = cardRepository.selectRecentlyChallengeCard(loginUser.getId(), CardType.SPECIAL, now);
+		Card recentlyChallengeCard = cardRepository.findTopByUserIdRecentlyChallengeCard(loginUser.getId(), CardType.SPECIAL, now);
 		return recentlyChallengeCard.getId();
 	}
 

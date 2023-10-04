@@ -1,5 +1,6 @@
 package com.fintech.masoori.domain.card.repository;
 
+import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,6 +26,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
 	Card findCardByUserIdAndId(Long userId, Long id);
 
-	@Query("SELECT c FROM Card c WHERE c.user.id = :userId AND c.cardType = :type AND c.createdDate <= :now ")
-	Card selectRecentlyChallengeCard(@Param("userId") long userId, @Param("type") CardType type, @Param("now")LocalDateTime now);
+	@Query("SELECT c FROM Card c WHERE c.user.id = :userId AND c.cardType = :type AND c.createdDate <= :now ORDER BY c.createdDate DESC")
+	Card findTopByUserIdRecentlyChallengeCard(@Param("userId") long userId, @Param("type") CardType type, @Param("now")LocalDateTime now);
 }

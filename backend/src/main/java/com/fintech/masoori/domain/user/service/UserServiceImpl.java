@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public InfoRes getUserInfo(String email) {
 		User user = userRepository.findUserByEmail(email);
-		Long challengeCardId = cardService.selectRecentlyChallengeCard(user.getEmail());
+		Long challengeCardId = cardService.findTopByUserIdRecentlyChallengeCard(user.getEmail());
 		// 오늘 기준
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime nowEnd = now.withHour(23).withMinute(59).withSecond(59);
