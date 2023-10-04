@@ -158,7 +158,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             >
               <MainLogo
                 onClick={() => {
-                  navigate("/main");
+                  window.location.href = "/main";
                 }}
               />
               <MenuButtonImage src={MenuButton} onClick={navigatePage} />
@@ -178,7 +178,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           >
             <MainLogo
               onClick={() => {
-                navigate("/main");
+                window.location.href = "/main";
               }}
             />
             <MenuButtonImage src={MenuButton} onClick={navigatePage} />
