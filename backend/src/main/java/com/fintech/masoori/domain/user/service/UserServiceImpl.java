@@ -227,16 +227,16 @@ public class UserServiceImpl implements UserService {
 		String name = sendSmsReq.getName();
 		String phoneNumber = sendSmsReq.getPhoneNumber();
 		userRepository.updateInfo(loginUser.getEmail(), name, phoneNumber);
-		sendSms(loginUser);
+		sendAuthcode(loginUser);
 	}
 
-	public void sendSms(User user) {
+	public void sendAuthcode(User user) {
 		// 인증코드 redis 서버에 저장 후 메시지 발송
 		String phoneNumber = user.getPhoneNumber();
 		String code = smsService.createCode(6);
 		redisService.setSmsCode(phoneNumber, code);
 		try {
-			smsService.sendSms(phoneNumber, code);
+			smsService.sendAuthcode(phoneNumber, code);
 		} catch (CoolsmsException e) {
 			redisService.deleteSmsCode(phoneNumber);
 			throw new SmsMessagingException("Failed To Send Email");
