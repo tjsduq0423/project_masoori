@@ -79,4 +79,9 @@ public class Card extends BaseTimeEntity {
 		user.getCardList().add(this);
 	}
 
+	public void cardUpdate(String name, String imagePath, String description) {
+		this.name = name;
+		this.imagePath = imagePath;
+		this.description = description;
+	}
 }

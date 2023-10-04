@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class GeneratedSpendingCard {
-	private Long userId;
+	private Long cardId;
 	private String name;
 	private String imagePath;
 	private String description;

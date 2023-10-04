@@ -30,14 +30,6 @@ def callback(ch, method, properties, body):
     # body가 spring boot 서버에서 받은 데이터임 - parsing 해야할 수 있음.data = json.loads(received_message) 이런식으로
     print(f"Received {json.loads(body)}")
 
-    # 다시 처리 완료 된 값을 메시지로 파싱 - class 형태 -> json.dump 사용하여 json으로 변환 후 직렬화해서 전달
-    # import json
-    # data = {  # 예시
-    #     'name': 'John',
-    #     'age': 30,
-    #     'city': 'New York'
-    # }
-    # response = json.dumps(data)
 
     # 파싱된 메시지 큐로 전달
     ch.basic_publish(exchange="", routing_key=pub_queue_name, body=body)

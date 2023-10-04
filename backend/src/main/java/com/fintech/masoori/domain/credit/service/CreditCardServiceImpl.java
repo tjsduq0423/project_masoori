@@ -50,14 +50,12 @@ public class CreditCardServiceImpl implements CreditCardService {
 			calcDate.getStartDate(), calcDate.getEndDate());
 
 		List<CreditCardRes.CreditCard> creditCardResList = creditCardList.stream()
-																		 .map(
-																			 creditCardUser -> new CreditCardRes.CreditCard(
-																				 creditCardUser.getCreditCard()))
-																		 .collect(Collectors.toList());
+		                                                                 .map(
+			                                                                 creditCardUser -> new CreditCardRes.CreditCard(
+				                                                                 creditCardUser.getCreditCard()))
+		                                                                 .collect(Collectors.toList());
 
-		return CreditCardRes.builder()
-							.creditCardList(creditCardResList)
-							.build();
+		return CreditCardRes.builder().creditCardList(creditCardResList).build();
 	}
 
 	@Override
@@ -73,20 +71,18 @@ public class CreditCardServiceImpl implements CreditCardService {
 	@Transactional
 	public void saveRecommendedCreditCard(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard) {
 		User serviceUser = userRepository.findById(monthlySpendingAndCreditcard.getUserId())
-										 .orElseThrow(() -> new RuntimeException("User Not Found"));
+		                                 .orElseThrow(() -> new RuntimeException("User Not Found"));
 
 		for (MonthlySpendingAndCreditcard.RecommendedCreditCard recommendedCreditCard : monthlySpendingAndCreditcard.getCreditCardList()) {
 			CreditCard creditCard = creditCardRepository.findById(recommendedCreditCard.getCreditCardId())
-														.orElseThrow(
-															() -> new InvalidIDException("Card Id is Not exist"));
+			                                            .orElseThrow(
+				                                            () -> new InvalidIDException("Card Id is Not exist"));
 
-			CreditCardUser creditCardUser = CreditCardUser.builder()
-														  .reason(recommendedCreditCard.getReason())
-														  .build();
+			CreditCardUser creditCardUser = CreditCardUser.builder().reason(recommendedCreditCard.getReason()).build();
 
-			creditCardUserRepository.save(creditCardUser);
-			serviceUser.addCreditCardUser(creditCardUser);
 			creditCard.addCreditCardUser(creditCardUser);
+			serviceUser.addCreditCardUser(creditCardUser);
+			creditCardUserRepository.save(creditCardUser);
 		}
 	}
 

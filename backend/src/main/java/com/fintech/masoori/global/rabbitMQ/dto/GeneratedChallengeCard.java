@@ -14,7 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class GeneratedChallengeCard {
-	private Long userId;
+	private Long cardId;
 	private String name;
 	private String imagePath;
 	private String description;

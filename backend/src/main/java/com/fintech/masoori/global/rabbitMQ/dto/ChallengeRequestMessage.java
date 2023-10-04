@@ -15,7 +15,7 @@ import lombok.ToString;
 @Builder
 @ToString
 public class ChallengeRequestMessage {
-	private Long userId;
+	private Long cardId;
 	@Builder.Default
-	private List<Transaction> userMonthlyTransactionList = new ArrayList<>();
+	private List<Transaction> userWeeklyTransitionList = new ArrayList<>();
 }

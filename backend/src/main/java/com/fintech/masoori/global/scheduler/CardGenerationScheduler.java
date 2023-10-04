@@ -7,12 +7,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.fintech.masoori.domain.card.service.CardService;
 import com.fintech.masoori.domain.deal.service.DealService;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.service.UserService;
 import com.fintech.masoori.global.rabbitMQ.dto.AnalyticsRequestMessage;
-import com.fintech.masoori.global.rabbitMQ.dto.ChallengeRequestMessage;
-import com.fintech.masoori.global.rabbitMQ.dto.SpendingRequestMessage;
 import com.fintech.masoori.global.rabbitMQ.dto.Transaction;
 import com.fintech.masoori.global.rabbitMQ.service.AnalyticsPubService;
 import com.fintech.masoori.global.rabbitMQ.service.ChallengePubService;
@@ -31,6 +30,7 @@ public class CardGenerationScheduler {
 	private final DealService dealService;
 	private final ChallengePubService challengePubService;
 	private final SpendingPubService spendingPubService;
+	private final CardService cardService;
 	private final AnalyticsPubService analyticsPubService;
 
 	/**
@@ -46,9 +46,9 @@ public class CardGenerationScheduler {
 			List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
 				startEndDate.getStartDate(), startEndDate.getEndDate());
 			AnalyticsRequestMessage message = AnalyticsRequestMessage.builder()
-																	 .userId(user.getId())
-																	 .userMonthlyTransactionList(transactionList)
-																	 .build();
+			                                                         .userId(user.getId())
+			                                                         .userMonthlyTransactionList(transactionList)
+			                                                         .build();
 			analyticsPubService.sendMessage(message);
 		}
 	}
@@ -61,14 +61,7 @@ public class CardGenerationScheduler {
 	public void challengeGenerateWeelky() {
 		List<User> userList = userService.findUsersByIsAuthenticated(true);
 		for (User user : userList) {
-			CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
-			List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
-				startEndDate.getStartDate(), startEndDate.getEndDate());
-			ChallengeRequestMessage message = ChallengeRequestMessage.builder()
-			                                                         .userId(user.getId())
-			                                                         .userMonthlyTransactionList(transactionList)
-			                                                         .build();
-			challengePubService.sendMessage(message);
+			cardService.createChallengeCard(user.getEmail());
 		}
 	}
 
@@ -80,16 +73,7 @@ public class CardGenerationScheduler {
 	public void spendingAnalytics() {
 		List<User> userList = userService.findUsersByIsAuthenticated(true);
 		for (User user : userList) {
-			CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
-			List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
-				startEndDate.getStartDate(), startEndDate.getEndDate());
-			SpendingRequestMessage message = SpendingRequestMessage.builder()
-			                                                       .userId(user.getId())
-			                                                       .userWeeklyTransactionList(transactionList)
-			                                                       .build();
-			spendingPubService.sendMessage(message);
+			cardService.createSpendingCard(user.getEmail());
 		}
-
 	}
-
 }

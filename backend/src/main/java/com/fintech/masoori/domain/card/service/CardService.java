@@ -2,6 +2,8 @@ package com.fintech.masoori.domain.card.service;
 
 import java.time.LocalDateTime;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.fintech.masoori.domain.card.dto.BasicCardRes;
 import com.fintech.masoori.domain.card.dto.ChallengeCardRes;
 import com.fintech.masoori.domain.card.dto.UserCardListRes;
@@ -29,6 +31,8 @@ public interface CardService {
 	void registerSpendingCard(GeneratedSpendingCard generatedSpendingCard);
 
 	void createSpendingCard(String email);
+
+	void createChallengeCard(String email);
 
 	BasicCardRes.BasicCard selectUserRecentBasicCard(String email, LocalDateTime time);
 

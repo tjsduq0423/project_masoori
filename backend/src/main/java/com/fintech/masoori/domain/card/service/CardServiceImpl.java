@@ -21,12 +21,14 @@ import com.fintech.masoori.domain.deal.service.DealService;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.exception.UserNotFoundException;
 import com.fintech.masoori.domain.user.repository.UserRepository;
+import com.fintech.masoori.global.rabbitMQ.dto.ChallengeRequestMessage;
 import com.fintech.masoori.global.rabbitMQ.dto.GeneratedChallenge;
 import com.fintech.masoori.global.rabbitMQ.dto.GeneratedChallengeCard;
 import com.fintech.masoori.global.rabbitMQ.dto.GeneratedSpending;
 import com.fintech.masoori.global.rabbitMQ.dto.GeneratedSpendingCard;
 import com.fintech.masoori.global.rabbitMQ.dto.SpendingRequestMessage;
 import com.fintech.masoori.global.rabbitMQ.dto.Transaction;
+import com.fintech.masoori.global.rabbitMQ.service.ChallengePubService;
 import com.fintech.masoori.global.rabbitMQ.service.SpendingPubService;
 import com.fintech.masoori.global.util.CalcDate;
 
@@ -39,6 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CardServiceImpl implements CardService {
 	private final SpendingPubService spendingPubService;
+	private final ChallengePubService challengePubService;
 	private final CardRepository cardRepository;
 	private final UserRepository userRepository;
 	private final DealService dealService;
@@ -119,15 +122,10 @@ public class CardServiceImpl implements CardService {
 	@Override
 	@Transactional
 	public void registerChallengeCard(GeneratedChallengeCard generatedChallengeCard) {
-		User user = userRepository.findById(generatedChallengeCard.getUserId())
-		                          .orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
-
-		Card newCard = Card.builder()
-		                   .cardType(CardType.SPECIAL)
-		                   .name(generatedChallengeCard.getName())
-		                   .description(generatedChallengeCard.getDescription())
-		                   .imagePath(generatedChallengeCard.getImagePath())
-		                   .build();
+		Card card = cardRepository.findById(generatedChallengeCard.getCardId())
+		                          .orElseThrow(() -> new CardNotFound("Card Is Not Found"));
+		card.cardUpdate(generatedChallengeCard.getName(), generatedChallengeCard.getImagePath(),
+			generatedChallengeCard.getDescription());
 
 		List<GeneratedChallenge> challenges = generatedChallengeCard.getChallenges();
 		for (GeneratedChallenge c : challenges) {
@@ -143,23 +141,17 @@ public class CardServiceImpl implements CardService {
 			                                                                                                             .endTime(
 				                                                                                                             c.getEndTime())
 			                                                                                                             .build();
-			challenge.setCard(newCard);
+			challenge.setCard(card);
 		}
-		newCard.setUser(user);
 	}
 
 	@Override
 	@Transactional
 	public void registerSpendingCard(GeneratedSpendingCard generatedSpendingCard) {
-		User user = userRepository.findById(generatedSpendingCard.getUserId())
-		                          .orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
-
-		Card newCard = Card.builder()
-		                   .cardType(CardType.BASIC)
-		                   .name(generatedSpendingCard.getName())
-		                   .description(generatedSpendingCard.getDescription())
-		                   .imagePath(generatedSpendingCard.getImagePath())
-		                   .build();
+		Card card = cardRepository.findById(generatedSpendingCard.getCardId())
+		                          .orElseThrow(() -> new CardNotFound("Card Is Not Found"));
+		card.cardUpdate(generatedSpendingCard.getName(), generatedSpendingCard.getImagePath(),
+			generatedSpendingCard.getDescription());
 
 		List<GeneratedSpending> spendings = generatedSpendingCard.getSpendings();
 		for (GeneratedSpending s : spendings) {
@@ -171,21 +163,42 @@ public class CardServiceImpl implements CardService {
 			                                                                                                 .frequency(
 				                                                                                                 s.getFrequency())
 			                                                                                                 .build();
-			basic.setCard(newCard);
+			basic.setCard(card);
 		}
-		newCard.setUser(user);
 	}
 
 	@Override
+	@Transactional
 	public void createSpendingCard(String email) {
 		// 사용자 찾기.
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
+		Card card = Card.builder().cardType(CardType.BASIC).user(user).build();
+		cardRepository.save(card);
+
 		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
 		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
 			startEndDate.getStartDate(), startEndDate.getEndDate());
+
 		// 소비 카드 생성 중인지 저장.
 		spendingPubService.sendMessage(
-			SpendingRequestMessage.builder().userId(user.getId()).userWeeklyTransactionList(transactionList).build());
+			SpendingRequestMessage.builder().cardId(card.getId()).userWeeklyTransactionList(transactionList).build());
+	}
+
+	@Override
+	@Transactional
+	public void createChallengeCard(String email) {
+		// 사용자 찾기.
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
+		Card card = Card.builder().cardType(CardType.SPECIAL).user(user).build();
+		cardRepository.save(card);
+
+		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
+		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
+			startEndDate.getStartDate(), startEndDate.getEndDate());
+
+		// 소비 카드 생성 중인지 저장.
+		challengePubService.sendMessage(
+			ChallengeRequestMessage.builder().cardId(card.getId()).userWeeklyTransitionList(transactionList).build());
 	}
 
 	@Override
@@ -207,11 +220,11 @@ public class CardServiceImpl implements CardService {
 	@Override
 	public void updateUserProfileImage(String email, Long id) {
 		User user = userRepository.findUserByEmail(email);
-		if(user == null){
+		if (user == null) {
 			throw new UserNotFoundException("User Is Not Found");
 		}
 		Card card = cardRepository.findCardByUserIdAndId(user.getId(), id);
-		if(card == null){
+		if (card == null) {
 			throw new CardNotFound("Card not found");
 		}
 		userRepository.updateUserProfileImage(card.getImagePath(), user.getEmail());

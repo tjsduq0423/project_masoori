@@ -222,6 +222,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public void updateInfoAndSendSms(SendSmsReq sendSmsReq, User loginUser) {
 		// 사용자 정보 업데이트
 		String name = sendSmsReq.getName();
