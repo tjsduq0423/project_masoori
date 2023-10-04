@@ -4,7 +4,7 @@ import MenuButton from "@/assets/img/MenuButton.png";
 import Modal from "@/components/modal/login";
 import SignInModalBack from "@/assets/img/signCard/signInModalBack.png";
 import LandingMainLogo from "@/assets/img/HeaderLogo/masooriHeaderLogo.png";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { modalOpenState } from "@/states/userState";
 import { useRecoilState } from "recoil";
 import MenuPage from "@/pages/menu";
@@ -88,7 +88,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [whatModal, setWhatModal] = useState(false);
   const AT = localStorage.getItem("accessToken");
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (AT && AT.length > 0) {
