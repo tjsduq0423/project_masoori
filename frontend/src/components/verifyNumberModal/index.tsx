@@ -70,6 +70,19 @@ const DisableNextButton = styled.button`
   font-size: 12px;
 `;
 
+const AbleNextButton = styled.button`
+  width: 16.275vw;
+  border-radius: 5px;
+  border-color: #eae2ed;
+  border-width: 1px;
+  margin-top: 25px;
+  height: 30px;
+  background-color: #5e3a66;
+  color: #eae2ed;
+  font-weight: bold;
+  font-size: 12px;
+`;
+
 const EmailInput = styled.input`
   width: 11.5vw;
   border-radius: 5px;
@@ -102,7 +115,11 @@ const DisableSendCodeButton = styled.button`
   color: #eae2ed;
 `;
 
-const VerifyNumberModal = () => {
+interface VerifyNumberModalProps {
+  closeModal: () => void;
+}
+
+const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
   // const navigate = useNavigate();
 
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
@@ -110,6 +127,7 @@ const VerifyNumberModal = () => {
   const [phonenumber, setPhonenumber] = useState("");
   const [code, setCode] = useState("");
   const [isTextEntered, setIsTextEntered] = useState(false);
+  const [isVerify, setIsVerify] = useState(false);
 
   const usePostSmsMutation = usePostSms();
   const usePostSmsCheckMutation = usePostSmsCheck();
@@ -137,6 +155,7 @@ const VerifyNumberModal = () => {
       });
 
       toast.info("✉ 인증 코드 인증 성공 ✉");
+      setIsVerify(true);
     } catch (error) {
       toast.warning("✉ 인증 코드 인증 실패 ✉");
     }
@@ -147,6 +166,7 @@ const VerifyNumberModal = () => {
       await usePostConsumeMutation.mutateAsync();
 
       toast.info("⛓ 연동 성공 ⛓");
+      closeModal();
     } catch (error) {
       console.error("연동 실패:", error);
     }
@@ -227,9 +247,13 @@ const VerifyNumberModal = () => {
             </DisableSendCodeButton>
           </div>
           <SignUp>
-            <DisableNextButton onClick={() => postConsumeHandler()}>
-              연동하기
-            </DisableNextButton>
+            {isVerify ? (
+              <AbleNextButton onClick={() => postConsumeHandler()}>
+                연동하기
+              </AbleNextButton>
+            ) : (
+              <DisableNextButton>연동하기</DisableNextButton>
+            )}
           </SignUp>
         </Email>
       </SignUpFrontImg>
