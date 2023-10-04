@@ -44,6 +44,7 @@ const LoginFrontImg = styled.div<ImgProps>`
   background-repeat: no-repeat;
   z-index: 99;
   opacity: ${({ loaded }) => (loaded ? "1" : "0")};
+  transition: opacity 0.5s ease-in-out;
 `;
 
 const SignUpFrontImg = styled.div<ImgProps>`

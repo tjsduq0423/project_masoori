@@ -4,6 +4,9 @@ import DonutChart from "@/components/donutGraph";
 import cardFrontImage from "../../assets/img/cardFront.png";
 import { usePostGeneration } from "@/apis/user/Mutations/usePostGeneration";
 import { usePostAlram } from "@/apis/user/Mutations/usePostAlram";
+import TarotCard from "@/components/tarotCard";
+
+import tarotCardFront from "@/assets/img/tarotCard/tarotCardFront.png";
 
 const Container = styled.div`
   border-radius: 25px;
@@ -117,7 +120,8 @@ const ProfilePage = () => {
   //마이페이지 sms 알림 연동 변경 API 종료
 
   const data = {
-    imagePath: "/etc/img",
+    imagePath:
+      "https://plus.unsplash.com/premium_photo-1664809962461-8f871eb12b4f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80",
     smsAlarm: true,
     cardGeneration: false,
     dailySpending: 10000,
@@ -129,7 +133,17 @@ const ProfilePage = () => {
   return (
     <Container>
       <WeatherSide>
-        <WeatherGradient />
+        <TarotCard
+          width="347px"
+          height="500px"
+          cardWidth="100%"
+          cardSrc={tarotCardFront}
+          imageSrc={data.imagePath}
+          bottomImageWidth="100%"
+          text="내 프로필 사진"
+          fontsize="20px"
+          bottom="1.2rem"
+        ></TarotCard>
       </WeatherSide>
       <InfoSide>
         <TodayInfo>
@@ -172,8 +186,8 @@ const ProfilePage = () => {
               CARD
             </p>
             <ToggleSwitch
-              textOn="카카오 연동 취소하기"
-              textOff="카카오 연동 등록하기"
+              textOn="문자 연동 취소하기"
+              textOff="문자 연동 등록하기"
               backgroundImage="https://www.svgrepo.com/show/368252/kakao.svg"
               backgroundColor="#e0cf19"
               checked={data.smsAlarm}

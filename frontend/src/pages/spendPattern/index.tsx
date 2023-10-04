@@ -3,7 +3,6 @@ import styled from "styled-components";
 import background from "@/assets/img/background/silkBackground.jpg";
 import TarotCard from "@/components/tarotCard";
 import tarotCardFront from "@/assets/img/tarotCard/tarotCardFront.png";
-import tarotCardBack from "@/assets/img/tarotCard/tarotCardBack.png";
 import HashTag from "@/components/hashtag";
 import TextBubble from "@/components/textBubble";
 import { StyledTextBubbleProps } from "@/types/luckType";
@@ -11,10 +10,11 @@ import GhostModal from "@/components/ghostModal";
 import AlertModal from "@/components/alertModal";
 import puzzle from "@/assets/img/puzzle.png";
 import { useRecoilState, useRecoilValue } from "recoil";
-import VerifyNumberModal from "@/components/verifyNumberModal";
 import { useGetConsumeId } from "@/apis/spend/Queries/useGetConsumeId";
 import { spendInfoState } from "@/states/spendState";
 import { spendIdState } from "@/states/dictionaryState";
+import { useProfileImage } from "@/apis/menu/Mutations/useProfileImage";
+import { toast } from "react-toastify";
 
 const PageContainer = styled.div`
   position: fixed;
@@ -105,6 +105,7 @@ const SpendPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 여부 상태
   const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
   const [ConsumeIdInfo, setConsumeIdInfo] = useRecoilState(spendInfoState);
+  const profileImage = useProfileImage();
 
   const consume = useGetConsumeId(spendId);
 
@@ -127,8 +128,14 @@ const SpendPage: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const openPuzzleModal = () => {
-    setIsPuzzleModalOpen(true);
+  const settingProfileImage = async () => {
+    try {
+      // 이름과 전화번호를 사용하여 SMS를 보냅니다.
+      await profileImage.mutateAsync(consume.card.id);
+      toast.info("🃏 프로필 카드 등록 완료 🃏");
+    } catch (error) {
+      console.error("인증 코드 전송 실패:", error);
+    }
   };
 
   const closePuzzleModal = () => {
@@ -158,7 +165,7 @@ const SpendPage: React.FC = () => {
   };
 
   const crystalTextBubbleProps: StyledTextBubbleProps = {
-    text: `🔮 마녀에게 손을 내민다 🔮`,
+    text: `🖼 해당 카드를 프로필 이미지로 설정한다. 🖼`,
     width: "650px",
     background: "#4D1B2D80",
     opacity: "1",
@@ -182,7 +189,6 @@ const SpendPage: React.FC = () => {
   return (
     <div>
       <PageContainer>
-        <VerifyNumberModal />
         <ContentContainer>
           <CardContainer>
             <TarotCard
@@ -190,10 +196,11 @@ const SpendPage: React.FC = () => {
               height="402px"
               cardWidth="100%"
               cardSrc={tarotCardFront}
-              imageSrc={tarotCardBack}
+              imageSrc={consume.card.imagePath}
               bottomImageWidth="100%"
               text={`${ConsumeIdInfo.card.name}`}
               fontsize="20px"
+              bottom="18px"
             ></TarotCard>
           </CardContainer>
           <TitleContainer>
@@ -210,7 +217,7 @@ const SpendPage: React.FC = () => {
               <TextBubbleContainer>
                 <TextBubble {...contentTextBubbleProps} />
               </TextBubbleContainer>
-              <TextBubbleContainer onClick={openPuzzleModal}>
+              <TextBubbleContainer onClick={settingProfileImage}>
                 <TextBubble {...crystalTextBubbleProps} />
               </TextBubbleContainer>
               <TextBubbleContainer onClick={openModal}>
