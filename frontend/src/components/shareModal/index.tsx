@@ -74,14 +74,14 @@ const ShareModal = () => {
         description: "마녀가 직접 봐주는 나의 소비패턴 타로카드!",
         imageUrl: specialImageUrl,
         link: {
-          webUrl: realUrl,
+          webUrl: specialImageUrl,
         },
       },
       buttons: [
         {
           title: "마녀에게 테스트 받으러 가기",
           link: {
-            webUrl: realUrl,
+            webUrl: specialImageUrl,
           },
         },
       ],
