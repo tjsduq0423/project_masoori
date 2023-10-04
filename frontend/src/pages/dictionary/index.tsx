@@ -14,6 +14,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   creditInfoState,
   specialIdState,
+  specialImageUrlState,
   spendIdState,
 } from "@/states/dictionaryState";
 import { useNavigate } from "react-router-dom";
@@ -148,9 +149,10 @@ const DictionaryPage = () => {
 
   const setCreditInfo = useSetRecoilState(creditInfoState);
   const setSpendId = useSetRecoilState(spendIdState);
+  const setSpecialImageUrl = useSetRecoilState(specialImageUrlState);
 
   const challengeCard = useChallengeCard(specialId);
-  console.log(challengeCard);
+  setSpecialImageUrl(challengeCard.card.imagePath);
   const allUserFortune = useAllUserFortune().fortuneList;
   const AllConsume = useGetAllConsume(
     "2000-09-16T07:42:34.76",
