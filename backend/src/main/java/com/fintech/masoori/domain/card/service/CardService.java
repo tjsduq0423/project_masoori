@@ -36,6 +36,8 @@ public interface CardService {
 
 	BasicCardRes.BasicCard selectUserRecentBasicCard(String email, LocalDateTime time);
 
+	Long selectRecentlyChallengeCard(String email);
+
 	void updateUserProfileImage(String email, Long id);
 
 }

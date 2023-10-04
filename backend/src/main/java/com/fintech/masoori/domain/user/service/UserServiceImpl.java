@@ -152,6 +152,7 @@ public class UserServiceImpl implements UserService {
 		                         .monthlySpending(amountSumByPeriodWeek)
 		                         .weeklySpending(amountSumByPeriodMonth)
 								 .monthlySpendingGoal(user.getMonthlySpendingGoal())
+								 .challengeCardId(user.getChallengeCardId())
 		                         .build();
 		return infoRes;
 	}

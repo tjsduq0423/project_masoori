@@ -24,4 +24,7 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 	Card findRecentCard(@Param("userId") long userId, @Param("type") CardType type, @Param("startDate")LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
 	Card findCardByUserIdAndId(Long userId, Long id);
+
+	@Query("SELECT c FROM Card c WHERE c.user.id = :userId AND c.cardType = :type AND c.createdDate <= :now ")
+	Card selectRecentlyChallengeCard(@Param("userId") long userId, @Param("type") CardType type, @Param("now")LocalDateTime now);
 }

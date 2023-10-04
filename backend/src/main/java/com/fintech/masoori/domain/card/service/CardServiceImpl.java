@@ -119,6 +119,8 @@ public class CardServiceImpl implements CardService {
 		                                     .build();
 	}
 
+
+
 	@Override
 	@Transactional
 	public void registerChallengeCard(GeneratedChallengeCard generatedChallengeCard) {
@@ -215,6 +217,14 @@ public class CardServiceImpl implements CardService {
 			return null;
 		}
 		return BasicCardRes.BasicCard.builder().card(new com.fintech.masoori.domain.card.dto.Card(recentCard)).build();
+	}
+
+	@Override
+	public Long selectRecentlyChallengeCard(String email) {
+		User loginUser = userRepository.findUserByEmail(email);
+		LocalDateTime now = LocalDateTime.now();
+		Card recentlyChallengeCard = cardRepository.selectRecentlyChallengeCard(loginUser.getId(), CardType.SPECIAL, now);
+		return recentlyChallengeCard.getId();
 	}
 
 	@Override
