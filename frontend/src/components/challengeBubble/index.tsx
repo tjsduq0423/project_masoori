@@ -26,7 +26,7 @@ const StyledChallengeBubble = styled.div<StyledChallengeBubbleProps>`
 const BubbleContainer = styled.div``;
 
 const Image = styled.img`
-  width: 90px;
+  width: 70px;
 `;
 
 const ContentContainer = styled.div`
