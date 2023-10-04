@@ -115,9 +115,11 @@ public class UserController {
 	@PostMapping("/sms/check")
 	public ResponseEntity<?> verifySmsCode(
 		@Parameter(description = "회원 전화번호, 인증 코드", required = true) @RequestBody @Validated SmsCheckReq smsCheckReq,
-		BindingResult bindingResult) {
+		BindingResult bindingResult, Principal principal) {
 		validateRequest(bindingResult);
+		User loginUser = loginUser(principal);
 		userService.verifySmsCode(smsCheckReq);
+		userService.updateAuthentication(loginUser);
 		return ResponseEntity.ok().build();
 	}
 

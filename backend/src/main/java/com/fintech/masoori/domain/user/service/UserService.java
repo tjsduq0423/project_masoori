@@ -52,4 +52,6 @@ public interface UserService {
 	void updateCardGeneration(User loginUser);
 
 	void updateMonthlySpendingGoal(User loginUser, Integer monthlySpendingGoal);
+
+	void updateAuthentication(User loginUser);
 }

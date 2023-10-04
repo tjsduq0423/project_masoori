@@ -262,4 +262,9 @@ public class UserServiceImpl implements UserService {
 	public void updateMonthlySpendingGoal(User loginUser, Integer monthlySpendingGoal) {
 		userRepository.updateMonthlySpendingGoal(loginUser.getEmail(), monthlySpendingGoal);
 	}
+
+	@Override
+	public void updateAuthentication(User loginUser) {
+		userRepository.updateAuthentication(loginUser.getEmail());
+	}
 }
