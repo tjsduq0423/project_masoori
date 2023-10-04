@@ -142,10 +142,15 @@ const LoginButton = styled.button`
   border-width: 2px;
   margin-bottom: 20px;
   height: 30px;
-  background-color: #5e3a66;
-  color: white;
+  background-color: #eae2ed;
+  color: #5e3a66;
   font-weight: bold;
   font-size: 12px;
+
+  &:hover {
+    background-color: #5e3a66; /* 호버 시 배경색 변경 */
+    color: white;
+  }
 `;
 
 const SocialLogin = styled.img`

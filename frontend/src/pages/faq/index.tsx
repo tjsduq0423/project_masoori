@@ -57,7 +57,7 @@ const FaqItem = styled.div<FaqItemProps>`
   .faq-title {
     font-weight: 700;
     font-size: 20px;
-    color: ${(props) => (props.active ? "#4A3246" : "initial")};
+    color: ${(props) => (props.active ? "#4A3246" : "#5E3A66")};
   }
 
   .faq-text {
