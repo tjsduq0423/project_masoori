@@ -34,7 +34,13 @@ interface CheckSignUpCodeProps {
 interface CheckDuplicateEmailProps {
   email: string;
 }
+
+interface SettingMonthlyGoalProps {
+  monthlySpendingGoal: number;
+}
+
 export type {
+  SettingMonthlyGoalProps,
   CheckDuplicateEmailProps,
   CheckSignUpCodeProps,
   RenewPasswordProps,

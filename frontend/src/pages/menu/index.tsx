@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import menuTitle from "../../assets/img/menuTitle.png";
 import { usePostLogout } from "@/apis/user/Mutations/usePostLogout";
+import { useRecoilState } from "recoil";
+import { settingModalOpenState } from "@/states/spendState";
 
 const PageContainer = styled.div`
   position: fixed;
@@ -62,8 +64,12 @@ const MenuItem = styled.div`
 const MenuPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const [isSettingOpen, setIsSettingOpen] = useRecoilState(
+    settingModalOpenState
+  );
 
   const openModal = () => {
+    setIsSettingOpen(false);
     setIsModalOpen(true);
   };
 

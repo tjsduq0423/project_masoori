@@ -8,6 +8,7 @@ import {
   CheckSignUpCodeProps,
   CheckDuplicateEmailProps,
   SignUpProps,
+  SettingMonthlyGoalProps,
 } from "@/types/userType";
 import { error } from "console";
 
@@ -144,7 +145,18 @@ const postAlram = async () => {
   }
 };
 
+const postSetGoalAmount = async (amount: SettingMonthlyGoalProps) => {
+  try {
+    const response = await instance.post(`/user/monthly-spending`, amount);
+    console.log(response);
+    return response;
+  } catch {
+    console.log(new Error("api 연동 오류 - postSetGoalAmount"));
+  }
+};
+
 export {
+  postSetGoalAmount,
   postAlram,
   postGeneration,
   postCheckDuplicateEmail,

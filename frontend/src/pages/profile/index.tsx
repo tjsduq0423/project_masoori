@@ -4,6 +4,11 @@ import DonutChart from "@/components/donutGraph";
 import cardFrontImage from "../../assets/img/cardFront.png";
 import { usePostGeneration } from "@/apis/user/Mutations/usePostGeneration";
 import { usePostAlram } from "@/apis/user/Mutations/usePostAlram";
+import SettingFinancialGoals from "@/components/settingGoals";
+import { useRecoilState } from "recoil";
+import { settingModalOpenState } from "@/states/spendState";
+import { getUserInfo } from "@/apis/menu/menuAPI";
+import { useState, useEffect } from "react";
 import TarotCard from "@/components/tarotCard";
 
 import tarotCardFront from "@/assets/img/tarotCard/tarotCardFront.png";
@@ -119,16 +124,63 @@ const ProfilePage = () => {
 
   //마이페이지 sms 알림 연동 변경 API 종료
 
-  const data = {
-    imagePath:
-      "https://plus.unsplash.com/premium_photo-1664809962461-8f871eb12b4f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80",
-    smsAlarm: true,
+  interface UserData {
+    imagePath?: string | undefined;
+    smsAlarm?: boolean;
+    cardGeneration?: boolean;
+    dailySpending?: number;
+    weeklySpending?: number;
+    monthlySpending?: number;
+    monthlySpendingGoal?: number;
+    isAuthenticated?: boolean;
+  }
+
+  const [userInfo, setUserInfo] = useState<UserData>({
+    imagePath: "",
+    smsAlarm: false,
     cardGeneration: false,
-    dailySpending: 10000,
-    weeklySpending: 100000,
-    monthlySpending: 500000,
-    isAuthenticated: true,
-  };
+    dailySpending: 0,
+    weeklySpending: 0,
+    monthlySpending: 0,
+    monthlySpendingGoal: 0,
+    isAuthenticated: false,
+  });
+
+  const [isSettingOpen, setIsSettingOpen] = useRecoilState(
+    settingModalOpenState
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = await getUserInfo();
+        setUserInfo({
+          imagePath: userData.imagePath ? userData.imagePath : "",
+          smsAlarm: userData.smsAlarm ? userData.smsAlarm : false,
+          cardGeneration: userData.cardGeneration
+            ? userData.cardGeneration
+            : false,
+          dailySpending: userData.dailySpending ? userData.dailySpending : 0,
+          weeklySpending: userData.weeklySpending ? userData.weeklySpending : 0,
+          monthlySpending: userData.monthlySpending
+            ? userData.monthlySpending
+            : 0,
+          monthlySpendingGoal: userData.monthlySpendingGoal
+            ? userData.monthlySpendingGoal
+            : 0,
+          isAuthenticated: userData.isAuthenticated
+            ? userData.isAuthenticated
+            : false,
+        });
+      } catch (error) {
+        console.error("데이터 가져오기 실패:", error);
+      }
+    };
+
+    fetchData();
+  }, [isSettingOpen]);
+
+  console.log(userInfo);
 
   return (
     <Container>
@@ -138,7 +190,7 @@ const ProfilePage = () => {
           height="500px"
           cardWidth="100%"
           cardSrc={tarotCardFront}
-          imageSrc={data.imagePath}
+          imageSrc={userInfo.imagePath || ""}
           bottomImageWidth="100%"
           text="내 프로필 사진"
           fontsize="20px"
@@ -149,21 +201,33 @@ const ProfilePage = () => {
         <TodayInfo>
           <InfoTitle>Wallets</InfoTitle>
         </TodayInfo>
-        <WeekContainer>
+        <WeekContainer
+          onClick={() => {
+            setIsSettingOpen(!isSettingOpen);
+          }}
+        >
           <DonutChart
-            value={data.dailySpending / 10000}
+            value={
+              (userInfo.dailySpending! / (userInfo.monthlySpendingGoal! / 30)) *
+              100
+            }
             valuelabel="Day"
             size={115}
             strokewidth={15}
           />
           <DonutChart
-            value={data.weeklySpending / 10000}
+            value={
+              (userInfo.weeklySpending! / (userInfo.monthlySpendingGoal! / 4)) *
+              100
+            }
             valuelabel="WEEK"
             size={115}
             strokewidth={15}
           />
           <DonutChart
-            value={data.monthlySpending / 10000}
+            value={
+              (userInfo.monthlySpending! / userInfo.monthlySpendingGoal!) * 100
+            }
             valuelabel="MONTH"
             size={115}
             strokewidth={15}
@@ -190,7 +254,7 @@ const ProfilePage = () => {
               textOff="문자 연동 등록하기"
               backgroundImage="https://www.svgrepo.com/show/368252/kakao.svg"
               backgroundColor="#e0cf19"
-              checked={data.smsAlarm}
+              checked={userInfo.smsAlarm!}
             />
           </div>
           <div
@@ -209,7 +273,7 @@ const ProfilePage = () => {
               textOff="카드 연동 등록하기"
               backgroundImage="https://assets.codepen.io/4175254/boo-face.png"
               backgroundColor="#FFF"
-              checked={data.cardGeneration}
+              checked={userInfo.cardGeneration!}
             />
           </div>
         </LocationContainer>
@@ -222,6 +286,13 @@ const ProfilePage = () => {
           </FooterText>
         </div>
       </InfoSide>
+      {isSettingOpen ? (
+        <SettingFinancialGoals
+          monthlySpendingGoal={userInfo.monthlySpendingGoal!}
+        />
+      ) : (
+        <></>
+      )}
     </Container>
   );
 };
