@@ -24,7 +24,8 @@ const TitleText = styled.div`
   color: #fdf1f1;
   font-family: "Pyeongchangpeace";
   font-size: 50px;
-  margin: 50px;
+  margin-top: 100px;
+  margin-bottom: 80px;
 `;
 
 const FaqContainer = styled.div`
