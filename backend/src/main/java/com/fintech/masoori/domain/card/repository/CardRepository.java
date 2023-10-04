@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.cglib.core.Local;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,5 +28,5 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 	Card findCardByUserIdAndId(Long userId, Long id);
 
 	@Query("SELECT c FROM Card c WHERE c.user.id = :userId AND c.cardType = :type AND c.createdDate <= :now ORDER BY c.createdDate DESC")
-	Card findTopByUserIdRecentlyChallengeCard(@Param("userId") long userId, @Param("type") CardType type, @Param("now")LocalDateTime now);
+	Card findTopByUserIdRecentlyChallengeCard(@Param("userId") long userId, @Param("type") CardType type, @Param("now")LocalDateTime now, PageRequest pageable);
 }

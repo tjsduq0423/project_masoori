@@ -1,10 +1,12 @@
 package com.fintech.masoori.domain.card.service;
 
+import java.awt.print.Pageable;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -224,7 +226,8 @@ public class CardServiceImpl implements CardService {
 	public Long findTopByUserIdRecentlyChallengeCard(String email) {
 		User loginUser = userRepository.findUserByEmail(email);
 		LocalDateTime now = LocalDateTime.now();
-		Card recentlyChallengeCard = cardRepository.findTopByUserIdRecentlyChallengeCard(loginUser.getId(), CardType.SPECIAL, now);
+		Card recentlyChallengeCard = cardRepository.findTopByUserIdRecentlyChallengeCard(loginUser.getId(), CardType.SPECIAL, now,
+			PageRequest.of(0,1));
 		return recentlyChallengeCard.getId();
 	}
 
