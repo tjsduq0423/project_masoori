@@ -8,13 +8,13 @@ import TextBubble from "@/components/textBubble";
 import { StyledTextBubbleProps } from "@/types/luckType";
 import GhostModal from "@/components/ghostModal";
 import AlertModal from "@/components/alertModal";
-import puzzle from "@/assets/img/puzzle.png";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useGetConsumeId } from "@/apis/spend/Queries/useGetConsumeId";
 import { spendInfoState } from "@/states/spendState";
 import { spendIdState } from "@/states/dictionaryState";
 import { useProfileImage } from "@/apis/menu/Mutations/useProfileImage";
 import { toast } from "react-toastify";
+import ShareModal from "@/components/shareModal";
 
 const PageContainer = styled.div`
   position: fixed;
@@ -90,20 +90,20 @@ const ModalContainer = styled.div<{ isOpen: boolean }>`
   z-index: 3;
 `;
 
-const PuzzleModalContainer = styled.div<{ isPuzzleOpen: boolean }>`
+const ShareModalContainer = styled.div<{ isShareOpen: boolean }>`
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px;
-  display: ${(props) => (props.isPuzzleOpen ? "block" : "none")};
+  display: ${(props) => (props.isShareOpen ? "block" : "none")};
   z-index: 3;
 `;
 
 const SpendPage: React.FC = () => {
   const spendId = useRecoilValue(spendIdState);
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 여부 상태
-  const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [ConsumeIdInfo, setConsumeIdInfo] = useRecoilState(spendInfoState);
   const profileImage = useProfileImage();
 
@@ -120,12 +120,12 @@ const SpendPage: React.FC = () => {
 
   // 모달 열기 함수
   const openModal = () => {
-    setIsModalOpen(true);
+    setIsShareModalOpen(true);
   };
 
   // 모달 닫기 함수
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsShareModalOpen(false);
   };
 
   const settingProfileImage = async () => {
@@ -138,8 +138,8 @@ const SpendPage: React.FC = () => {
     }
   };
 
-  const closePuzzleModal = () => {
-    setIsPuzzleModalOpen(false);
+  const closeShareModal = () => {
+    setIsShareModalOpen(false);
   };
 
   const titleTextBubbleProps: StyledTextBubbleProps = {
@@ -228,34 +228,12 @@ const SpendPage: React.FC = () => {
           <ModalContainer isOpen={isModalOpen}>
             <GhostModal zIndex={"3"} toggleModal={toggleModal} />
           </ModalContainer>
-          <PuzzleModalContainer isPuzzleOpen={isPuzzleModalOpen}>
-            <AlertModal
-              width="600px"
-              topText="퍼즐을 찾았어요"
-              middleText="우리 함께 살펴볼까요?"
-              bottomText="내 진행상황 보러가기"
-              imageUrl={puzzle} // 이미지 경로
-              topTextColor="#5E3A66"
-              middleTextColor="#5E3A66"
-              bottomTextColor="#EAE2ED"
-              upperSectionBackground="#EAE2ED"
-              lowerSectionBackground="#5E3A66"
-              topTextFontSize="28px"
-              middleTextFontSize="18px"
-              bottomTextFontSize="20px"
-              topTextPaddingTopBottom="20px"
-              middleTextPaddingTopBottom="6px"
-              middleTextPaddingLeftRight="0px"
-              topTextFontWeight="bold"
-              middleTextFontWeight="medium"
-              bottomTextFontWeight="medium"
-              zIndex={"3"}
-              routerLink="/dictionary"
-            />
-          </PuzzleModalContainer>
+          <ShareModalContainer isShareOpen={isShareModalOpen}>
+            <ShareModal />
+          </ShareModalContainer>
         </ContentContainer>
         <Backdrop isOpen={isModalOpen} onClick={closeModal} />
-        <Backdrop isOpen={isPuzzleModalOpen} onClick={closePuzzleModal} />
+        <Backdrop isOpen={isShareModalOpen} onClick={closeShareModal} />
       </PageContainer>
     </div>
   );
