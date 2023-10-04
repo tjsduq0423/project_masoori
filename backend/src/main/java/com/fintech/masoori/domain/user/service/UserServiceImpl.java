@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
+import com.fintech.masoori.domain.card.service.CardService;
 import com.fintech.masoori.domain.user.UserRole;
 import com.fintech.masoori.domain.user.dto.EmailCheckReq;
 import com.fintech.masoori.domain.user.dto.InfoRes;
@@ -60,6 +61,7 @@ public class UserServiceImpl implements UserService {
 	private final RedisService redisService;
 	private final EmailService emailService;
 	private final SmsService smsService;
+	private final CardService cardService;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 	@Override
@@ -118,6 +120,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public InfoRes getUserInfo(String email) {
 		User user = userRepository.findUserByEmail(email);
+		Long challengeCardId = cardService.selectRecentlyChallengeCard(user.getEmail());
 		// 오늘 기준
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime nowEnd = now.withHour(23).withMinute(59).withSecond(59);
@@ -152,7 +155,7 @@ public class UserServiceImpl implements UserService {
 		                         .monthlySpending(amountSumByPeriodWeek)
 		                         .weeklySpending(amountSumByPeriodMonth)
 								 .monthlySpendingGoal(user.getMonthlySpendingGoal())
-								 .challengeCardId(user.getChallengeCardId())
+								 .challengeCardId(challengeCardId)
 		                         .build();
 		return infoRes;
 	}

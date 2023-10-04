@@ -144,6 +144,7 @@ public class CardServiceImpl implements CardService {
 				                                                                                                             c.getEndTime())
 			                                                                                                             .build();
 			challenge.setCard(card);
+
 		}
 	}
 
