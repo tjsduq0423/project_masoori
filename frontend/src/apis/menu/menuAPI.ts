@@ -28,4 +28,15 @@ const getUserInfo = async () => {
   }
 };
 
-export { getFaqData, postAlarm, getUserInfo };
+const postProfileImage = async (id: number) => {
+  try {
+    const response = await instance.post(`/card/profileimage`, {
+      id: id,
+    });
+    return response.data;
+  } catch {
+    new Error("api 연동 오류 - postProfileImage");
+  }
+};
+
+export { getFaqData, postAlarm, getUserInfo, postProfileImage };

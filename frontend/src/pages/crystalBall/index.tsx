@@ -1,4 +1,4 @@
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import {
   Sphere,
   OrbitControls,
@@ -12,8 +12,9 @@ import { a as a3, useSpring as useSpringThree } from "@react-spring/three";
 import * as THREE from "three";
 import styled from "styled-components";
 import AlertModal from "@/components/alertModal";
-import crystalBall from "@/assets/img/crystalBlue.png";
 import { useLuckyColor } from "@/apis/luck/Queries/useLuckyColor";
+import { useRecoilState } from "recoil";
+import { ColorInfoState } from "@/states/luckState";
 
 interface MagicMarbleMaterialProps
   extends THREE.MeshStandardMaterialParameters {
@@ -28,7 +29,7 @@ const Backdrop = styled.div<{ isOpen: boolean }>`
   height: 100%;
   background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
   display: ${(props) => (props.isOpen ? "block" : "none")};
-  z-index: 1;
+  z-index: 5;
 `;
 
 // Create a modal container
@@ -39,7 +40,7 @@ const ModalContainer = styled.div<{ isOpen: boolean }>`
   transform: translate(-50%, -50%);
   padding: 20px;
   display: ${(props) => (props.isOpen ? "block" : "none")};
-  z-index: 2;
+  z-index: 8;
 `;
 
 interface ColorOptions {
@@ -66,20 +67,14 @@ const options: ColorOptions = {
 const CrystalBallPage = () => {
   const [step, setStep] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 여부 상태
+  const [isColor, setIsColor] = useRecoilState(ColorInfoState);
   const colorInfo = useLuckyColor();
 
-  // 초기 h, s, l 값을 0, 0, 0으로 설정
-  const { hsl } = useSpringWeb({
-    hsl: step === 0 ? [210, 80, 50] : options[colorInfo.colorName],
-    config: { tension: 50 },
-  });
-
-  const springyGradient = hsl.to(
-    (h, s, l) =>
-      `radial-gradient(hsl(${h}, ${s * 0.7}%, ${l}%), hsl(${h},${s * 0.4}%, ${
-        l * 0.2
-      }%))`
-  );
+  useEffect(() => {
+    if (isColor.colorName === "") {
+      setIsColor(colorInfo);
+    }
+  }, [colorInfo, setIsColor, isColor]);
 
   // 모달 열기 함수
   const openModal = () => {
@@ -91,12 +86,37 @@ const CrystalBallPage = () => {
     setIsModalOpen(false);
   };
 
+  const { opacity } = useSpringWeb({
+    opacity: 1, // Start from 0 and transition to 1
+    from: { opacity: 0 }, // Initial opacity value
+    config: {
+      duration: 1000, // 0.5 seconds
+    },
+  });
+
   return (
+    // position: fixed;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
+    // padding: 20px;
+    // display: "block";
+    // z-index: 2;
     <>
       {/* 모달 렌더링 */}
       <Backdrop isOpen={isModalOpen} onClick={closeModal} />
       <aw.div
-        style={{ background: springyGradient, width: "100%", height: "100%" }}
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "fixed",
+          top: "0%",
+          left: "0%",
+          display: "block",
+          background: "radial-gradient(#4d0d3f, transparent)",
+          zIndex: 5,
+          opacity,
+        }}
       >
         <Canvas camera={{ position: [0, 0, 2] }}>
           <Suspense fallback={null}>
@@ -114,11 +134,11 @@ const CrystalBallPage = () => {
         <ModalContainer isOpen={isModalOpen}>
           <AlertModal
             width="550px"
-            topText={`Lucky ${colorInfo.colorName}`}
-            middleText={`${colorInfo.description}`}
+            topText={`Lucky ${isColor.colorName}`}
+            middleText={`${isColor.description}`}
             bottomText="메인으로 돌아가기"
-            imageUrl={`${colorInfo.imagePath}`}
-            topTextColor={`${colorInfo.color}`}
+            imageUrl={`${isColor.imagePath}`}
+            topTextColor={`${isColor.color}`}
             middleTextColor="#5E3A66"
             bottomTextColor="#EAE2ED"
             upperSectionBackground="#EAE2ED"
@@ -151,6 +171,7 @@ const Marble: React.FC<MarbleProps> = ({ step, setStep, openModal }) => {
   const [tap, setTap] = useState(false);
   const { scale } = useSpringThree({
     scale: tap && hover ? 0.95 : 1,
+    opacity: step === 0 ? 0 : 1, // Initially set opacity to 0, and gradually increase it when step is not 0
     config: {
       friction: 15,
       tension: 300,
@@ -194,12 +215,13 @@ const MagicMarbleMaterial: React.FC<MagicMarbleMaterialProps> = ({
   step,
   ...props
 }) => {
+  const [isColor, setIsColor] = useRecoilState(ColorInfoState);
+
   // Load the noise textures
   const heightMap = useTexture("noise.jpg");
   const displacementMap = useTexture("noise3D.jpg");
   heightMap.minFilter = displacementMap.minFilter = THREE.NearestFilter;
   displacementMap.wrapS = displacementMap.wrapT = THREE.RepeatWrapping;
-  const colorInfo = useLuckyColor();
 
   // Create persistent local uniforms object
   const [uniforms] = useState(() => ({
@@ -216,7 +238,7 @@ const MagicMarbleMaterial: React.FC<MagicMarbleMaterialProps> = ({
 
   // This spring value allows us to "fast forward" the displacement in the marble
   const { timeOffset } = useSpringThree({
-    hsl: options[colorInfo.colorName], // 스텝에 따라 옵션에서 색상 가져오기
+    hsl: options[isColor.colorName], // 스텝에 따라 옵션에서 색상 가져오기
     timeOffset: step * 0.2,
     config: { tension: 50 },
     onChange: ({ value: { hsl } }) => {

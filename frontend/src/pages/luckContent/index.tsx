@@ -6,6 +6,7 @@ import { useRecoilValue } from "recoil";
 import { luckInfoState } from "@/states/luckState";
 import { useNavigate } from "react-router-dom";
 import TarotCard from "@/components/tarotCard";
+import CrystalBallPage from "@/pages/crystalBall";
 
 import background from "@/assets/img/background/capetBackground.jpg";
 import headerDecorationLeft from "@/assets/img/headerDecorationLeft.png";
@@ -73,12 +74,9 @@ const TitleContainer = styled.div`
 `;
 
 const LuckContentPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const luckInfo = useRecoilValue(luckInfoState);
   const navigate = useNavigate();
-
-  const goCrystal = () => {
-    navigate("/crystal");
-  };
 
   const titleTextBubbleProps: StyledTextBubbleProps = {
     text: "🌟 마녀 🌟",
@@ -152,11 +150,15 @@ const LuckContentPage = () => {
               <TextBubble {...contentTextBubbleProps} />
             </TextBubbleContainer>
             <TextBubbleContainer>
-              <TextBubble {...crystalTextBubbleProps} onClick={goCrystal} />
+              <TextBubble
+                {...crystalTextBubbleProps}
+                onClick={() => setIsModalOpen(!isModalOpen)}
+              />
             </TextBubbleContainer>
           </ContentWrapper>
         </TitleContainer>
       </ContentContainer>
+      {isModalOpen && <CrystalBallPage />}
     </PageContainer>
   );
 };
