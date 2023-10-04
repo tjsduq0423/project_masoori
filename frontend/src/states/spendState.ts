@@ -58,3 +58,8 @@ export const SSEInfoState = atom<SSEInfo>({
     timeout: 0,
   },
 });
+
+export const settingModalOpenState = atom<boolean>({
+  key: "settingModalOpenState",
+  default: false,
+});
