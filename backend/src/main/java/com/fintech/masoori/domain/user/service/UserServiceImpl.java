@@ -228,12 +228,11 @@ public class UserServiceImpl implements UserService {
 		String name = sendSmsReq.getName();
 		String phoneNumber = sendSmsReq.getPhoneNumber();
 		userRepository.updateInfo(loginUser.getEmail(), name, phoneNumber);
-		sendAuthcode(loginUser);
+		sendAuthcode(phoneNumber);
 	}
 
-	public void sendAuthcode(User user) {
+	public void sendAuthcode(String phoneNumber) {
 		// 인증코드 redis 서버에 저장 후 메시지 발송
-		String phoneNumber = user.getPhoneNumber();
 		String code = smsService.createCode(6);
 		redisService.setSmsCode(phoneNumber, code);
 		try {
