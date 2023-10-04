@@ -10,9 +10,11 @@ import org.springframework.stereotype.Component;
 import com.fintech.masoori.domain.deal.service.DealService;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.service.UserService;
+import com.fintech.masoori.global.rabbitMQ.dto.AnalyticsRequestMessage;
 import com.fintech.masoori.global.rabbitMQ.dto.ChallengeRequestMessage;
 import com.fintech.masoori.global.rabbitMQ.dto.SpendingRequestMessage;
 import com.fintech.masoori.global.rabbitMQ.dto.Transaction;
+import com.fintech.masoori.global.rabbitMQ.service.AnalyticsPubService;
 import com.fintech.masoori.global.rabbitMQ.service.ChallengePubService;
 import com.fintech.masoori.global.rabbitMQ.service.SpendingPubService;
 import com.fintech.masoori.global.util.CalcDate;
@@ -29,17 +31,26 @@ public class CardGenerationScheduler {
 	private final DealService dealService;
 	private final ChallengePubService challengePubService;
 	private final SpendingPubService spendingPubService;
+	private final AnalyticsPubService analyticsPubService;
 
 	/**
-	 * 추천 크레딧 Card 생성 요청 - 주 1회 오늘 날짜를 기준으로 한달 치 데이터를 기반으로
+	 * 추천 크레딧 Card 생성 요청 - 월 1회 -> 매월 1일 새벽 1시
 	 */
 	@Async
-	@Scheduled(cron = "0 0 1 * * 0")
+	@Scheduled(cron = "0 0 1 1 * *")
 	public void creditCardGenerateWeekly() {
 		log.info("");
-		// 모든 유저에 대해 유저의 연동 여부를 체크하여 true인 유저에 대해
-		// 프로세스에 필요하다고 생각되는 Dto
-		// 추천된 creditCard List 등록 유저 객체를 조회 해서 해당 유저의 크레딧 카드 유저 객체를 생성 추가하여 등록
+		List<User> userList = userService.findUsersByIsAuthenticated(true);
+		for (User user : userList) {
+			CalcDate.StartEndDate startEndDate = CalcDate.calcLastMonth();
+			List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
+				startEndDate.getStartDate(), startEndDate.getEndDate());
+			AnalyticsRequestMessage message = AnalyticsRequestMessage.builder()
+																	 .userId(user.getId())
+																	 .userMonthlyTransactionList(transactionList)
+																	 .build();
+			analyticsPubService.sendMessage(message);
+		}
 	}
 
 	/**
@@ -81,12 +92,4 @@ public class CardGenerationScheduler {
 
 	}
 
-	/**
-	 * 유저에 대한 월간 분석을 실시함. 웛 1회 -> 매월 첫번째 월요일 실행
-	 */
-	@Async
-	@Scheduled(cron = "0 0 0 * * 1#1")
-	public void monthlySpendingAnalyticsGenerate() {
-		log.info("");
-	}
 }
