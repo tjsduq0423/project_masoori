@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import SignUpModalFront from "@/assets/img/signCard/signUpModalFront.png";
+import tarotPhoneVerify from "@/assets/img/tarotPhoneVerify.png";
 import styled from "styled-components";
 // import { useNavigate } from "react-router-dom";
 import { usePostSms } from "@/apis/main/Mutations/usePostSms";
@@ -25,7 +25,7 @@ const SignUpFrontImg = styled.div<ImgProps>`
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
-  background-image: url(${SignUpModalFront});
+  background-image: url(${tarotPhoneVerify});
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -153,7 +153,7 @@ const VerifyNumberModal = () => {
 
   useEffect(() => {
     const img = new Image();
-    img.src = SignUpModalFront;
+    img.src = tarotPhoneVerify;
     img.onload = () => {
       setImageLoaded(true);
     };
