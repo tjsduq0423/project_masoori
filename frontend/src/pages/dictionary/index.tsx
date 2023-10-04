@@ -105,6 +105,7 @@ const BookTitle = styled.div`
 const ContentSection = styled.div`
   width: 50%;
   height: 100%;
+  padding-left: 20px;
   margin-top: 5%;
   overflow: auto;
   margin-bottom: 300px;
