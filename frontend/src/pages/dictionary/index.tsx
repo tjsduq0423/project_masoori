@@ -17,6 +17,8 @@ import {
   spendIdState,
 } from "@/states/dictionaryState";
 import { useNavigate } from "react-router-dom";
+import { useProfileImage } from "@/apis/menu/Mutations/useProfileImage";
+import { toast } from "react-toastify";
 
 import cardBack from "@/assets/img/tarotCard/tarotCardBack.png";
 
@@ -137,6 +139,7 @@ const DictionaryPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSpecialModalOpen, setIsSpecialModalOpen] = useState(false);
   const specialId = useRecoilValue(specialIdState);
+  const profileImage = useProfileImage();
 
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
@@ -215,6 +218,16 @@ const DictionaryPage = () => {
     setIsSpecialModalOpen(!isSpecialModalOpen);
   };
 
+  const settingProfileImage = async () => {
+    try {
+      // 이름과 전화번호를 사용하여 SMS를 보냅니다.
+      await profileImage.mutateAsync(challengeCard.card.id);
+      toast.info("🃏 프로필 카드 등록완료 🃏");
+    } catch (error) {
+      console.error("인증 코드 전송 실패:", error);
+    }
+  };
+
   const crystalChallengeBubbleProps: StyledChallengeBubbleProps = {
     text: `사실 말도 안되는 챌린지죠 그치만 어쩌겠습니까 해야지`,
     width: "340px",
@@ -278,7 +291,9 @@ const DictionaryPage = () => {
           <div>
             <SpecialHeader>
               <SpecialText>
-                2023.09 <DcitBtn onClick={openSpecialModal} text="카드변경" />
+                2023.09
+                <DcitBtn onClick={settingProfileImage} text="프로필 설정" />
+                <DcitBtn onClick={openSpecialModal} text="카드변경" />
                 <DcitBtn onClick={openModal} text="공유하기" />
               </SpecialText>
             </SpecialHeader>

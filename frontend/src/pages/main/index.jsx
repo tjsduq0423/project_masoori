@@ -14,13 +14,11 @@ import styled from "styled-components";
 
 import { useUserInfo } from "@/apis/menu/Queries/useUserInfo";
 // import { userInfoState, userLoginState } from "@/states/userState";
-import masuriImg from "../../assets/img/masuri.png";
-import book from "../../assets/img/book.png";
-import cardhand from "../../assets/img/handcard.png";
 import money from "../../assets/img/mainLogo/money.png";
 import dictionary from "../../assets/img/mainLogo/dictionary.jpg";
 import masooriStory from "../../assets/img/mainLogo/masooriStory.jpg";
 import spendtarot from "../../assets/img/mainLogo/spendtarot.jpg";
+import tarotPhoneVerify from "@/assets/img/tarotPhoneVerify.png";
 import VerifyNumberModal from "@/components/verifyNumberModal";
 import { userInfoState } from "@/states/userState";
 import { useRecoilState, useRecoilValue } from "recoil";
