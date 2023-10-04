@@ -68,6 +68,11 @@ const DisableNextButton = styled.button`
   color: #5e3a66;
   font-weight: bold;
   font-size: 12px;
+
+  &:hover {
+    background-color: #5e3a66; /* 호버 시 배경색 변경 */
+    color: white;
+  }
 `;
 
 const AbleNextButton = styled.button`
@@ -100,7 +105,11 @@ const DuplicateCheckButton = styled.button`
   background-color: #5e3a66;
   height: 30px;
   color: white;
-  /* font-weight: bold; */
+
+  &:hover {
+    background-color: #813e83; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+  }
 `;
 
 const DisableSendCodeButton = styled.button`
@@ -113,6 +122,11 @@ const DisableSendCodeButton = styled.button`
   font-weight: bold;
   background-color: #5e3a66;
   color: #eae2ed;
+
+  &:hover {
+    background-color: #813e83; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+  }
 `;
 
 interface VerifyNumberModalProps {
@@ -196,7 +210,6 @@ const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
             <EmailInput
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="이름을 입력하세요"
               style={{
                 color: isTextEntered ? "#5e3a66" : "initial", // 상황에 따라 텍스트 색상을 조건적으로 변경
               }}
@@ -216,7 +229,6 @@ const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
             <EmailInput
               value={phonenumber}
               onChange={(e) => setPhonenumber(e.target.value)}
-              placeholder="전화번호를 입력하세요"
             />
             <DuplicateCheckButton
               onClick={() => postSmsHandler(name, phonenumber)}
@@ -238,7 +250,6 @@ const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
             <EmailInput
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              placeholder="인증번호를 입력하세요"
             />
             <DisableSendCodeButton
               onClick={() => postCodeHandler(phonenumber, code)}

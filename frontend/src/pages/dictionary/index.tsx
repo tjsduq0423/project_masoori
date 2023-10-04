@@ -108,7 +108,7 @@ const ContentSection = styled.div`
   width: 50%;
   height: 100%;
   padding-left: 20px;
-  margin-top: 5%;
+  margin-top: 6%;
   overflow: auto;
   margin-bottom: 300px;
 `;
@@ -240,11 +240,11 @@ const DictionaryPage = () => {
 
   const crystalChallengeBubbleProps: StyledChallengeBubbleProps = {
     text: `사실 말도 안되는 챌린지죠 그치만 어쩌겠습니까 해야지`,
-    width: "302px",
+    width: "300px",
     background: "#4D1B2D80",
     opacity: "1",
     paddingLeftRight: "40px",
-    paddingTopBottom: "30px",
+    paddingTopBottom: "20px",
     borderRadius: "20px",
     imgLink: ChallegeSuccess,
     titleText: "소비금액 5만원 넘지 않기",
@@ -338,14 +338,15 @@ const DictionaryPage = () => {
                 // 하나 이상의 챌린지의 isSuccess가 false인 경우 Tarot 카드 렌더링
                 <div
                   style={{
-                    marginRight: "30px",
-                    backgroundColor: "rgba(0, 0, 0, 0.7)",
+                    marginRight: "20px",
                     borderRadius: "20px",
+                    marginTop: "19px",
+                    marginLeft: "20px",
                   }}
                 >
                   <TarotCard
-                    width="403px"
-                    height="100%"
+                    width="365px"
+                    height="80%"
                     cardWidth="100%"
                     cardSrc={frontcard}
                     imageSrc={challengeCard.card.imagePath}
@@ -358,9 +359,10 @@ const DictionaryPage = () => {
               )}
               <div
                 style={{
+                  marginTop: "50px",
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "space-around",
+                  gap: "15px",
                 }}
               >
                 {challengeCard.challengeList.map(

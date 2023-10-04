@@ -54,6 +54,7 @@ const TextBubble = ({
   hoverable,
   onClick,
 }: StyledTextBubbleProps) => {
+  const content = { __html: text };
   return (
     <StyledTextBubble
       width={width}
@@ -66,7 +67,7 @@ const TextBubble = ({
       hoverable={hoverable}
       onClick={onClick}
     >
-      {text}
+      <div dangerouslySetInnerHTML={content} />
     </StyledTextBubble>
   );
 };

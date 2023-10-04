@@ -140,6 +140,8 @@ const AlertModal = ({
     window.location.href = routerLink;
   };
 
+  const content = { __html: middleText };
+
   return (
     <StyledAlertModal
       width={width}
@@ -183,7 +185,7 @@ const AlertModal = ({
           middleTextPaddingLeftRight={middleTextPaddingLeftRight}
           middleTextFontWeight={middleTextFontWeight}
         >
-          {middleText}
+          <div dangerouslySetInnerHTML={content} />
         </MiddleText>
       </UpperSection>
       <LowerSection
