@@ -14,6 +14,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   creditInfoState,
   specialIdState,
+  specialImageUrlState,
   spendIdState,
 } from "@/states/dictionaryState";
 import { useNavigate } from "react-router-dom";
@@ -26,6 +27,7 @@ import { useChallengeCard } from "@/apis/dictionary/Queries/useChallengeCard";
 import { useAllUserFortune } from "@/apis/luck/Queries/useAllUserFortune";
 import { useGetAllConsume } from "@/apis/dictionary/Queries/useGetAllConsume";
 import SpecialSelectModal from "@/components/specialSelectModal";
+import card from "@/assets/img/cardFront.png";
 
 interface Challenge {
   id: number;
@@ -147,9 +149,10 @@ const DictionaryPage = () => {
 
   const setCreditInfo = useSetRecoilState(creditInfoState);
   const setSpendId = useSetRecoilState(spendIdState);
+  const setSpecialImageUrl = useSetRecoilState(specialImageUrlState);
 
   const challengeCard = useChallengeCard(specialId);
-  console.log(challengeCard);
+  setSpecialImageUrl(challengeCard.card.imagePath);
   const allUserFortune = useAllUserFortune().fortuneList;
   const AllConsume = useGetAllConsume(
     "2000-09-16T07:42:34.76",
@@ -240,6 +243,20 @@ const DictionaryPage = () => {
     titleText: "소비금액 5만원 넘지 않기",
   };
 
+  const formatSpecialDateString = (SpecialdateString: string) => {
+    const date = new Date(SpecialdateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
+    const formatSpecialDateString = `${year}.${month
+      .toString()
+      .padStart(2, "0")}`;
+    return formatSpecialDateString;
+  };
+
+  const formattedSpecialDate = formatSpecialDateString(
+    challengeCard.card.createdDate
+  );
+
   return (
     <PageContainer>
       <BookSection>
@@ -291,7 +308,7 @@ const DictionaryPage = () => {
           <div>
             <SpecialHeader>
               <SpecialText>
-                2023.09
+                {formattedSpecialDate}
                 <DcitBtn onClick={settingProfileImage} text="프로필 설정" />
                 <DcitBtn onClick={openSpecialModal} text="카드변경" />
                 <DcitBtn onClick={openModal} text="공유하기" />
