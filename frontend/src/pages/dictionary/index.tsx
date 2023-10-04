@@ -10,7 +10,7 @@ import ChallengeBubble from "@/components/challengeBubble";
 import { StyledChallengeBubbleProps } from "@/types/challengeType";
 import ChallegeSuccess from "@/assets/img/challengeBubble/challengeSuccess.png";
 import ShareModal from "@/components/shareModal";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   creditInfoState,
   specialIdState,
@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { useProfileImage } from "@/apis/menu/Mutations/useProfileImage";
 import { toast } from "react-toastify";
 import Lottie from "lottie-react";
+import { useAllChallengeCard } from "@/apis/dictionary/Queries/useAllChallengeCard";
 
 import cardBack from "@/assets/img/tarotCard/tarotCardBack.png";
 
@@ -142,7 +143,7 @@ const DictionaryPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSpecialModalOpen, setIsSpecialModalOpen] = useState(false);
-  const specialId = useRecoilValue(specialIdState);
+  const [specialId, setSpecialId] = useRecoilState(specialIdState);
   const profileImage = useProfileImage();
 
   const currentDate = new Date();
@@ -154,8 +155,12 @@ const DictionaryPage = () => {
   const setSpecialImageUrl = useSetRecoilState(specialImageUrlState);
 
   const challengeCard = useChallengeCard(specialId);
+
   setSpecialImageUrl(challengeCard.card.imagePath);
   const allUserFortune = useAllUserFortune().fortuneList;
+
+  console.log(allUserFortune);
+
   const AllConsume = useGetAllConsume(
     "2000-09-16T07:42:34.76",
     initialEndDate
@@ -235,7 +240,7 @@ const DictionaryPage = () => {
 
   const crystalChallengeBubbleProps: StyledChallengeBubbleProps = {
     text: `사실 말도 안되는 챌린지죠 그치만 어쩌겠습니까 해야지`,
-    width: "340px",
+    width: "302px",
     background: "#4D1B2D80",
     opacity: "1",
     paddingLeftRight: "40px",
@@ -267,7 +272,7 @@ const DictionaryPage = () => {
       </BookSection>
       <ContentSection>
         {currentPage === 0 && (
-          <div style={{ marginBottom: "140px" }}>
+          <div style={{ marginBottom: "140px", marginTop: "30px" }}>
             {Object.keys(groupImagesByMonth()).map((month) => (
               <div key={month}>
                 <BasicText>
@@ -307,7 +312,7 @@ const DictionaryPage = () => {
           </div>
         )}
         {currentPage === 2 && (
-          <div>
+          <div style={{ marginTop: "0px" }}>
             <SpecialHeader>
               <SpecialText>
                 {formattedSpecialDate}
