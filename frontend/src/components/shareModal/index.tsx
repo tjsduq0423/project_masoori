@@ -74,14 +74,14 @@ const ShareModal = () => {
         description: "마녀가 직접 봐주는 나의 소비패턴 타로카드!",
         imageUrl: specialImageUrl,
         link: {
-          webUrl: specialImageUrl,
+          webUrl: realUrl,
         },
       },
       buttons: [
         {
           title: "마녀에게 테스트 받으러 가기",
           link: {
-            webUrl: specialImageUrl,
+            webUrl: realUrl,
           },
         },
       ],
@@ -102,13 +102,13 @@ const ShareModal = () => {
     <FlexContainer>
       <h1>공유하기</h1>
       <GridContainer>
-        <FacebookShareButton url={currentUrl}>
+        <FacebookShareButton url={specialImageUrl}>
           <FacebookIcon size={48} round={true} borderRadius={24}></FacebookIcon>
         </FacebookShareButton>
-        <TwitterShareButton url={currentUrl}>
+        <TwitterShareButton url={specialImageUrl}>
           <TwitterIcon size={48} round={true} borderRadius={24}></TwitterIcon>
         </TwitterShareButton>
-        <CopyToClipboard text={currentUrl}>
+        <CopyToClipboard text={specialImageUrl}>
           <URLShareButton>URL</URLShareButton>
         </CopyToClipboard>
         <KakaoShareButton
