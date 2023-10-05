@@ -136,21 +136,19 @@ public class CardServiceImpl implements CardService {
 		card.cardUpdate(generatedSpendingCard.getName(), generatedSpendingCard.getImagePath(),
 			generatedSpendingCard.getDescription());
 
-		cardRepository.save(card);
 		List<com.fintech.masoori.domain.card.entity.Basic> list = generatedSpendingCard.getSpendings()
 		                                                                               .stream()
 		                                                                               .map(s -> {
-			                                                                               com.fintech.masoori.domain.card.entity.Basic basic = com.fintech.masoori.domain.card.entity.Basic.builder()
-																							   																								.card(card)
-			                                                                                                                                                                                .keyword(
-				                                                                                                                                                                                s.getKeyword())
-			                                                                                                                                                                                .totalAmount(
-				                                                                                                                                                                                s.getTotalAmount())
-			                                                                                                                                                                                .frequency(
-				                                                                                                                                                                                s.getFrequency())
-			                                                                                                                                                                                .build();
-			                                                                               // basic.setCard(card);
-			                                                                               return basic;
+			                                                                               return com.fintech.masoori.domain.card.entity.Basic.builder()
+			                                                                                                                                  .card(
+				                                                                                                                                  card)
+			                                                                                                                                  .keyword(
+				                                                                                                                                  s.getKeyword())
+			                                                                                                                                  .totalAmount(
+				                                                                                                                                  s.getTotalAmount())
+			                                                                                                                                  .frequency(
+				                                                                                                                                  s.getFrequency())
+			                                                                                                                                  .build();
 		                                                                               })
 		                                                                               .toList();
 		basicRepository.saveAll(list);
@@ -188,7 +186,7 @@ public class CardServiceImpl implements CardService {
 			log.info("Deal List 비어있음");
 			return;
 		}
-		if (card.getId() == null){
+		if (card.getId() == null) {
 			log.info("CardId가 null");
 			return;
 		}
