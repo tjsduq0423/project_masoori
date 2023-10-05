@@ -25,11 +25,7 @@ def MakeCardName(spendData):
         )
         chain = LLMChain(llm=chat, prompt=prompt, verbose=True)
         result = chain.run(Data=spendData)
-        result = result.replace("이름 : ", "")
+        result = result.replace("이름 : ", "").replace("이름: ", "")
         return result
     except Exception as e:
         print(e)
-
-
-
-print(MakeCardName({"amountKeyword":"교육", "amount" : "12345", "frequencyKeyword":"교통", "frequency" : "10"}))
