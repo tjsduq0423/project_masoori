@@ -1,7 +1,7 @@
 import pika
 import json
 import asyncio
-import pydantic
+from pydantic import BaseModel, List
 import time
 
 from Categories.useFaiss import FaissCategorization
@@ -28,32 +28,52 @@ connection = pika.BlockingConnection(
         port=rabbit_mq_server_domain_port,
     )
 )
+
 channel = connection.channel()
 
 # pub 를 위한 queue 선언
 channel.queue_declare(queue=pub_queue_name, durable=True)
 
 
+class Transaction(BaseModel):
+    date: str
+    content: str
+    amount: int
+    dealPlaceName: str
+
+
+class RecommendedCreditCard(BaseModel):
+    creditCardId: int
+    reason: str
+
+
+# reqDto
+class AnalyticsRequestMessage(BaseModel):
+    userId: int
+    userWeeklyTransactionList: List[Transaction]
+
+
+# resDto 선언
+class MonthlySpendingAndCreditcard(BaseModel):
+    userId: int
+    creditCardList: List[RecommendedCreditCard]
+
+
 # sub 에서 메시지를 받아 처리하는 함수
 def callback(ch, method, properties, body):
-    # 메시지 처리 로직 작성 - LangChain 모듈 import -> 작성 필수
-    # body가 spring boot 서버에서 받은 데이터임 - parsing 해야할 수 있음.data = json.loads(received_message) 이런식으로
-    print(f"Received {json.loads(body)}")
-    time.sleep(5)
-    # 다시 처리 완료 된 값을 메시지로 파싱 - class 형태 -> json.dump 사용하여 json으로 변환 후 직렬화해서 전달
-    # import json
-    # data = {  # 예시
-    #     'name': 'John',
-    #     'age': 30,
-    #     'city': 'New York'
-    # }
-    # response = json.dumps(data)
+    try:
+        # 이거 쓰면댐 -> Anal
+        request_message_dict = json.loads(body)
+        # 서비스 로직 실행 -> 결과값 res 객체에 넣고 쏘면 댐.
 
-    # 파싱된 메시지 큐로 전달
-    ch.basic_publish(exchange="", routing_key=pub_queue_name, body=body)
+        res = ""
+        # 메시지 응답 큐 pub
+        ch.basic_publish(exchange="", routing_key=pub_queue_name, body=res)
 
-    # 메시지 처리 완료 시 MQ에 처리 했다고 전달하는 함수
-    ch.basic_ack(delivery_tag=method.delivery_tag)
+        # 메시지 처리 완료 시 MQ에 처리 했다고 전달하는 함수
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+    except Exception as e:
+        print(e)
 
 
 # sub 설정
