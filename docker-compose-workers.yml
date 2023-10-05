@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  challenge:
+    container_name: challenge
+    build:
+      context: ./workers/challenge
+  recommend:
+    container_name: recommend
+    build:
+      context: ./workers/recommend
+  spending:
+    container_name: spending
+    build:
+      context: ./workers/spending

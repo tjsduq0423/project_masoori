@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import com.fintech.masoori.domain.credit.dto.CreditCardRes;
 import com.fintech.masoori.domain.credit.dto.UserCreditCardRes;
 import com.fintech.masoori.domain.credit.entity.CreditCard;
+import com.fintech.masoori.domain.credit.entity.CreditCardUser;
+import com.fintech.masoori.global.rabbitMQ.dto.MonthlySpendingAndCreditcard;
 
 public interface CreditCardService {
 	/**
@@ -16,5 +18,5 @@ public interface CreditCardService {
 
 	CreditCard selectOne(Long id);
 
-	void save(CreditCard creditCard);
+	void saveRecommendedCreditCard(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard);
 }

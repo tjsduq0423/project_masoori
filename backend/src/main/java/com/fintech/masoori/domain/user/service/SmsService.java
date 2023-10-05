@@ -21,7 +21,17 @@ public class SmsService {
 	@Value("${spring.sms.from}")
 	private String from;
 
-	public void sendSms(String phoneNumber, String code) throws CoolsmsException {
+	public String createCode(int codeLength) {
+		Random random = new Random();
+		StringBuilder key = new StringBuilder();
+
+		for (int i = 0; i < codeLength; i++) {
+			key.append(random.nextInt(10));
+		}
+		return key.toString();
+	}
+
+	public void sendAuthcode(String phoneNumber, String code) throws CoolsmsException {
 		Message message = new Message(apiKey, apiSecretKey);
 
 		HashMap<String, String> params = new HashMap<>();
@@ -34,14 +44,43 @@ public class SmsService {
 		message.send(params);
 	}
 
-	public String createCode(int codeLength) {
-		Random random = new Random();
-		StringBuilder key = new StringBuilder();
+	public void sendCreditCardAlarm(String phoneNumber) throws CoolsmsException {
+		Message message = new Message(apiKey, apiSecretKey);
 
-		for (int i = 0; i < codeLength; i++) {
-			key.append(random.nextInt(10));
-		}
-		return key.toString();
+		HashMap<String, String> params = new HashMap<>();
+		params.put("to", phoneNumber);
+		params.put("from", from);
+		params.put("type", "SMS");
+		params.put("text", "[마수리] 당신만을 위한 카드가 도착했습니다.\n홈페이지에서 확인해주세요.");
+		params.put("app_version", "test app 1.2");
+
+		message.send(params);
+	}
+
+	public void sendGenerationTarotCardAlarm(String phoneNumber) throws CoolsmsException {
+		Message message = new Message(apiKey, apiSecretKey);
+
+		HashMap<String, String> params = new HashMap<>();
+		params.put("to", phoneNumber);
+		params.put("from", from);
+		params.put("type", "SMS");
+		params.put("text", "[마수리] 타로 카드 생성이 완료되었습니다.\n홈페이지에서 확인해주세요.");
+		params.put("app_version", "test app 1.2");
+
+		message.send(params);
+	}
+
+	public void sendChallengeAlarm(String phoneNumber) throws CoolsmsException {
+		Message message = new Message(apiKey, apiSecretKey);
+
+		HashMap<String, String> params = new HashMap<>();
+		params.put("to", phoneNumber);
+		params.put("from", from);
+		params.put("type", "SMS");
+		params.put("text", "[마수리] 이번 주 챌린지가 생성되었습니다.\n홈페이지에서 확인해주세요.");
+		params.put("app_version", "test app 1.2");
+
+		message.send(params);
 	}
 
 }

@@ -16,6 +16,7 @@ import com.fintech.masoori.domain.credit.repository.CreditCardRepository;
 import com.fintech.masoori.domain.credit.repository.CreditCardUserRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
+import com.fintech.masoori.global.rabbitMQ.dto.MonthlySpendingAndCreditcard;
 import com.fintech.masoori.global.util.CalcDate;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class CreditCardServiceImpl implements CreditCardService {
 	@Override
 	public UserCreditCardRes selectAll(String userEmail) {
 		User user = userRepository.findUserByEmail(userEmail);
-		List<UserCreditCardRes.UserCreditCard> userCreditCardList = user.getCreditCardUsers().stream().map(e -> {
+		List<UserCreditCardRes.UserCreditCard> userCreditCardList = user.getCreditCardUserList().stream().map(e -> {
 			CreditCard creditCard = e.getCreditCard();
 			return new UserCreditCardRes.UserCreditCard(creditCard);
 		}).collect(Collectors.toList());
@@ -49,14 +50,12 @@ public class CreditCardServiceImpl implements CreditCardService {
 			calcDate.getStartDate(), calcDate.getEndDate());
 
 		List<CreditCardRes.CreditCard> creditCardResList = creditCardList.stream()
-																		 .map(
-																			 creditCardUser -> new CreditCardRes.CreditCard(
-																				 creditCardUser.getCreditCard()))
-																		 .collect(Collectors.toList());
+		                                                                 .map(
+			                                                                 creditCardUser -> new CreditCardRes.CreditCard(
+				                                                                 creditCardUser.getCreditCard()))
+		                                                                 .collect(Collectors.toList());
 
-		return CreditCardRes.builder()
-							.creditCardList(creditCardResList)
-							.build();
+		return CreditCardRes.builder().creditCardList(creditCardResList).build();
 	}
 
 	@Override
@@ -69,7 +68,22 @@ public class CreditCardServiceImpl implements CreditCardService {
 	}
 
 	@Override
-	public void save(CreditCard creditCard) {
-		creditCardRepository.save(creditCard);
+	@Transactional
+	public void saveRecommendedCreditCard(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard) {
+		User serviceUser = userRepository.findById(monthlySpendingAndCreditcard.getUserId())
+		                                 .orElseThrow(() -> new RuntimeException("User Not Found"));
+
+		for (MonthlySpendingAndCreditcard.RecommendedCreditCard recommendedCreditCard : monthlySpendingAndCreditcard.getCreditCardList()) {
+			CreditCard creditCard = creditCardRepository.findById(recommendedCreditCard.getCreditCardId())
+			                                            .orElseThrow(
+				                                            () -> new InvalidIDException("Card Id is Not exist"));
+
+			CreditCardUser creditCardUser = CreditCardUser.builder().reason(recommendedCreditCard.getReason()).build();
+
+			creditCard.addCreditCardUser(creditCardUser);
+			serviceUser.addCreditCardUser(creditCardUser);
+			creditCardUserRepository.save(creditCardUser);
+		}
 	}
+
 }

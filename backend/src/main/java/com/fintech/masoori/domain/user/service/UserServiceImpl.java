@@ -6,6 +6,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
+import com.fintech.masoori.domain.card.service.CardService;
 import com.fintech.masoori.domain.user.UserRole;
 import com.fintech.masoori.domain.user.dto.EmailCheckReq;
 import com.fintech.masoori.domain.user.dto.InfoRes;
@@ -59,7 +61,13 @@ public class UserServiceImpl implements UserService {
 	private final RedisService redisService;
 	private final EmailService emailService;
 	private final SmsService smsService;
+	private final CardService cardService;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+	@Override
+	public List<User> findUsersByIsAuthenticated(Boolean isAuthentication) {
+		return userRepository.findUsersByIsAuthenticated(isAuthentication);
+	}
 
 	@Override
 	public boolean checkEmail(String email) {
@@ -79,11 +87,11 @@ public class UserServiceImpl implements UserService {
 			throw new EmailDuplicationException("Email is Duplicated");
 		}
 		User newUser = User.builder()
-						   .email(signUpReq.getEmail())
-						   .password(passwordEncoder.encode(signUpReq.getPassword()))
-						   .roles(Collections.singletonList(UserRole.ROLE_USER.name()))
-						   .providerType(ProviderType.LOCAL)
-						   .build();
+		                   .email(signUpReq.getEmail())
+		                   .password(passwordEncoder.encode(signUpReq.getPassword()))
+		                   .roles(Collections.singletonList(UserRole.ROLE_USER.name()))
+		                   .providerType(ProviderType.LOCAL)
+		                   .build();
 		userRepository.save(newUser);
 	}
 
@@ -103,8 +111,8 @@ public class UserServiceImpl implements UserService {
 		TokenInfo tokenInfo = jwtTokenProvider.createToken(authentication);
 
 		redisTemplate.opsForValue()
-					 .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getExpireTime(),
-						 TimeUnit.MILLISECONDS);
+		             .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getExpireTime(),
+			             TimeUnit.MILLISECONDS);
 		LoginRes loginRes = new LoginRes(tokenInfo.getAccessToken());
 		return loginRes;
 	}
@@ -112,40 +120,43 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public InfoRes getUserInfo(String email) {
 		User user = userRepository.findUserByEmail(email);
+		Long challengeCardId = cardService.findTopByUserIdRecentlyChallengeCard(user.getEmail());
 		// 오늘 기준
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime nowEnd = now.withHour(23).withMinute(59).withSecond(59);
 		LocalDateTime nowStart = now.withHour(0).withMinute(0).withSecond(0);
 		// 현재 주의 시작 날짜와 종료 날짜 계산
 		LocalDateTime nowWeekStart = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-										.withHour(0)
-										.withMinute(0)
-										.withSecond(0);
+		                                .withHour(0)
+		                                .withMinute(0)
+		                                .withSecond(0);
 		LocalDateTime nowWeekEnd = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
-									  .withHour(23)
-									  .withMinute(59)
-									  .withSecond(59);
+		                              .withHour(23)
+		                              .withMinute(59)
+		                              .withSecond(59);
 		// 현재 달의 시작 날짜와 종료 날짜 계산
 		LocalDateTime nowMonthStart = now.with(TemporalAdjusters.firstDayOfMonth())
-										 .withHour(0)
-										 .withMinute(0)
-										 .withSecond(0);
+		                                 .withHour(0)
+		                                 .withMinute(0)
+		                                 .withSecond(0);
 		LocalDateTime nowMonthEnd = now.with(TemporalAdjusters.lastDayOfMonth())
-									   .withHour(23)
-									   .withMinute(59)
-									   .withSecond(59);
+		                               .withHour(23)
+		                               .withMinute(59)
+		                               .withSecond(59);
 		Integer amountSumByPeriodDay = userRepository.getAmountSumByPeriod(email, nowStart, nowEnd);
 		Integer amountSumByPeriodWeek = userRepository.getAmountSumByPeriod(email, nowWeekStart, nowWeekEnd);
 		Integer amountSumByPeriodMonth = userRepository.getAmountSumByPeriod(email, nowMonthStart, nowMonthEnd);
 
 		InfoRes infoRes = InfoRes.builder()
-								 .imagePath(user.getCardImage())
-								 .isAuthenticated(user.getIsAuthenticated())
-								 .smsAlarm(user.getSmsAlarm())
-								 .dailySpending(amountSumByPeriodDay)
-								 .monthlySpending(amountSumByPeriodWeek)
-								 .weeklySpending(amountSumByPeriodMonth)
-								 .build();
+		                         .imagePath(user.getCardImage())
+		                         .isAuthenticated(user.getIsAuthenticated())
+		                         .smsAlarm(user.getSmsAlarm())
+		                         .dailySpending(amountSumByPeriodDay)
+		                         .monthlySpending(amountSumByPeriodWeek)
+		                         .weeklySpending(amountSumByPeriodMonth)
+								 .monthlySpendingGoal(user.getMonthlySpendingGoal())
+								 .challengeCardId(challengeCardId)
+		                         .build();
 		return infoRes;
 	}
 
@@ -161,6 +172,11 @@ public class UserServiceImpl implements UserService {
 	public Optional<User> findByEmail(String email) {
 		Optional<User> findUser = userRepository.findByEmail(email);
 		return findUser;
+	}
+
+	@Override
+	public User findById(Long id) {
+		return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User Not Found"));
 	}
 
 	@Override
@@ -210,21 +226,21 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public void updateInfoAndSendSms(SendSmsReq sendSmsReq, User loginUser) {
 		// 사용자 정보 업데이트
 		String name = sendSmsReq.getName();
 		String phoneNumber = sendSmsReq.getPhoneNumber();
 		userRepository.updateInfo(loginUser.getEmail(), name, phoneNumber);
-		sendSms(loginUser);
+		sendAuthcode(phoneNumber);
 	}
 
-	public void sendSms(User user) {
+	public void sendAuthcode(String phoneNumber) {
 		// 인증코드 redis 서버에 저장 후 메시지 발송
-		String phoneNumber = user.getPhoneNumber();
 		String code = smsService.createCode(6);
 		redisService.setSmsCode(phoneNumber, code);
 		try {
-			smsService.sendSms(phoneNumber, code);
+			smsService.sendAuthcode(phoneNumber, code);
 		} catch (CoolsmsException e) {
 			redisService.deleteSmsCode(phoneNumber);
 			throw new SmsMessagingException("Failed To Send Email");
@@ -244,5 +260,15 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updateCardGeneration(User loginUser) {
 		userRepository.updateCardGeneration(loginUser.getEmail());
+	}
+
+	@Override
+	public void updateMonthlySpendingGoal(User loginUser, Integer monthlySpendingGoal) {
+		userRepository.updateMonthlySpendingGoal(loginUser.getEmail(), monthlySpendingGoal);
+	}
+
+	@Override
+	public void updateAuthentication(User loginUser) {
+		userRepository.updateAuthentication(loginUser.getEmail());
 	}
 }

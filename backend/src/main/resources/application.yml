@@ -109,13 +109,9 @@ jwt:
 
 rabbitmq:
   queue:
-    realtime: realtime.req
-    weekly: weekly.req
-    recommend: recommend.req
-  sub:
-    realtime: realtime.res
-    weekly: weekly.res
-    recommend: recommend.res
+    challenge: challenge.req
+    spending : spending.req
+    analytics: analytics.req
 
 # ssl 설정
 #server:
