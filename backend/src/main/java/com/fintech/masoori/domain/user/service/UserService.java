@@ -1,5 +1,6 @@
 package com.fintech.masoori.domain.user.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.fintech.masoori.domain.user.dto.EmailCheckReq;
@@ -15,6 +16,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public interface UserService {
+	List<User> findUsersByIsAuthenticated(Boolean isAuthentication);
+
 	boolean checkEmail(String email);
 
 	boolean checkOAuthAccount(String email);
@@ -29,6 +32,8 @@ public interface UserService {
 
 	// 사용자 이메일로 조회
 	Optional<User> findByEmail(String email);
+
+	User findById(Long id);
 
 	void updateInfoAndSendSms(SendSmsReq sendSmsReq, User loginUser);
 
@@ -45,4 +50,8 @@ public interface UserService {
 	void updateSmsAlarm(User loginUser);
 
 	void updateCardGeneration(User loginUser);
+
+	void updateMonthlySpendingGoal(User loginUser, Integer monthlySpendingGoal);
+
+	void updateAuthentication(User loginUser);
 }

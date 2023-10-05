@@ -1,7 +1,9 @@
 package com.fintech.masoori.domain.lucky.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -84,17 +86,21 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 		//전체 금전운 조회
 		FortuneListRes fortuneList = selectAllFortune();
 
-		List<FortuneRes> fortuneResList = new ArrayList<>();
+		Map<Long, FortuneRes> fortuneResMap = new HashMap<>();
 
-		for (FortuneUser fortuneUser : fortuneUserList) {
-			for (FortuneRes fortuneRes : fortuneList.getFortuneList()) {
-				if (fortuneUser.getFortune().getId().equals(fortuneRes.getId())) {
-					fortuneResList.add(new FortuneRes(fortuneUser.getFortune()));
-				} else {
-					fortuneResList.add(null);
+		for(FortuneRes fortuneRes : fortuneList.getFortuneList()){
+			boolean match = false;
+			for (FortuneUser fortuneUser : fortuneUserList) {
+				if(fortuneRes.getId().equals(fortuneUser.getFortune().getId())){
+					fortuneResMap.put(fortuneRes.getId(), new FortuneRes((fortuneUser.getFortune())));
+					match = true;
 				}
 			}
+			if(!match){
+				fortuneResMap.put(fortuneRes.getId(), null);
+			}
 		}
+		List<FortuneRes> fortuneResList = new ArrayList<>(fortuneResMap.values());
 		return FortuneListRes.builder().fortuneList(fortuneResList).build();
 	}
 }

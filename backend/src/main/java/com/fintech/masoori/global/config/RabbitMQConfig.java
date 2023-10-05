@@ -24,14 +24,15 @@ public class RabbitMQConfig {
 	@Value("${spring.rabbitmq.port}")
 	private int port;
 
-	@Value("${rabbitmq.queue.realtime}")
+	@Value("${rabbitmq.queue.challenge}")
 	private String queue1;
 
-	@Value("${rabbitmq.queue.weekly}")
+	@Value("${rabbitmq.queue.spending}")
 	private String queue2;
 
-	@Value("${rabbitmq.queue.recommend}")
+	@Value("${rabbitmq.queue.analytics}")
 	private String queue3;
+
 
 	@Bean
 	public Queue queue1() {
@@ -48,14 +49,6 @@ public class RabbitMQConfig {
 		return new Queue(queue3, true);
 	}
 
-	// @Bean
-	// public DirectExchange directExchange() {
-	// 	return new DirectExchange(exchange,true,true);   // Topic Exchange 타입
-	// }
-	// @Bean
-	// public Binding binding1(DirectExchange directExchange, Queue queue1) {
-	// 	return BindingBuilder.bind(queue1).to(directExchange).with(routingKey1);`
-	// }
 
 	@Bean
 	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
