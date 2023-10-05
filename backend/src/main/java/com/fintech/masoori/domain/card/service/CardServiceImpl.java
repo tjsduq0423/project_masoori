@@ -141,6 +141,7 @@ public class CardServiceImpl implements CardService {
 		                                                                               .stream()
 		                                                                               .map(s -> {
 			                                                                               com.fintech.masoori.domain.card.entity.Basic basic = com.fintech.masoori.domain.card.entity.Basic.builder()
+																							   																								.card(card)
 			                                                                                                                                                                                .keyword(
 				                                                                                                                                                                                s.getKeyword())
 			                                                                                                                                                                                .totalAmount(
@@ -148,7 +149,7 @@ public class CardServiceImpl implements CardService {
 			                                                                                                                                                                                .frequency(
 				                                                                                                                                                                                s.getFrequency())
 			                                                                                                                                                                                .build();
-			                                                                               basic.setCard(card);
+			                                                                               // basic.setCard(card);
 			                                                                               return basic;
 		                                                                               })
 		                                                                               .toList();
@@ -185,6 +186,10 @@ public class CardServiceImpl implements CardService {
 		// 소비 카드 생성 중인지 저장.
 		if (transactionList.isEmpty()) {
 			log.info("Deal List 비어있음");
+			return;
+		}
+		if (card.getId() == null){
+			log.info("CardId가 null");
 			return;
 		}
 		spendingPubService.sendMessage(
