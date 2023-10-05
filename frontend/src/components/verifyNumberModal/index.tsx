@@ -53,6 +53,7 @@ const SignUp = styled.div`
 
 const Email = styled.div`
   position: relative;
+  margin-bottom: 5px;
   z-index: 1;
   top: 15%;
 `;
@@ -211,6 +212,7 @@ const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               style={{
+                padding: "5px",
                 color: isTextEntered ? "#5e3a66" : "initial", // 상황에 따라 텍스트 색상을 조건적으로 변경
               }}
             />
