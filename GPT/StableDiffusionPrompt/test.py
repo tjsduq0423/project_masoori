@@ -6,7 +6,7 @@ import base64
 
 # url = "https://c26ac38078231d0cbf.gradio.live"
 # url = "http://149.28.51.188/api"
-url = "http://149.28.51.188:7668"
+url = "http://sonagi.site/api"
 
 user = "test@gmail.com"
 time = "202309271515"
@@ -19,7 +19,7 @@ payload = {
     "steps": 40,
     "override_settings": {
         # "sd_model_checkpoint": "AnythingV5Ink_v5PrtRE.safetensors [7f96a1a9ca]"
-        "sd_model_checkpoint": "deliberate_v3-inpainting.safetensors [cadc1eef6f]"
+        "sd_model_checkpoint": "AnythingV5Ink_ink.safetensors [a1535d0a42]"
     },
     "override_settings_restore_afterwards": True,
     "sampler_index": "DPM++ 2M Karras",
