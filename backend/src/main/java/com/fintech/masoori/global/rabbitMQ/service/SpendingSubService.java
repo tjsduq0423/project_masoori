@@ -31,9 +31,9 @@ public class SpendingSubService {
 	@RabbitListener(queues = "spending.res")
 	public void subscribeSpendingQueue(GeneratedSpendingCard generatedSpendingCard) throws CoolsmsException {
 		log.info("생성되어 넘겨받은 소비 카드 등록");
-		User user = cardRepository.findById(generatedSpendingCard.getCardId())
-		                          .orElseThrow(() -> new CardNotFound("Card is Not Found"))
-		                          .getUser();
+		// User user = cardRepository.findById(generatedSpendingCard.getCardId())
+		//                           .orElseThrow(() -> new CardNotFound("Card is Not Found"))
+		//                           .getUser();
 		//spending 으로 소비 내역 생성해서 challenge 추가
 		// List<GeneratedSpending> spendings = generatedSpendingCard.getSpendings();
 		// Optional<GeneratedSpending> maxSpending = spendings.stream()
@@ -47,7 +47,7 @@ public class SpendingSubService {
 		// }
 		cardService.registerSpendingCard(generatedSpendingCard);
 
-		String phoneNumber = user.getPhoneNumber();
-		smsService.sendGenerationTarotCardAlarm(phoneNumber);
+		// String phoneNumber = user.getPhoneNumber();
+		// smsService.sendGenerationTarotCardAlarm(phoneNumber);
 	}
 }
