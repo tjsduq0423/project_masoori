@@ -137,6 +137,8 @@ public class CardServiceImpl implements CardService {
 		card.cardUpdate(generatedSpendingCard.getName(), generatedSpendingCard.getImagePath(),
 			generatedSpendingCard.getDescription());
 
+		cardRepository.save(card);
+
 		List<GeneratedSpending> spendings = generatedSpendingCard.getSpendings();
 		for (GeneratedSpending s : spendings) {
 			com.fintech.masoori.domain.card.entity.Basic basic = com.fintech.masoori.domain.card.entity.Basic.builder()
