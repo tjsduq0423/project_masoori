@@ -24,8 +24,8 @@ instance.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response?.status === 401) {
       // 로그아웃 시키고 로그인 PAGE로 리다이렉트
-      // localStorage.clear();
-      // window.location.href = "/main";
+      localStorage.clear();
+      window.location.href = "/main";
     }
     return Promise.reject(error);
   }
