@@ -24,9 +24,9 @@ public class ChallengeSubService {
 
 	@RabbitListener(queues = "challenge.res")
 	public void subscribeChallengeQueue(GeneratedChallengeCard generatedChallengeCard) throws CoolsmsException {
-		log.info("생성되어 넘겨받은 챌린지 카드 등록");
-		cardService.registerChallengeCard(generatedChallengeCard);
-
+		log.info("생성되어 넘겨받은 챌린지 이미지 등록");
+		cardService.registerChallengeCardImage(generatedChallengeCard.getImagePath(),
+			generatedChallengeCard.getCardId());
 		String phoneNumber = cardRepository.findById(generatedChallengeCard.getCardId())
 		                                   .orElseThrow(() -> new CardNotFound("Card is Not Found"))
 		                                   .getUser()
