@@ -1,0 +1,15 @@
+카드ID : 1228
+카드명 : SSG.COM 삼성카드
+카드사 : 삼성카드
+국내 연회비 : 15000원
+해외 연회비 : 15000원
+전월실적 : 0원
+브랜드 : mastercard
+혜택 : 
+적립 : SSG.COM 결제 시 1% SSG MONEY 적립
+적립 : SSG.COM 결제 시 9% SSG MONEY 추가 적립
+생활 : 생활편의영역 5% SSG MONEY 추가 적립
+APP : SSGPAY를 통한 오프라인 간편결제 시 1% SSG MONEY 적립
+해외 : 해외 1.5% SSG MONEY 적립
+디지털구독 : 스마일클럽 월 이용료 결제일할인
+프리미엄 서비스 : Mastercard PLATINUM 등급서비스
