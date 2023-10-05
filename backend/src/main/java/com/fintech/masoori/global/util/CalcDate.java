@@ -38,6 +38,16 @@ public class CalcDate {
 		return StartEndDate.builder().startDate(startOfLastWeek).endDate(endOfLastWeek).build();
 	}
 
+	public static StartEndDate calcLastWeek(LocalDateTime date) {
+		LocalDateTime startOfLastWeek = date.minusWeeks(1).with(DayOfWeek.MONDAY);
+		LocalDateTime endOfLastWeek = date.minusWeeks(1)
+		                                  .with(DayOfWeek.SUNDAY)
+		                                  .withHour(23)
+		                                  .withMinute(59)
+		                                  .withSecond(59);
+		return StartEndDate.builder().startDate(startOfLastWeek).endDate(endOfLastWeek).build();
+	}
+
 	public static StartEndDate calcLastMonth() {
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime endOfLastMonth = now.with(TemporalAdjusters.firstDayOfMonth()).minusDays(1);

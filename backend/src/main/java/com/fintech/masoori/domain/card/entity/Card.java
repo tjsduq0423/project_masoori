@@ -1,5 +1,6 @@
 package com.fintech.masoori.domain.card.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

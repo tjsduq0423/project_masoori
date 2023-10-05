@@ -166,6 +166,22 @@ public class CardServiceImpl implements CardService {
 
 	@Override
 	@Transactional
+	public void createSpendingCard(String email, LocalDateTime date) {
+		// 사용자 찾기.
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
+		Card card = Card.builder().cardType(CardType.BASIC).user(user).build();
+		cardRepository.save(card);
+		card.setLocalDateTime(date);
+		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek(date);
+		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
+			startEndDate.getStartDate(), startEndDate.getEndDate());
+		// 소비 카드 생성 중인지 저장.
+		spendingPubService.sendMessage(
+			SpendingRequestMessage.builder().cardId(card.getId()).userWeeklyTransactionList(transactionList).build());
+	}
+
+	@Override
+	@Transactional
 	public void registerChallengeCardImage(String imgPath, Long cardId) {
 		Card card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFound("Card Is Not Found"));
 		card.updateImgPath(imgPath);
@@ -175,6 +191,27 @@ public class CardServiceImpl implements CardService {
 	@Transactional
 	public void addChallenge(Long userId, String achievementCondition) {
 		CalcDate.StartEndDate startEndDate = CalcDate.calcRecentWeek();
+		Card card = cardRepository.findRecentCard(userId, CardType.SPECIAL, startEndDate.getStartDate(),
+			startEndDate.getEndDate());
+		com.fintech.masoori.domain.card.entity.Challenge challenge = com.fintech.masoori.domain.card.entity.Challenge.builder()
+		                                                                                                             .achievementCondition(
+			                                                                                                             achievementCondition)
+		                                                                                                             .startTime(
+			                                                                                                             startEndDate.getStartDate())
+		                                                                                                             .endTime(
+			                                                                                                             startEndDate.getEndDate())
+		                                                                                                             .isSuccess(
+			                                                                                                             false)
+		                                                                                                             .build();
+		ChallengeRepository.save(challenge);
+		card.updateChallengeIdx(card.getChallengeIdx() + 1);
+		challenge.setCard(card);
+	}
+
+	@Override
+	@Transactional
+	public void addChallenge(Long userId, String achievementCondition, LocalDateTime date) {
+		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek(date);
 		Card card = cardRepository.findRecentCard(userId, CardType.SPECIAL, startEndDate.getStartDate(),
 			startEndDate.getEndDate());
 		com.fintech.masoori.domain.card.entity.Challenge challenge = com.fintech.masoori.domain.card.entity.Challenge.builder()
@@ -213,6 +250,31 @@ public class CardServiceImpl implements CardService {
 		                .build();
 		// 이미지 생성 요청.
 		cardRepository.save(card);
+		challengePubService.sendMessage(ChallengeRequestMessage.builder().cardId(card.getId()).name(cardName).build());
+	}
+
+	@Override
+	@Transactional
+	public void createChallengeCard(String email, LocalDateTime date) {
+		// 사용자 찾기.
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
+		// 카드 이름 정하기
+		// 랜덤한 인덱스 생성
+		Random random = new Random();
+		// 이름과
+		String n = NAME_LIST[random.nextInt(NAME_LIST.length)];
+		String v = VERSE_LIST[random.nextInt(VERSE_LIST.length)];
+		String cardName = v + " " + n;
+		Card card = Card.builder()
+		                .cardType(CardType.SPECIAL)
+		                .user(user)
+		                .description("")
+		                .name(cardName)
+		                .challengeIdx(0)
+		                .build();
+		// 이미지 생성 요청.
+		cardRepository.save(card);
+		card.setLocalDateTime(date);
 		challengePubService.sendMessage(ChallengeRequestMessage.builder().cardId(card.getId()).name(cardName).build());
 	}
 
