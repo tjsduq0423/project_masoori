@@ -33,6 +33,7 @@ def SummarizeSpend(categorizedSpend):
         )
         chain = LLMChain(llm=chat, prompt=prompt, verbose=True)
         result = chain.run(Data=categorizedSpend)
+        result = result.replace("\"", "")
         return result
     except Exception as e:
         print(e)
