@@ -44,21 +44,21 @@ public class MonthlySpendingAnalyticsServiceImpl implements MonthlySpendingAnaly
 										  .build();
 	}
 
-	@Override
-	@Transactional
-	public void saveMonthlySpendingAnalytics(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard) {
-		User serviceUser = userRepository.findById(monthlySpendingAndCreditcard.getUserId())
-										 .orElseThrow(() -> new RuntimeException("User Not Found"));
-
-		for (MonthlySpendingAndCreditcard.MonthlySpending spending : monthlySpendingAndCreditcard.getMonthlySpendingList()) {
-			MonthlySpendingAnalytics analytics = MonthlySpendingAnalytics.builder()
-																		 .category(spending.getCategory())
-																		 .cost(spending.getCost())
-																		 .build();
-
-			monthlySpendingAnalyticsRepository.save(analytics);
-			serviceUser.addMonthlySpendingAnalytics(analytics);
-		}
-	}
+	// @Override
+	// @Transactional
+	// public void saveMonthlySpendingAnalytics(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard) {
+	// 	User serviceUser = userRepository.findById(monthlySpendingAndCreditcard.getUserId())
+	// 									 .orElseThrow(() -> new RuntimeException("User Not Found"));
+	//
+	// 	for (MonthlySpendingAndCreditcard.MonthlySpending spending : monthlySpendingAndCreditcard.getMonthlySpendingList()) {
+	// 		MonthlySpendingAnalytics analytics = MonthlySpendingAnalytics.builder()
+	// 																	 .category(spending.getCategory())
+	// 																	 .cost(spending.getCost())
+	// 																	 .build();
+	//
+	// 		monthlySpendingAnalyticsRepository.save(analytics);
+	// 		serviceUser.addMonthlySpendingAnalytics(analytics);
+	// 	}
+	// }
 
 }

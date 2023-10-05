@@ -24,18 +24,33 @@ channel = connection.channel()
 channel.queue_declare(queue=pub_queue_name, durable=True)
 
 
+# reqDto
+class ChallengeRequestMessage(BaseModel):
+    cardId: int
+    verse: str
+
+
+# resDto 선언
+class GeneratedChallengeCard(BaseModel):
+    cardId: int
+    imagePath: str
+
+
 # sub 에서 메시지를 받아 처리하는 함수
 def callback(ch, method, properties, body):
-    # 메시지 처리 로직 작성 - LangChain 모듈 import -> 작성 필수
-    # body가 spring boot 서버에서 받은 데이터임 - parsing 해야할 수 있음.data = json.loads(received_message) 이런식으로
-    print(f"Received {json.loads(body)}")
+    try:
+        # 이거 쓰면댐 -> Anal
+        request_message_dict = json.loads(body)
+        # 서비스 로직 실행 -> 결과값 res 객체에 넣고 쏘면 댐.
 
+        res = ""
+        # 메시지 응답 큐 pub
+        ch.basic_publish(exchange="", routing_key=pub_queue_name, body=res)
 
-    # 파싱된 메시지 큐로 전달
-    ch.basic_publish(exchange="", routing_key=pub_queue_name, body=body)
-
-    # 메시지 처리 완료 시 MQ에 처리 했다고 전달하는 함수
-    ch.basic_ack(delivery_tag=method.delivery_tag)
+        # 메시지 처리 완료 시 MQ에 처리 했다고 전달하는 함수
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+    except Exception as e:
+        print(e)
 
 
 # sub 설정

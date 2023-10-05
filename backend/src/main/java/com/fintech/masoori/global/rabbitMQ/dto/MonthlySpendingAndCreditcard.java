@@ -18,16 +18,7 @@ import lombok.ToString;
 public class MonthlySpendingAndCreditcard {
 	// 분석된 월간 소비내용과 추천된 신용카드 리스트를 받는다.
 	private Long userId;
-	private List<MonthlySpending> monthlySpendingList;
 	private List<RecommendedCreditCard> creditCardList;
-
-	@Data
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class MonthlySpending {
-		private String category;
-		private Integer cost;
-	}
 
 	@Data
 	@NoArgsConstructor
