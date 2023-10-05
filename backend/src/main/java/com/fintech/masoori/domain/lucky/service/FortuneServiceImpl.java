@@ -46,6 +46,7 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 	}
 
 	@Override
+	@Transactional
 	public FortuneRes selectOneFortune(String email) {
 		//로그인
 		if (!email.isEmpty()) {
@@ -56,9 +57,9 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 				String fortuneName = userFortuneOptional.get();
 				Fortune findFortune = fortuneRepository.findDescriptioneByName(fortuneName);
 				return new FortuneRes(findFortune);
-
 			}
 		}
+
 		//오늘 처음 조회하는 경우, 비로그인인 경우 그냥 진행
 		long fortuneSize = fortuneRepository.count();
 		int idx = (int)(Math.random() * fortuneSize);
@@ -69,6 +70,7 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 				log.debug("Login select fortune");
 				int limitMinute = CalcEndTime.endMinute();
 				redisService.setUserFortune(email, temp.getName(), limitMinute);
+				fortuneRepository.save(temp);
 			}
 			return new FortuneRes(temp);
 		}
@@ -88,15 +90,15 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 
 		Map<Long, FortuneRes> fortuneResMap = new HashMap<>();
 
-		for(FortuneRes fortuneRes : fortuneList.getFortuneList()){
+		for (FortuneRes fortuneRes : fortuneList.getFortuneList()) {
 			boolean match = false;
 			for (FortuneUser fortuneUser : fortuneUserList) {
-				if(fortuneRes.getId().equals(fortuneUser.getFortune().getId())){
+				if (fortuneRes.getId().equals(fortuneUser.getFortune().getId())) {
 					fortuneResMap.put(fortuneRes.getId(), new FortuneRes((fortuneUser.getFortune())));
 					match = true;
 				}
 			}
-			if(!match){
+			if (!match) {
 				fortuneResMap.put(fortuneRes.getId(), null);
 			}
 		}
