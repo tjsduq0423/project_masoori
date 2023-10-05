@@ -179,9 +179,14 @@ public class CardServiceImpl implements CardService {
 		cardRepository.save(card);
 		card.setLocalDateTime(date);
 		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek(date);
+		log.info(startEndDate.toString());
 		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
 			startEndDate.getStartDate(), startEndDate.getEndDate());
 		// 소비 카드 생성 중인지 저장.
+		if (transactionList.isEmpty()) {
+			log.info("Deal List 비어있음");
+			return;
+		}
 		spendingPubService.sendMessage(
 			SpendingRequestMessage.builder().cardId(card.getId()).userWeeklyTransactionList(transactionList).build());
 	}
