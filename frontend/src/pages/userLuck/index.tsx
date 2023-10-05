@@ -28,7 +28,7 @@ const Header = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-top: 3%;
+  margin-top: 6%;
 `;
 
 const Title = styled.div`

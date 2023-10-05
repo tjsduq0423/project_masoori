@@ -43,7 +43,7 @@ const ModalContainer = styled.div<{ isOpen: boolean }>`
 const MenuTitle = styled.div`
   background: url(${menuTitle}) no-repeat;
   background-size: contain;
-  margin-top: 1.5rem;
+  margin-top: 5rem;
   height: 300px;
   width: 550px;
 `;

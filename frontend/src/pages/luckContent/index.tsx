@@ -29,7 +29,7 @@ const Header = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-top: 3%;
+  margin-top: 6%;
 `;
 
 const Title = styled.div`
@@ -124,7 +124,7 @@ const LuckContentPage = () => {
         <CardContainer>
           <TarotCard
             width="300px"
-            height="402px"
+            height="440px"
             cardWidth="100%"
             cardSrc={cardFront}
             imageSrc={luckInfo.imagePath}
