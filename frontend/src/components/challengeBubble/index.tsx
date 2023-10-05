@@ -25,11 +25,9 @@ const StyledChallengeBubble = styled.div<StyledChallengeBubbleProps>`
 
 const BubbleContainer = styled.div``;
 
-const ImageContainer = styled.div`
-  width: 90px;
+const Image = styled.img`
+  width: 70px;
 `;
-
-const Image = styled.img``;
 
 const ContentContainer = styled.div`
   margin-left: 15px;
@@ -66,9 +64,7 @@ const ChallengeBubble = ({
         text={text}
         titleText={titleText}
       >
-        <ImageContainer>
-          <Image src={imgLink}></Image>
-        </ImageContainer>
+        <Image src={imgLink}></Image>
         <ContentContainer>
           <Title>{titleText}</Title>
           {text}

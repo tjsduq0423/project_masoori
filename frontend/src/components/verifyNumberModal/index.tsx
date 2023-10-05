@@ -68,6 +68,24 @@ const DisableNextButton = styled.button`
   color: #5e3a66;
   font-weight: bold;
   font-size: 12px;
+
+  &:hover {
+    background-color: #5e3a66; /* 호버 시 배경색 변경 */
+    color: white;
+  }
+`;
+
+const AbleNextButton = styled.button`
+  width: 16.275vw;
+  border-radius: 5px;
+  border-color: #eae2ed;
+  border-width: 1px;
+  margin-top: 25px;
+  height: 30px;
+  background-color: #5e3a66;
+  color: #eae2ed;
+  font-weight: bold;
+  font-size: 12px;
 `;
 
 const EmailInput = styled.input`
@@ -87,7 +105,11 @@ const DuplicateCheckButton = styled.button`
   background-color: #5e3a66;
   height: 30px;
   color: white;
-  /* font-weight: bold; */
+
+  &:hover {
+    background-color: #813e83; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+  }
 `;
 
 const DisableSendCodeButton = styled.button`
@@ -100,9 +122,18 @@ const DisableSendCodeButton = styled.button`
   font-weight: bold;
   background-color: #5e3a66;
   color: #eae2ed;
+
+  &:hover {
+    background-color: #813e83; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+  }
 `;
 
-const VerifyNumberModal = () => {
+interface VerifyNumberModalProps {
+  closeModal: () => void;
+}
+
+const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
   // const navigate = useNavigate();
 
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
@@ -110,6 +141,7 @@ const VerifyNumberModal = () => {
   const [phonenumber, setPhonenumber] = useState("");
   const [code, setCode] = useState("");
   const [isTextEntered, setIsTextEntered] = useState(false);
+  const [isVerify, setIsVerify] = useState(false);
 
   const usePostSmsMutation = usePostSms();
   const usePostSmsCheckMutation = usePostSmsCheck();
@@ -137,6 +169,7 @@ const VerifyNumberModal = () => {
       });
 
       toast.info("✉ 인증 코드 인증 성공 ✉");
+      setIsVerify(true);
     } catch (error) {
       toast.warning("✉ 인증 코드 인증 실패 ✉");
     }
@@ -147,6 +180,7 @@ const VerifyNumberModal = () => {
       await usePostConsumeMutation.mutateAsync();
 
       toast.info("⛓ 연동 성공 ⛓");
+      closeModal();
     } catch (error) {
       console.error("연동 실패:", error);
     }
@@ -176,7 +210,6 @@ const VerifyNumberModal = () => {
             <EmailInput
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="이름을 입력하세요"
               style={{
                 color: isTextEntered ? "#5e3a66" : "initial", // 상황에 따라 텍스트 색상을 조건적으로 변경
               }}
@@ -196,7 +229,6 @@ const VerifyNumberModal = () => {
             <EmailInput
               value={phonenumber}
               onChange={(e) => setPhonenumber(e.target.value)}
-              placeholder="전화번호를 입력하세요"
             />
             <DuplicateCheckButton
               onClick={() => postSmsHandler(name, phonenumber)}
@@ -218,7 +250,6 @@ const VerifyNumberModal = () => {
             <EmailInput
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              placeholder="인증번호를 입력하세요"
             />
             <DisableSendCodeButton
               onClick={() => postCodeHandler(phonenumber, code)}
@@ -227,9 +258,13 @@ const VerifyNumberModal = () => {
             </DisableSendCodeButton>
           </div>
           <SignUp>
-            <DisableNextButton onClick={() => postConsumeHandler()}>
-              연동하기
-            </DisableNextButton>
+            {isVerify ? (
+              <AbleNextButton onClick={() => postConsumeHandler()}>
+                연동하기
+              </AbleNextButton>
+            ) : (
+              <DisableNextButton>연동하기</DisableNextButton>
+            )}
           </SignUp>
         </Email>
       </SignUpFrontImg>

@@ -6,6 +6,7 @@ import { useAllCreditCard } from "@/apis/dictionary/Queries/useAllCreditCard";
 import MonthSpendCarousel from "@/components/monthSpend";
 import { useRecoilValue } from "recoil";
 import { creditInfoState } from "@/states/dictionaryState";
+import { toast } from "react-toastify";
 
 import tarotback from "@/assets/img/tarotCard/tarotCardBack.png";
 
@@ -149,6 +150,14 @@ const StyledSwiperSlide = styled.div`
   opacity: 0.4;
   transition: opacity 0.4s ease-in;
 
+  transition: transform 0.2s ease; /* 호버 애니메이션 추가 */
+  transform-origin: center center;
+
+  /* 호버 시 확대 스타일 */
+  &:hover {
+    transform: scale(1.05);
+  }
+
   span {
     display: inline-block;
     background: #9926e1;
@@ -264,7 +273,6 @@ const StyledRotatedImageWrapper = styled.div<{ imageAttr?: string }>`
 const CardRecommend = () => {
   const creditInfo = useRecoilValue(creditInfoState);
   console.log(creditInfo);
-
   const allCreditCard = useAllCreditCard(creditInfo);
   const creditCardRes = allCreditCard.creditCardRes.creditCardList;
   const MonthData =
@@ -275,8 +283,12 @@ const CardRecommend = () => {
 
   const handleRegistBtnClick = () => {
     // Use window.location.href to navigate to the specified link
-    // console.log(currentSlideIndex.registerPath);
-    window.open(currentSlideIndex.registerPath, "_blank");
+
+    if (currentSlideIndex.registerPath) {
+      window.open(currentSlideIndex.registerPath, "_blank");
+    } else {
+      toast.warning("온라인 신청이 불가합니다");
+    }
   };
 
   useEffect(() => {
@@ -341,7 +353,7 @@ const CardRecommend = () => {
   return (
     <StyledMain>
       <StyledContent>
-        <StyledDate>23.09</StyledDate>
+        <StyledDate>{creditInfo.slice(0, -12)}월</StyledDate>
         <StyledTitle>이달의 추천카드</StyledTitle>
         <StyledWrapper>
           <MonthSpendCarousel monthData={MonthData} />

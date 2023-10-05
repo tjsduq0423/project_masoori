@@ -39,12 +39,18 @@ const routes: RouteType[] = [
   },
   {
     path: "/faq",
+    layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/faq")),
   },
   {
     path: "/luck",
     layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/luck")),
+  },
+  {
+    path: "/userluck",
+    layout: DashboardLayout,
+    element: React.lazy(() => import("@/pages/userLuck")),
   },
   {
     path: "/luckcontent",
@@ -76,6 +82,7 @@ const routes: RouteType[] = [
   },
   {
     path: "/card",
+    layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/cardRecommend")),
   },
   {

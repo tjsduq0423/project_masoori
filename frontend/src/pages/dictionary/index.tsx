@@ -10,7 +10,7 @@ import ChallengeBubble from "@/components/challengeBubble";
 import { StyledChallengeBubbleProps } from "@/types/challengeType";
 import ChallegeSuccess from "@/assets/img/challengeBubble/challengeSuccess.png";
 import ShareModal from "@/components/shareModal";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   creditInfoState,
   specialIdState,
@@ -20,6 +20,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useProfileImage } from "@/apis/menu/Mutations/useProfileImage";
 import { toast } from "react-toastify";
+import Lottie from "lottie-react";
+import { useAllChallengeCard } from "@/apis/dictionary/Queries/useAllChallengeCard";
 
 import cardBack from "@/assets/img/tarotCard/tarotCardBack.png";
 
@@ -105,7 +107,8 @@ const BookTitle = styled.div`
 const ContentSection = styled.div`
   width: 50%;
   height: 100%;
-  margin-top: 5%;
+  padding-left: 20px;
+  margin-top: 6%;
   overflow: auto;
   margin-bottom: 300px;
 `;
@@ -140,7 +143,7 @@ const DictionaryPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSpecialModalOpen, setIsSpecialModalOpen] = useState(false);
-  const specialId = useRecoilValue(specialIdState);
+  const [specialId, setSpecialId] = useRecoilState(specialIdState);
   const profileImage = useProfileImage();
 
   const currentDate = new Date();
@@ -152,8 +155,12 @@ const DictionaryPage = () => {
   const setSpecialImageUrl = useSetRecoilState(specialImageUrlState);
 
   const challengeCard = useChallengeCard(specialId);
+
   setSpecialImageUrl(challengeCard.card.imagePath);
   const allUserFortune = useAllUserFortune().fortuneList;
+
+  console.log(allUserFortune);
+
   const AllConsume = useGetAllConsume(
     "2000-09-16T07:42:34.76",
     initialEndDate
@@ -225,7 +232,7 @@ const DictionaryPage = () => {
     try {
       // 이름과 전화번호를 사용하여 SMS를 보냅니다.
       await profileImage.mutateAsync(challengeCard.card.id);
-      toast.info("🃏 프로필 카드 등록완료 🃏");
+      toast.info("🃏 프로필 카드 등록 완료 🃏");
     } catch (error) {
       console.error("인증 코드 전송 실패:", error);
     }
@@ -233,11 +240,11 @@ const DictionaryPage = () => {
 
   const crystalChallengeBubbleProps: StyledChallengeBubbleProps = {
     text: `사실 말도 안되는 챌린지죠 그치만 어쩌겠습니까 해야지`,
-    width: "340px",
+    width: "300px",
     background: "#4D1B2D80",
     opacity: "1",
     paddingLeftRight: "40px",
-    paddingTopBottom: "30px",
+    paddingTopBottom: "20px",
     borderRadius: "20px",
     imgLink: ChallegeSuccess,
     titleText: "소비금액 5만원 넘지 않기",
@@ -265,7 +272,7 @@ const DictionaryPage = () => {
       </BookSection>
       <ContentSection>
         {currentPage === 0 && (
-          <div style={{ marginBottom: "140px" }}>
+          <div style={{ marginBottom: "140px", marginTop: "30px" }}>
             {Object.keys(groupImagesByMonth()).map((month) => (
               <div key={month}>
                 <BasicText>
@@ -305,7 +312,7 @@ const DictionaryPage = () => {
           </div>
         )}
         {currentPage === 2 && (
-          <div>
+          <div style={{ marginTop: "0px" }}>
             <SpecialHeader>
               <SpecialText>
                 {formattedSpecialDate}
@@ -331,14 +338,15 @@ const DictionaryPage = () => {
                 // 하나 이상의 챌린지의 isSuccess가 false인 경우 Tarot 카드 렌더링
                 <div
                   style={{
-                    marginRight: "30px",
-                    backgroundColor: "rgba(0, 0, 0, 0.7)",
+                    marginRight: "20px",
                     borderRadius: "20px",
+                    marginTop: "19px",
+                    marginLeft: "20px",
                   }}
                 >
                   <TarotCard
-                    width="403px"
-                    height="100%"
+                    width="365px"
+                    height="80%"
                     cardWidth="100%"
                     cardSrc={frontcard}
                     imageSrc={challengeCard.card.imagePath}
@@ -351,9 +359,10 @@ const DictionaryPage = () => {
               )}
               <div
                 style={{
+                  marginTop: "50px",
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "space-around",
+                  gap: "15px",
                 }}
               >
                 {challengeCard.challengeList.map(

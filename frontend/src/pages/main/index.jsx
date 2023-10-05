@@ -18,15 +18,15 @@ import money from "../../assets/img/mainLogo/money.png";
 import dictionary from "../../assets/img/mainLogo/dictionary.jpg";
 import masooriStory from "../../assets/img/mainLogo/masooriStory.jpg";
 import spendtarot from "../../assets/img/mainLogo/spendtarot.jpg";
+import { toast } from "react-toastify";
 
 import VerifyNumberModal from "@/components/verifyNumberModal";
-import { userInfoState } from "@/states/userState";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { nowDateInfoState } from "@/states/spendState";
 import { useGetConsumeRecent } from "@/apis/spend/Queries/useGetConsumeRecent";
-import { usePostSSESendData } from "@/apis/spend/Mutations/usePostSSESendData";
-import { useGetSSESubscribe } from "@/apis/spend/Queries/useGetSSESubscribe";
-import { spendIdState } from "@/states/dictionaryState";
+import { spendIdState, specialIdState } from "@/states/dictionaryState";
+import { modalOpenState } from "@/states/userState";
+import { usePostConsume } from "@/apis/main/Mutations/usePostConsume";
 
 //verifymodal
 
@@ -385,46 +385,71 @@ const MainPage = () => {
     };
   }, []);
 
+  //modal
+  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false); // 모달 열림 여부 상태
+  const [isModalOpen, setIsModalOpen] = useRecoilState(modalOpenState);
+
   //navigation
   const navigateAbout = () => {
     navigate("/landing");
   };
 
   const navigateLuck = () => {
-    navigate("/luck");
+    if (isLogin === "true") {
+      navigate("/userluck");
+    } else {
+      toast.info("비로그인 시 카드 저장 불가");
+      setTimeout(() => {
+        navigate("/luck");
+      }, 1000); // 1초 뒤에 "/luck"으로 이동
+    }
   };
 
   const navigateDictionary = () => {
     if (isLogin === "true") {
       navigate("/dictionary");
+    } else {
+      setIsModalOpen(!isModalOpen);
     }
-  };
-
-  //modal
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 여부 상태
-
-  // 모달 열기 함수
-  const openModal = () => {
-    setIsModalOpen(!isModalOpen);
   };
 
   // 모달 닫기 함수
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsVerifyModalOpen(false);
+  };
+
+  const closeVerifyModal = () => {
+    setIsVerifyModalOpen(false);
+    setIsAuth(true);
   };
 
   // 로그인 사용자 userInfo:isAuthenticated 체크
   const [spendId, setSpendId] = useRecoilState(spendIdState);
   const [nowDateInfo, setNowDateInfo] = useRecoilState(nowDateInfoState);
   const [isLogin, setIsLogin] = useState("");
+  const [isAuth, setIsAuth] = useState(false);
+
+  const usePostConsumeMutation = usePostConsume();
+
+  const postConsumeHandler = useCallback(async () => {
+    try {
+      await usePostConsumeMutation.mutateAsync();
+      toast.info("⛓ 연동 성공 ⛓");
+    } catch (error) {
+      console.error("연동 실패:", error);
+    }
+  }, [usePostConsumeMutation]);
 
   const consumeRecent = useGetConsumeRecent(nowDateInfo);
   const userInfo = useUserInfo(isLogin);
 
+  console.log(userInfo);
+
   useEffect(() => {
     setNowDateInfo("");
     if (consumeRecent === "인증") {
-      setIsModalOpen(!isModalOpen);
+      console.log("인증");
+      postConsumeHandler();
     }
 
     if (consumeRecent && consumeRecent.card) {
@@ -433,7 +458,14 @@ const MainPage = () => {
       console.log(spendId);
       window.location.href = "/spend";
     }
-  }, [consumeRecent, setNowDateInfo, setSpendId, spendId, isModalOpen]);
+  }, [
+    consumeRecent,
+    setNowDateInfo,
+    setSpendId,
+    spendId,
+    isVerifyModalOpen,
+    postConsumeHandler,
+  ]);
 
   useEffect(() => {
     // Check if there is an accessToken in localStorage
@@ -445,7 +477,7 @@ const MainPage = () => {
 
   const checkAuth = () => {
     if (isLogin === "true") {
-      if (userInfo.isAuthenticated !== undefined) {
+      if (userInfo.isAuthenticated === true || isAuth === true) {
         const currentDate = new Date();
         currentDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
         const initialEndDate = currentDate.toISOString().slice(0, -2);
@@ -453,10 +485,10 @@ const MainPage = () => {
         console.log("true라 recent를 호출할거임");
       } else {
         console.log("false라 모달이 떴음");
-        setIsModalOpen(!isModalOpen);
+        setIsVerifyModalOpen(!isVerifyModalOpen);
       }
     } else {
-      console.log("하이");
+      setIsModalOpen(!isModalOpen);
     }
   };
 
@@ -516,10 +548,10 @@ const MainPage = () => {
           </div>
         </div>
       </main>
-      <ModalContainer isOpen={isModalOpen}>
-        <VerifyNumberModal />
+      <ModalContainer isOpen={isVerifyModalOpen}>
+        <VerifyNumberModal closeModal={closeVerifyModal} />
       </ModalContainer>
-      <Backdrop isOpen={isModalOpen} onClick={closeModal} />
+      <Backdrop isOpen={isVerifyModalOpen} onClick={closeModal} />
     </div>
   );
 };

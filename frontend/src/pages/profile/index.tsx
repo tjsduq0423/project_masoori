@@ -192,7 +192,7 @@ const ProfilePage = () => {
           cardSrc={tarotCardFront}
           imageSrc={userInfo.imagePath || ""}
           bottomImageWidth="100%"
-          text="내 프로필 사진"
+          text="MY PROFILE"
           fontsize="20px"
           bottom="1.2rem"
         ></TarotCard>
@@ -252,8 +252,8 @@ const ProfilePage = () => {
             <ToggleSwitch
               textOn="문자 연동 취소하기"
               textOff="문자 연동 등록하기"
-              backgroundImage="https://www.svgrepo.com/show/368252/kakao.svg"
-              backgroundColor="#e0cf19"
+              backgroundImage="https://assets.codepen.io/4175254/boo-face.png"
+              backgroundColor="#FFF"
               checked={userInfo.smsAlarm!}
             />
           </div>
@@ -288,7 +288,7 @@ const ProfilePage = () => {
       </InfoSide>
       {isSettingOpen ? (
         <SettingFinancialGoals
-          monthlySpendingGoal={userInfo.monthlySpendingGoal!}
+          monthlySpendingGoal={userInfo.monthlySpendingGoal! / 10000}
         />
       ) : (
         <></>

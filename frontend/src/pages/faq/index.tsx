@@ -24,7 +24,8 @@ const TitleText = styled.div`
   color: #fdf1f1;
   font-family: "Pyeongchangpeace";
   font-size: 50px;
-  margin: 50px;
+  margin-top: 100px;
+  margin-bottom: 80px;
 `;
 
 const FaqContainer = styled.div`
@@ -34,6 +35,7 @@ const FaqContainer = styled.div`
   background-color: #fff;
   overflow: hidden;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  margin-bottom: 100px;
 `;
 
 const FaqItem = styled.div<FaqItemProps>`
@@ -56,7 +58,7 @@ const FaqItem = styled.div<FaqItemProps>`
   .faq-title {
     font-weight: 700;
     font-size: 20px;
-    color: ${(props) => (props.active ? "#4A3246" : "initial")};
+    color: ${(props) => (props.active ? "#4A3246" : "#5E3A66")};
   }
 
   .faq-text {

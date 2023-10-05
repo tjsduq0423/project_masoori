@@ -89,17 +89,10 @@ const LuckContentPage = () => {
     hoverable: false,
   };
 
-  // const formattedDescription = luckInfo.description
-  //   .split("\n")
-  //   .map((line, index) => (
-  //     <React.Fragment key={index}>
-  //       {line}
-  //       <br />
-  //     </React.Fragment>
-  //   ));
+  console.log(luckInfo.description.split("\n").join("<br>"));
 
   const contentTextBubbleProps: StyledTextBubbleProps = {
-    text: `${luckInfo.description.replace(/\n/g, "<br>")}`, // \n을 <br>로 대체
+    text: luckInfo.description,
     width: "588px", // "px" 대문자로 변경
     background: "#4D1B2D80",
     opacity: "1",
@@ -147,7 +140,10 @@ const LuckContentPage = () => {
               <TextBubble {...titleTextBubbleProps} />
             </TextBubbleContainer>
             <TextBubbleContainer>
-              <TextBubble {...contentTextBubbleProps} />
+              <TextBubble
+                {...contentTextBubbleProps}
+                text={luckInfo.description.replace(/\\n/g, "<br/>")}
+              />
             </TextBubbleContainer>
             <TextBubbleContainer>
               <TextBubble
