@@ -8,6 +8,7 @@ import java.time.temporal.TemporalAdjusters;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.ToString;
 
 @Data
 public class CalcDate {
@@ -58,6 +59,7 @@ public class CalcDate {
 	@Data
 	@Getter
 	@Builder
+	@ToString
 	public static class StartEndDate {
 		private LocalDateTime startDate;
 		private LocalDateTime endDate;
