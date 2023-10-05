@@ -228,6 +228,7 @@ public class CardServiceImpl implements CardService {
 		LocalDateTime now = LocalDateTime.now();
 		Card recentlyChallengeCard = cardRepository.findTopByUserIdRecentlyChallengeCard(loginUser.getId(), CardType.SPECIAL, now,
 			PageRequest.of(0,1));
+		if (recentlyChallengeCard == null) return null;
 		return recentlyChallengeCard.getId();
 	}
 
