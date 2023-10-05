@@ -54,10 +54,10 @@ public class CardGenerationScheduler {
 	}
 
 	/**
-	 챌린지 생성 요청 - 주 1회 언제? 주 시작 -> 매주 일요일 새벽 1시
+	 챌린지 생성 요청 - 매월 첫 날. 0시 0분
 	 */
 	@Async
-	@Scheduled(cron = "0 0 1 * * 0")
+	@Scheduled(cron = "0 0 0 1  * *")
 	public void challengeGenerateWeelky() {
 		List<User> userList = userService.findUsersByIsAuthenticated(true);
 		for (User user : userList) {
