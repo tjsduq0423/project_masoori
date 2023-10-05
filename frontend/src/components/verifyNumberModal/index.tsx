@@ -77,7 +77,7 @@ const DisableNextButton = styled.button`
 `;
 
 const AbleNextButton = styled.button`
-  width: 16.275vw;
+  width: 100%;
   border-radius: 5px;
   border-color: #eae2ed;
   border-width: 1px;
@@ -229,6 +229,7 @@ const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
             }}
           >
             <EmailInput
+              style={{ padding: "5px" }}
               value={phonenumber}
               onChange={(e) => setPhonenumber(e.target.value)}
             />
@@ -250,6 +251,7 @@ const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
             }}
           >
             <EmailInput
+              style={{ padding: "5px" }}
               value={code}
               onChange={(e) => setCode(e.target.value)}
             />
