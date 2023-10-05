@@ -1,3 +1,8 @@
 pydantic>=1.8.0,<2.0.0
 uvicorn>=0.15.0,<0.16.0
 pika==1.3.2
+openai
+langchain
+faiss-cpu
+tiktoken
+sentence-transformers
