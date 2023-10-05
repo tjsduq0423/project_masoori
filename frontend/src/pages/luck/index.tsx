@@ -28,7 +28,7 @@ const Header = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-top: 3%;
+  margin-top: 6%;
 `;
 
 const Title = styled.div`
@@ -43,7 +43,7 @@ const CardSection = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 80px;
+  margin-top: 130px;
   gap: 300px;
   flex-grow: 1;
 `;

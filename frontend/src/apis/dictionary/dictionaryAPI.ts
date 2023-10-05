@@ -1,4 +1,5 @@
 import { instance } from "@/apis/instance";
+import { toast } from "react-toastify";
 
 // 사용자 추천 카드 리스트 조회 API
 const getAllCreditcard = async (time: string) => {
@@ -45,7 +46,7 @@ const getAllChallengeCard = async (startDate: string, endDate: string) => {
 };
 
 // 유저에게 할당되어 있는 챌린지카드와 챌린지를 연,월일을 통해 조회한다.
-const getChallengeCard = async (id: number) => {
+const getChallengeCard = async (id: number | null) => {
   try {
     const response = await instance.get(`/card/challenge/${id}`);
     return response.data;

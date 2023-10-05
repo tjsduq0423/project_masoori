@@ -54,6 +54,13 @@ const ModalContainer = styled.div`
 const MainPage = () => {
   const navigate = useNavigate();
   const canvasRef = useRef(null); // Ref to store the canvas element
+  // 로그인 사용자 userInfo:isAuthenticated 체크
+  const [spendId, setSpendId] = useRecoilState(spendIdState);
+
+  const [nowDateInfo, setNowDateInfo] = useRecoilState(nowDateInfoState);
+  const [isLogin, setIsLogin] = useState("");
+  const [isAuth, setIsAuth] = useState(false);
+  const [specialId, setSpecialId] = useRecoilState(specialIdState);
 
   useEffect(() => {
     let body,
@@ -407,7 +414,11 @@ const MainPage = () => {
 
   const navigateDictionary = () => {
     if (isLogin === "true") {
-      navigate("/dictionary");
+      if (specialId !== null) {
+        navigate("/dictionary");
+      } else {
+        navigate("/userdictionary");
+      }
     } else {
       setIsModalOpen(!isModalOpen);
     }
@@ -423,12 +434,6 @@ const MainPage = () => {
     setIsAuth(true);
   };
 
-  // 로그인 사용자 userInfo:isAuthenticated 체크
-  const [spendId, setSpendId] = useRecoilState(spendIdState);
-  const [nowDateInfo, setNowDateInfo] = useRecoilState(nowDateInfoState);
-  const [isLogin, setIsLogin] = useState("");
-  const [isAuth, setIsAuth] = useState(false);
-
   const usePostConsumeMutation = usePostConsume();
 
   const postConsumeHandler = useCallback(async () => {
@@ -443,7 +448,9 @@ const MainPage = () => {
   const consumeRecent = useGetConsumeRecent(nowDateInfo);
   const userInfo = useUserInfo(isLogin);
 
-  console.log(userInfo);
+  if (userInfo) {
+    setSpecialId(userInfo.challengeCardId);
+  }
 
   useEffect(() => {
     setNowDateInfo("");
@@ -484,6 +491,7 @@ const MainPage = () => {
         setNowDateInfo(initialEndDate);
         console.log("true라 recent를 호출할거임");
       } else {
+        toast.warning("현재는 소비내역 블랙박스입니다. ");
         console.log("false라 모달이 떴음");
         setIsVerifyModalOpen(!isVerifyModalOpen);
       }

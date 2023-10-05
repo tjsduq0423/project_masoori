@@ -17,7 +17,7 @@ const routes: RouteType[] = [
   {
     path: "/",
     layout: DashboardLayout,
-    element: React.lazy(() => import("@/pages/landing")),
+    element: React.lazy(() => import("@/pages/main")),
   },
   {
     path: "/main",
@@ -70,6 +70,11 @@ const routes: RouteType[] = [
     path: "/dictionary",
     layout: DashboardLayout,
     element: React.lazy(() => import("@/pages/dictionary")),
+  },
+  {
+    path: "/userdictionary",
+    layout: DashboardLayout,
+    element: React.lazy(() => import("@/pages/nonUserDictionary")),
   },
   {
     path: "/spend",

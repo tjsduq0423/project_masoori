@@ -274,6 +274,7 @@ const CardRecommend = () => {
   const creditInfo = useRecoilValue(creditInfoState);
   console.log(creditInfo);
   const allCreditCard = useAllCreditCard(creditInfo);
+  console.log(allCreditCard.creditCardRes.creditCardList);
   const creditCardRes = allCreditCard.creditCardRes.creditCardList;
   const MonthData =
     allCreditCard.monthlySpendingAnalyticsRes.monthlySpendingAnalyticsList;

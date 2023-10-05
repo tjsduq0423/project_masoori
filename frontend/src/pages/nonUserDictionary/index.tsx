@@ -5,13 +5,12 @@ import PokemonCard from "@/components/Pokemon";
 import TarotCard from "@/components/tarotCard";
 import DcitBtn from "@/components/dictBtn";
 import frontcard from "@/assets/img/tarotCard/tarotCardFront.png";
-import specialTarotCard from "@/assets/img/tarotCard/tarotCardSpecial.png";
 import background from "@/assets/img/background/silkBackground.jpg";
 import ChallengeBubble from "@/components/challengeBubble";
 import { StyledChallengeBubbleProps } from "@/types/challengeType";
 import ChallegeSuccess from "@/assets/img/challengeBubble/challengeSuccess.png";
 import ShareModal from "@/components/shareModal";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   creditInfoState,
   specialIdState,
@@ -21,8 +20,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useProfileImage } from "@/apis/menu/Mutations/useProfileImage";
 import { toast } from "react-toastify";
-
 import Lottie from "lottie-react";
+import { useAllChallengeCard } from "@/apis/dictionary/Queries/useAllChallengeCard";
 
 import cardBack from "@/assets/img/tarotCard/tarotCardBack.png";
 
@@ -140,11 +139,12 @@ const BasicText = styled.div`
   margin-bottom: 10px;
 `;
 
-const DictionaryPage = () => {
+const NonUserDictionaryPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSpecialModalOpen, setIsSpecialModalOpen] = useState(false);
-  const specialId = useRecoilValue(specialIdState);
+  const [specialId, setSpecialId] = useRecoilState(specialIdState);
+  const [formattedSpecialDate, setFormattedSpecialDate] = useState("");
   const profileImage = useProfileImage();
 
   const currentDate = new Date();
@@ -153,11 +153,10 @@ const DictionaryPage = () => {
 
   const setCreditInfo = useSetRecoilState(creditInfoState);
   const setSpendId = useSetRecoilState(spendIdState);
-  const setSpecialImageUrl = useSetRecoilState(specialImageUrlState);
 
   const challengeCard = useChallengeCard(specialId);
-  setSpecialImageUrl(challengeCard.card.imagePath);
   const allUserFortune = useAllUserFortune().fortuneList;
+
   const AllConsume = useGetAllConsume(
     "2000-09-16T07:42:34.76",
     initialEndDate
@@ -257,9 +256,11 @@ const DictionaryPage = () => {
     return formatSpecialDateString;
   };
 
-  const formattedSpecialDate = formatSpecialDateString(
-    challengeCard.card.createdDate
-  );
+  if (specialId !== null) {
+    setFormattedSpecialDate(
+      formatSpecialDateString(challengeCard.card.createdDate)
+    );
+  }
 
   return (
     <PageContainer>
@@ -269,7 +270,7 @@ const DictionaryPage = () => {
       </BookSection>
       <ContentSection>
         {currentPage === 0 && (
-          <div style={{ marginBottom: "140px" }}>
+          <div style={{ marginBottom: "140px", marginTop: "30px" }}>
             {Object.keys(groupImagesByMonth()).map((month) => (
               <div key={month}>
                 <BasicText>
@@ -309,89 +310,97 @@ const DictionaryPage = () => {
           </div>
         )}
         {currentPage === 2 && (
-          <div style={{ marginTop: "10px" }}>
-            <SpecialHeader>
-              <SpecialText>
-                {formattedSpecialDate}
-                <DcitBtn onClick={settingProfileImage} text="프로필 설정" />
-                <DcitBtn onClick={openSpecialModal} text="카드변경" />
-                <DcitBtn onClick={openModal} text="공유하기" />
-              </SpecialText>
-            </SpecialHeader>
-            <div style={{ display: "flex" }}>
-              {challengeCard.challengeList.every(
-                (challenge: Challenge) => challenge.isSuccess
-              ) ? (
-                // 모든 챌린지의 isSuccess가 true인 경우 Pokemon 카드 렌더링
-                <PokemonCard
-                  cardWidth="100%"
-                  cardSrc={specialTarotCard}
-                  imageUrl={challengeCard.card.imagePath}
-                  text={challengeCard.card.name}
-                  bottom="20px"
-                  fontsize="32px"
-                />
-              ) : (
-                // 하나 이상의 챌린지의 isSuccess가 false인 경우 Tarot 카드 렌더링
-                <div
-                  style={{
-                    marginRight: "20px",
-                    borderRadius: "20px",
-                    marginTop: "19px",
-                    marginLeft: "20px",
-                  }}
-                >
-                  <TarotCard
-                    width="405px"
-                    height="80%"
-                    cardWidth="100%"
-                    cardSrc={frontcard}
-                    imageSrc={challengeCard.card.imagePath}
-                    bottomImageWidth="100%"
-                    text={challengeCard.card.name}
-                    bottom="20px"
-                    fontsize="32px"
-                  />
-                </div>
-              )}
-              <div
-                style={{
-                  marginTop: "50px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "15px",
-                }}
-              >
-                {challengeCard.challengeList.map(
-                  (challenge: Challenge, index: number) => (
-                    <ChallengeBubble
-                      key={index}
-                      text={challenge.achievementCondition}
-                      titleText={challenge.name}
-                      width={crystalChallengeBubbleProps.width}
-                      background={
-                        challenge.isSuccess
-                          ? "#7B263B"
-                          : crystalChallengeBubbleProps.background
-                      }
-                      opacity={
-                        challenge.isSuccess
-                          ? "1"
-                          : crystalChallengeBubbleProps.opacity
-                      }
-                      paddingLeftRight={
-                        crystalChallengeBubbleProps.paddingLeftRight
-                      }
-                      paddingTopBottom={
-                        crystalChallengeBubbleProps.paddingTopBottom
-                      }
-                      borderRadius={crystalChallengeBubbleProps.borderRadius}
-                      imgLink={crystalChallengeBubbleProps.imgLink}
+          <div style={{ marginTop: "0px" }}>
+            {specialId !== null ? (
+              <div>
+                <SpecialHeader>
+                  <SpecialText>
+                    {formattedSpecialDate}
+                    <DcitBtn onClick={settingProfileImage} text="프로필 설정" />
+                    <DcitBtn onClick={openSpecialModal} text="카드변경" />
+                    <DcitBtn onClick={openModal} text="공유하기" />
+                  </SpecialText>
+                </SpecialHeader>
+                <div style={{ display: "flex" }}>
+                  {challengeCard.challengeList.every(
+                    (challenge: Challenge) => challenge.isSuccess
+                  ) ? (
+                    // 모든 챌린지의 isSuccess가 true인 경우 Pokemon 카드 렌더링
+                    <PokemonCard
+                      cardWidth="100%"
+                      cardSrc={frontcard}
+                      imageUrl={challengeCard.card.imagePath}
+                      text={challengeCard.card.name}
+                      bottom="20px"
+                      fontsize="32px"
                     />
-                  )
-                )}
+                  ) : (
+                    // 하나 이상의 챌린지의 isSuccess가 false인 경우 Tarot 카드 렌더링
+                    <div
+                      style={{
+                        marginRight: "20px",
+                        borderRadius: "20px",
+                        marginTop: "19px",
+                        marginLeft: "20px",
+                      }}
+                    >
+                      <TarotCard
+                        width="365px"
+                        height="80%"
+                        cardWidth="100%"
+                        cardSrc={frontcard}
+                        imageSrc={challengeCard.card.imagePath}
+                        bottomImageWidth="100%"
+                        text={challengeCard.card.name}
+                        bottom="20px"
+                        fontsize="32px"
+                      />
+                    </div>
+                  )}
+                  <div
+                    style={{
+                      marginTop: "50px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "15px",
+                    }}
+                  >
+                    {challengeCard.challengeList.map(
+                      (challenge: Challenge, index: number) => (
+                        <ChallengeBubble
+                          key={index}
+                          text={challenge.achievementCondition}
+                          titleText={challenge.name}
+                          width={crystalChallengeBubbleProps.width}
+                          background={
+                            challenge.isSuccess
+                              ? "#7B263B"
+                              : crystalChallengeBubbleProps.background
+                          }
+                          opacity={
+                            challenge.isSuccess
+                              ? "1"
+                              : crystalChallengeBubbleProps.opacity
+                          }
+                          paddingLeftRight={
+                            crystalChallengeBubbleProps.paddingLeftRight
+                          }
+                          paddingTopBottom={
+                            crystalChallengeBubbleProps.paddingTopBottom
+                          }
+                          borderRadius={
+                            crystalChallengeBubbleProps.borderRadius
+                          }
+                          imgLink={crystalChallengeBubbleProps.imgLink}
+                        />
+                      )
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div></div>
+            )}
           </div>
         )}
         {currentPage === 4 && (
@@ -400,7 +409,7 @@ const DictionaryPage = () => {
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(4, 1fr)", // Adjust the number of columns as needed
-                marginTop: "0px",
+                marginTop: "30px",
               }}
             >
               {allUserFortune.map((card: FortuneListProps, index: number) =>
@@ -440,4 +449,4 @@ const DictionaryPage = () => {
   );
 };
 
-export default DictionaryPage;
+export default NonUserDictionaryPage;
