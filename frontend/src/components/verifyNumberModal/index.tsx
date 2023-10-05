@@ -53,12 +53,13 @@ const SignUp = styled.div`
 
 const Email = styled.div`
   position: relative;
+  margin-bottom: 5px;
   z-index: 1;
   top: 15%;
 `;
 
 const DisableNextButton = styled.button`
-  width: 16.275vw;
+  width: 100%;
   border-radius: 5px;
   border-color: #5e3a66;
   border-width: 1px;
@@ -76,7 +77,7 @@ const DisableNextButton = styled.button`
 `;
 
 const AbleNextButton = styled.button`
-  width: 16.275vw;
+  width: 100%;
   border-radius: 5px;
   border-color: #eae2ed;
   border-width: 1px;
@@ -89,7 +90,7 @@ const AbleNextButton = styled.button`
 `;
 
 const EmailInput = styled.input`
-  width: 11.5vw;
+  width: 70%;
   border-radius: 5px;
   border-width: 1px;
   border-color: #5e3a66;
@@ -97,7 +98,7 @@ const EmailInput = styled.input`
 `;
 
 const DuplicateCheckButton = styled.button`
-  width: 4.5vw;
+  width: 25%;
   border-radius: 5px;
   border-width: 1px;
   border-color: #5e3a66;
@@ -113,7 +114,7 @@ const DuplicateCheckButton = styled.button`
 `;
 
 const DisableSendCodeButton = styled.button`
-  width: 4.5vw;
+  width: 25%;
   border-radius: 5px;
   border-width: 1px;
   border-color: #5e3a66;
@@ -211,6 +212,7 @@ const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               style={{
+                padding: "5px",
                 color: isTextEntered ? "#5e3a66" : "initial", // 상황에 따라 텍스트 색상을 조건적으로 변경
               }}
             />
@@ -227,6 +229,7 @@ const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
             }}
           >
             <EmailInput
+              style={{ padding: "5px" }}
               value={phonenumber}
               onChange={(e) => setPhonenumber(e.target.value)}
             />
@@ -248,6 +251,7 @@ const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
             }}
           >
             <EmailInput
+              style={{ padding: "5px" }}
               value={code}
               onChange={(e) => setCode(e.target.value)}
             />
