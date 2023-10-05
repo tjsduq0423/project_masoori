@@ -9,6 +9,7 @@ import Bottles from "@/assets/img/Bottles.png";
 import CardFlip from "@/components/cardFlip";
 import { useNavigate } from "react-router-dom";
 import LoadingPage from "../loading";
+import { toast } from "react-toastify";
 
 <link rel="stylesheet" type="text/css" href="@/styles.font.css" />;
 
@@ -247,6 +248,12 @@ const SelectToGo = styled.div`
     5px 0px 10px 0px rgba(255, 255, 255, 0.1) inset,
     0px -5px 10px 0px rgba(255, 255, 255, 0.1) inset,
     -5px 0px 10px 0px rgba(255, 255, 255, 0.1) inset;
+
+  transition: background-color 0.3s; /* hover 효과를 위한 transition 설정 */
+
+  &:hover {
+    background-color: rgba(162, 11, 137, 0.8); /* hover 시 배경색 변경 */
+  }
 `;
 
 const CardSection = styled.div`
@@ -272,7 +279,27 @@ const CardBox = styled.div`
 
 const Landing: React.FC = () => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
+  const [isLogin, setIsLogin] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if there is an accessToken in localStorage
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      setIsLogin("true"); // accessToken이 있으면 isLogin을 true로 설정
+    }
+  }, []);
+
+  const navigateLuck = () => {
+    if (isLogin === "true") {
+      navigate("/userluck");
+    } else {
+      toast.info("비로그인 시 카드 저장 불가");
+      setTimeout(() => {
+        navigate("/luck");
+      }, 1000); // 1초 뒤에 "/luck"으로 이동
+    }
+  };
 
   const handleCardClick = (index: number) => {
     if (selectedCard === null) {
@@ -373,27 +400,9 @@ const Landing: React.FC = () => {
       </MainPages>
       <MainPages>
         <ToGoContent>
-          <SelectToGo>🌟 어디로 갈 지 골라보겠니? 🌟</SelectToGo>
-          <CardBox>
-            <CardSection>
-              <CardFlip
-                onClick={() => handleCardClick(0)}
-                isClickable={isClickable(0)}
-              />
-              <CardFlip
-                onClick={() => handleCardClick(1)}
-                isClickable={isClickable(1)}
-              />
-              <CardFlip
-                onClick={() => handleCardClick(2)}
-                isClickable={isClickable(2)}
-              />
-              <CardFlip
-                onClick={() => handleCardClick(3)}
-                isClickable={isClickable(3)}
-              />
-            </CardSection>
-          </CardBox>
+          <SelectToGo onClick={navigateLuck}>
+            🌟 오늘의 금전운 보러가기 🌟
+          </SelectToGo>
         </ToGoContent>
       </MainPages>
     </Container>

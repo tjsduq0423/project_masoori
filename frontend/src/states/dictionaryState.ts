@@ -10,9 +10,9 @@ export const spendIdState = atom<number>({
   default: 1,
 });
 
-export const specialIdState = atom<number>({
+export const specialIdState = atom<number | null>({
   key: "specialIdState",
-  default: 13,
+  default: null,
 });
 
 export const specialImageUrlState = atom<string>({
