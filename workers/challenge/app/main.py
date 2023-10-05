@@ -3,6 +3,13 @@ import json
 import asyncio
 from pydantic import BaseModel
 from typing import List
+from datetime import datetime
+
+import os
+os.environ['OPENAI_API_KEY'] = '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'
+
+from StableDiffusionPrompt.promptWriting import PromptWriting
+from StableDiffusionPrompt.makePNG import MakePng
 
 # rabbitMQ 변수 정리
 rabbit_mq_server_domain_name = "j9b308.p.ssafy.io"
@@ -43,8 +50,17 @@ def callback(ch, method, properties, body):
         # 이거 쓰면댐 -> Anal
         request_message_dict = json.loads(body)
         # 서비스 로직 실행 -> 결과값 res 객체에 넣고 쏘면 댐.
+        cardId = request_message_dict['cardId']
+        keyword = request_message_dict['verse']
 
-        res = ""
+        promptText = PromptWriting(keyword)
+        prompt = promptText.replace("프롬프트 : ", "")
+        time = datetime.now().strftime("%Y%m%d%H%M")
+        imageName = MakePng(str(cardId), time, prompt)
+
+        res = GeneratedChallengeCard(
+            cardId=cardId, 
+            imagePath=f"https://sonagi.site/outputs/{imageName}.png").json()
         # 메시지 응답 큐 pub
         ch.basic_publish(exchange="", routing_key=pub_queue_name, body=res)
 

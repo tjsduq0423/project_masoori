@@ -3,13 +3,14 @@ import json
 import asyncio
 from pydantic import BaseModel
 from typing import List
-import time
+
+import os
+os.environ['OPENAI_API_KEY'] = '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'
 
 from Categories.useFaiss import FaissCategorization
 
 from Description.summarizeSpend import SummarizeSpend
 from Description.contentSearch import ContentSearch
-from Description.makeCardName import MakeCardName
 
 from CreditCard.recomandCreditCard import RecommandCreditCard
 from CreditCard.creditCardSearch import CreditCardSearch
@@ -67,8 +68,8 @@ def callback(ch, method, properties, body):
         request_message_dict = json.loads(body)
         # 서비스 로직 실행 -> 결과값 res 객체에 넣고 쏘면 댐.
 
-        userId = request_message_dict.userId
-        spendList = request_message_dict.userWeeklyTransactionList
+        userId = request_message_dict['userId']
+        spendList = request_message_dict['userWeeklyTransactionList']
 
         categorization = FaissCategorization(spendList)
         description = SummarizeSpend(categorization)
