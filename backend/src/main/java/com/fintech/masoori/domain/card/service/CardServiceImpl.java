@@ -1,6 +1,5 @@
 package com.fintech.masoori.domain.card.service;
 
-import java.awt.print.Pageable;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
@@ -121,8 +120,6 @@ public class CardServiceImpl implements CardService {
 		                                     .build();
 	}
 
-
-
 	@Override
 	@Transactional
 	public void registerChallengeCard(GeneratedChallengeCard generatedChallengeCard) {
@@ -131,19 +128,20 @@ public class CardServiceImpl implements CardService {
 		card.cardUpdate(generatedChallengeCard.getName(), generatedChallengeCard.getImagePath(),
 			generatedChallengeCard.getDescription());
 
+		CalcDate.StartEndDate startEndDate = CalcDate.calcRecentWeek();
 		List<GeneratedChallenge> challenges = generatedChallengeCard.getChallenges();
 		for (GeneratedChallenge c : challenges) {
 			com.fintech.masoori.domain.card.entity.Challenge challenge = com.fintech.masoori.domain.card.entity.Challenge.builder()
 			                                                                                                             .isSuccess(
 				                                                                                                             false)
-			                                                                                                             .name(
-				                                                                                                             c.getName())
 			                                                                                                             .achievementCondition(
-				                                                                                                             c.getAchievementCondition())
+				                                                                                                             c.getName())
+			                                                                                                             .isSuccess(
+				                                                                                                             false)
 			                                                                                                             .startTime(
-				                                                                                                             c.getStartTime())
+				                                                                                                             startEndDate.getStartDate())
 			                                                                                                             .endTime(
-				                                                                                                             c.getEndTime())
+				                                                                                                             startEndDate.getEndDate())
 			                                                                                                             .build();
 			challenge.setCard(card);
 
@@ -197,6 +195,9 @@ public class CardServiceImpl implements CardService {
 		Card card = Card.builder().cardType(CardType.SPECIAL).user(user).build();
 		cardRepository.save(card);
 
+		// 사용자 소비 카드 정보가 있을 때 호출되어야 하고
+		// 사용자 최근 소비카드를 불러와서 해당 정보를 -> 특정 문자열 조합하여 이미지 생성을 요청한다.
+		// 카드 , 이름 , 설명,
 		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
 		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
 			startEndDate.getStartDate(), startEndDate.getEndDate());
@@ -226,9 +227,10 @@ public class CardServiceImpl implements CardService {
 	public Long findTopByUserIdRecentlyChallengeCard(String email) {
 		User loginUser = userRepository.findUserByEmail(email);
 		LocalDateTime now = LocalDateTime.now();
-		Card recentlyChallengeCard = cardRepository.findTopByUserIdRecentlyChallengeCard(loginUser.getId(), CardType.SPECIAL, now,
-			PageRequest.of(0,1));
-		if (recentlyChallengeCard == null) return null;
+		Card recentlyChallengeCard = cardRepository.findTopByUserIdRecentlyChallengeCard(loginUser.getId(),
+			CardType.SPECIAL, now, PageRequest.of(0, 1));
+		if (recentlyChallengeCard == null)
+			return null;
 		return recentlyChallengeCard.getId();
 	}
 

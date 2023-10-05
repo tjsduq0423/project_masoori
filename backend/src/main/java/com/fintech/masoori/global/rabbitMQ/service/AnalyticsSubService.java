@@ -32,7 +32,6 @@ public class AnalyticsSubService {
 		// 문자 보내자
 		String phoneNumber = userService.findById(monthlySpendingAndCreditcard.getUserId()).getPhoneNumber();
 		smsService.sendCreditCardAlarm(phoneNumber);
-
 	}
 
 }

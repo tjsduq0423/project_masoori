@@ -42,12 +42,12 @@ public class CardGenerationScheduler {
 		log.info("");
 		List<User> userList = userService.findUsersByIsAuthenticated(true);
 		for (User user : userList) {
-			CalcDate.StartEndDate startEndDate = CalcDate.calcLastMonth();
+			CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
 			List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
 				startEndDate.getStartDate(), startEndDate.getEndDate());
 			AnalyticsRequestMessage message = AnalyticsRequestMessage.builder()
 			                                                         .userId(user.getId())
-			                                                         .userMonthlyTransactionList(transactionList)
+			                                                         .userWeeklyTransactionList(transactionList)
 			                                                         .build();
 			analyticsPubService.sendMessage(message);
 		}

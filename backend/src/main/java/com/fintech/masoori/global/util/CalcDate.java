@@ -20,6 +20,13 @@ public class CalcDate {
 		                   .build();
 	}
 
+	public static StartEndDate calcRecentWeek() {
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime startOfLastWeek = now.with(DayOfWeek.MONDAY);
+		LocalDateTime endOfLastWeek = now.with(DayOfWeek.SUNDAY).withHour(23).withMinute(59).withSecond(59);
+		return StartEndDate.builder().startDate(startOfLastWeek).endDate(endOfLastWeek).build();
+	}
+
 	public static StartEndDate calcLastWeek() {
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime startOfLastWeek = now.minusWeeks(1).with(DayOfWeek.MONDAY);
