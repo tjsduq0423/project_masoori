@@ -387,6 +387,11 @@ const MainPage = () => {
 
     // Cleanup function
     return () => {
+      // 이전에 생성된 파티클을 제거합니다.
+      for (let i = 0; i < particles.length; i++) {
+        scene.remove(particles[i].particle);
+      }
+
       window.removeEventListener("resize", onWindowResize);
       window.removeEventListener("mousemove", onMouseMove);
     };
