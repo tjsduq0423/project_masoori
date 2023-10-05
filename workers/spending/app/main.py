@@ -1,7 +1,8 @@
 import pika
 import json
 import asyncio
-from pydantic import BaseModel, List
+from pydantic import BaseModel
+from typing import List
 import time
 
 # rabbitMQ 변수 정리
