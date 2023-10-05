@@ -74,21 +74,34 @@ def callback(ch, method, properties, body):
         # 서비스 로직 실행 -> 결과값 res 객체에 넣고 쏘면 댐.
         cardId = request_message_dict['cardId']
         spendList = request_message_dict['userWeeklyTransactionList']
+        print(f"CardId : {cardId}")
+        print(f"SpendList : {spendList}")
 
         if len(spendList) == 0:
+            print("SpendList Length is 0")
             ch.basic_ack(delivery_tag=method.delivery_tag)
             return
 
         categorization = FaissCategorization(spendList)
+        print(f"Categorization : {categorization}")
         description = SummarizeSpend(categorization)
+        print(f"Description : {description}")
         summary = ContentSearch(description)
+        print(f"Summary : {summary}")
         name = MakeCardName(summary)
+        print(f"Name : {name}")
         sorted_result = sorted(categorization, key=lambda x: x['totalAmount'], reverse=True)
+        print(f"sorted_result : {sorted_result}")
         keyword = sorted_result[0]['keyword']
+        print(f"Keyword : {keyword}")
         promptText = PromptWriting(keyword)
+        print(f"PromptText : {promptText}")
         prompt = promptText.replace("프롬프트 : ", "")
+        print(f"Prompt : {prompt}")
         time = datetime.now().strftime("%Y%m%d%H%M")
+        print(f"Time : {time}")
         imageName = MakePng(str(cardId), time, prompt)
+        print(f"ImagePath : {imageName}")
 
         res = GeneratedSpendingCard(
             cardId=cardId,
@@ -96,6 +109,7 @@ def callback(ch, method, properties, body):
             imagePath=f"https://sonagi.site/outputs/{imageName}.png",
             description=description,
             spendings=categorization).json()
+        print(f"Result : {res}")
         # 메시지 응답 큐 pub
         ch.basic_publish(exchange="", routing_key=pub_queue_name, body=res)
 

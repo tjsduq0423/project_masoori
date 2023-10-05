@@ -53,18 +53,27 @@ def callback(ch, method, properties, body):
         cardId = request_message_dict['cardId']
         keyword = request_message_dict['verse']
 
+        print(f"CardId : {cardId}")
+        print(f"Keyword : {keyword}")
+
         if len(keyword) == 0:
+            print(f"Keyword is 0")
             ch.basic_ack(delivery_tag=method.delivery_tag)
             return
 
         promptText = PromptWriting(keyword)
+        print(f"PromptText : {promptText}")
         prompt = promptText.replace("프롬프트 : ", "")
+        print(f"Prompt : {prompt}")
         time = datetime.now().strftime("%Y%m%d%H%M")
+        print(f"Time : {time}")
         imageName = MakePng(str(cardId), time, prompt)
+        print(f"ImageName : {imageName}")
 
         res = GeneratedChallengeCard(
             cardId=cardId, 
             imagePath=f"https://sonagi.site/outputs/{imageName}.png").json()
+        print(f"Result : {res}")
         # 메시지 응답 큐 pub
         ch.basic_publish(exchange="", routing_key=pub_queue_name, body=res)
 
