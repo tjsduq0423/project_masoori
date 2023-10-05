@@ -9,6 +9,7 @@ import { creditInfoState } from "@/states/dictionaryState";
 import { toast } from "react-toastify";
 
 import tarotback from "@/assets/img/tarotCard/tarotCardBack.png";
+import { useNavigate } from "react-router-dom";
 
 interface CreditCard {
   id: number;
@@ -272,19 +273,43 @@ const StyledRotatedImageWrapper = styled.div<{ imageAttr?: string }>`
 
 const CardRecommend = () => {
   const creditInfo = useRecoilValue(creditInfoState);
-  console.log(creditInfo);
   const allCreditCard = useAllCreditCard(creditInfo);
-  console.log(allCreditCard.creditCardRes.creditCardList);
   const creditCardRes = allCreditCard.creditCardRes.creditCardList;
+  const navigate = useNavigate();
+
   const MonthData =
     allCreditCard.monthlySpendingAnalyticsRes.monthlySpendingAnalyticsList;
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(creditCardRes[0]);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState<CreditCard>({
+    id: 0,
+    name: "",
+    company: "",
+    domestic: "",
+    overseas: "",
+    condition: "",
+    brandList: [],
+    imagePath: "",
+    imageAttr: "",
+    registerPath: "",
+    reason: "",
+    benefitList: [
+      {
+        title: "",
+        description: "",
+        detailDescription: "",
+      },
+    ],
+  });
+
+  useEffect(() => {
+    if (creditCardRes[0] === undefined) {
+      navigate("/dictionary");
+      toast.info("데이터가 부족해요...");
+    }
+  }, [creditCardRes, navigate]);
 
   Swiper.use([Navigation, Pagination]); // Initialize Swiper with necessary modules\
 
   const handleRegistBtnClick = () => {
-    // Use window.location.href to navigate to the specified link
-
     if (currentSlideIndex.registerPath) {
       window.open(currentSlideIndex.registerPath, "_blank");
     } else {
