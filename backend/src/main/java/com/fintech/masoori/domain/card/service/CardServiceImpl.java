@@ -26,7 +26,6 @@ import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.exception.UserNotFoundException;
 import com.fintech.masoori.domain.user.repository.UserRepository;
 import com.fintech.masoori.global.rabbitMQ.dto.ChallengeRequestMessage;
-import com.fintech.masoori.global.rabbitMQ.dto.GeneratedSpending;
 import com.fintech.masoori.global.rabbitMQ.dto.GeneratedSpendingCard;
 import com.fintech.masoori.global.rabbitMQ.dto.SpendingRequestMessage;
 import com.fintech.masoori.global.rabbitMQ.dto.Transaction;
@@ -138,20 +137,22 @@ public class CardServiceImpl implements CardService {
 			generatedSpendingCard.getDescription());
 
 		cardRepository.save(card);
-
-		List<GeneratedSpending> spendings = generatedSpendingCard.getSpendings();
-		for (GeneratedSpending s : spendings) {
-			com.fintech.masoori.domain.card.entity.Basic basic = com.fintech.masoori.domain.card.entity.Basic.builder()
-			                                                                                                 .keyword(
-				                                                                                                 s.getKeyword())
-			                                                                                                 .totalAmount(
-				                                                                                                 s.getTotalAmount())
-			                                                                                                 .frequency(
-				                                                                                                 s.getFrequency())
-			                                                                                                 .build();
-			basicRepository.save(basic);
-			basic.setCard(card);
-		}
+		List<com.fintech.masoori.domain.card.entity.Basic> list = generatedSpendingCard.getSpendings()
+		                                                                               .stream()
+		                                                                               .map(s -> {
+			                                                                               com.fintech.masoori.domain.card.entity.Basic basic = com.fintech.masoori.domain.card.entity.Basic.builder()
+			                                                                                                                                                                                .keyword(
+				                                                                                                                                                                                s.getKeyword())
+			                                                                                                                                                                                .totalAmount(
+				                                                                                                                                                                                s.getTotalAmount())
+			                                                                                                                                                                                .frequency(
+				                                                                                                                                                                                s.getFrequency())
+			                                                                                                                                                                                .build();
+			                                                                               basic.setCard(card);
+			                                                                               return basic;
+		                                                                               })
+		                                                                               .toList();
+		basicRepository.saveAll(list);
 	}
 
 	@Override
@@ -160,13 +161,13 @@ public class CardServiceImpl implements CardService {
 		// 사용자 찾기.
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
 		Card card = Card.builder().cardType(CardType.BASIC).user(user).build();
+		cardRepository.save(card);
 		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
 		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
 			startEndDate.getStartDate(), startEndDate.getEndDate());
 		// 소비 카드 생성 중인지 저장.
 		spendingPubService.sendMessage(
 			SpendingRequestMessage.builder().cardId(card.getId()).userWeeklyTransactionList(transactionList).build());
-		cardRepository.save(card);
 	}
 
 	@Override
