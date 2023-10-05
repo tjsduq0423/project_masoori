@@ -4,6 +4,15 @@ import asyncio
 import pydantic
 import time
 
+from Categories.useFaiss import FaissCategorization
+
+from Description.summarizeSpend import SummarizeSpend
+from Description.contentSearch import ContentSearch
+from Description.makeCardName import MakeCardName
+
+from CreditCard.recomandCreditCard import RecommandCreditCard
+from CreditCard.creditCardSearch import CreditCardSearch
+
 # rabbitMQ 변수 정리
 rabbit_mq_server_domain_name = "j9b308.p.ssafy.io"
 rabbit_mq_server_domain_port = 5672
