@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 @Configuration
 public class RabbitMQConfig {
 	@Value("${spring.rabbitmq.host}")
@@ -33,7 +36,6 @@ public class RabbitMQConfig {
 	@Value("${rabbitmq.queue.analytics}")
 	private String queue3;
 
-
 	@Bean
 	public Queue queue1() {
 		return new Queue(queue1, true);
@@ -48,7 +50,6 @@ public class RabbitMQConfig {
 	public Queue queue3() {
 		return new Queue(queue3, true);
 	}
-
 
 	@Bean
 	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
@@ -69,6 +70,8 @@ public class RabbitMQConfig {
 
 	@Bean
 	public MessageConverter messageConverter() {
-		return new Jackson2JsonMessageConverter();
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule()); // LocalDate 처리를 위한 모듈 등록
+		return new Jackson2JsonMessageConverter(objectMapper);
 	}
 }
