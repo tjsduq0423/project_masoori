@@ -2,8 +2,6 @@ package com.fintech.masoori.domain.card.service;
 
 import java.time.LocalDateTime;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.fintech.masoori.domain.card.dto.BasicCardRes;
 import com.fintech.masoori.domain.card.dto.ChallengeCardRes;
 import com.fintech.masoori.domain.card.dto.UserCardListRes;
@@ -20,17 +18,15 @@ public interface CardService {
 	ChallengeCardRes.ChallengeCard selectChallengeCard(String email, long cardId);
 
 	/**
-	 * 챌린지 카드 등록
-	 * 카드 이름, 사진 경로, 카드 설명 ,type =  SPECIAL , 챌린지 객체 등록, 성공여부 defalut, 챌린지 이름, 달성 조건 , 시간 defalut
-	 */
-	void registerChallengeCard(GeneratedChallengeCard challengeCard);
-
-	/**
 	 * 기본 소비 카드 등록
 	 */
 	void registerSpendingCard(GeneratedSpendingCard generatedSpendingCard);
 
 	void createSpendingCard(String email);
+
+	void registerChallengeCardImage(String imgPath, Long cardId);
+
+	void addChallenge(Long cardId, String achievementCondition);
 
 	void createChallengeCard(String email);
 

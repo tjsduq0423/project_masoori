@@ -16,6 +16,7 @@ import com.fintech.masoori.domain.lucky.dto.FortuneRes;
 import com.fintech.masoori.domain.lucky.entity.Fortune;
 import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.domain.lucky.repository.FortuneRepository;
+import com.fintech.masoori.domain.lucky.repository.FortuneUserRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
 import com.fintech.masoori.global.redis.RedisService;
@@ -29,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class FortuneServiceImpl implements FortuneService, FortuneUserService {
-
+	private final FortuneUserRepository fortuneUserRepository;
 	private final FortuneRepository fortuneRepository;
 	private final UserRepository userRepository;
 	private final RedisService redisService;
@@ -46,6 +47,7 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 	}
 
 	@Override
+	@Transactional
 	public FortuneRes selectOneFortune(String email) {
 		//로그인
 		if (!email.isEmpty()) {
@@ -56,9 +58,9 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 				String fortuneName = userFortuneOptional.get();
 				Fortune findFortune = fortuneRepository.findDescriptioneByName(fortuneName);
 				return new FortuneRes(findFortune);
-
 			}
 		}
+
 		//오늘 처음 조회하는 경우, 비로그인인 경우 그냥 진행
 		long fortuneSize = fortuneRepository.count();
 		int idx = (int)(Math.random() * fortuneSize);
@@ -67,6 +69,12 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 			Fortune temp = fortunePage.getContent().get(0);
 			if (!email.isEmpty()) {
 				log.debug("Login select fortune");
+
+				User user = userRepository.findUserByEmail(email);
+				FortuneUser fortuneUser = FortuneUser.builder().fortune(temp).build();
+				fortuneUserRepository.save(fortuneUser);
+				fortuneUser.setUser(user);
+
 				int limitMinute = CalcEndTime.endMinute();
 				redisService.setUserFortune(email, temp.getName(), limitMinute);
 			}
@@ -88,15 +96,15 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 
 		Map<Long, FortuneRes> fortuneResMap = new HashMap<>();
 
-		for(FortuneRes fortuneRes : fortuneList.getFortuneList()){
+		for (FortuneRes fortuneRes : fortuneList.getFortuneList()) {
 			boolean match = false;
 			for (FortuneUser fortuneUser : fortuneUserList) {
-				if(fortuneRes.getId().equals(fortuneUser.getFortune().getId())){
+				if (fortuneRes.getId().equals(fortuneUser.getFortune().getId())) {
 					fortuneResMap.put(fortuneRes.getId(), new FortuneRes((fortuneUser.getFortune())));
 					match = true;
 				}
 			}
-			if(!match){
+			if (!match) {
 				fortuneResMap.put(fortuneRes.getId(), null);
 			}
 		}
