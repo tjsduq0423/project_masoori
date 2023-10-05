@@ -17,8 +17,7 @@ import lombok.ToString;
 @Builder
 @ToString
 public class AnalyticsRequestMessage {
-	// 유저id와 거래내역 리스트를 보낸다.
 	private Long userId;
 	@Builder.Default
-	private List<Transaction> userMonthlyTransactionList = new ArrayList<>();
+	private List<Transaction> userWeeklyTransactionList = new ArrayList<>();
 }

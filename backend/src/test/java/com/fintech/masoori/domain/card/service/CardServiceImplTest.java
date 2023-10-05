@@ -122,7 +122,6 @@ class CardServiceImplTest {
 		for (int i = 1; i <= 5; i++) {
 			challengeList.add(Challenge.builder()
 									   .isSuccess(false)
-									   .name(i + "번 챌린지")
 									   .achievementCondition("절약하기")
 									   .startTime(LocalDateTime.of(2023, 9, 18, 0, 0))
 									   .endTime(LocalDateTime.of(2023, 9, 24, 23, 59))
@@ -132,7 +131,6 @@ class CardServiceImplTest {
 		for (int i = 1; i <= 2; i++) {
 			Card card = Card.builder()
 							.user(user)
-							.name(i + "번 카드")
 							.imagePath(i + "번 경로")
 							.description(i + "번 카드 설명")
 							.cardType(
@@ -175,7 +173,6 @@ class CardServiceImplTest {
 		for (int i = 1; i <= 5; i++) {
 			challengeList.add(Challenge.builder()
 									   .isSuccess(false)
-									   .name(i + "번 챌린지")
 									   .achievementCondition("절약하기")
 									   .startTime(LocalDateTime.of(2023, 9, 18, 0, 0))
 									   .endTime(LocalDateTime.of(2023, 9, 24, 23, 59))
