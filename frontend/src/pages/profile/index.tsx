@@ -207,27 +207,27 @@ const ProfilePage = () => {
           }}
         >
           <DonutChart
-            value={
+            value={Math.round(
               (userInfo.dailySpending! / (userInfo.monthlySpendingGoal! / 30)) *
-              100
-            }
+                100
+            )}
             valuelabel="Day"
             size={115}
             strokewidth={15}
           />
           <DonutChart
-            value={
+            value={Math.round(
               (userInfo.weeklySpending! / (userInfo.monthlySpendingGoal! / 4)) *
-              100
-            }
+                100
+            )}
             valuelabel="WEEK"
             size={115}
             strokewidth={15}
           />
           <DonutChart
-            value={
+            value={Math.round(
               (userInfo.monthlySpending! / userInfo.monthlySpendingGoal!) * 100
-            }
+            )}
             valuelabel="MONTH"
             size={115}
             strokewidth={15}
