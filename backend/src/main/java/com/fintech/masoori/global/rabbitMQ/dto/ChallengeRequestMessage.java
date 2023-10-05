@@ -13,5 +13,5 @@ import lombok.ToString;
 @ToString
 public class ChallengeRequestMessage {
 	private Long cardId;
-	private String verse;
+	private String name;
 }
