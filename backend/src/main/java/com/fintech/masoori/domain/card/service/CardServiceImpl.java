@@ -18,6 +18,7 @@ import com.fintech.masoori.domain.card.dto.ChallengeCardRes;
 import com.fintech.masoori.domain.card.dto.UserCardListRes;
 import com.fintech.masoori.domain.card.entity.Card;
 import com.fintech.masoori.domain.card.exception.CardNotFound;
+import com.fintech.masoori.domain.card.repository.BasicRepository;
 import com.fintech.masoori.domain.card.repository.CardRepository;
 import com.fintech.masoori.domain.card.repository.ChallengeRepository;
 import com.fintech.masoori.domain.deal.service.DealService;
@@ -53,6 +54,7 @@ public class CardServiceImpl implements CardService {
 	private final UserRepository userRepository;
 	private final DealService dealService;
 	private final ChallengeRepository ChallengeRepository;
+	private final BasicRepository basicRepository;
 
 	@Override
 	public UserCardListRes selectRangeBasicCard(String email, LocalDateTime start, LocalDateTime end) {
@@ -145,6 +147,7 @@ public class CardServiceImpl implements CardService {
 			                                                                                                 .frequency(
 				                                                                                                 s.getFrequency())
 			                                                                                                 .build();
+			basicRepository.save(basic);
 			basic.setCard(card);
 		}
 	}
@@ -214,6 +217,7 @@ public class CardServiceImpl implements CardService {
 		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek(date);
 		Card card = cardRepository.findRecentCard(userId, CardType.SPECIAL, startEndDate.getStartDate(),
 			startEndDate.getEndDate());
+
 		com.fintech.masoori.domain.card.entity.Challenge challenge = com.fintech.masoori.domain.card.entity.Challenge.builder()
 		                                                                                                             .achievementCondition(
 			                                                                                                             achievementCondition)
