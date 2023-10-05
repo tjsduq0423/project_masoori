@@ -46,15 +46,15 @@ public class TestController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/test/challenge")
-	public ResponseEntity<?> challengeTestAPI(Principal principal) {
-		cardService.createChallengeCard(principal.getName());
-		return ResponseEntity.ok().build();
-	}
+	// @GetMapping("/test/challenge")
+	// public ResponseEntity<?> challengeTestAPI(Principal principal, @RequestParam LocalDateTime date) {
+	// 	cardService.createChallengeCard(principal.getName(), date);
+	// 	return ResponseEntity.ok().build();
+	// }
 
 	@GetMapping("/test/spending")
-	public ResponseEntity<?> spendingTestAPI(Principal principal) {
-		cardService.createSpendingCard(principal.getName());
+	public ResponseEntity<?> spendingTestAPI(Principal principal, @RequestParam LocalDateTime date) {
+		cardService.createSpendingCard(principal.getName(), date);
 		return ResponseEntity.ok().build();
 	}
 
