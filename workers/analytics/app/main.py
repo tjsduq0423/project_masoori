@@ -66,7 +66,16 @@ def callback(ch, method, properties, body):
         request_message_dict = json.loads(body)
         # 서비스 로직 실행 -> 결과값 res 객체에 넣고 쏘면 댐.
 
-        res = ""
+        userId = request_message_dict.userId
+        spendList = request_message_dict.userWeeklyTransactionList
+
+        categorization = FaissCategorization(spendList)
+        description = SummarizeSpend(categorization)
+        summary = ContentSearch(description)
+        recommandCardList = RecommandCreditCard(summary)
+        cardList = CreditCardSearch(recommandCardList)
+
+        res = MonthlySpendingAndCreditcard(userId=userId, creditCardList=cardList).json()
         # 메시지 응답 큐 pub
         ch.basic_publish(exchange="", routing_key=pub_queue_name, body=res)
 
