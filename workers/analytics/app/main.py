@@ -11,6 +11,7 @@ from Categories.useFaiss import FaissCategorization
 
 from Description.summarizeSpend import SummarizeSpend
 from Description.contentSearch import ContentSearch
+from Description.makeCardName import MakeCardName
 
 from CreditCard.recomandCreditCard import RecommandCreditCard
 from CreditCard.creditCardSearch import CreditCardSearch

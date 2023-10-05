@@ -34,7 +34,7 @@ public class TestController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/test/card")
+	@GetMapping("/test/analytics")
 	public ResponseEntity<?> cardTestAPI() {
 		User user = userRepository.findUserByEmail("ssafy2@gmail.com");
 		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
@@ -45,6 +45,18 @@ public class TestController {
 		                                                         .userWeeklyTransactionList(transactionList)
 		                                                         .build();
 		analyticsPubService.sendMessage(message);
+		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/test/challenge")
+	public ResponseEntity<?> challengeTestAPI() {
+		cardService.createChallengeCard("ssafy2@gmail.com");
+		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/test/spending")
+	public ResponseEntity<?> spendingTestAPI() {
+		cardService.createSpendingCard("ssafy2@gmail.com");
 		return ResponseEntity.ok().build();
 	}
 }

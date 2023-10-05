@@ -213,7 +213,7 @@ public class CardServiceImpl implements CardService {
 		                .build();
 		// 이미지 생성 요청.
 		cardRepository.save(card);
-		challengePubService.sendMessage(ChallengeRequestMessage.builder().cardId(card.getId()).verse(v).build());
+		challengePubService.sendMessage(ChallengeRequestMessage.builder().cardId(card.getId()).name(cardName).build());
 	}
 
 	@Override

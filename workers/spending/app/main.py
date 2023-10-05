@@ -87,13 +87,14 @@ def callback(ch, method, properties, body):
         imageName = MakePng(str(cardId), time, prompt)
 
         res = GeneratedSpendingCard(
-            cardId=cardId, 
-            name=name, 
-            imagePath=f"https://sonagi.site/outputs/{imageName}.png", 
-            description=description, 
+            cardId=cardId,
+            name=name,
+            imagePath=f"https://sonagi.site/outputs/{imageName}.png",
+            description=description,
             spendings=categorization).json()
         # 메시지 응답 큐 pub
         ch.basic_publish(exchange="", routing_key=pub_queue_name, body=res)
+
         # 메시지 처리 완료 시 MQ에 처리 했다고 전달하는 함수
         ch.basic_ack(delivery_tag=method.delivery_tag)
     except Exception as e:
