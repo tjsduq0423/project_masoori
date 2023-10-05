@@ -288,20 +288,30 @@ const DictionaryPage = () => {
                   }}
                 >
                   {groupImagesByMonth()[month].map((item, index) => {
-                    return (
-                      <TarotCard
-                        key={index}
-                        width="140px"
-                        height="200px"
-                        cardWidth="100%"
-                        cardSrc={frontcard}
-                        imageSrc={item.imagePath}
-                        bottomImageWidth="100%"
-                        text={item.name}
-                        fontsize="0.8rem"
-                        onClick={() => goCardSpend(item.id)}
-                      />
-                    );
+                    if (item.name === null) {
+                      return (
+                        <img
+                          key={index}
+                          src={cardBack}
+                          style={{ width: "140px", marginBottom: "0px" }}
+                        />
+                      );
+                    } else {
+                      return (
+                        <TarotCard
+                          key={index}
+                          width="140px"
+                          height="200px"
+                          cardWidth="100%"
+                          cardSrc={frontcard}
+                          imageSrc={item.imagePath}
+                          bottomImageWidth="100%"
+                          text={item.name}
+                          fontsize="0.8rem"
+                          onClick={() => goCardSpend(item.id)}
+                        />
+                      );
+                    }
                   })}
                 </div>
               </div>
