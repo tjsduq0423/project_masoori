@@ -22,7 +22,7 @@ const BottomText = styled.div`
   transform: translateX(-50%);
   z-index: 1;
   font-size: ${(props) => props.fontsize};
-  color: #5e3a66;
+  color: #ffffff;
   font-family: "Museum";
 `;
 
