@@ -1,4 +1,7 @@
 import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
+
+const { persistAtom } = recoilPersist();
 
 interface LuckInfo {
   name: string;
@@ -32,9 +35,11 @@ const defaultColorInfo: ColorInfo = {
 export const luckInfoState = atom<LuckInfo>({
   key: "luckInfoState",
   default: defaultUserInfo,
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const ColorInfoState = atom<ColorInfo>({
   key: "colorInfoState",
   default: defaultColorInfo,
+  effects_UNSTABLE: [persistAtom],
 });
