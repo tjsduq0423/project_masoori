@@ -72,19 +72,29 @@ def callback(ch, method, properties, body):
         userId = request_message_dict['userId']
         spendList = request_message_dict['userWeeklyTransactionList']
 
+        print(f"UserId : {userId}")
+        print(f"SpendList : {spendList}")
+
         if len(spendList) == 0:
+            print("SpendList Length is 0")
             ch.basic_ack(delivery_tag=method.delivery_tag)
             return
 
         categorization = FaissCategorization(spendList)
+        print(f"Categorization : {categorization}")
         description = SummarizeSpend(categorization)
+        print(f"Description : {description}")
         summary = ContentSearch(description)
+        print(f"Summary : {summary}")
         recommandCardList = RecommandCreditCard(summary)
+        print(f"RecommandCardList : {recommandCardList}")
         cardList = CreditCardSearch(recommandCardList)
+        print(f"CardList : {cardList}")
 
         res = MonthlySpendingAndCreditcard(
             userId=userId, creditCardList=cardList
         ).json()
+        print(f"Result : {res}")
         # 메시지 응답 큐 pub
         ch.basic_publish(exchange="", routing_key=pub_queue_name, body=res)
 
