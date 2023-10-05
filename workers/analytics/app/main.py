@@ -75,6 +75,11 @@ def callback(ch, method, properties, body):
         print(f"UserId : {userId}")
         print(f"SpendList : {spendList}")
 
+        if userId is None:
+            print("UserId is None")
+            ch.basic_ack(delivery_tag=method.delivery_tag)
+            return
+
         if len(spendList) == 0:
             print("SpendList Length is 0")
             ch.basic_ack(delivery_tag=method.delivery_tag)

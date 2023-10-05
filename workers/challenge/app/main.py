@@ -56,6 +56,11 @@ def callback(ch, method, properties, body):
         print(f"CardId : {cardId}")
         print(f"Keyword : {keyword}")
 
+        if cardId is None:
+            print("CardId is None")
+            ch.basic_ack(delivery_tag=method.delivery_tag)
+            return
+
         if len(keyword) == 0:
             print(f"Keyword is 0")
             ch.basic_ack(delivery_tag=method.delivery_tag)
