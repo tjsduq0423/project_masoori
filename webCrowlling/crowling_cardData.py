@@ -109,6 +109,7 @@ try:
         driver.switch_to.window(driver.window_handles[0])
 
         # 출력부
+        print(card_data)
         data_list.append(card_data)
 finally:
     print(len(data_list))
