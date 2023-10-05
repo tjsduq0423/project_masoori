@@ -59,7 +59,7 @@ const Email = styled.div`
 `;
 
 const DisableNextButton = styled.button`
-  width: 16.275vw;
+  width: 100%;
   border-radius: 5px;
   border-color: #5e3a66;
   border-width: 1px;
@@ -90,7 +90,7 @@ const AbleNextButton = styled.button`
 `;
 
 const EmailInput = styled.input`
-  width: 11.5vw;
+  width: 70%;
   border-radius: 5px;
   border-width: 1px;
   border-color: #5e3a66;
@@ -98,7 +98,7 @@ const EmailInput = styled.input`
 `;
 
 const DuplicateCheckButton = styled.button`
-  width: 4.5vw;
+  width: 25%;
   border-radius: 5px;
   border-width: 1px;
   border-color: #5e3a66;
@@ -114,7 +114,7 @@ const DuplicateCheckButton = styled.button`
 `;
 
 const DisableSendCodeButton = styled.button`
-  width: 4.5vw;
+  width: 25%;
   border-radius: 5px;
   border-width: 1px;
   border-color: #5e3a66;
