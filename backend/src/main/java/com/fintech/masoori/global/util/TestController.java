@@ -1,10 +1,12 @@
 package com.fintech.masoori.global.util;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fintech.masoori.domain.card.service.CardService;
@@ -28,15 +30,9 @@ public class TestController {
 	private final DealService dealService;
 	private final AnalyticsPubService analyticsPubService;
 
-	@GetMapping("/test")
-	public ResponseEntity<?> testAPI() {
-		cardService.createSpendingCard("tjsduq0423@naver.com");
-		return ResponseEntity.ok().build();
-	}
-
 	@GetMapping("/test/analytics")
-	public ResponseEntity<?> cardTestAPI() {
-		User user = userRepository.findUserByEmail("ssafy2@gmail.com");
+	public ResponseEntity<?> cardTestAPI(Principal principal) {
+		User user = userRepository.findUserByEmail(principal.getName());
 		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
 		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
 			startEndDate.getStartDate(), startEndDate.getEndDate());
@@ -49,14 +45,14 @@ public class TestController {
 	}
 
 	@GetMapping("/test/challenge")
-	public ResponseEntity<?> challengeTestAPI() {
-		cardService.createChallengeCard("ssafy2@gmail.com");
+	public ResponseEntity<?> challengeTestAPI(Principal principal) {
+		cardService.createChallengeCard(principal.getName());
 		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping("/test/spending")
-	public ResponseEntity<?> spendingTestAPI() {
-		cardService.createSpendingCard("ssafy2@gmail.com");
+	public ResponseEntity<?> spendingTestAPI(Principal principal) {
+		cardService.createSpendingCard(principal.getName());
 		return ResponseEntity.ok().build();
 	}
 }
