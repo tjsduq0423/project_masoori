@@ -18,6 +18,7 @@ import com.fintech.masoori.domain.card.dto.ChallengeCardRes;
 import com.fintech.masoori.domain.card.dto.UserCardListRes;
 import com.fintech.masoori.domain.card.entity.Card;
 import com.fintech.masoori.domain.card.exception.CardNotFound;
+import com.fintech.masoori.domain.card.repository.BasicRepository;
 import com.fintech.masoori.domain.card.repository.CardRepository;
 import com.fintech.masoori.domain.card.repository.ChallengeRepository;
 import com.fintech.masoori.domain.deal.service.DealService;
@@ -25,7 +26,6 @@ import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.exception.UserNotFoundException;
 import com.fintech.masoori.domain.user.repository.UserRepository;
 import com.fintech.masoori.global.rabbitMQ.dto.ChallengeRequestMessage;
-import com.fintech.masoori.global.rabbitMQ.dto.GeneratedSpending;
 import com.fintech.masoori.global.rabbitMQ.dto.GeneratedSpendingCard;
 import com.fintech.masoori.global.rabbitMQ.dto.SpendingRequestMessage;
 import com.fintech.masoori.global.rabbitMQ.dto.Transaction;
@@ -53,6 +53,7 @@ public class CardServiceImpl implements CardService {
 	private final UserRepository userRepository;
 	private final DealService dealService;
 	private final ChallengeRepository ChallengeRepository;
+	private final BasicRepository basicRepository;
 
 	@Override
 	public UserCardListRes selectRangeBasicCard(String email, LocalDateTime start, LocalDateTime end) {
@@ -135,18 +136,23 @@ public class CardServiceImpl implements CardService {
 		card.cardUpdate(generatedSpendingCard.getName(), generatedSpendingCard.getImagePath(),
 			generatedSpendingCard.getDescription());
 
-		List<GeneratedSpending> spendings = generatedSpendingCard.getSpendings();
-		for (GeneratedSpending s : spendings) {
-			com.fintech.masoori.domain.card.entity.Basic basic = com.fintech.masoori.domain.card.entity.Basic.builder()
-			                                                                                                 .keyword(
-				                                                                                                 s.getKeyword())
-			                                                                                                 .totalAmount(
-				                                                                                                 s.getTotalAmount())
-			                                                                                                 .frequency(
-				                                                                                                 s.getFrequency())
-			                                                                                                 .build();
-			basic.setCard(card);
-		}
+		cardRepository.save(card);
+		List<com.fintech.masoori.domain.card.entity.Basic> list = generatedSpendingCard.getSpendings()
+		                                                                               .stream()
+		                                                                               .map(s -> {
+			                                                                               com.fintech.masoori.domain.card.entity.Basic basic = com.fintech.masoori.domain.card.entity.Basic.builder()
+			                                                                                                                                                                                .keyword(
+				                                                                                                                                                                                s.getKeyword())
+			                                                                                                                                                                                .totalAmount(
+				                                                                                                                                                                                s.getTotalAmount())
+			                                                                                                                                                                                .frequency(
+				                                                                                                                                                                                s.getFrequency())
+			                                                                                                                                                                                .build();
+			                                                                               basic.setCard(card);
+			                                                                               return basic;
+		                                                                               })
+		                                                                               .toList();
+		basicRepository.saveAll(list);
 	}
 
 	@Override
@@ -155,13 +161,13 @@ public class CardServiceImpl implements CardService {
 		// 사용자 찾기.
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
 		Card card = Card.builder().cardType(CardType.BASIC).user(user).build();
-		cardRepository.save(card);
 		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
 		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
 			startEndDate.getStartDate(), startEndDate.getEndDate());
 		// 소비 카드 생성 중인지 저장.
 		spendingPubService.sendMessage(
 			SpendingRequestMessage.builder().cardId(card.getId()).userWeeklyTransactionList(transactionList).build());
+		cardRepository.save(card);
 	}
 
 	@Override
@@ -173,9 +179,14 @@ public class CardServiceImpl implements CardService {
 		cardRepository.save(card);
 		card.setLocalDateTime(date);
 		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek(date);
+		log.info(startEndDate.toString());
 		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
 			startEndDate.getStartDate(), startEndDate.getEndDate());
 		// 소비 카드 생성 중인지 저장.
+		if (transactionList.isEmpty()) {
+			log.info("Deal List 비어있음");
+			return;
+		}
 		spendingPubService.sendMessage(
 			SpendingRequestMessage.builder().cardId(card.getId()).userWeeklyTransactionList(transactionList).build());
 	}
@@ -214,6 +225,7 @@ public class CardServiceImpl implements CardService {
 		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek(date);
 		Card card = cardRepository.findRecentCard(userId, CardType.SPECIAL, startEndDate.getStartDate(),
 			startEndDate.getEndDate());
+
 		com.fintech.masoori.domain.card.entity.Challenge challenge = com.fintech.masoori.domain.card.entity.Challenge.builder()
 		                                                                                                             .achievementCondition(
 			                                                                                                             achievementCondition)

@@ -35,20 +35,19 @@ public class SpendingSubService {
 		                          .orElseThrow(() -> new CardNotFound("Card is Not Found"))
 		                          .getUser();
 		//spending 으로 소비 내역 생성해서 challenge 추가
-		List<GeneratedSpending> spendings = generatedSpendingCard.getSpendings();
-		Optional<GeneratedSpending> maxSpending = spendings.stream()
-		                                                   .max(
-			                                                   Comparator.comparing(GeneratedSpending::getTotalAmount));
-		if (maxSpending.isPresent()) {
-			GeneratedSpending maxSpendingObject = maxSpending.get();
-			int ap = (int)(maxSpendingObject.getTotalAmount() * 0.15);
-			String achievementCondition = maxSpendingObject.getKeyword() + "에서 아껴서 " + ap + "원 저축 하기";
-			cardService.addChallenge(user.getId(), achievementCondition);
-		}
+		// List<GeneratedSpending> spendings = generatedSpendingCard.getSpendings();
+		// Optional<GeneratedSpending> maxSpending = spendings.stream()
+		//                                                    .max(
+		// 	                                                   Comparator.comparing(GeneratedSpending::getTotalAmount));
+		// if (maxSpending.isPresent()) {
+		// 	GeneratedSpending maxSpendingObject = maxSpending.get();
+		// 	int ap = (int)(maxSpendingObject.getTotalAmount() * 0.15);
+		// 	String achievementCondition = maxSpendingObject.getKeyword() + "에서 아껴서 " + ap + "원 저축 하기";
+		// 	cardService.addChallenge(user.getId(), achievementCondition);
+		// }
 		cardService.registerSpendingCard(generatedSpendingCard);
 
 		String phoneNumber = user.getPhoneNumber();
 		smsService.sendGenerationTarotCardAlarm(phoneNumber);
-
 	}
 }
