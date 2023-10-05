@@ -53,6 +53,10 @@ def callback(ch, method, properties, body):
         cardId = request_message_dict['cardId']
         keyword = request_message_dict['verse']
 
+        if len(keyword) == 0:
+            ch.basic_ack(delivery_tag=method.delivery_tag)
+            return
+
         promptText = PromptWriting(keyword)
         prompt = promptText.replace("프롬프트 : ", "")
         time = datetime.now().strftime("%Y%m%d%H%M")

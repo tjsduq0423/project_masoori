@@ -72,6 +72,10 @@ def callback(ch, method, properties, body):
         userId = request_message_dict['userId']
         spendList = request_message_dict['userWeeklyTransactionList']
 
+        if len(spendList) == 0:
+            ch.basic_ack(delivery_tag=method.delivery_tag)
+            return
+
         categorization = FaissCategorization(spendList)
         description = SummarizeSpend(categorization)
         summary = ContentSearch(description)
