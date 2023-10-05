@@ -1,7 +1,7 @@
 import requests
 def MakePng(user, time, prompt):
     try:
-        url = "http://sonagi.site/api"
+        url = "http://sonagi.site/api2"
         fileName = f"{user}_{time}"
         payload = {
             "prompt": f"best_quality, {prompt}",
