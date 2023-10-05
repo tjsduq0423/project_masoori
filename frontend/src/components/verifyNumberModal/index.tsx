@@ -134,7 +134,7 @@ interface VerifyNumberModalProps {
 }
 
 const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
-  // const navigate = useNavigate();
+  // const  = useNavigate();
 
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [name, setName] = useState("");
