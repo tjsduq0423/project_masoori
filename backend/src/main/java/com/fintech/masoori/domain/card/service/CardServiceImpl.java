@@ -176,7 +176,6 @@ public class CardServiceImpl implements CardService {
 		// 사용자 찾기.
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
 		Card card = Card.builder().cardType(CardType.BASIC).user(user).build();
-		cardRepository.save(card);
 		card.setLocalDateTime(date);
 		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek(date);
 		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
@@ -184,6 +183,7 @@ public class CardServiceImpl implements CardService {
 		// 소비 카드 생성 중인지 저장.
 		spendingPubService.sendMessage(
 			SpendingRequestMessage.builder().cardId(card.getId()).userWeeklyTransactionList(transactionList).build());
+		cardRepository.save(card);
 	}
 
 	@Override
