@@ -1,7 +1,8 @@
 import pika
 import json
 import asyncio
-from pydantic import BaseModel, List
+from pydantic import BaseModel
+from typing import List
 
 # rabbitMQ 변수 정리
 rabbit_mq_server_domain_name = "j9b308.p.ssafy.io"

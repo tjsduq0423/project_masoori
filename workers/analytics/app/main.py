@@ -1,7 +1,8 @@
 import pika
 import json
 import asyncio
-from pydantic import BaseModel, List
+from pydantic import BaseModel
+from typing import List
 import time
 
 from Categories.useFaiss import FaissCategorization
@@ -75,7 +76,9 @@ def callback(ch, method, properties, body):
         recommandCardList = RecommandCreditCard(summary)
         cardList = CreditCardSearch(recommandCardList)
 
-        res = MonthlySpendingAndCreditcard(userId=userId, creditCardList=cardList).json()
+        res = MonthlySpendingAndCreditcard(
+            userId=userId, creditCardList=cardList
+        ).json()
         # 메시지 응답 큐 pub
         ch.basic_publish(exchange="", routing_key=pub_queue_name, body=res)
 
