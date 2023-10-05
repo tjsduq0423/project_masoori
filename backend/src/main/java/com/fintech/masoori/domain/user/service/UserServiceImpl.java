@@ -147,6 +147,10 @@ public class UserServiceImpl implements UserService {
 		Integer amountSumByPeriodWeek = userRepository.getAmountSumByPeriod(email, nowWeekStart, nowWeekEnd);
 		Integer amountSumByPeriodMonth = userRepository.getAmountSumByPeriod(email, nowMonthStart, nowMonthEnd);
 
+		if (amountSumByPeriodDay == null) amountSumByPeriodDay = 0;
+		if (amountSumByPeriodWeek == null) amountSumByPeriodWeek = 0;
+		if (amountSumByPeriodMonth == null) amountSumByPeriodMonth = 0;
+
 		InfoRes infoRes = InfoRes.builder()
 		                         .imagePath(user.getCardImage())
 		                         .isAuthenticated(user.getIsAuthenticated())

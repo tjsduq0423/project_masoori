@@ -27,14 +27,12 @@ public class Challenge {
 	public Challenge(com.fintech.masoori.domain.card.entity.Challenge challenge) {
 		this.id = challenge.getId();
 		this.isSuccess = challenge.getIsSuccess();
-		this.name = challenge.getName();
 		this.achievementCondition = challenge.getAchievementCondition();
 		this.startTime = challenge.getStartTime();
 		this.endTime = challenge.getEndTime();
 	}
 
 	public com.fintech.masoori.domain.card.entity.Challenge toEntity() {
-		return com.fintech.masoori.domain.card.entity.Challenge.builder()
-		                                                       .build();
+		return com.fintech.masoori.domain.card.entity.Challenge.builder().build();
 	}
 }

@@ -1,7 +1,5 @@
 package com.fintech.masoori.global.rabbitMQ.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,8 +13,5 @@ import lombok.ToString;
 @ToString
 public class GeneratedChallengeCard {
 	private Long cardId;
-	private String name;
 	private String imagePath;
-	private String description;
-	private List<GeneratedChallenge> challenges;
 }

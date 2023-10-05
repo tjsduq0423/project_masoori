@@ -5,10 +5,10 @@ services:
     container_name: challenge
     build:
       context: ./workers/challenge
-  recommend:
-    container_name: recommend
+  analytics:
+    container_name: analytics
     build:
-      context: ./workers/recommend
+      context: ./workers/analytics
   spending:
     container_name: spending
     build:

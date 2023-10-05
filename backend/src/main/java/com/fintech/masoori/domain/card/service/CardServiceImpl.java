@@ -1,10 +1,10 @@
 package com.fintech.masoori.domain.card.service;
 
-import java.awt.print.Pageable;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -19,13 +19,12 @@ import com.fintech.masoori.domain.card.dto.UserCardListRes;
 import com.fintech.masoori.domain.card.entity.Card;
 import com.fintech.masoori.domain.card.exception.CardNotFound;
 import com.fintech.masoori.domain.card.repository.CardRepository;
+import com.fintech.masoori.domain.card.repository.ChallengeRepository;
 import com.fintech.masoori.domain.deal.service.DealService;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.exception.UserNotFoundException;
 import com.fintech.masoori.domain.user.repository.UserRepository;
 import com.fintech.masoori.global.rabbitMQ.dto.ChallengeRequestMessage;
-import com.fintech.masoori.global.rabbitMQ.dto.GeneratedChallenge;
-import com.fintech.masoori.global.rabbitMQ.dto.GeneratedChallengeCard;
 import com.fintech.masoori.global.rabbitMQ.dto.GeneratedSpending;
 import com.fintech.masoori.global.rabbitMQ.dto.GeneratedSpendingCard;
 import com.fintech.masoori.global.rabbitMQ.dto.SpendingRequestMessage;
@@ -42,11 +41,18 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class CardServiceImpl implements CardService {
+	private final String[] NAME_LIST = {"Fool", "Magician", "High Priestess", "Empress", "Emperor", "Hierophant",
+		"Lovers", "Chariot", "Strength", "Hermit", "Wheel of Fortune", "Justice", "Hanged Man", "Death", "Temperance",
+		"Devil", "Tower", "Star", "Moon", "Sun", "Judgment", "World", "Ace of Wands", "Two of Wands", "Three of Wands",
+		"Four of Wands", "Five of Wands", "Six of Wands", "Seven of Wands", "Eight of Wands"};
+	private final String[] VERSE_LIST = {"Conquering", "Rising", "Falling", "Leaning", "Fleeing", "Despairing",
+		"Rejoicing", "Exploring", "Transforming", "Discovering", "Balancing"};
 	private final SpendingPubService spendingPubService;
 	private final ChallengePubService challengePubService;
 	private final CardRepository cardRepository;
 	private final UserRepository userRepository;
 	private final DealService dealService;
+	private final ChallengeRepository ChallengeRepository;
 
 	@Override
 	public UserCardListRes selectRangeBasicCard(String email, LocalDateTime start, LocalDateTime end) {
@@ -121,35 +127,6 @@ public class CardServiceImpl implements CardService {
 		                                     .build();
 	}
 
-
-
-	@Override
-	@Transactional
-	public void registerChallengeCard(GeneratedChallengeCard generatedChallengeCard) {
-		Card card = cardRepository.findById(generatedChallengeCard.getCardId())
-		                          .orElseThrow(() -> new CardNotFound("Card Is Not Found"));
-		card.cardUpdate(generatedChallengeCard.getName(), generatedChallengeCard.getImagePath(),
-			generatedChallengeCard.getDescription());
-
-		List<GeneratedChallenge> challenges = generatedChallengeCard.getChallenges();
-		for (GeneratedChallenge c : challenges) {
-			com.fintech.masoori.domain.card.entity.Challenge challenge = com.fintech.masoori.domain.card.entity.Challenge.builder()
-			                                                                                                             .isSuccess(
-				                                                                                                             false)
-			                                                                                                             .name(
-				                                                                                                             c.getName())
-			                                                                                                             .achievementCondition(
-				                                                                                                             c.getAchievementCondition())
-			                                                                                                             .startTime(
-				                                                                                                             c.getStartTime())
-			                                                                                                             .endTime(
-				                                                                                                             c.getEndTime())
-			                                                                                                             .build();
-			challenge.setCard(card);
-
-		}
-	}
-
 	@Override
 	@Transactional
 	public void registerSpendingCard(GeneratedSpendingCard generatedSpendingCard) {
@@ -179,11 +156,9 @@ public class CardServiceImpl implements CardService {
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
 		Card card = Card.builder().cardType(CardType.BASIC).user(user).build();
 		cardRepository.save(card);
-
 		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
 		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
 			startEndDate.getStartDate(), startEndDate.getEndDate());
-
 		// 소비 카드 생성 중인지 저장.
 		spendingPubService.sendMessage(
 			SpendingRequestMessage.builder().cardId(card.getId()).userWeeklyTransactionList(transactionList).build());
@@ -191,19 +166,54 @@ public class CardServiceImpl implements CardService {
 
 	@Override
 	@Transactional
+	public void registerChallengeCardImage(String imgPath, Long cardId) {
+		Card card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFound("Card Is Not Found"));
+		card.updateImgPath(imgPath);
+	}
+
+	@Override
+	@Transactional
+	public void addChallenge(Long userId, String achievementCondition) {
+		CalcDate.StartEndDate startEndDate = CalcDate.calcRecentWeek();
+		Card card = cardRepository.findRecentCard(userId, CardType.SPECIAL, startEndDate.getStartDate(),
+			startEndDate.getEndDate());
+		com.fintech.masoori.domain.card.entity.Challenge challenge = com.fintech.masoori.domain.card.entity.Challenge.builder()
+		                                                                                                             .achievementCondition(
+			                                                                                                             achievementCondition)
+		                                                                                                             .startTime(
+			                                                                                                             startEndDate.getStartDate())
+		                                                                                                             .endTime(
+			                                                                                                             startEndDate.getEndDate())
+		                                                                                                             .isSuccess(
+			                                                                                                             false)
+		                                                                                                             .build();
+		ChallengeRepository.save(challenge);
+		card.updateChallengeIdx(card.getChallengeIdx() + 1);
+		challenge.setCard(card);
+	}
+
+	@Override
+	@Transactional
 	public void createChallengeCard(String email) {
 		// 사용자 찾기.
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
-		Card card = Card.builder().cardType(CardType.SPECIAL).user(user).build();
+		// 카드 이름 정하기
+		// 랜덤한 인덱스 생성
+		Random random = new Random();
+		// 이름과
+		String n = NAME_LIST[random.nextInt(NAME_LIST.length)];
+		String v = VERSE_LIST[random.nextInt(VERSE_LIST.length)];
+		String cardName = v + " " + n;
+		Card card = Card.builder()
+		                .cardType(CardType.SPECIAL)
+		                .user(user)
+		                .description("")
+		                .name(cardName)
+		                .challengeIdx(0)
+		                .build();
+		// 이미지 생성 요청.
 		cardRepository.save(card);
-
-		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
-		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
-			startEndDate.getStartDate(), startEndDate.getEndDate());
-
-		// 소비 카드 생성 중인지 저장.
-		challengePubService.sendMessage(
-			ChallengeRequestMessage.builder().cardId(card.getId()).userWeeklyTransitionList(transactionList).build());
+		challengePubService.sendMessage(ChallengeRequestMessage.builder().cardId(card.getId()).verse(v).build());
 	}
 
 	@Override
@@ -226,8 +236,10 @@ public class CardServiceImpl implements CardService {
 	public Long findTopByUserIdRecentlyChallengeCard(String email) {
 		User loginUser = userRepository.findUserByEmail(email);
 		LocalDateTime now = LocalDateTime.now();
-		Card recentlyChallengeCard = cardRepository.findTopByUserIdRecentlyChallengeCard(loginUser.getId(), CardType.SPECIAL, now,
-			PageRequest.of(0,1));
+		Card recentlyChallengeCard = cardRepository.findTopByUserIdRecentlyChallengeCard(loginUser.getId(),
+			CardType.SPECIAL, now, PageRequest.of(0, 1));
+		if (recentlyChallengeCard == null)
+			return null;
 		return recentlyChallengeCard.getId();
 	}
 
