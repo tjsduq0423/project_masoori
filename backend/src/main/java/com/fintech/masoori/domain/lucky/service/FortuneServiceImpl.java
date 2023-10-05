@@ -16,6 +16,7 @@ import com.fintech.masoori.domain.lucky.dto.FortuneRes;
 import com.fintech.masoori.domain.lucky.entity.Fortune;
 import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.domain.lucky.repository.FortuneRepository;
+import com.fintech.masoori.domain.lucky.repository.FortuneUserRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
 import com.fintech.masoori.global.redis.RedisService;
@@ -29,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class FortuneServiceImpl implements FortuneService, FortuneUserService {
-
+	private final FortuneUserRepository fortuneUserRepository;
 	private final FortuneRepository fortuneRepository;
 	private final UserRepository userRepository;
 	private final RedisService redisService;
@@ -68,9 +69,14 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 			Fortune temp = fortunePage.getContent().get(0);
 			if (!email.isEmpty()) {
 				log.debug("Login select fortune");
+
+				User user = userRepository.findUserByEmail(email);
+				FortuneUser fortuneUser = FortuneUser.builder().fortune(temp).build();
+				fortuneUserRepository.save(fortuneUser);
+				fortuneUser.setUser(user);
+
 				int limitMinute = CalcEndTime.endMinute();
 				redisService.setUserFortune(email, temp.getName(), limitMinute);
-				fortuneRepository.save(temp);
 			}
 			return new FortuneRes(temp);
 		}
