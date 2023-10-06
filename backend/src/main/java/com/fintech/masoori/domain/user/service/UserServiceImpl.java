@@ -6,6 +6,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
+import com.fintech.masoori.domain.card.service.CardService;
 import com.fintech.masoori.domain.user.UserRole;
 import com.fintech.masoori.domain.user.dto.EmailCheckReq;
 import com.fintech.masoori.domain.user.dto.InfoRes;
@@ -42,7 +44,6 @@ import com.fintech.masoori.global.redis.RedisService;
 import com.fintech.masoori.global.util.CookieUtil;
 
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +61,13 @@ public class UserServiceImpl implements UserService {
 	private final RedisService redisService;
 	private final EmailService emailService;
 	private final SmsService smsService;
+	private final CardService cardService;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+	@Override
+	public List<User> findUsersByIsAuthenticated(Boolean isAuthentication) {
+		return userRepository.findUsersByIsAuthenticated(isAuthentication);
+	}
 
 	@Override
 	public boolean checkEmail(String email) {
@@ -113,6 +120,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public InfoRes getUserInfo(String email) {
 		User user = userRepository.findUserByEmail(email);
+		Long challengeCardId = cardService.findTopByUserIdRecentlyChallengeCard(user.getEmail());
 		// 오늘 기준
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime nowEnd = now.withHour(23).withMinute(59).withSecond(59);
@@ -139,6 +147,10 @@ public class UserServiceImpl implements UserService {
 		Integer amountSumByPeriodWeek = userRepository.getAmountSumByPeriod(email, nowWeekStart, nowWeekEnd);
 		Integer amountSumByPeriodMonth = userRepository.getAmountSumByPeriod(email, nowMonthStart, nowMonthEnd);
 
+		if (amountSumByPeriodDay == null) amountSumByPeriodDay = 0;
+		if (amountSumByPeriodWeek == null) amountSumByPeriodWeek = 0;
+		if (amountSumByPeriodMonth == null) amountSumByPeriodMonth = 0;
+
 		InfoRes infoRes = InfoRes.builder()
 		                         .imagePath(user.getCardImage())
 		                         .isAuthenticated(user.getIsAuthenticated())
@@ -146,29 +158,29 @@ public class UserServiceImpl implements UserService {
 		                         .dailySpending(amountSumByPeriodDay)
 		                         .monthlySpending(amountSumByPeriodWeek)
 		                         .weeklySpending(amountSumByPeriodMonth)
+								 .monthlySpendingGoal(user.getMonthlySpendingGoal())
+								 .challengeCardId(challengeCardId)
 		                         .build();
 		return infoRes;
 	}
 
 	@Override
-	public void logout(HttpServletRequest request, HttpServletResponse response) {
-		Optional<String> cookie = CookieUtil.getCookie(request, REFRESH_TOKEN).map(Cookie::getValue);
-		// 쿠키 없으면 걍 로그아웃.
-		if (cookie.isEmpty()) {
-			return;
-		}
-		String refreshTokenFromCookie = cookie.get();
-		String userEmail = jwtTokenProvider.parseClaims(refreshTokenFromCookie).getSubject();
+	public void logout(HttpServletRequest request, HttpServletResponse response, String email) {
+		// redis 토큰 삭제
+		redisTemplate.delete("RT:" + email);
 		// 쿠키 삭제
 		CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-		// redis 토큰 삭제
-		redisTemplate.delete("RT" + userEmail);
 	}
 
 	@Override
 	public Optional<User> findByEmail(String email) {
 		Optional<User> findUser = userRepository.findByEmail(email);
 		return findUser;
+	}
+
+	@Override
+	public User findById(Long id) {
+		return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User Not Found"));
 	}
 
 	@Override
@@ -218,21 +230,21 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public void updateInfoAndSendSms(SendSmsReq sendSmsReq, User loginUser) {
 		// 사용자 정보 업데이트
 		String name = sendSmsReq.getName();
 		String phoneNumber = sendSmsReq.getPhoneNumber();
 		userRepository.updateInfo(loginUser.getEmail(), name, phoneNumber);
-		sendSms(loginUser);
+		sendAuthcode(phoneNumber);
 	}
 
-	public void sendSms(User user) {
+	public void sendAuthcode(String phoneNumber) {
 		// 인증코드 redis 서버에 저장 후 메시지 발송
-		String phoneNumber = user.getPhoneNumber();
 		String code = smsService.createCode(6);
 		redisService.setSmsCode(phoneNumber, code);
 		try {
-			smsService.sendSms(phoneNumber, code);
+			smsService.sendAuthcode(phoneNumber, code);
 		} catch (CoolsmsException e) {
 			redisService.deleteSmsCode(phoneNumber);
 			throw new SmsMessagingException("Failed To Send Email");
@@ -252,5 +264,15 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updateCardGeneration(User loginUser) {
 		userRepository.updateCardGeneration(loginUser.getEmail());
+	}
+
+	@Override
+	public void updateMonthlySpendingGoal(User loginUser, Integer monthlySpendingGoal) {
+		userRepository.updateMonthlySpendingGoal(loginUser.getEmail(), monthlySpendingGoal);
+	}
+
+	@Override
+	public void updateAuthentication(User loginUser) {
+		userRepository.updateAuthentication(loginUser.getEmail());
 	}
 }

@@ -19,7 +19,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "color")
-@ToString(of = {"id", "color", "description"})
+@ToString(of = {"id", "color", "colorName", "description", "imagePath"})
 public class Color {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +34,7 @@ public class Color {
 
 	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
+
+	@Column(name = "image_path")
+	private String imagePath;
 }

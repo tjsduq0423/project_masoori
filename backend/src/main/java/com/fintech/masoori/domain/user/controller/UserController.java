@@ -1,7 +1,8 @@
 package com.fintech.masoori.domain.user.controller;
 
+import java.security.Principal;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +17,13 @@ import com.fintech.masoori.domain.user.dto.EmailCheckReq;
 import com.fintech.masoori.domain.user.dto.InfoRes;
 import com.fintech.masoori.domain.user.dto.LoginReq;
 import com.fintech.masoori.domain.user.dto.LoginRes;
+import com.fintech.masoori.domain.user.dto.MonthlySpendingGoalReq;
 import com.fintech.masoori.domain.user.dto.SendEmailReq;
 import com.fintech.masoori.domain.user.dto.SendSmsReq;
 import com.fintech.masoori.domain.user.dto.SignUpReq;
 import com.fintech.masoori.domain.user.dto.SmsCheckReq;
 import com.fintech.masoori.domain.user.entity.User;
+import com.fintech.masoori.domain.user.exception.UserNotFoundException;
 import com.fintech.masoori.domain.user.service.UserService;
 import com.fintech.masoori.global.error.exception.InvalidValueException;
 
@@ -92,8 +95,8 @@ public class UserController {
 
 	@Operation(summary = "로그아웃 API", description = "사용자를 로그아웃시키고 메인 페이지로 리다이렉트시킨다.")
 	@PostMapping("/logout")
-	public String logout(HttpServletRequest request, HttpServletResponse response) {
-		userService.logout(request, response);
+	public String logout(HttpServletRequest request, HttpServletResponse response, Principal principal) {
+		userService.logout(request, response, principal.getName());
 		return "redirect:https://masoori.site/";
 	}
 
@@ -101,9 +104,9 @@ public class UserController {
 	@PostMapping("/sms")
 	public ResponseEntity<?> sendSms(
 		@Parameter(description = "회원 전화번호", required = true) @RequestBody @Validated SendSmsReq sendSmsReq,
-		BindingResult bindingResult, Authentication authentication) {
+		BindingResult bindingResult, Principal principal) {
 		validateRequest(bindingResult);
-		User loginUser = loginUser(authentication);
+		User loginUser = loginUser(principal);
 		userService.updateInfoAndSendSms(sendSmsReq, loginUser);
 		return ResponseEntity.ok().build();
 	}
@@ -112,39 +115,41 @@ public class UserController {
 	@PostMapping("/sms/check")
 	public ResponseEntity<?> verifySmsCode(
 		@Parameter(description = "회원 전화번호, 인증 코드", required = true) @RequestBody @Validated SmsCheckReq smsCheckReq,
-		BindingResult bindingResult) {
+		BindingResult bindingResult, Principal principal) {
 		validateRequest(bindingResult);
+		User loginUser = loginUser(principal);
 		userService.verifySmsCode(smsCheckReq);
+		userService.updateAuthentication(loginUser);
 		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "마이페이지 유저 정보 조회 API", description = "마이페이지에서 필요한 사용자 정보를 조회한다.")
 	@GetMapping("/info")
-	public ResponseEntity<InfoRes> userInfo(Authentication authentication) {
-		InfoRes infoRes = userService.getUserInfo(authentication.getName());
+	public ResponseEntity<InfoRes> userInfo(Principal principal) {
+		InfoRes infoRes = userService.getUserInfo(principal.getName());
 		return ResponseEntity.ok().body(infoRes);
 	}
 
 	@Operation(summary = "유령을 통한 SMS, 소비카드 생성 연동 API", description = "유령이 나타나서 동의했을 때, SMS 알림과 소비카드 생성을 연동한다.")
 	@PostMapping("/ghost")
-	public ResponseEntity<?> updateIntegration(Authentication authentication) {
-		User loginUser = loginUser(authentication);
+	public ResponseEntity<?> updateIntegration(Principal principal) {
+		User loginUser = loginUser(principal);
 		userService.updateIntegration(loginUser);
 		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "마이페이지 sms 알림 연동 변경 API", description = "마이페이지에서 sms 알림 연동 설정을 변경했을 때 토글로 작동한다.")
 	@PostMapping("/alram")
-	public ResponseEntity<?> updateSmsAlarm(Authentication authentication) {
-		User loginUser = loginUser(authentication);
+	public ResponseEntity<?> updateSmsAlarm(Principal principal) {
+		User loginUser = loginUser(principal);
 		userService.updateSmsAlarm(loginUser);
 		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "마이페이지 소비카드 생성 연동 변경 API", description = "마이페이지에서 소비카드 생성 연동 설정을 변경했을 때 토글로 작동한다.")
 	@PostMapping("/generation")
-	public ResponseEntity<?> updateCardGeneration(Authentication authentication) {
-		User loginUser = loginUser(authentication);
+	public ResponseEntity<?> updateCardGeneration(Principal principal) {
+		User loginUser = loginUser(principal);
 		userService.updateCardGeneration(loginUser);
 		return ResponseEntity.ok().build();
 	}
@@ -158,14 +163,26 @@ public class UserController {
 		return ResponseEntity.ok(checkEmailDupulicatedRes);
 	}
 
+	@Operation(summary = "사용자 월별 소비 목표 금액 설정 API", description = "사용자가 입력한 소비 금액을 사용자 정보에 업데이트한다.")
+	@PostMapping("/monthly-spending")
+	public ResponseEntity<?> updateMonthlySpending(
+		@Parameter(description = "소비 목표 금액", required = true) @RequestBody MonthlySpendingGoalReq monthlySpendingGoalReq, Principal principal) {
+		User loginUser = loginUser(principal);
+		userService.updateMonthlySpendingGoal(loginUser, monthlySpendingGoalReq.getMonthlySpendingGoal());
+		return ResponseEntity.ok().build();
+	}
+
 	private void validateRequest(BindingResult bindingResult) {
 		if (bindingResult.hasErrors())
 			throw new InvalidValueException("Invalid Input Value");
 	}
 
 	// 현재 로그인한 유저 정보를 찾아온다.
-	public User loginUser(Authentication authentication) {
-		return userService.findByEmail(authentication.getPrincipal().toString()).get();
+	public User loginUser(Principal principal) {
+		return userService.findByEmail(principal.getName())
+		                  .orElseThrow(() -> new UserNotFoundException("User is Not Found"));
 	}
+
+
 
 }

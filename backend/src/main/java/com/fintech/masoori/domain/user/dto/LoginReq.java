@@ -15,12 +15,12 @@ import lombok.NoArgsConstructor;
 public class LoginReq {
 
 	@NotEmpty(message = "이메일은 필수 입력값입니다.")
-	@Schema(description = "이메일", example = "tjsduq0423@gmail.com")
+	@Schema(description = "이메일", example = "ssafy@gmail.com")
 	@Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식에 맞지 않습니다.")
 	private String email;
 
 	@NotEmpty(message = "비밀번호는 필수 입력값입니다.")
-	@Schema(description = "비밀번호", example = "wqlfhljds*14900")
+	@Schema(description = "비밀번호", example = "1Q2w3e4r!")
 	private String password;
 
 	public UsernamePasswordAuthenticationToken toAuthentication() {

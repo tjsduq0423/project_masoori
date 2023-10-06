@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fintech.masoori.domain.lucky.dto.FortuneListRes;
 import com.fintech.masoori.domain.lucky.dto.FortuneRes;
-import com.fintech.masoori.domain.lucky.dto.UserFortuneRes;
 import com.fintech.masoori.domain.lucky.entity.Fortune;
 import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.domain.lucky.repository.FortuneRepository;
@@ -155,29 +154,27 @@ class FortuneServiceImplTest {
 	@Test
 	void 유저_금전운_조회() {
 		List<Fortune> fortuneList = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 30; i++) {
 			fortuneList.add(Fortune.builder().name(i + "번 카드").imagePath("이미지 경로" + i).description(i + "번 설명").build());
 		}
 		fortuneRepository.saveAll(fortuneList);
 
-		User user = User.builder().email("test@gmail.com").providerType(ProviderType.LOCAL).build();
-		// userRepository.save(user);
+		User user = User.builder().email("test124@gmail.com").providerType(ProviderType.LOCAL).build();
 		em.persist(user);
 
 		List<FortuneUser> fortuneUserList = new ArrayList<>();
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 10; i++) {
 			FortuneUser fortuneUser = FortuneUser.builder().user(user).fortune(fortuneList.get(i)).build();
 			em.persist(fortuneUser);
 			fortuneUserList.add(fortuneUser);
 		}
-		// fortuneUserRepository.saveAll(fortuneUserList);
 		em.flush();
 
-		UserFortuneRes fortuneRes = fortuneUserService.selectAllUserFortune(user.getEmail());
+		FortuneListRes fortuneRes = fortuneUserService.selectAllUserFortune(user.getEmail());
 		log.info("User's Fortune : {}", fortuneRes);
-		assertThat(fortuneRes.getFortuneList().size() == 3);
+		assertThat(fortuneRes.getFortuneList().size() == 30);
 		List<FortuneUser> allByUserId = fortuneUserRepository.findAllByUserId(user.getId());
-		assertThat(allByUserId.size() == 3);
+		assertThat(allByUserId.size() == 10);
 		for (FortuneUser fortuneUser : allByUserId) {
 			assertThat(fortuneUser.getUser().getId().equals(user.getId()));
 		}
