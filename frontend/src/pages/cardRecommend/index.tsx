@@ -302,7 +302,6 @@ const CardRecommend = () => {
 
   useEffect(() => {
     if (creditCardRes[0] === undefined) {
-      navigate("/dictionary");
       toast.info("데이터가 부족해요...");
     }
   }, [creditCardRes, navigate]);
