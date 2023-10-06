@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    networks:
+      - deploy
+
+networks:
+  deploy:
+    external: true
