@@ -136,6 +136,7 @@ public class CardServiceImpl implements CardService {
 		card.cardUpdate(generatedSpendingCard.getName(), generatedSpendingCard.getImagePath(),
 			generatedSpendingCard.getDescription());
 
+		cardRepository.save(card);
 		List<com.fintech.masoori.domain.card.entity.Basic> list = generatedSpendingCard.getSpendings()
 		                                                                               .stream()
 		                                                                               .map(s -> {
@@ -164,9 +165,9 @@ public class CardServiceImpl implements CardService {
 		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
 			startEndDate.getStartDate(), startEndDate.getEndDate());
 		// 소비 카드 생성 중인지 저장.
+		cardRepository.save(card);
 		spendingPubService.sendMessage(
 			SpendingRequestMessage.builder().cardId(card.getId()).userWeeklyTransactionList(transactionList).build());
-		cardRepository.save(card);
 	}
 
 	@Override
@@ -224,10 +225,14 @@ public class CardServiceImpl implements CardService {
 
 	@Override
 	@Transactional
-	public void addChallenge(Long userId, String achievementCondition, LocalDateTime date) {
+	public void addChallenge(Long cardId, String achievementCondition, LocalDateTime date) {
 		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek(date);
-		Card card = cardRepository.findRecentCard(userId, CardType.SPECIAL, startEndDate.getStartDate(),
+		Card card = cardRepository.findCardByCardId(cardId, CardType.SPECIAL, startEndDate.getStartDate(),
 			startEndDate.getEndDate());
+		if(card == null){
+			log.info("CARD IS NULL : {}", card);
+			return;
+		}
 
 		com.fintech.masoori.domain.card.entity.Challenge challenge = com.fintech.masoori.domain.card.entity.Challenge.builder()
 		                                                                                                             .achievementCondition(
@@ -239,9 +244,13 @@ public class CardServiceImpl implements CardService {
 		                                                                                                             .isSuccess(
 			                                                                                                             false)
 		                                                                                                             .build();
-		ChallengeRepository.save(challenge);
+		if(card.getChallengeIdx() == null){
+			log.info("ChallengeIdx is NULL");
+			card.updateChallengeIdx(0);
+		}
 		card.updateChallengeIdx(card.getChallengeIdx() + 1);
 		challenge.setCard(card);
+		ChallengeRepository.save(challenge);
 	}
 
 	@Override
