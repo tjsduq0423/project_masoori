@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  challenge:
+    container_name: challenge
+    build:
+      context: ./workers/challenge
+  analytics:
+    container_name: analytics
+    build:
+      context: ./workers/analytics
+  spending:
+    container_name: spending
+    build:
+      context: ./workers/spending

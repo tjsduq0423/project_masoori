@@ -15,11 +15,11 @@ public class Card {
 	private Long id;
 	@Schema(description = "카드 이름", example = "카드 이름")
 	private String name;
-	@Schema(description = "이미지 경로", example = "j9b308.p.ssafy.io/abc.jpg")
+	@Schema(description = "이미지 경로", example = "http://j9b308.p.ssafy.io/abc.jpg")
 	private String imagePath;
 	@Schema(description = "카드 설명", example = "이 카드는...")
 	private String description;
-	@Schema(description = "카드 생성일", example = "2023-09-20")
+	@Schema(description = "카드 생성일", example = "2023-09-26T07:42:34.76")
 	private LocalDateTime createdDate;
 	@Schema(description = "카드 타입", example = "BASIC, SPECIAL")
 	private CardType cardType;

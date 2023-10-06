@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fintech.masoori.domain.card.dto.BasicCardRes;
 import com.fintech.masoori.domain.card.dto.CardType;
 import com.fintech.masoori.domain.card.dto.ChallengeCardRes;
+import com.fintech.masoori.domain.card.dto.UserCardListRes;
 import com.fintech.masoori.domain.card.entity.Basic;
 import com.fintech.masoori.domain.card.entity.Card;
 import com.fintech.masoori.domain.card.entity.Challenge;
@@ -63,18 +64,18 @@ class CardServiceImplTest {
 			cardList.get(i).setLocalDateTime(LocalDateTime.of(2023, 6 + i, 10 + i, 10, 10, 10));
 		}
 		em.flush();
-		BasicCardRes response = cardService.selectRangeBasicCard(user.getEmail(), LocalDateTime.of(2023, 7, 1, 1, 1),
+		UserCardListRes response = cardService.selectRangeBasicCard(user.getEmail(), LocalDateTime.of(2023, 7, 1, 1, 1),
 			LocalDateTime.of(2023, 7, 1, 1, 1));
-		assertThat(response.getBasicCardList().size() == 1);
+		assertThat(response.getUserCardList().size() == 1);
 		response = cardService.selectRangeBasicCard(user.getEmail(), LocalDateTime.of(2023, 8, 1, 1, 1),
 			LocalDateTime.of(2023, 8, 1, 1, 1));
-		assertThat(response.getBasicCardList().size() == 1);
+		assertThat(response.getUserCardList().size() == 1);
 		response = cardService.selectRangeBasicCard(user.getEmail(), LocalDateTime.of(2023, 9, 1, 1, 1),
 			LocalDateTime.of(2023, 9, 1, 1, 1));
-		assertThat(response.getBasicCardList().size() == 0);
+		assertThat(response.getUserCardList().size() == 0);
 		response = cardService.selectRangeBasicCard(user.getEmail(), LocalDateTime.of(2023, 7, 1, 1, 1),
 			LocalDateTime.of(2023, 9, 1, 1, 1));
-		assertThat(response.getBasicCardList().size() == 2);
+		assertThat(response.getUserCardList().size() == 2);
 		log.info("Response : {}", response);
 	}
 
@@ -121,7 +122,6 @@ class CardServiceImplTest {
 		for (int i = 1; i <= 5; i++) {
 			challengeList.add(Challenge.builder()
 									   .isSuccess(false)
-									   .name(i + "번 챌린지")
 									   .achievementCondition("절약하기")
 									   .startTime(LocalDateTime.of(2023, 9, 18, 0, 0))
 									   .endTime(LocalDateTime.of(2023, 9, 24, 23, 59))
@@ -131,7 +131,6 @@ class CardServiceImplTest {
 		for (int i = 1; i <= 2; i++) {
 			Card card = Card.builder()
 							.user(user)
-							.name(i + "번 카드")
 							.imagePath(i + "번 경로")
 							.description(i + "번 카드 설명")
 							.cardType(
@@ -146,18 +145,18 @@ class CardServiceImplTest {
 			cardList.get(i).setLocalDateTime(LocalDateTime.of(2023, 8 + i, 1, 0, 0));
 		}
 		em.flush();
-		ChallengeCardRes challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(),
+		UserCardListRes challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(),
 			LocalDateTime.of(2023, 7, 1, 1, 1), LocalDateTime.of(2023, 7, 1, 1, 1));
-		assertThat(challengeCardList.getChallengeCardList().size() == 0);
+		assertThat(challengeCardList.getUserCardList().size() == 0);
 		challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(),
 			LocalDateTime.of(2023, 8, 1, 1, 1), LocalDateTime.of(2023, 8, 1, 1, 1));
-		assertThat(challengeCardList.getChallengeCardList().size() == 1);
+		assertThat(challengeCardList.getUserCardList().size() == 1);
 		challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(),
 			LocalDateTime.of(2023, 9, 1, 1, 1), LocalDateTime.of(2023, 9, 1, 1, 1));
-		assertThat(challengeCardList.getChallengeCardList().size() == 1);
+		assertThat(challengeCardList.getUserCardList().size() == 1);
 		challengeCardList = cardService.selectRangeChallengeCard(user.getEmail(),
 			LocalDateTime.of(2023, 8, 1, 1, 1), LocalDateTime.of(2023, 9, 1, 1, 1));
-		assertThat(challengeCardList.getChallengeCardList().size() == 2);
+		assertThat(challengeCardList.getUserCardList().size() == 2);
 	}
 
 	/**
@@ -174,7 +173,6 @@ class CardServiceImplTest {
 		for (int i = 1; i <= 5; i++) {
 			challengeList.add(Challenge.builder()
 									   .isSuccess(false)
-									   .name(i + "번 챌린지")
 									   .achievementCondition("절약하기")
 									   .startTime(LocalDateTime.of(2023, 9, 18, 0, 0))
 									   .endTime(LocalDateTime.of(2023, 9, 24, 23, 59))
@@ -193,5 +191,43 @@ class CardServiceImplTest {
 		ChallengeCardRes.ChallengeCard challengeCard = cardService.selectChallengeCard(user.getEmail(), card.getId());
 		assertThat(challengeCard.getCard().getId().equals(card.getId()));
 		assertThat(challengeCard.getCard().getName().equals(card.getName()));
+	}
+
+	@Test
+	void 사용자_최근_생성_카드_조회(){
+		User user = User.builder()
+						.email("test@gmail.com")
+						.providerType(ProviderType.LOCAL)
+						.build();
+		em.persist(user);
+		List<Basic> basicList = new ArrayList<>();
+		for (int i = 1; i <= 5; i++) {
+			basicList.add(Basic.builder().keyword("음식").totalAmount(1000 * i).frequency(2 * i).build());
+		}
+		Card card = Card.builder()
+						.user(user)
+						.name("1번 카드")
+						.imagePath("1번 경로")
+						.description("1번 카드 설명")
+						.cardType(CardType.BASIC)
+						.basicList(basicList)
+						.build();
+		em.persist(card);
+		em.flush();
+		card.setLocalDateTime(LocalDateTime.of(2023, 9, 25, 1, 10));
+		em.flush();
+		BasicCardRes.BasicCard basicCard = cardService.selectUserRecentBasicCard(user.getEmail(), LocalDateTime.of(2023, 9, 28, 13, 1));
+		assertThat(basicCard != null && basicCard.getCard() != null);
+		log.info("BasicCard : {}", basicCard.getCard());
+		card.setLocalDateTime(LocalDateTime.of(2023, 9, 23, 1, 10));
+		em.flush();
+		basicCard = cardService.selectUserRecentBasicCard(user.getEmail(), LocalDateTime.of(2023, 9, 28, 13, 1));
+		assertThat(basicCard == null);
+		log.info("이번주에 생성한 카드가 없습니다. : {}", basicCard);
+		card.setLocalDateTime(LocalDateTime.of(2022, 12, 30, 1, 10));
+		em.flush();
+		basicCard = cardService.selectUserRecentBasicCard(user.getEmail(), LocalDateTime.of(2023, 1, 1, 13, 1));
+		assertThat(basicCard != null && basicCard.getCard() != null);
+		log.info("BasicCard : {}", basicCard.getCard());
 	}
 }

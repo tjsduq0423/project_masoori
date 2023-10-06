@@ -109,9 +109,8 @@ jwt:
 
 rabbitmq:
   queue:
-    realtime: realtime.req
-    weekly: weekly.req
-    recommend: recommend.req
+    challenge: challenge.req
+    spending: spending.req
 
 # ssl 설정
 server:
@@ -119,3 +118,4 @@ server:
     key-store: classpath:keystore.p12
     key-store-password: ssafy
     key-store-type: PKCS12
+  ec2-url: https://masoori.site

@@ -1,0 +1,8 @@
+pika==1.3.2
+pydantic
+uvicorn
+openai
+langchain
+faiss-cpu
+tiktoken
+sentence-transformers
