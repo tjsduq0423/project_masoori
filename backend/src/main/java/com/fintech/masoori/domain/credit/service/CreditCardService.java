@@ -1,17 +1,22 @@
 package com.fintech.masoori.domain.credit.service;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import com.fintech.masoori.domain.credit.dto.CreditCardRes;
+import com.fintech.masoori.domain.credit.dto.UserCreditCardRes;
 import com.fintech.masoori.domain.credit.entity.CreditCard;
+import com.fintech.masoori.domain.credit.entity.CreditCardUser;
+import com.fintech.masoori.global.rabbitMQ.dto.MonthlySpendingAndCreditcard;
 
 public interface CreditCardService {
 	/**
 	 * 유저-카드 전체 조회
 	 */
-	CreditCardRes selectAll(String userEmail);
+	UserCreditCardRes selectAll(String userEmail);
+
+	CreditCardRes selectMonth(String userEmail, LocalDateTime time);
 
 	CreditCard selectOne(Long id);
 
-	void save (CreditCard creditCard);
+	void saveRecommendedCreditCard(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard);
 }

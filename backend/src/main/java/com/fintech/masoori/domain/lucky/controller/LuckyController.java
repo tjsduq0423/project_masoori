@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fintech.masoori.domain.lucky.dto.ColorRes;
 import com.fintech.masoori.domain.lucky.dto.FortuneListRes;
 import com.fintech.masoori.domain.lucky.dto.FortuneRes;
-import com.fintech.masoori.domain.lucky.dto.UserFortuneRes;
 import com.fintech.masoori.domain.lucky.service.ColorService;
 import com.fintech.masoori.domain.lucky.service.FortuneService;
 import com.fintech.masoori.domain.lucky.service.FortuneUserService;
@@ -30,9 +29,16 @@ public class LuckyController {
 
 	//행운의 색 조회
 	@Operation(summary = "행운의 색 조회 API", description = "하루에 한번 이용할 수 있는 행운의 색을 반환한다.")
-	@GetMapping("/color")
-	public ResponseEntity<ColorRes> selectColor(Principal principal) {
+	@GetMapping("/user/color")
+	public ResponseEntity<ColorRes> selectLoginColor(Principal principal) {
 		ColorRes color = colorService.selectOneColor(principal.getName());
+		return ResponseEntity.ok(color);
+	}
+
+	@Operation(summary = "행운의 색 조회(비로그인) API", description = "비로그인 유저가 사용하는 행운의 색 조회 API")
+	@GetMapping("/color")
+	public ResponseEntity<ColorRes> selectColor() {
+		ColorRes color = colorService.selectOneColor("");
 		return ResponseEntity.ok(color);
 	}
 
@@ -63,8 +69,8 @@ public class LuckyController {
 	//사용자 금전운 전체 조회
 	@Operation(summary = "사용자 금전운 전체 조회 API", description = "사용자가 소유하고 있는 금전운 카드를 리스트로 반환")
 	@GetMapping("/userfortune")
-	public ResponseEntity<UserFortuneRes> selectAllUserFortune(Principal principal) {
-		UserFortuneRes fortuneList = fortuneUserService.selectAllUserFortune(principal.getName());
+	public ResponseEntity<FortuneListRes> selectAllUserFortune(Principal principal) {
+		FortuneListRes fortuneList = fortuneUserService.selectAllUserFortune(principal.getName());
 		return ResponseEntity.ok(fortuneList);
 	}
 

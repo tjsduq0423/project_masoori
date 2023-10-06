@@ -1,7 +1,9 @@
 package com.fintech.masoori.domain.lucky.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -11,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fintech.masoori.domain.lucky.dto.FortuneListRes;
 import com.fintech.masoori.domain.lucky.dto.FortuneRes;
-import com.fintech.masoori.domain.lucky.dto.UserFortuneRes;
 import com.fintech.masoori.domain.lucky.entity.Fortune;
 import com.fintech.masoori.domain.lucky.entity.FortuneUser;
 import com.fintech.masoori.domain.lucky.repository.FortuneRepository;
+import com.fintech.masoori.domain.lucky.repository.FortuneUserRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
 import com.fintech.masoori.global.redis.RedisService;
@@ -28,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class FortuneServiceImpl implements FortuneService, FortuneUserService {
-
+	private final FortuneUserRepository fortuneUserRepository;
 	private final FortuneRepository fortuneRepository;
 	private final UserRepository userRepository;
 	private final RedisService redisService;
@@ -36,21 +38,17 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 	@Override
 	public FortuneListRes selectAllFortune() {
 		FortuneListRes fortuneListRes = FortuneListRes.builder().build();
-		List<String> fortuneNameList = fortuneRepository.findAllOnlyName();
-		List<FortuneListRes.Fortune> fortuneResList = new ArrayList<>();
-		for (String fortuneName : fortuneNameList) {
-			FortuneListRes.Fortune temp = FortuneListRes.Fortune.builder()
-										.name(fortuneName)
-										.build();
-			fortuneResList.add(temp);
+		List<Fortune> fortuneList = fortuneRepository.findAll();
+		for (Fortune fortune : fortuneList) {
+			FortuneRes temp = new FortuneRes(fortune);
+			fortuneListRes.getFortuneList().add(temp);
 		}
-		fortuneListRes.setFortuneList(fortuneResList);
 		return fortuneListRes;
 	}
 
 	@Override
+	@Transactional
 	public FortuneRes selectOneFortune(String email) {
-		FortuneRes fortune = FortuneRes.builder().build();
 		//로그인
 		if (!email.isEmpty()) {
 			Optional<String> userFortuneOptional = Optional.ofNullable(redisService.getUserFortune(email));
@@ -59,49 +57,58 @@ public class FortuneServiceImpl implements FortuneService, FortuneUserService {
 				log.debug("Today already select fortune");
 				String fortuneName = userFortuneOptional.get();
 				Fortune findFortune = fortuneRepository.findDescriptioneByName(fortuneName);
-				fortune.setName(findFortune.getName());
-				fortune.setImagePath(findFortune.getImagePath());
-				fortune.setSummary(findFortune.getSummary());
-				fortune.setDescription(findFortune.getDescription());
-				return fortune;
-
+				return new FortuneRes(findFortune);
 			}
 		}
+
 		//오늘 처음 조회하는 경우, 비로그인인 경우 그냥 진행
 		long fortuneSize = fortuneRepository.count();
 		int idx = (int)(Math.random() * fortuneSize);
 		Page<Fortune> fortunePage = fortuneRepository.findAll(PageRequest.of(idx, 1));
 		if (fortunePage.hasContent()) {
 			Fortune temp = fortunePage.getContent().get(0);
-			fortune.setName(temp.getName());
-			fortune.setImagePath(temp.getImagePath());
-			fortune.setSummary(temp.getSummary());
-			fortune.setDescription(temp.getDescription());
 			if (!email.isEmpty()) {
 				log.debug("Login select fortune");
+
+				User user = userRepository.findUserByEmail(email);
+				FortuneUser fortuneUser = FortuneUser.builder().fortune(temp).build();
+				fortuneUserRepository.save(fortuneUser);
+				fortuneUser.setUser(user);
+
 				int limitMinute = CalcEndTime.endMinute();
 				redisService.setUserFortune(email, temp.getName(), limitMinute);
 			}
+			return new FortuneRes(temp);
 		}
-		return fortune;
+		return null;
 	}
 
 	@Override
-	public UserFortuneRes selectAllUserFortune(String email) {
+	public FortuneListRes selectAllUserFortune(String email) {
+		//유저 정보 조회
 		User user = userRepository.findUserByEmail(email);
+
+		//유저가 가지고 있는 fortune을 조회
 		List<FortuneUser> fortuneUserList = user.getFortuneUserList();
-		UserFortuneRes fortuneRes = UserFortuneRes.builder().build();
-		List<FortuneRes> fortuneList = new ArrayList<>();
-		for (FortuneUser f : fortuneUserList) {
-			Fortune fortune = f.getFortune();
-			fortuneList.add(FortuneRes.builder()
-									  .name(fortune.getName())
-									  .imagePath(fortune.getImagePath())
-									  .summary(fortune.getSummary())
-									  .description(fortune.getDescription())
-									  .build());
+
+		//전체 금전운 조회
+		FortuneListRes fortuneList = selectAllFortune();
+
+		Map<Long, FortuneRes> fortuneResMap = new HashMap<>();
+
+		for (FortuneRes fortuneRes : fortuneList.getFortuneList()) {
+			boolean match = false;
+			for (FortuneUser fortuneUser : fortuneUserList) {
+				if (fortuneRes.getId().equals(fortuneUser.getFortune().getId())) {
+					fortuneResMap.put(fortuneRes.getId(), new FortuneRes((fortuneUser.getFortune())));
+					match = true;
+				}
+			}
+			if (!match) {
+				fortuneResMap.put(fortuneRes.getId(), null);
+			}
 		}
-		fortuneRes.setFortuneList(fortuneList);
-		return fortuneRes;
+		List<FortuneRes> fortuneResList = new ArrayList<>(fortuneResMap.values());
+		return FortuneListRes.builder().fortuneList(fortuneResList).build();
 	}
 }

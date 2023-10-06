@@ -1,5 +1,7 @@
 package com.fintech.masoori.domain.lucky.dto;
 
+import com.fintech.masoori.domain.lucky.entity.Fortune;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +11,8 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class FortuneRes {
+	@Schema(description = "금전운 ID", example = "1")
+	private Long id;
 	@Schema(description = "금전운 이름", example = "행운")
 	private String name;
 	@Schema(description = "금전운 이미지 경로", example = "j9b308.p.ssafy.io/img/1234.png")
@@ -17,4 +21,13 @@ public class FortuneRes {
 	private String summary;
 	@Schema(description = "금전운 설명", example = "이 카드를 뽑은 당신! 오늘은...")
 	private String description;
+
+	public FortuneRes(Fortune fortune) {
+		this.id = fortune.getId();
+		this.name = fortune.getName();
+		this.imagePath = fortune.getImagePath();
+		this.summary = fortune.getSummary();
+		this.description = fortune.getDescription();
+	}
+
 }

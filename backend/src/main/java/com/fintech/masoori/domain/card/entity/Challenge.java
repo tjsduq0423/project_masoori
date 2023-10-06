@@ -24,7 +24,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "challenge")
-@ToString(of = {"id", "isSuccess", "name", "achievementCondition", "startTime", "endTime"})
+@ToString(of = {"id", "isSuccess", "achievementCondition", "startTime", "endTime"})
 public class Challenge {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,9 +37,6 @@ public class Challenge {
 
 	@Column(name = "is_success")
 	private Boolean isSuccess;
-
-	@Column(name = "challenge_name")
-	private String name;
 
 	@Column(name = "achievement_condition", length = 25)
 	private String achievementCondition;
