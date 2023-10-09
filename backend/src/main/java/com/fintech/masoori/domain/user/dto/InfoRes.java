@@ -27,6 +27,12 @@ public class InfoRes {
 	@Schema(description = "월별 소비 금액", example = "500000")
 	private Integer monthlySpending;
 
+	@Schema(description = "월별 소비 목표 금액", example = "1000000")
+	private Integer monthlySpendingGoal;
+
 	@Schema(description = "결제 내역 연동 여부 ", example = "true")
 	private Boolean isAuthenticated;
+
+	@Schema(description = "가장 최근에 생성된 챌린지카드 id", example = "1")
+	private Long challengeCardId;
 }

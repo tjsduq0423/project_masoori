@@ -83,9 +83,12 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@Column(name = "provider_type", length = 20, nullable = false)
 	private ProviderType providerType;
 
+	@Column(name = "monthly_spending_goal")
+	private Integer monthlySpendingGoal;
+
 	@OneToMany(mappedBy = "user")
 	@Builder.Default
-	private List<CreditCardUser> creditCardUsers = new ArrayList<>();
+	private List<CreditCardUser> creditCardUserList = new ArrayList<>();
 
 	public User(String email, String password) {
 		this.email = email;
@@ -159,6 +162,16 @@ public class User extends BaseTimeEntity implements UserDetails {
 	public void addCard(Card card) {
 		this.cardList.add(card);
 		card.setUser(this);
+	}
+
+	public void addMonthlySpendingAnalytics(MonthlySpendingAnalytics analytics) {
+		this.monthlySpendingAnalyticsList.add(analytics);
+		analytics.setUser(this);
+	}
+
+	public void addCreditCardUser(CreditCardUser creditCardUser) {
+		this.creditCardUserList.add(creditCardUser);
+		creditCardUser.setUser(this);
 	}
 
 }
