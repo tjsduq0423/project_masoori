@@ -469,6 +469,9 @@ const MainPage = () => {
       setNowDateInfo("");
     }
 
+    console.log(consumeRecent);
+    console.log(consumeRecent.card);
+
     if (consumeRecent && consumeRecent.card) {
       // Access consumeRecent.card safely
       toast.info("이번 주는 이미 생성했어요!");
