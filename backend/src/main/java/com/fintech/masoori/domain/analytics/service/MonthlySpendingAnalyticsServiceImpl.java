@@ -69,7 +69,7 @@ public class MonthlySpendingAnalyticsServiceImpl implements MonthlySpendingAnaly
 				serviceUser.addMonthlySpendingAnalytics(analytics);
 				i++;
 			} else {
-				return;
+				break;
 			}
 		}
 		//year와 month로 createdDate 변경
