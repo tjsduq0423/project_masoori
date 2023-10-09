@@ -12,6 +12,7 @@ import com.fintech.masoori.domain.analytics.entity.MonthlySpendingAnalytics;
 import com.fintech.masoori.domain.analytics.repository.MonthlySpendingAnalyticsRepository;
 import com.fintech.masoori.domain.user.entity.User;
 import com.fintech.masoori.domain.user.repository.UserRepository;
+import com.fintech.masoori.global.rabbitMQ.dto.GeneratedSpending;
 import com.fintech.masoori.global.rabbitMQ.dto.MonthlySpendingAndCreditcard;
 import com.fintech.masoori.global.util.CalcDate;
 
@@ -31,7 +32,6 @@ public class MonthlySpendingAnalyticsServiceImpl implements MonthlySpendingAnaly
 
 		List<MonthlySpendingAnalytics> monthlySpendingAnalyticsList = monthlySpendingAnalyticsRepository.findMonthlySpendingAnalyticsByUserId(
 			user.getId(), calcDate.getStartDate(), calcDate.getEndDate());
-		MonthlySpendingAnalyticsRes monthlySpendingAnalyticsRes = MonthlySpendingAnalyticsRes.builder().build();
 
 		List<MonthlySpendingAnalyticsRes.MonthlySpendingAnalytics> monthlySpendingAnalyticsResList = monthlySpendingAnalyticsList.stream()
 																																 .map(
@@ -44,21 +44,25 @@ public class MonthlySpendingAnalyticsServiceImpl implements MonthlySpendingAnaly
 										  .build();
 	}
 
-	// @Override
-	// @Transactional
-	// public void saveMonthlySpendingAnalytics(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard) {
-	// 	User serviceUser = userRepository.findById(monthlySpendingAndCreditcard.getUserId())
-	// 									 .orElseThrow(() -> new RuntimeException("User Not Found"));
-	//
-	// 	for (MonthlySpendingAndCreditcard.MonthlySpending spending : monthlySpendingAndCreditcard.getMonthlySpendingList()) {
-	// 		MonthlySpendingAnalytics analytics = MonthlySpendingAnalytics.builder()
-	// 																	 .category(spending.getCategory())
-	// 																	 .cost(spending.getCost())
-	// 																	 .build();
-	//
-	// 		monthlySpendingAnalyticsRepository.save(analytics);
-	// 		serviceUser.addMonthlySpendingAnalytics(analytics);
-	// 	}
-	// }
+	@Override
+	@Transactional
+	public void saveMonthlySpendingAnalytics(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard) {
+		User serviceUser = userRepository.findById(monthlySpendingAndCreditcard.getUserId())
+										 .orElseThrow(() -> new RuntimeException("User Not Found"));
+		String[] tempDate = monthlySpendingAndCreditcard.getDate().split("/");
+		int year = Integer.parseInt(tempDate[0]);
+		int month = Integer.parseInt(tempDate[1]);
+		for (GeneratedSpending spending : monthlySpendingAndCreditcard.getSpendings()) {
+			MonthlySpendingAnalytics analytics = MonthlySpendingAnalytics.builder()
+																		 .category(spending.getKeyword())
+																		 .cost(spending.getTotalAmount())
+																		 .year(year)
+																		 .month(month)
+																		 .build();
+
+			monthlySpendingAnalyticsRepository.save(analytics);
+			serviceUser.addMonthlySpendingAnalytics(analytics);
+		}
+	}
 
 }

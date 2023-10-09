@@ -18,6 +18,8 @@ import lombok.ToString;
 @ToString
 public class AnalyticsRequestMessage {
 	private Long userId;
+	private String date;
 	@Builder.Default
-	private List<Transaction> userWeeklyTransactionList = new ArrayList<>();
+	private List<Transaction> userMonthlyTransactionList = new ArrayList<>();
+
 }

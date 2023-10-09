@@ -26,7 +26,7 @@ public class AnalyticsSubService {
 	@RabbitListener(queues = "analytics.res")
 	public void subscribe(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard) throws CoolsmsException {
 		log.info("{}", monthlySpendingAndCreditcard);
-		// monthlySpendingAnalyticsService.saveMonthlySpendingAnalytics(monthlySpendingAndCreditcard);
+		monthlySpendingAnalyticsService.saveMonthlySpendingAnalytics(monthlySpendingAndCreditcard);
 		creditCardService.saveRecommendedCreditCard(monthlySpendingAndCreditcard);
 
 		// 문자 보내자

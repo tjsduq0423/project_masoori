@@ -53,12 +53,14 @@ class RecommendedCreditCard(BaseModel):
 # reqDto
 class AnalyticsRequestMessage(BaseModel):
     userId: int
-    userWeeklyTransactionList: List[Transaction]
+    date: str
+    userMonthlyTransactionList: List[Transaction]
 
 
 # resDto 선언
 class MonthlySpendingAndCreditcard(BaseModel):
     userId: int
+    date : str
     creditCardList: List[RecommendedCreditCard]
 
 
@@ -70,9 +72,11 @@ def callback(ch, method, properties, body):
         # 서비스 로직 실행 -> 결과값 res 객체에 넣고 쏘면 댐.
 
         userId = request_message_dict['userId']
-        spendList = request_message_dict['userWeeklyTransactionList']
+        date = request_message_dict['date']
+        spendList = request_message_dict['userMonthlyTransactionList']
 
         print(f"UserId : {userId}")
+        print(f"Date : {date}")
         print(f"SpendList : {spendList}")
 
         if userId is None:
@@ -97,7 +101,9 @@ def callback(ch, method, properties, body):
         print(f"CardList : {cardList}")
 
         res = MonthlySpendingAndCreditcard(
-            userId=userId, creditCardList=cardList
+            userId=userId, 
+            date=date,
+            creditCardList=cardList
         ).json()
         print(f"Result : {res}")
         # 메시지 응답 큐 pub

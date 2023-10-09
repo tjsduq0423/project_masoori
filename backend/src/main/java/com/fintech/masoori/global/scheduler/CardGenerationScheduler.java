@@ -38,16 +38,16 @@ public class CardGenerationScheduler {
 	 */
 	@Async
 	@Scheduled(cron = "0 0 1 1 * *")
-	public void creditCardGenerateWeekly() {
+	public void creditCardGenerateMonthly() {
 		log.info("");
 		List<User> userList = userService.findUsersByIsAuthenticated(true);
 		for (User user : userList) {
-			CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
+			CalcDate.StartEndDate startEndDate = CalcDate.calcLastMonth();
 			List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
 				startEndDate.getStartDate(), startEndDate.getEndDate());
 			AnalyticsRequestMessage message = AnalyticsRequestMessage.builder()
 			                                                         .userId(user.getId())
-			                                                         .userWeeklyTransactionList(transactionList)
+			                                                         .userMonthlyTransactionList(transactionList)
 			                                                         .build();
 			analyticsPubService.sendMessage(message);
 		}

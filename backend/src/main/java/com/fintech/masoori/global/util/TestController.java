@@ -36,12 +36,14 @@ public class TestController {
 	@GetMapping("/test/analytics")
 	public ResponseEntity<?> cardTestAPI(Principal principal, @RequestParam LocalDateTime date) {
 		User user = userRepository.findUserByEmail(principal.getName());
-		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek(date);
+		CalcDate.StartEndDate startEndDate = CalcDate.calcLastMonth(date);
 		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
 			startEndDate.getStartDate(), startEndDate.getEndDate());
+		String tempDate = date.getYear()+"/"+date.getMonthValue()+"/"+date.getDayOfMonth();
 		AnalyticsRequestMessage message = AnalyticsRequestMessage.builder()
 		                                                         .userId(user.getId())
-		                                                         .userWeeklyTransactionList(transactionList)
+																 .date(tempDate)
+		                                                         .userMonthlyTransactionList(transactionList)
 		                                                         .build();
 		analyticsPubService.sendMessage(message);
 		return ResponseEntity.ok().build();

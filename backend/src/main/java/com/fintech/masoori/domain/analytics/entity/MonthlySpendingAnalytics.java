@@ -34,6 +34,12 @@ public class MonthlySpendingAnalytics extends BaseTimeEntity {
 	@Column(name = "monthly_spending_analytics_id", nullable = false)
 	private Long id;
 
+	@Column(name="year")
+	private Integer year;
+
+	@Column(name="month")
+	private Integer month;
+
 	@Column(name = "category")
 	private String category;
 
