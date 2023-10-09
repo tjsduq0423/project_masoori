@@ -214,7 +214,8 @@ public class CardServiceImpl implements CardService {
 	@Transactional
 	public void addChallenge(Long userId, String achievementCondition) {
 		//이번 달에 생성된 챌린지 카드 조회
-		CalcDate.StartEndDate startEndDate = CalcDate.calcRecentWeek();
+		CalcDate.StartEndDate startEndDate = CalcDate.calcLastMonth();
+		CalcDate.StartEndDate challengeDate = CalcDate.calcLastWeek();
 		log.info("Calc Date is : {}", startEndDate);
 		Card card = cardRepository.findRecentCard(userId, CardType.SPECIAL, startEndDate.getStartDate(),
 			startEndDate.getEndDate());
@@ -225,9 +226,9 @@ public class CardServiceImpl implements CardService {
 		                                                                                                             .achievementCondition(
 			                                                                                                             achievementCondition)
 		                                                                                                             .startTime(
-			                                                                                                             startEndDate.getStartDate())
+																														 challengeDate.getStartDate())
 		                                                                                                             .endTime(
-			                                                                                                             startEndDate.getEndDate())
+																														 challengeDate.getEndDate())
 		                                                                                                             .isSuccess(
 			                                                                                                             false)
 		                                                                                                             .build();
@@ -243,7 +244,8 @@ public class CardServiceImpl implements CardService {
 	@Override
 	@Transactional
 	public void addChallenge(Long cardId, String achievementCondition, LocalDateTime date) {
-		CalcDate.StartEndDate startEndDate = CalcDate.calcThisWeek(date);
+		CalcDate.StartEndDate startEndDate = CalcDate.calcMonth(date);
+		CalcDate.StartEndDate challengeDate = CalcDate.calcThisWeek(date);
 		Card card = cardRepository.findSpecialCardByUserId(cardId, CardType.SPECIAL, startEndDate.getStartDate(),
 			startEndDate.getEndDate());
 		if(card == null){
@@ -255,9 +257,9 @@ public class CardServiceImpl implements CardService {
 		                                                                                                             .achievementCondition(
 			                                                                                                             achievementCondition)
 		                                                                                                             .startTime(
-			                                                                                                             startEndDate.getStartDate())
+																														 challengeDate.getStartDate())
 		                                                                                                             .endTime(
-			                                                                                                             startEndDate.getEndDate())
+																														 challengeDate.getEndDate())
 		                                                                                                             .isSuccess(
 			                                                                                                             false)
 		                                                                                                             .build();
