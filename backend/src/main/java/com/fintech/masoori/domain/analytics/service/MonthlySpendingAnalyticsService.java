@@ -15,4 +15,6 @@ public interface MonthlySpendingAnalyticsService {
 
 	void saveMonthlySpendingAnalytics(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard);
 
+	void updateCreatedDateAnalytics(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard);
+
 }

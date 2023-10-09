@@ -73,36 +73,43 @@ public class CreditCardServiceImpl implements CreditCardService {
 		User serviceUser = userRepository.findById(monthlySpendingAndCreditcard.getUserId())
 		                                 .orElseThrow(() -> new RuntimeException("User Not Found"));
 
+		if(monthlySpendingAndCreditcard.getDate().isEmpty()) {
+			log.debug("Date가 없습니다.");
+			return;
+		}
+		if(monthlySpendingAndCreditcard.getCreditCardList().isEmpty()){
+			log.info("추천된 카드가 없습니다.");
+			return;
+		}
 		for (MonthlySpendingAndCreditcard.RecommendedCreditCard recommendedCreditCard : monthlySpendingAndCreditcard.getCreditCardList()) {
 			CreditCard creditCard = creditCardRepository.findById(recommendedCreditCard.getCreditCardId())
 			                                            .orElseThrow(
 				                                            () -> new InvalidIDException("Card Id is Not exist"));
 
-			CreditCardUser creditCardUser;
-			if(!monthlySpendingAndCreditcard.getDate().isEmpty()){
-				String[] splitDate = monthlySpendingAndCreditcard.getDate().split("/");
-				creditCardUser = CreditCardUser.builder().reason(recommendedCreditCard.getReason()).year(Integer.parseInt(splitDate[0])).month(Integer.parseInt(splitDate[1])).build();
-			} else {
-				creditCardUser = CreditCardUser.builder().reason(recommendedCreditCard.getReason()).year(0).month(0).build();
-			}
+
+			String[] splitDate = monthlySpendingAndCreditcard.getDate().split("/");
+			CreditCardUser creditCardUser = CreditCardUser.builder().reason(recommendedCreditCard.getReason()).year(Integer.parseInt(splitDate[0])).month(Integer.parseInt(splitDate[1])).build();
 
 			creditCard.addCreditCardUser(creditCardUser);
 			serviceUser.addCreditCardUser(creditCardUser);
 			creditCardUserRepository.save(creditCardUser);
-			if(!monthlySpendingAndCreditcard.getDate().isEmpty()){
-				String[] splitDate = monthlySpendingAndCreditcard.getDate().split("/");
-				creditCardUserRepository.updateCreatedDate(
-					LocalDateTime.of(
-						Integer.parseInt(splitDate[0]),
-						Integer.parseInt(splitDate[1]),
-						Integer.parseInt(splitDate[2]),
-						0,0),
-					recommendedCreditCard.getCreditCardId(),
-					monthlySpendingAndCreditcard.getUserId(),
-					Integer.parseInt(splitDate[0]),
-					Integer.parseInt(splitDate[1]));
-			}
+
 		}
+	}
+
+	@Override
+	@Transactional
+	public void updateRecommendedCreditCardCreatedDate(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard) {
+		String[] splitDate = monthlySpendingAndCreditcard.getDate().split("/");
+		creditCardUserRepository.updateCreatedDate(
+			LocalDateTime.of(
+				Integer.parseInt(splitDate[0]),
+				Integer.parseInt(splitDate[1]),
+				Integer.parseInt(splitDate[2]),
+				0,0),
+			monthlySpendingAndCreditcard.getUserId(),
+			Integer.parseInt(splitDate[0]),
+			Integer.parseInt(splitDate[1]));
 	}
 
 }

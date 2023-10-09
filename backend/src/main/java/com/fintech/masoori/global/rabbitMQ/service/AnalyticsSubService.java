@@ -26,12 +26,21 @@ public class AnalyticsSubService {
 	@RabbitListener(queues = "analytics.res")
 	public void subscribe(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard) throws CoolsmsException {
 		log.info("MonthlySpendingAndCreditcard : {}", monthlySpendingAndCreditcard);
+		log.info("소비 내역 등록");
 		monthlySpendingAnalyticsService.saveMonthlySpendingAnalytics(monthlySpendingAndCreditcard);
-		creditCardService.saveRecommendedCreditCard(monthlySpendingAndCreditcard);
+		log.info("소비 내역 내용 업데이트");
+		monthlySpendingAnalyticsService.updateCreatedDateAnalytics(monthlySpendingAndCreditcard);
 
+		log.info("카드 추천 등록");
+		creditCardService.saveRecommendedCreditCard(monthlySpendingAndCreditcard);
+		log.info("카드 추천 등록 업데이트");
+		creditCardService.updateRecommendedCreditCardCreatedDate(monthlySpendingAndCreditcard);
+
+		log.info("User Id : {}", monthlySpendingAndCreditcard.getUserId());
 		// 문자 보내자
-		String phoneNumber = userService.findById(monthlySpendingAndCreditcard.getUserId()).getPhoneNumber();
-		smsService.sendCreditCardAlarm(phoneNumber);
+		// String phoneNumber = userService.findById(monthlySpendingAndCreditcard.getUserId()).getPhoneNumber();
+		// smsService.sendCreditCardAlarm(phoneNumber);
+
 	}
 
 }

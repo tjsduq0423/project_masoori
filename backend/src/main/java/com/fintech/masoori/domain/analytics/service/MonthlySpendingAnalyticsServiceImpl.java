@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Slf4j
 public class MonthlySpendingAnalyticsServiceImpl implements MonthlySpendingAnalyticsService {
 	private final UserRepository userRepository;
@@ -72,9 +73,19 @@ public class MonthlySpendingAnalyticsServiceImpl implements MonthlySpendingAnaly
 				break;
 			}
 		}
-		//year와 month로 createdDate 변경
-		LocalDateTime date = LocalDateTime.of(year, month, 1, 0, 0);
-		monthlySpendingAnalyticsRepository.updateCreatedDate(date, serviceUser.getId(), month, year);
+	}
+
+	@Override
+	@Transactional
+	public void updateCreatedDateAnalytics(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard) {
+		User user = userRepository.findById(monthlySpendingAndCreditcard.getUserId())
+										 .orElseThrow(() -> new RuntimeException("User Not Found"));
+		String[] tempDate = monthlySpendingAndCreditcard.getDate().split("/");
+		int year = Integer.parseInt(tempDate[0]);
+		int month = Integer.parseInt(tempDate[1]);
+		LocalDateTime temp = LocalDateTime.of(year, month, 1, 0, 0);
+		monthlySpendingAnalyticsRepository.updateCreatedDate(temp, user.getId(), month, year);
+
 	}
 
 }

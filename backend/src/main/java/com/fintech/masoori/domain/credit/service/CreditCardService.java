@@ -19,4 +19,6 @@ public interface CreditCardService {
 	CreditCard selectOne(Long id);
 
 	void saveRecommendedCreditCard(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard);
+
+	void updateRecommendedCreditCardCreatedDate(MonthlySpendingAndCreditcard monthlySpendingAndCreditcard);
 }
