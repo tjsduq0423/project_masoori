@@ -64,7 +64,7 @@ const Slide = styled.div`
   justify-content: center;
   height: 100px;
   width: 250px;
-  font-size: 28px;
+  font-size: 24px;
   font-family: "Pyeongchangpeace";
 `;
 
