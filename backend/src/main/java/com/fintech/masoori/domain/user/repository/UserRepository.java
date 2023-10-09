@@ -1,6 +1,7 @@
 package com.fintech.masoori.domain.user.repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +18,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByEmail(String email);
 
 	User save(User newUser);
+
+	List<User> findUsersByCardGenerationAndIsAuthenticated(Boolean cardGeneration, Boolean isAuthentication);
+
+	List<User> findUsersByIsAuthenticated(Boolean isAuthentication);
 
 	@Modifying
 	@Query("UPDATE User u SET u.phoneNumber = :phoneNumber, u.name =:name WHERE u.email = :email")
@@ -35,5 +40,19 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	void updateIntegration(@Param("email") String email);
 
 	@Query("SELECT sum(d.amount) FROM Deal d WHERE d.user.email = :email AND d.date >= :startDate AND d.date <= :endDate")
-	Integer getAmountSumByPeriod(@Param("email") String email, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+	Integer getAmountSumByPeriod(@Param("email") String email, @Param("startDate") LocalDateTime startDate,
+		@Param("endDate") LocalDateTime endDate);
+
+	@Modifying
+	@Query("UPDATE User u SET u.monthlySpendingGoal = :monthlySpendingGoal WHERE u.email = :email")
+	void updateMonthlySpendingGoal(@Param("email") String email, @Param("monthlySpendingGoal") Integer monthlySpendingGoal);
+
+	@Modifying
+	@Query("UPDATE User u SET u.cardImage = :imagePath WHERE u.email = :email")
+	void updateUserProfileImage(@Param("imagePath") String imagePath, @Param("email") String email);
+
+	@Modifying
+	@Query("UPDATE User u SET u.isAuthenticated = true WHERE u.email = :email")
+	void updateAuthentication(@Param("email") String email);
+
 }

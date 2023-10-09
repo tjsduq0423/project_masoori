@@ -55,15 +55,24 @@ public class CreditCard {
 	@Column(name = "image_path")
 	private String imagePath;
 
+	@Column(name = "img_attr")
+	private String imgAttr;
+
 	@Column(name = "register_path", columnDefinition = "TEXT")
 	private String registerPath;
 
 	@OneToMany(mappedBy = "creditCard")
 	@Builder.Default
-	private List<CreditCardUser> creditCardUsers = new ArrayList<>();
+	private List<CreditCardUser> creditCardUserList = new ArrayList<>();
 
 	@ElementCollection
 	@CollectionTable(name = "benefits", joinColumns = @JoinColumn(name = "credit_card_id"))
 	@Builder.Default
 	private List<Benefit> benefits = new ArrayList<>();
+
+	public void addCreditCardUser(CreditCardUser creditCardUser) {
+		this.creditCardUserList.add(creditCardUser);
+		creditCardUser.setCreditCard(this);
+	}
+
 }

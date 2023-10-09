@@ -156,9 +156,9 @@ const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
         phoneNumber: phonenumber,
       });
 
-      toast.info("✉ 인증 코드 전송 성공 ✉");
+      toast.info("인증 코드 전송 성공");
     } catch (error) {
-      toast.warning("✉ 인증 코드 전송 실패 ✉");
+      toast.warning("인증 코드 전송 실패");
     }
   };
 
@@ -169,10 +169,10 @@ const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
         code: code,
       });
 
-      toast.info("✉ 인증 코드 인증 성공 ✉");
+      toast.info("인증 코드 인증 성공");
       setIsVerify(true);
     } catch (error) {
-      toast.warning("✉ 인증 코드 인증 실패 ✉");
+      toast.warning("인증 코드 인증 실패");
     }
   };
 
@@ -180,7 +180,7 @@ const VerifyNumberModal = ({ closeModal }: VerifyNumberModalProps) => {
     try {
       await usePostConsumeMutation.mutateAsync();
 
-      toast.info("⛓ 연동 성공 ⛓");
+      toast.info("카드를 생성하고 알려드릴게요!");
       closeModal();
     } catch (error) {
       console.error("연동 실패:", error);

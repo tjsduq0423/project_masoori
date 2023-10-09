@@ -1,5 +1,6 @@
 package com.fintech.masoori.domain.card.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,9 @@ public class Card extends BaseTimeEntity {
 	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 
+	@Column(name = "challenge_idx")
+	private Integer challengeIdx;
+
 	@Column(name = "card_type")
 	@Enumerated(EnumType.STRING)
 	private CardType cardType;
@@ -79,4 +83,17 @@ public class Card extends BaseTimeEntity {
 		user.getCardList().add(this);
 	}
 
+	public void cardUpdate(String name, String imagePath, String description) {
+		this.name = name;
+		this.imagePath = imagePath;
+		this.description = description;
+	}
+
+	public void updateImgPath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
+	public void updateChallengeIdx(Integer challengeIdx){
+		this.challengeIdx = challengeIdx;
+	}
 }
