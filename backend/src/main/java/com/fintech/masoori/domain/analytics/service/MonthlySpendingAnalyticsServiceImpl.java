@@ -17,9 +17,11 @@ import com.fintech.masoori.global.rabbitMQ.dto.MonthlySpendingAndCreditcard;
 import com.fintech.masoori.global.util.CalcDate;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MonthlySpendingAnalyticsServiceImpl implements MonthlySpendingAnalyticsService {
 	private final UserRepository userRepository;
 	private final MonthlySpendingAnalyticsRepository monthlySpendingAnalyticsRepository;
@@ -52,16 +54,23 @@ public class MonthlySpendingAnalyticsServiceImpl implements MonthlySpendingAnaly
 		String[] tempDate = monthlySpendingAndCreditcard.getDate().split("/");
 		int year = Integer.parseInt(tempDate[0]);
 		int month = Integer.parseInt(tempDate[1]);
+		log.info("Spendings : {}", monthlySpendingAndCreditcard.getSpendings());
+		int i=0;
 		for (GeneratedSpending spending : monthlySpendingAndCreditcard.getSpendings()) {
-			MonthlySpendingAnalytics analytics = MonthlySpendingAnalytics.builder()
-																		 .category(spending.getKeyword())
-																		 .cost(spending.getTotalAmount())
-																		 .year(year)
-																		 .month(month)
-																		 .build();
+			if(i<5){
+				MonthlySpendingAnalytics analytics = MonthlySpendingAnalytics.builder()
+																			 .category(spending.getKeyword())
+																			 .cost(spending.getTotalAmount())
+																			 .year(year)
+																			 .month(month)
+																			 .build();
 
-			monthlySpendingAnalyticsRepository.save(analytics);
-			serviceUser.addMonthlySpendingAnalytics(analytics);
+				monthlySpendingAnalyticsRepository.save(analytics);
+				serviceUser.addMonthlySpendingAnalytics(analytics);
+				i++;
+			} else {
+				return;
+			}
 		}
 	}
 

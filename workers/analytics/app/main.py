@@ -49,6 +49,10 @@ class RecommendedCreditCard(BaseModel):
     creditCardId: int
     reason: str
 
+class GeneratedSpending(BaseModel):
+    keyword: str
+    totalAmount: int
+    frequency: int
 
 # reqDto
 class AnalyticsRequestMessage(BaseModel):
@@ -62,6 +66,7 @@ class MonthlySpendingAndCreditcard(BaseModel):
     userId: int
     date : str
     creditCardList: List[RecommendedCreditCard]
+    spendings: List[GeneratedSpending]
 
 
 # sub 에서 메시지를 받아 처리하는 함수
@@ -103,7 +108,8 @@ def callback(ch, method, properties, body):
         res = MonthlySpendingAndCreditcard(
             userId=userId, 
             date=date,
-            creditCardList=cardList
+            creditCardList=cardList,
+            spendings=categorization
         ).json()
         print(f"Result : {res}")
         # 메시지 응답 큐 pub
