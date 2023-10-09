@@ -85,6 +85,11 @@ def callback(ch, method, properties, body):
         print(f"Date : {date}")
         print(f"SpendList : {spendList}")
 
+        if userId is None:
+            print("User is None")
+            ch.basic_ack(delivery_tag=method.delivery_tag)
+            return
+
         if cardId is None:
             print("CardId is None")
             ch.basic_ack(delivery_tag=method.delivery_tag)
