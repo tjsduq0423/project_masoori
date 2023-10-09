@@ -444,7 +444,7 @@ const MainPage = () => {
   const postConsumeHandler = useCallback(async () => {
     try {
       await usePostConsumeMutation.mutateAsync();
-      toast.info("⛓ 연동 성공 ⛓");
+      toast.info("카드를 생성하고 알려드릴게요!");
     } catch (error) {
       console.error("연동 실패:", error);
     }
@@ -458,17 +458,23 @@ const MainPage = () => {
   }
 
   useEffect(() => {
-    setNowDateInfo("");
     if (consumeRecent === "인증") {
       console.log("인증");
+      setNowDateInfo("");
       postConsumeHandler();
+    }
+
+    if (consumeRecent === "생성중") {
+      toast.info(" 아직 카드 생성중... ");
+      setNowDateInfo("");
     }
 
     if (consumeRecent && consumeRecent.card) {
       // Access consumeRecent.card safely
+      toast.info("이번 주는 이미 생성했어요!");
       setSpendId(consumeRecent.card.id);
-      console.log(spendId);
-      window.location.href = "/spend";
+      setNowDateInfo("");
+      navigate("/spend");
     }
   }, [
     consumeRecent,
@@ -477,6 +483,7 @@ const MainPage = () => {
     spendId,
     isVerifyModalOpen,
     postConsumeHandler,
+    navigate,
   ]);
 
   useEffect(() => {
@@ -494,7 +501,6 @@ const MainPage = () => {
         currentDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
         const initialEndDate = currentDate.toISOString().slice(0, -2);
         setNowDateInfo(initialEndDate);
-        console.log("true라 recent를 호출할거임");
       } else {
         toast.warning("현재는 소비내역 블랙박스입니다. ");
         console.log("false라 모달이 떴음");

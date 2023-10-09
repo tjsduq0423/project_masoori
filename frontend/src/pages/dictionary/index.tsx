@@ -229,7 +229,7 @@ const DictionaryPage = () => {
     try {
       // 이름과 전화번호를 사용하여 SMS를 보냅니다.
       await profileImage.mutateAsync(challengeCard.card.id);
-      toast.info("🃏 프로필 카드 등록 완료 🃏");
+      toast.info("프로필 카드🃏 등록 완료 ");
     } catch (error) {
       console.error("인증 코드 전송 실패:", error);
     }
