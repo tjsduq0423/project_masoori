@@ -499,6 +499,7 @@ const MainPage = () => {
       if (userInfo.isAuthenticated === true || isAuth === true) {
         const currentDate = new Date();
         currentDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
+        currentDate.setHours(currentDate.getHours() + 9);
         const initialEndDate = currentDate.toISOString().slice(0, -2);
         setNowDateInfo(initialEndDate);
       } else {
