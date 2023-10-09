@@ -117,7 +117,7 @@ const SettingFinancialGoals: React.FC<MyComponentProps> = ({
       });
       console.log(result);
       if (result?.status === 200) {
-        toast.info("💲 변경되었습니다 💲");
+        toast.info("변경되었습니다");
         setIsSettingOpen(false);
       }
     } catch (error) {

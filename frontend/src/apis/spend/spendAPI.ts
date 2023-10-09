@@ -1,7 +1,5 @@
 import { instance } from "@/apis/instance";
 import { toast } from "react-toastify";
-import { useRecoilState } from "recoil";
-import { nowDateInfoState } from "@/states/spendState";
 
 const postGhost = async () => {
   try {
@@ -50,7 +48,7 @@ const getConsumeRecent = async (nowDate: string) => {
       error.response.status === 400 &&
       error.response.data.code === "C009"
     ) {
-      toast.info("🃏 아직 카드 생성중... 🃏");
+      return "생성중";
     } else if (
       error.response &&
       error.response.status === 400 &&

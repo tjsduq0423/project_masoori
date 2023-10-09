@@ -279,6 +279,7 @@ const CardRecommend = () => {
 
   const MonthData =
     allCreditCard.monthlySpendingAnalyticsRes.monthlySpendingAnalyticsList;
+
   const [currentSlideIndex, setCurrentSlideIndex] = useState<CreditCard>({
     id: 0,
     name: "",
@@ -303,6 +304,8 @@ const CardRecommend = () => {
   useEffect(() => {
     if (creditCardRes[0] === undefined) {
       toast.info("데이터가 부족해요...");
+    } else {
+      setCurrentSlideIndex(creditCardRes[0]);
     }
   }, [creditCardRes, navigate]);
 
@@ -390,8 +393,17 @@ const CardRecommend = () => {
           카드사: {currentSlideIndex.company}
         </StyledCardCompany>
         <StyledCardCondition>
-          연회비 : {currentSlideIndex.domestic}원 <br />
-          전월 실적 조건 : {currentSlideIndex.overseas}원
+          연회비 :{" "}
+          {currentSlideIndex.domestic === "" ||
+          currentSlideIndex.domestic === "없음"
+            ? "없음"
+            : currentSlideIndex.domestic + "원"}{" "}
+          <br />
+          전월 실적 조건 :{" "}
+          {currentSlideIndex.overseas === "" ||
+          currentSlideIndex.overseas === "없음"
+            ? "없음"
+            : currentSlideIndex.overseas + "원"}
         </StyledCardCondition>
         <StyledCardBenefits>
           혜택 <br />
