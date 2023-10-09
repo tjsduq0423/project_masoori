@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import RenderRoutes from "@/router/routes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import bgm from "@/assets/bgm/BGM.mp3";
+// import bgm from "@/assets/bgm/BGM.mp3";
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
         pauseOnHover
         theme="dark"
       />
-      <audio src={bgm} autoPlay></audio>
+      {/* <audio src={bgm} autoPlay></audio> */}
     </div>
   );
 }
