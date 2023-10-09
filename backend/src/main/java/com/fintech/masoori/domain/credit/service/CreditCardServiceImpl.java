@@ -78,7 +78,13 @@ public class CreditCardServiceImpl implements CreditCardService {
 			                                            .orElseThrow(
 				                                            () -> new InvalidIDException("Card Id is Not exist"));
 
-			CreditCardUser creditCardUser = CreditCardUser.builder().reason(recommendedCreditCard.getReason()).build();
+			CreditCardUser creditCardUser;
+			if(!monthlySpendingAndCreditcard.getDate().isEmpty()){
+				String[] splitDate = monthlySpendingAndCreditcard.getDate().split("/");
+				creditCardUser = CreditCardUser.builder().reason(recommendedCreditCard.getReason()).year(Integer.parseInt(splitDate[0])).month(Integer.parseInt(splitDate[1])).build();
+			} else {
+				creditCardUser = CreditCardUser.builder().reason(recommendedCreditCard.getReason()).year(0).month(0).build();
+			}
 
 			creditCard.addCreditCardUser(creditCardUser);
 			serviceUser.addCreditCardUser(creditCardUser);
@@ -92,7 +98,9 @@ public class CreditCardServiceImpl implements CreditCardService {
 						Integer.parseInt(splitDate[2]),
 						0,0),
 					recommendedCreditCard.getCreditCardId(),
-					monthlySpendingAndCreditcard.getUserId());
+					monthlySpendingAndCreditcard.getUserId(),
+					Integer.parseInt(splitDate[0]),
+					Integer.parseInt(splitDate[1]));
 			}
 		}
 	}

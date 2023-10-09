@@ -41,6 +41,12 @@ public class CreditCardUser extends BaseTimeEntity {
 
 	@Column(name = "reason")
 	private String reason;
+
+	@Column(name="year")
+	private Integer year;
+
+	@Column(name="month")
+	private Integer month;
 }
 
 

@@ -18,7 +18,7 @@ public interface CreditCardUserRepository extends JpaRepository<CreditCardUser, 
 		@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
 	@Modifying
-	@Query("UPDATE CreditCardUser c SET c.createdDate = :date WHERE c.creditCard.id = :creditCardId AND c.user.id = :userId")
-	void updateCreatedDate(@Param("date")LocalDateTime date, @Param("creditCardId") long creditCardId, @Param("userId") long userId);
+	@Query("UPDATE CreditCardUser c SET c.createdDate = :date WHERE c.creditCard.id = :creditCardId AND c.user.id = :userId AND c.year = :year AND c.month = :month")
+	void updateCreatedDate(@Param("date")LocalDateTime date, @Param("creditCardId") long creditCardId, @Param("userId") long userId, @Param("year") long year, @Param("month") long month);
 
 }
