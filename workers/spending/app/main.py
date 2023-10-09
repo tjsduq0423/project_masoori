@@ -53,16 +53,20 @@ class GeneratedSpending(BaseModel):
 
 # reqDto
 class SpendingRequestMessage(BaseModel):
+    userId: int
     cardId: int
+    date : str
     userWeeklyTransactionList: List[Transaction]
 
 
 # resDto 선언
 class GeneratedSpendingCard(BaseModel):
+    userId: int
     cardId: int
     name: str
     imagePath: str
     description: str
+    date : str
     spendings: List[GeneratedSpending]
 
 
@@ -72,9 +76,13 @@ def callback(ch, method, properties, body):
         # 이거 쓰면댐 -> Anal
         request_message_dict = json.loads(body)
         # 서비스 로직 실행 -> 결과값 res 객체에 넣고 쏘면 댐.
+        userId = request_message_dict['userId']
         cardId = request_message_dict['cardId']
+        date = request_message_dict['date']
         spendList = request_message_dict['userWeeklyTransactionList']
+        print(f"UserId : {userId}")
         print(f"CardId : {cardId}")
+        print(f"Date : {date}")
         print(f"SpendList : {spendList}")
 
         if cardId is None:
@@ -109,10 +117,12 @@ def callback(ch, method, properties, body):
         print(f"ImagePath : {imageName}")
 
         res = GeneratedSpendingCard(
+            userId=userId,
             cardId=cardId,
             name=name,
             imagePath=f"https://sonagi.site/outputs/{imageName}.png",
             description=description,
+            date=date,
             spendings=categorization).json()
         print(f"Result : {res}")
         # 메시지 응답 큐 pub

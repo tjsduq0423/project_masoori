@@ -158,6 +158,7 @@ public class CardServiceImpl implements CardService {
 	@Override
 	@Transactional
 	public void createSpendingCard(String email) {
+		// 이미 생성중인 사용자면 throw하기
 		// 사용자 찾기.
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User Is Not Found"));
 		Card card = Card.builder().cardType(CardType.BASIC).user(user).build();
@@ -167,7 +168,7 @@ public class CardServiceImpl implements CardService {
 		// 소비 카드 생성 중인지 저장.
 		cardRepository.save(card);
 		spendingPubService.sendMessage(
-			SpendingRequestMessage.builder().cardId(card.getId()).userWeeklyTransactionList(transactionList).build());
+			SpendingRequestMessage.builder().userId(user.getId()).cardId(card.getId()).userWeeklyTransactionList(transactionList).build());
 	}
 
 	@Override
@@ -191,8 +192,9 @@ public class CardServiceImpl implements CardService {
 			log.info("CardId가 null");
 			return;
 		}
+		String temp = date.getYear()+"/"+date.getMonthValue()+"/"+date.getDayOfMonth();
 		spendingPubService.sendMessage(
-			SpendingRequestMessage.builder().cardId(card.getId()).userWeeklyTransactionList(transactionList).build());
+			SpendingRequestMessage.builder().userId(user.getId()).cardId(card.getId()).date(temp).userWeeklyTransactionList(transactionList).build());
 	}
 
 	@Override
@@ -205,9 +207,14 @@ public class CardServiceImpl implements CardService {
 	@Override
 	@Transactional
 	public void addChallenge(Long userId, String achievementCondition) {
-		CalcDate.StartEndDate startEndDate = CalcDate.calcRecentWeek();
+		//이번 달에 생성된 챌린지 카드 조회
+		CalcDate.StartEndDate startEndDate = CalcDate.calcMonth();
+		log.info("Calc Date is : {}", startEndDate);
 		Card card = cardRepository.findRecentCard(userId, CardType.SPECIAL, startEndDate.getStartDate(),
 			startEndDate.getEndDate());
+		if(card == null){
+			throw new CardNotFound("card is null, 이번 달에 생성된 챌린지 카드가 존재하지 않습니다.");
+		}
 		com.fintech.masoori.domain.card.entity.Challenge challenge = com.fintech.masoori.domain.card.entity.Challenge.builder()
 		                                                                                                             .achievementCondition(
 			                                                                                                             achievementCondition)
@@ -218,16 +225,20 @@ public class CardServiceImpl implements CardService {
 		                                                                                                             .isSuccess(
 			                                                                                                             false)
 		                                                                                                             .build();
-		ChallengeRepository.save(challenge);
-		card.updateChallengeIdx(card.getChallengeIdx() + 1);
+		if(card.getChallengeIdx() == null){
+			log.info("ChallengeIdx is NULL");
+			card.updateChallengeIdx(0);
+		}
 		challenge.setCard(card);
+		card.updateChallengeIdx(card.getChallengeIdx() + 1);
+		ChallengeRepository.save(challenge);
 	}
 
 	@Override
 	@Transactional
 	public void addChallenge(Long cardId, String achievementCondition, LocalDateTime date) {
-		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek(date);
-		Card card = cardRepository.findCardByCardId(cardId, CardType.SPECIAL, startEndDate.getStartDate(),
+		CalcDate.StartEndDate startEndDate = CalcDate.calcMonth(date);
+		Card card = cardRepository.findSpecialCardByUserId(cardId, CardType.SPECIAL, startEndDate.getStartDate(),
 			startEndDate.getEndDate());
 		if(card == null){
 			log.info("CARD IS NULL : {}", card);
@@ -311,6 +322,8 @@ public class CardServiceImpl implements CardService {
 			0);
 		LocalDateTime endDate = LocalDateTime.of(sunday.getYear(), sunday.getMonth(), sunday.getDayOfMonth(), 23, 59,
 			59);
+		log.info("StartDate : {}", startDate);
+		log.info("endDate : {}", endDate);
 		Card recentCard = cardRepository.findRecentCard(user.getId(), CardType.BASIC, startDate, endDate);
 		if (recentCard == null) {
 			return null;

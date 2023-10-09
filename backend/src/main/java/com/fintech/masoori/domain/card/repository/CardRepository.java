@@ -32,4 +32,7 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
 	@Query("SELECT c FROM Card c WHERE c.user.id = :userId AND c.cardType = :type AND c.createdDate <= :now ORDER BY c.createdDate DESC")
 	Card findTopByUserIdRecentlyChallengeCard(@Param("userId") long userId, @Param("type") CardType type, @Param("now")LocalDateTime now, PageRequest pageable);
+
+	@Query("SELECT c FROM Card c WHERE c.user.id = :userId AND c.cardType = :type AND c.createdDate >= :startDate AND c.createdDate <= :endDate")
+	Card findSpecialCardByUserId(@Param("userId") long userId, @Param("type") CardType type, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 }

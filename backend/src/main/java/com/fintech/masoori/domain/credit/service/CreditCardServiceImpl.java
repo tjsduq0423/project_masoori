@@ -83,6 +83,17 @@ public class CreditCardServiceImpl implements CreditCardService {
 			creditCard.addCreditCardUser(creditCardUser);
 			serviceUser.addCreditCardUser(creditCardUser);
 			creditCardUserRepository.save(creditCardUser);
+			if(!monthlySpendingAndCreditcard.getDate().isEmpty()){
+				String[] splitDate = monthlySpendingAndCreditcard.getDate().split("/");
+				creditCardUserRepository.updateCreatedDate(
+					LocalDateTime.of(
+						Integer.parseInt(splitDate[0]),
+						Integer.parseInt(splitDate[1]),
+						Integer.parseInt(splitDate[2]),
+						0,0),
+					recommendedCreditCard.getCreditCardId(),
+					monthlySpendingAndCreditcard.getUserId());
+			}
 		}
 	}
 

@@ -15,7 +15,9 @@ import lombok.ToString;
 @Builder
 @ToString
 public class SpendingRequestMessage {
+	private Long userId;
 	private Long cardId;
+	private String date;
 	@Builder.Default
 	private List<Transaction> userWeeklyTransactionList = new ArrayList<>();
 }
