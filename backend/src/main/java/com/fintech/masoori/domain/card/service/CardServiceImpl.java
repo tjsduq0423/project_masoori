@@ -165,10 +165,16 @@ public class CardServiceImpl implements CardService {
 		CalcDate.StartEndDate startEndDate = CalcDate.calcLastWeek();
 		List<Transaction> transactionList = dealService.findDealsByUserAndDateGreaterThanAndDateLessThan(user,
 			startEndDate.getStartDate(), startEndDate.getEndDate());
+
+		String tempDate =
+			startEndDate.getStartDate().getYear() +"/"+
+			startEndDate.getStartDate().getMonthValue() +"/"+
+			startEndDate.getStartDate().getDayOfMonth();
+
 		// 소비 카드 생성 중인지 저장.
 		cardRepository.save(card);
 		spendingPubService.sendMessage(
-			SpendingRequestMessage.builder().userId(user.getId()).cardId(card.getId()).userWeeklyTransactionList(transactionList).build());
+			SpendingRequestMessage.builder().userId(user.getId()).cardId(card.getId()).date(tempDate).userWeeklyTransactionList(transactionList).build());
 	}
 
 	@Override
@@ -208,7 +214,7 @@ public class CardServiceImpl implements CardService {
 	@Transactional
 	public void addChallenge(Long userId, String achievementCondition) {
 		//이번 달에 생성된 챌린지 카드 조회
-		CalcDate.StartEndDate startEndDate = CalcDate.calcMonth();
+		CalcDate.StartEndDate startEndDate = CalcDate.calcRecentWeek();
 		log.info("Calc Date is : {}", startEndDate);
 		Card card = cardRepository.findRecentCard(userId, CardType.SPECIAL, startEndDate.getStartDate(),
 			startEndDate.getEndDate());
@@ -237,7 +243,7 @@ public class CardServiceImpl implements CardService {
 	@Override
 	@Transactional
 	public void addChallenge(Long cardId, String achievementCondition, LocalDateTime date) {
-		CalcDate.StartEndDate startEndDate = CalcDate.calcMonth(date);
+		CalcDate.StartEndDate startEndDate = CalcDate.calcThisWeek(date);
 		Card card = cardRepository.findSpecialCardByUserId(cardId, CardType.SPECIAL, startEndDate.getStartDate(),
 			startEndDate.getEndDate());
 		if(card == null){
@@ -316,15 +322,8 @@ public class CardServiceImpl implements CardService {
 	@Override
 	public BasicCardRes.BasicCard selectUserRecentBasicCard(String email, LocalDateTime time) {
 		User user = userRepository.findUserByEmail(email);
-		LocalDateTime monday = time.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-		LocalDateTime sunday = time.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-		LocalDateTime startDate = LocalDateTime.of(monday.getYear(), monday.getMonth(), monday.getDayOfMonth(), 0, 0,
-			0);
-		LocalDateTime endDate = LocalDateTime.of(sunday.getYear(), sunday.getMonth(), sunday.getDayOfMonth(), 23, 59,
-			59);
-		log.info("StartDate : {}", startDate);
-		log.info("endDate : {}", endDate);
-		Card recentCard = cardRepository.findRecentCard(user.getId(), CardType.BASIC, startDate, endDate);
+		CalcDate.StartEndDate calcDate = CalcDate.calcThisWeek(time);
+		Card recentCard = cardRepository.findRecentCard(user.getId(), CardType.BASIC, calcDate.getStartDate(), calcDate.getEndDate());
 		if (recentCard == null) {
 			return null;
 		}

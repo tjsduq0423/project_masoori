@@ -49,7 +49,7 @@ public class SpendingSubService {
 			GeneratedSpending maxSpendingObject = maxSpending.get();
 			int ap = (int)(maxSpendingObject.getTotalAmount() * 0.15);
 			String achievementCondition = maxSpendingObject.getKeyword() + "에서 아껴서 " + ap + "원 저축 하기";
-			if(generatedSpendingCard.getDate().equals("")){
+			if(generatedSpendingCard.getDate()==null || generatedSpendingCard.getDate().equals("")){
 				cardService.addChallenge(user.getId(), achievementCondition);
 			} else {
 				String[] splitDate = generatedSpendingCard.getDate().split("/");
