@@ -274,7 +274,7 @@ const Login: React.FC = () => {
           window.location.href = "/main";
         }, 1200);
       } else if (result === undefined) {
-        toast.warning("❗ 입력을 다시 확인해주세요 ❗");
+        toast.warning("입력을 다시 확인해주세요");
       }
     } catch (error) {
       console.error("로그인에 실패했습니다.", error);
@@ -341,7 +341,7 @@ const Login: React.FC = () => {
     try {
       console.log(duplicateEmailData);
       await SendSignUpCode.mutateAsync(duplicateEmailData);
-      toast.info("✉ 코드가 전송되었습니다 ✉");
+      toast.info("코드가 전송되었습니다");
     } catch (error) {
       console.error("회원가입 코드 전송에 실패했습니다.", error);
     }
@@ -457,7 +457,7 @@ const Login: React.FC = () => {
       const result = await DoSignUp.mutateAsync(registInfo);
       if (result === 200) {
         // window.location.reload;
-        toast.info("🎃회원가입이 완료됬습니다🎃");
+        toast.info("회원가입이 완료됬습니다");
         setIsModalOpen(false);
         setTimeout(() => {
           window.location.href = "/main";
