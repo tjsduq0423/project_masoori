@@ -72,6 +72,9 @@ public class MonthlySpendingAnalyticsServiceImpl implements MonthlySpendingAnaly
 				return;
 			}
 		}
+		//year와 month로 createdDate 변경
+		LocalDateTime date = LocalDateTime.of(year, month, 1, 0, 0);
+		monthlySpendingAnalyticsRepository.updateCreatedDate(date, serviceUser.getId(), month, year);
 	}
 
 }
