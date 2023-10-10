@@ -71,7 +71,7 @@ const Slide = styled.div`
 const Cost = styled.p`
   margin-left: 10px;
   font-family: "Pretendard";
-  font-size: 30px;
+  font-size: 26px;
 `;
 
 function MonthSpendCarousel({ monthData }: MonthSpendCarouselProps) {
