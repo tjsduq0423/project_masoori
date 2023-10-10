@@ -83,7 +83,7 @@ function MonthSpendCarousel({ monthData }: MonthSpendCarouselProps) {
         {monthData.map((item, idx) => (
           <Slide key={idx}>
             {item.category}
-            <Cost>{item.cost} ₩</Cost>
+            <Cost>{item.cost.toLocaleString()} ₩</Cost>
           </Slide>
         ))}
       </SlideTrack>
