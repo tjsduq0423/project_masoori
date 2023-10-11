@@ -156,8 +156,8 @@ public class UserServiceImpl implements UserService {
 		                         .isAuthenticated(user.getIsAuthenticated())
 		                         .smsAlarm(user.getSmsAlarm())
 		                         .dailySpending(amountSumByPeriodDay)
-		                         .monthlySpending(amountSumByPeriodWeek)
-		                         .weeklySpending(amountSumByPeriodMonth)
+		                         .weeklySpending(amountSumByPeriodWeek)
+		                         .monthlySpending(amountSumByPeriodMonth)
 								 .monthlySpendingGoal(user.getMonthlySpendingGoal())
 								 .challengeCardId(challengeCardId)
 		                         .build();
